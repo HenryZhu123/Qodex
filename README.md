@@ -1,6 +1,6 @@
-# HKU Agent
+# Qodex
 
-本分支集成 Qodex/Pi Agent、exam-checker 服务与项目研究资料。
+本仓库集成 Qodex/Pi Agent、exam-checker 服务与项目研究资料。
 
 ## 目录结构
 
@@ -16,7 +16,7 @@
 └── research-assets/              # Prompt、数据集、评测结果、脚本和设计文档
 ```
 
-`research-assets/` 保存 `main` 分支的完整研究资料；可运行实现位于
+`research-assets/` 保存原 `main` 分支的完整研究资料；可运行实现位于
 `pi-coding-agent/`，两者互不混放。
 
 ## 启动数据库
