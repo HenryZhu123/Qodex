@@ -1,122 +1,50 @@
-# HKU Agent：试题审校、Prompt 评测与数据集工程
+# Qodex
 
-本仓库汇总了试题质量审校项目中的 Prompt、数据集、评测结果、数据处理脚本和错题合成工具。主要目标是识别并构造各类试题质量问题，例如错别字、标点错误、信息缺失、语义不清、答案泄露、选项结构错误、题目无解、题目与题型不一致，以及事实/逻辑错误等。
+本仓库集成 Qodex/Pi Agent、exam-checker 服务与项目研究资料。
 
-> 仓库中包含大量 Excel、JSONL、图片、压缩包和评测产物。克隆后请先执行 `git lfs pull`，否则部分大文件可能只是 LFS 指针。
-
-## 仓库结构
-
-| 路径 | 作用 |
-| --- | --- |
-| `agent_prompt/` | 审校 Agent 使用的任务 Prompt 与模板，包括中英德法日等语言任务、单项检查、汇总与复核提示词。 |
-| `qwen3.8_prompt/` | 面向 Qwen3.8 Flash/Pro 的候选与优选 Prompt、选择清单和效果摘要。 |
-| `提示词/` | 项目的基础 Prompt 集，按错误类型保存主要审校指令。 |
-| `提示词-新版/` | 新一轮规则或结构调整后的实验版 Prompt。 |
-| `提示词-微调版/` | 为微调模型压缩和改写的 Prompt，用于与原始 Prompt 进行对照实验。 |
-| `提示词-校验/` | 用于检查 Prompt 输出、事实错误和逻辑错误质量的校验材料。 |
-| `提示词-最优版/` | 经评测筛选后的最佳 Prompt，以及整卷审校运行脚本、运行数据和结果。该目录体积较大。 |
-| `error_synthesis_agent/` | 错题/负样本合成 CLI。支持单题或 Excel 输入，通过 OpenAI 兼容接口生成 JSONL 结果，并提供草稿审计工具。详见目录内 README。 |
-| `skills/` | 可供 Codex 使用的“试题造错”Skill，包含执行规则、参考资料和辅助脚本。 |
-| `scripts/` | 数据集构建、格式转换、质量审计、评测分析、样本筛选、错误生成与修复脚本；以 Python 和 PowerShell 为主。 |
-| `数据资产/` | 数据工程的规范化资产，包括原始快照、标准数据、Schema、manifest、迁移记录、微调阶段版本及质量核查结果。 |
-| `数据集/` | 专项数据集及其配套资源，目前包含图文不一致等多模态评测数据。 |
-| `训练集/` | 用于模型训练的正式样本与相关版本。 |
-| `训练集-微调版提示词/` | 使用微调版 Prompt 构建或重放的训练样本、manifest、审核结果和中间版本。 |
-| `验证集/` | 用于调参、阈值选择和版本比较的验证数据。 |
-| `测试集/` | 用于最终效果评测的测试数据。 |
-| `模型输出/` | 不同模型、Prompt 和并发配置的评测输出，以及自动评估和人工/Codex 语义审核结果。 |
-| `outputs/` | 脚本生成的阶段性产物、预览、修复结果和质量审计报告。 |
-| `外部数据源/` | 项目引用或整理的公开/外部语料，如 CGECData、FCGEC、结构化试题、完整试卷及研招真题。使用前请核对各来源的许可与使用条件。 |
-| `build_quality_audit.mjs` | 读取事实/逻辑错误 Excel，生成问题题目清单、汇总工作簿和预览图的 Node.js 审计脚本。脚本中的输入输出路径需要按本机环境调整。 |
-| `.gitattributes` | Git LFS 跟踪规则，用于管理压缩包、数据库和大型调试数据等文件。 |
-
-## 推荐阅读顺序
-
-如果第一次接触项目，建议按以下顺序浏览：
-
-1. 查看 `提示词-最优版/README.md` 和 `qwen3.8_prompt/README.md`，了解当前 Prompt 方案与选择依据。
-2. 查看 `训练集/`、`验证集/`、`测试集/`，了解数据划分和样本格式。
-3. 查看 `scripts/`，找到相应的数据构建、转换、审核或评测脚本。
-4. 查看 `模型输出/` 和 `outputs/`，对照不同模型与 Prompt 的实际结果。
-5. 如需生成新的错误样本，进入 `error_synthesis_agent/` 阅读其 README。
-
-## 常见工作流
+## 目录结构
 
 ```text
-外部数据源
-    ↓ 清洗、转换、筛选
-数据资产
-    ↓ 划分与版本化
-训练集 / 验证集 / 测试集
-    ↓ Prompt 或模型运行
-模型输出
-    ↓ 自动分析与人工复核
-outputs / Prompt 迭代结果
+.
+├── pi-coding-agent/              # Pi 源码及其配套服务
+│   ├── packages/                 # Pi monorepo packages
+│   ├── services/
+│   │   └── exam-checker/         # 试题解析、审校与题库服务
+│   ├── start-exam-checker-db.sh  # 启动 PostgreSQL 并执行迁移
+│   ├── start-exam-checker.sh     # 启动 exam-checker API
+│   └── pi-test.sh                # 从源码启动 Pi
+└── research-assets/              # Prompt、数据集、评测结果、脚本和设计文档
 ```
 
-## 快速开始
+`research-assets/` 保存原 `main` 分支的完整研究资料；可运行实现位于
+`pi-coding-agent/`，两者互不混放。
 
-### 1. 克隆仓库并拉取大文件
+## 启动数据库
 
 ```bash
-git clone git@github.com:HenryZhu123/hku_agent.git
-cd hku_agent
-git lfs install
-git lfs pull
+cd pi-coding-agent
+./start-exam-checker-db.sh
 ```
 
-### 2. 创建 Python 环境
+数据库配置和表结构说明见
+[`pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md`](pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md)。
 
-不同脚本的依赖并不完全相同，建议为具体任务单独创建虚拟环境，并优先使用对应目录中的依赖说明：
+## 启动 exam-checker
+
+首次使用时，在 `pi-coding-agent/.env` 中配置本地数据库连接和模型 API。真实密钥不得提交到 Git。
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
+cd pi-coding-agent
+./start-exam-checker.sh
 ```
 
-例如，使用错题合成工具时：
+## 启动 Pi
 
 ```bash
-python -m pip install -r error_synthesis_agent/requirements.txt
-cp error_synthesis_agent/.env.example error_synthesis_agent/.env
+cd pi-coding-agent
+npm install
+./pi-test.sh
 ```
 
-随后在本地 `.env` 中填写所需的模型接口配置。不要提交真实 API Key 或其他凭据。
-
-### 3. 运行具体任务
-
-本仓库中的脚本面向不同数据版本，部分脚本含有本机路径或特定输入文件名。运行前请先检查：
-
-- 输入文件路径与输出目录；
-- 依赖包和 Python/Node.js 版本；
-- Prompt 与数据版本是否匹配；
-- 是否会覆盖已有评测结果；
-- API Key、模型名称与并发参数是否正确。
-
-## 常见文件格式
-
-- `.jsonl`：训练样本、逐题模型输出或中间记录，一行一个 JSON 对象。
-- `.xlsx`：人工标注、评测汇总、质量审计和可视化报告。
-- `.json`：配置、manifest、任务状态或结构化结果。
-- `.txt` / `.md`：Prompt、规则说明和实验记录。
-- `.py` / `.ps1` / `.mjs`：Python、PowerShell 和 Node.js 工具脚本。
-- 图片、PDF、ZIP、SQLite 数据库：多模态输入、原始试卷、归档数据和运行状态。
-
-## 数据与版本管理约定
-
-- 原始数据优先保存在 `数据资产/raw_snapshot/`，规范化结果进入 `数据资产/canonical/`。
-- 数据构建过程应保留 manifest、来源和版本信息，避免训练集、验证集和测试集之间发生样本泄漏。
-- 新的模型运行结果建议使用“模型 + 任务 + 日期/版本”的目录名保存到 `模型输出/`。
-- 中间文件和一次性报告优先放入 `outputs/`，不要覆盖可复现的正式数据资产。
-- 大文件继续使用 Git LFS 管理；提交前可运行 `git lfs status` 检查。
-
-## 安全与合规
-
-- 仓库不应包含 `.env`、API Key、访问令牌或个人账号信息。
-- 外部数据、试卷和论文可能受版权或许可限制；分发、训练或商用前请确认授权范围。
-- 部分样本由模型合成或自动修复，正式使用前应进行人工抽检和语义审核。
-
-## 维护建议
-
-提交新的数据或实验结果时，建议同时记录：数据来源、生成脚本、Prompt 版本、模型版本、运行参数、评测指标和已知问题。这样可以让后续实验能够复现并进行可靠对比。
+Pi 通过 HTTP 调用 `services/exam-checker`，服务地址可通过
+`EXAM_CHECKER_SERVICE_URL` 配置。

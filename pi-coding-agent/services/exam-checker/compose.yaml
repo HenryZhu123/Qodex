@@ -1,0 +1,40 @@
+name: qodex-exam-checker
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${EXAM_CHECKER_POSTGRES_USER:-qodex}
+      POSTGRES_PASSWORD: ${EXAM_CHECKER_POSTGRES_PASSWORD:-qodex-local}
+      POSTGRES_DB: ${EXAM_CHECKER_POSTGRES_DB:-qodex}
+    ports:
+      - "${EXAM_CHECKER_POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - exam_checker_postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/001-init.sql:ro
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  migrate:
+    profiles: [tools]
+    build:
+      context: .
+      dockerfile: docker/migrations/Dockerfile
+    environment:
+      EXAM_CHECKER_DATABASE_URL: >-
+        postgresql+asyncpg://${EXAM_CHECKER_POSTGRES_USER:-qodex}:${EXAM_CHECKER_POSTGRES_PASSWORD:-qodex-local}@postgres:5432/${EXAM_CHECKER_POSTGRES_DB:-qodex}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+
+volumes:
+  exam_checker_postgres_data:

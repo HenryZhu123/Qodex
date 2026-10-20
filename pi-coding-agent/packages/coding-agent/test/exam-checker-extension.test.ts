@@ -1,0 +1,479 @@
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { ExtensionAPI } from "../src/core/extensions/types.ts";
+import examCheckerExtension, {
+	compactDocumentReviewResult,
+	compactReviewResult,
+} from "../src/extensions/exam-checker/index.ts";
+
+interface RegisteredExamCheckerTool {
+	execute: (
+		toolCallId: string,
+		params: {
+			operation: "review_file" | "review_document" | "review_question" | "revise_question" | "get_question_state";
+			file_path?: string;
+			document_id?: string;
+			question_id?: string;
+			base_version_id?: string;
+			question_json?: Record<string, unknown>;
+			user_instruction?: string;
+		},
+		signal: AbortSignal | undefined,
+		onUpdate: undefined,
+		ctx: { cwd: string },
+	) => Promise<{ content: Array<{ type: string; text?: string }>; isError?: boolean }>;
+}
+
+function registeredTool(): RegisteredExamCheckerTool {
+	let tool: unknown;
+	examCheckerExtension({
+		registerTool: (definition: unknown) => {
+			if ((definition as { name?: string }).name === "exam_checker") tool = definition;
+		},
+	} as unknown as ExtensionAPI);
+	return tool as RegisteredExamCheckerTool;
+}
+
+interface RegisteredQuestionBankTool {
+	execute: (
+		toolCallId: string,
+		params: {
+			operation: "get_question" | "search_questions";
+			record_id?: string;
+			subject?: string;
+			question_type?: string;
+			difficulty?: "easy" | "medium" | "hard";
+			knowledge_point?: string;
+			keyword?: string;
+			limit?: number;
+		},
+		signal: AbortSignal | undefined,
+		onUpdate: undefined,
+		ctx: { cwd: string },
+	) => Promise<{ content: Array<{ type: string; text?: string }>; isError?: boolean }>;
+}
+
+function registeredQuestionBankTool(): RegisteredQuestionBankTool {
+	let tool: unknown;
+	examCheckerExtension({
+		registerTool: (definition: unknown) => {
+			if ((definition as { name?: string }).name === "question_bank") tool = definition;
+		},
+	} as unknown as ExtensionAPI);
+	return tool as RegisteredQuestionBankTool;
+}
+
+afterEach(() => {
+	vi.restoreAllMocks();
+});
+
+function fullReview(status: "PASS" | "NEEDS_REVISION" | "UNRESOLVED") {
+	return {
+		document_id: "exam_1",
+		question_id: "question_2",
+		question_number: "2",
+		question_version_id: "00000000-0000-0000-0000-000000000002",
+		question: { reference: "ignored", detection_content: "ignored" },
+		ingestion: undefined as { status: "STORED" | "FAILED" | "SKIPPED"; record_id?: string } | undefined,
+		review: {
+			status,
+			routing: { options_check: { p_skip: 0.99 } },
+			checks: [] as unknown[],
+			summary: { has_error: false, total_errors: 0, errors: [] as unknown[], unresolved_checks: [] },
+			timing_ms: { total: 123 },
+		},
+	};
+}
+
+describe("compactReviewResult", () => {
+	it("returns only model-visible decision fields for a passing question", () => {
+		const result = compactReviewResult(fullReview("PASS"));
+
+		expect(result).toEqual({
+			document_id: "exam_1",
+			question_id: "question_2",
+			question_number: "2",
+			question_version_id: "00000000-0000-0000-0000-000000000002",
+			status: "PASS",
+			errors: [],
+			unresolved_checks: [],
+		});
+		expect(result).not.toHaveProperty("ingestion");
+	});
+
+	it("removes empty and audit-only fields from reported errors", () => {
+		const input = fullReview("NEEDS_REVISION");
+		input.review.summary = {
+			has_error: true,
+			total_errors: 1,
+			errors: [
+				{
+					error_type: "选项错误",
+					position: "选项 C",
+					original_text: "C. TCP 是无连接协议",
+					anchor_text: "must stay in details only",
+					correction: "C. TCP 是面向连接的协议",
+					description: "协议性质错误",
+					suggestion: "修改选项 C",
+					severity: "",
+				},
+			],
+			unresolved_checks: [],
+		};
+
+		expect(compactReviewResult(input).errors).toEqual([
+			{
+				error_type: "选项错误",
+				position: "选项 C",
+				original_text: "C. TCP 是无连接协议",
+				correction: "C. TCP 是面向连接的协议",
+				description: "协议性质错误",
+				suggestion: "修改选项 C",
+			},
+		]);
+	});
+
+	it("reports retry metadata for unresolved checks", () => {
+		const input = fullReview("UNRESOLVED");
+		input.review.checks = [
+			{
+				task_id: "logic_check",
+				execution_status: "FAILED",
+				attempts: 3,
+				error_code: "RATE_LIMITED",
+				retryable: true,
+				error: "provider response omitted",
+			},
+		];
+
+		expect(compactReviewResult(input).unresolved_checks).toEqual([
+			{ task_id: "logic_check", attempts: 3, error_code: "RATE_LIMITED", retryable: true },
+		]);
+	});
+
+	it("compacts every question in a document review", () => {
+		const first = fullReview("PASS");
+		const second = fullReview("NEEDS_REVISION");
+		second.question_id = "question_3";
+		second.question_number = "3";
+
+		expect(
+			compactDocumentReviewResult({
+				document_id: "exam_1",
+				status: "NEEDS_REVISION",
+				questions: [first, second],
+			}),
+		).toEqual({
+			document_id: "exam_1",
+			status: "NEEDS_REVISION",
+			questions: [
+				{
+					document_id: "exam_1",
+					question_id: "question_2",
+					question_number: "2",
+					question_version_id: "00000000-0000-0000-0000-000000000002",
+					status: "PASS",
+					errors: [],
+					unresolved_checks: [],
+				},
+				{
+					document_id: "exam_1",
+					question_id: "question_3",
+					question_number: "3",
+					question_version_id: "00000000-0000-0000-0000-000000000002",
+					status: "NEEDS_REVISION",
+					errors: [],
+					unresolved_checks: [],
+				},
+			],
+		});
+	});
+
+	it("routes review_document to the whole-document service endpoint", async () => {
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(
+				JSON.stringify({
+					document_id: "exam_1",
+					status: "PASS",
+					questions: [fullReview("PASS")],
+				}),
+				{ status: 200, headers: { "content-type": "application/json" } },
+			),
+		);
+
+		const result = await registeredTool().execute(
+			"call_1",
+			{ operation: "review_document", document_id: "exam_1" },
+			undefined,
+			undefined,
+			{ cwd: "/workspace" },
+		);
+
+		expect(fetchMock).toHaveBeenCalledWith(
+			"http://127.0.0.1:8091/v1/exam-checker/documents/exam_1/review",
+			expect.objectContaining({ method: "POST" }),
+		);
+		expect(JSON.parse(result.content[0]?.text ?? "{}")).toMatchObject({
+			document_id: "exam_1",
+			status: "PASS",
+		});
+	});
+
+	it("routes review_question to the single-question service endpoint", async () => {
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(JSON.stringify(fullReview("PASS")), {
+				status: 200,
+				headers: { "content-type": "application/json" },
+			}),
+		);
+
+		await registeredTool().execute(
+			"call_question",
+			{ operation: "review_question", document_id: "exam_1", question_id: "question_2" },
+			undefined,
+			undefined,
+			{ cwd: "/workspace" },
+		);
+
+		expect(fetchMock).toHaveBeenCalledWith(
+			"http://127.0.0.1:8091/v1/exam-checker/documents/exam_1/questions/question_2/review",
+			expect.objectContaining({ method: "POST" }),
+		);
+	});
+
+	it("reads the latest question workflow state", async () => {
+		const state = {
+			document_id: "exam_1",
+			question_id: "question_2",
+			question_version_id: "version_2",
+			version_number: 2,
+			revision_source: "AI_EDIT",
+			question: { question_text: "测试题" },
+			change_log: null,
+			review: { status: "NEEDS_REVISION", errors: [], unresolved_checks: [] },
+			question_bank: { status: "NOT_STORED", record_id: null },
+		};
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(JSON.stringify(state), {
+				status: 200,
+				headers: { "content-type": "application/json" },
+			}),
+		);
+
+		const result = await registeredTool().execute(
+			"call_state",
+			{ operation: "get_question_state", document_id: "exam_1", question_id: "question_2" },
+			undefined,
+			undefined,
+			{ cwd: "/workspace" },
+		);
+
+		expect(fetchMock).toHaveBeenCalledWith(
+			"http://127.0.0.1:8091/v1/exam-checker/documents/exam_1/questions/question_2/state",
+			expect.objectContaining({ method: "GET" }),
+		);
+		expect(JSON.parse(result.content[0]?.text ?? "{}")).toEqual(state);
+	});
+
+	it("routes revise_question with the version and user instruction", async () => {
+		const response = fullReview("PASS");
+		response.ingestion = { status: "STORED", record_id: "record_1" };
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(JSON.stringify(response), {
+				status: 200,
+				headers: { "content-type": "application/json" },
+			}),
+		);
+
+		const result = await registeredTool().execute(
+			"call_revise",
+			{
+				operation: "revise_question",
+				document_id: "exam_1",
+				question_id: "question_2",
+				base_version_id: "00000000-0000-0000-0000-000000000002",
+				user_instruction: "保持原考点，修正选项 C",
+			},
+			undefined,
+			undefined,
+			{ cwd: "/workspace" },
+		);
+
+		expect(fetchMock).toHaveBeenCalledWith(
+			"http://127.0.0.1:8091/v1/exam-checker/documents/exam_1/questions/question_2/revise",
+			expect.objectContaining({
+				method: "POST",
+				body: JSON.stringify({
+					base_version_id: "00000000-0000-0000-0000-000000000002",
+					user_instruction: "保持原考点，修正选项 C",
+				}),
+			}),
+		);
+		expect(JSON.parse(result.content[0]?.text ?? "{}")).toMatchObject({
+			document_id: "exam_1",
+			question_id: "question_2",
+			status: "PASS",
+			ingestion: { status: "STORED", record_id: "record_1" },
+		});
+	});
+
+	it("parses review_file once and then reviews the parsed document", async () => {
+		const directory = await mkdtemp(join(tmpdir(), "exam-checker-"));
+		const filePath = join(directory, "exam.pdf");
+		await writeFile(filePath, "test pdf bytes");
+		try {
+			const fetchMock = vi
+				.spyOn(globalThis, "fetch")
+				.mockResolvedValueOnce(
+					new Response(JSON.stringify({ document_id: "exam_from_file" }), {
+						status: 200,
+						headers: { "content-type": "application/json" },
+					}),
+				)
+				.mockResolvedValueOnce(
+					new Response(
+						JSON.stringify({
+							document_id: "exam_from_file",
+							status: "PASS",
+							questions: [fullReview("PASS")],
+						}),
+						{ status: 200, headers: { "content-type": "application/json" } },
+					),
+				);
+
+			await registeredTool().execute(
+				"call_file",
+				{ operation: "review_file", file_path: filePath },
+				undefined,
+				undefined,
+				{ cwd: "/workspace" },
+			);
+
+			expect(fetchMock).toHaveBeenNthCalledWith(
+				1,
+				"http://127.0.0.1:8091/v1/exam-checker/documents/parse",
+				expect.objectContaining({ method: "POST", body: expect.any(FormData) }),
+			);
+			expect(fetchMock).toHaveBeenNthCalledWith(
+				2,
+				"http://127.0.0.1:8091/v1/exam-checker/documents/exam_from_file/review",
+				expect.objectContaining({ method: "POST" }),
+			);
+		} finally {
+			await rm(directory, { recursive: true, force: true });
+		}
+	});
+
+	it("rejects parameters that conflict with the selected operation", async () => {
+		const fetchMock = vi.spyOn(globalThis, "fetch");
+
+		const result = await registeredTool().execute(
+			"call_2",
+			{
+				operation: "review_question",
+				document_id: "exam_1",
+				question_id: "question_1",
+				file_path: "exam.pdf",
+			},
+			undefined,
+			undefined,
+			{ cwd: "/workspace" },
+		);
+
+		expect(fetchMock).not.toHaveBeenCalled();
+		expect(result.isError).toBe(true);
+		expect(JSON.parse(result.content[0]?.text ?? "{}")).toEqual({ error: "INVALID_EXAM_CHECKER_INPUT" });
+	});
+
+	it("preserves the service HTTP status and error detail", async () => {
+		vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(
+				JSON.stringify({
+					detail: "Section filling failed after three attempts: Filled question is empty at root.3",
+				}),
+				{ status: 502, headers: { "content-type": "application/json" } },
+			),
+		);
+
+		const result = await registeredTool().execute(
+			"call_error",
+			{ operation: "review_document", document_id: "exam_1" },
+			undefined,
+			undefined,
+			{ cwd: "/workspace" },
+		);
+
+		expect(result.isError).toBe(true);
+		expect(JSON.parse(result.content[0]?.text ?? "{}")).toEqual({
+			error: "EXAM_CHECKER_UNAVAILABLE",
+			status: 502,
+			detail: "Section filling failed after three attempts: Filled question is empty at root.3",
+		});
+	});
+
+	it("gets one complete stored question by record ID", async () => {
+		const entry = {
+			record_id: "record_1",
+			document_id: "exam_1",
+			question_id: "question_2",
+			question_json: { question: { question_text: "TCP 题目" }, metadata: { difficulty: "medium" } },
+		};
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(JSON.stringify(entry), {
+				status: 200,
+				headers: { "content-type": "application/json" },
+			}),
+		);
+
+		const result = await registeredQuestionBankTool().execute(
+			"call_bank_get",
+			{ operation: "get_question", record_id: "record_1" },
+			undefined,
+			undefined,
+			{ cwd: "/workspace" },
+		);
+
+		expect(fetchMock).toHaveBeenCalledWith(
+			"http://127.0.0.1:8091/v1/question-bank/record_1",
+			expect.objectContaining({ method: "GET" }),
+		);
+		expect(JSON.parse(result.content[0]?.text ?? "{}")).toEqual(entry);
+	});
+
+	it("searches stored questions through bounded filters", async () => {
+		const entry = {
+			record_id: "record_1",
+			document_id: "exam_1",
+			question_id: "question_2",
+			question_json: { question: { question_text: "TCP 题目" } },
+		};
+		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(JSON.stringify({ questions: [entry] }), {
+				status: 200,
+				headers: { "content-type": "application/json" },
+			}),
+		);
+
+		const result = await registeredQuestionBankTool().execute(
+			"call_bank_search",
+			{
+				operation: "search_questions",
+				subject: "Computer Science",
+				difficulty: "medium",
+				knowledge_point: "TCP",
+				limit: 10,
+			},
+			undefined,
+			undefined,
+			{ cwd: "/workspace" },
+		);
+
+		expect(fetchMock).toHaveBeenCalledWith(
+			"http://127.0.0.1:8091/v1/question-bank/search?subject=Computer+Science&difficulty=medium&knowledge_point=TCP&limit=10",
+			expect.objectContaining({ method: "GET" }),
+		);
+		expect(JSON.parse(result.content[0]?.text ?? "{}")).toEqual({ questions: [entry] });
+	});
+});
