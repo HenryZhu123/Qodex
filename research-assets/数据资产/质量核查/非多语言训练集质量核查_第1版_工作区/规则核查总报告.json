@@ -1,0 +1,138 @@
+{
+  "schema_version": "TrainingDataRuleAuditReport.v1",
+  "audit_id": "非多语言训练集质量核查_第1版_工作区",
+  "created_at": "2026-08-05T08:00:33.909646Z",
+  "scope": {
+    "categories": [
+      "错别字",
+      "语义不清",
+      "选项结构错误",
+      "标点符号错误",
+      "信息缺失",
+      "题目与题型不一致",
+      "题目无解",
+      "答案泄露"
+    ],
+    "excluded": [
+      "英语",
+      "法语",
+      "德语",
+      "日语",
+      "图文任务"
+    ],
+    "source": "数据资产/raw_snapshot/v1/训练集-微调版提示词"
+  },
+  "counts": {
+    "records": 6604,
+    "rule_pass": 6448,
+    "rule_warning": 0,
+    "rule_fail": 156,
+    "semantic_pending": 6603,
+    "duplicate_task_contradiction_groups": 0
+  },
+  "severity_counts": {
+    "blocker": 156,
+    "major": 155
+  },
+  "dimension_counts": {
+    "答案质量": 1,
+    "定位": 310
+  },
+  "issue_counts": {
+    "ORIGINAL_TEXT_NOT_LOCATABLE": 155,
+    "ANCHOR_DOES_NOT_CONTAIN_ORIGINAL": 155,
+    "CORRECTION_UNCHANGED": 1
+  },
+  "category_summaries": {
+    "错别字": {
+      "dataset_category": "错别字",
+      "records": 989,
+      "rule_pass": 988,
+      "rule_warning": 0,
+      "rule_fail": 1,
+      "candidate_records_after_rule_audit": 988,
+      "semantic_pending": 988,
+      "issue_counts": {
+        "CORRECTION_UNCHANGED": 1
+      }
+    },
+    "语义不清": {
+      "dataset_category": "语义不清",
+      "records": 910,
+      "rule_pass": 910,
+      "rule_warning": 0,
+      "rule_fail": 0,
+      "candidate_records_after_rule_audit": 910,
+      "semantic_pending": 910,
+      "issue_counts": {}
+    },
+    "选项结构错误": {
+      "dataset_category": "选项结构错误",
+      "records": 980,
+      "rule_pass": 980,
+      "rule_warning": 0,
+      "rule_fail": 0,
+      "candidate_records_after_rule_audit": 980,
+      "semantic_pending": 980,
+      "issue_counts": {}
+    },
+    "标点符号错误": {
+      "dataset_category": "标点符号错误",
+      "records": 1061,
+      "rule_pass": 1061,
+      "rule_warning": 0,
+      "rule_fail": 0,
+      "candidate_records_after_rule_audit": 1061,
+      "semantic_pending": 1061,
+      "issue_counts": {}
+    },
+    "信息缺失": {
+      "dataset_category": "信息缺失",
+      "records": 479,
+      "rule_pass": 479,
+      "rule_warning": 0,
+      "rule_fail": 0,
+      "candidate_records_after_rule_audit": 479,
+      "semantic_pending": 479,
+      "issue_counts": {}
+    },
+    "题目与题型不一致": {
+      "dataset_category": "题目与题型不一致",
+      "records": 910,
+      "rule_pass": 910,
+      "rule_warning": 0,
+      "rule_fail": 0,
+      "candidate_records_after_rule_audit": 910,
+      "semantic_pending": 910,
+      "issue_counts": {}
+    },
+    "题目无解": {
+      "dataset_category": "题目无解",
+      "records": 1093,
+      "rule_pass": 938,
+      "rule_warning": 0,
+      "rule_fail": 155,
+      "candidate_records_after_rule_audit": 938,
+      "semantic_pending": 1093,
+      "issue_counts": {
+        "ORIGINAL_TEXT_NOT_LOCATABLE": 155,
+        "ANCHOR_DOES_NOT_CONTAIN_ORIGINAL": 155
+      }
+    },
+    "答案泄露": {
+      "dataset_category": "答案泄露",
+      "records": 182,
+      "rule_pass": 182,
+      "rule_warning": 0,
+      "rule_fail": 0,
+      "candidate_records_after_rule_audit": 182,
+      "semantic_pending": 182,
+      "issue_counts": {}
+    }
+  },
+  "notes": [
+    "规则通过只表示确定性结构检查通过，不代表答案语义已确认正确。",
+    "除可由确定性规则直接拒绝的样本外，其余样本semantic_audit为pending，必须完成语义审核后才能生成最终合格训练集。",
+    "本目录是核查工作区，不修改源训练集和已冻结规范数据。"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "paper": "10题_实际10题_2024广西民族大学824西方科技史.pdf",
+  "findings": [
+    {
+      "question_number": "1.4",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "互补原理",
+      "description": "题面仅给出名词，缺少“解释”、“说明”等任务指令或作答引导，导致无法确定具体作答要求。",
+      "recommendation": "在名词后补充任务指令，如“互补原理：请解释该概念。”。",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.2",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "开普勒",
+      "description": "题干仅列出名词，缺少“解释”、“简述”等任务指令或作答引导，导致无法确定具体作答要求。",
+      "recommendation": "在名词后补充任务指令，如“开普勒：解释该名词。”",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "3.1",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "论述第一次工业革命在英国发生的技术、经济与社会条件？",
+      "description": "题干为指令性陈述句，句末误用问号。",
+      "recommendation": "将句末问号改为句号：'论述第一次工业革命在英国发生的技术、经济与社会条件。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.5",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "耗散结构",
+      "description": "题干仅列出名词，缺少“解释”、“简述”等任务指令或作答引导，导致无法确定具体作答要求。",
+      "recommendation": "在名词后补充任务指令，如“耗散结构：请解释该概念。”",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.3",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "晶体管",
+      "description": "题干仅列出名词，缺少“解释”、“简述”等任务指令或作答引导，导致无法确定具体作答要求。",
+      "recommendation": "在名词后补充任务指令，如“晶体管：请解释其定义及历史意义。”",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.1",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "大翻译运动",
+      "description": "名词解释题仅列出词条，缺少冒号、横线或“解释下列名词”等引导语，导致作答任务不明确。",
+      "recommendation": "在词条后补充解释引导结构，如“大翻译运动：______”或“请解释：大翻译运动”。",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    }
+  ]
+}

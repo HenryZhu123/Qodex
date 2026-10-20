@@ -1,0 +1,36 @@
+{
+  "generated_at": "2026-08-12T10:36:12+08:00",
+  "input_records": 911,
+  "evaluated_records": 906,
+  "excluded_records": 5,
+  "answer_quality": {
+    "total": 906,
+    "tp": 350,
+    "fp": 14,
+    "fn": 93,
+    "tn": 451,
+    "precision": 0.9615384615384616,
+    "recall": 0.7900677200902935,
+    "f1": 0.8674101610904585,
+    "fully_correct": 801,
+    "accuracy": 0.8841059602649006
+  },
+  "by_task": {
+    "语义不清": {
+      "total": 906,
+      "tp": 350,
+      "fp": 14,
+      "fn": 93,
+      "tn": 451,
+      "precision": 0.9615384615384616,
+      "recall": 0.7900677200902935,
+      "f1": 0.8674101610904585,
+      "fully_correct": 801,
+      "accuracy": 0.8841059602649006
+    }
+  },
+  "latency": {
+    "count": 0
+  },
+  "latency_by_task": {}
+}

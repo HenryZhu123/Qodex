@@ -1,0 +1,514 @@
+{
+  "rule": "错别字不处理漏字；漏字、漏词及其造成的成分残缺归入语义不清",
+  "source_version": "v5",
+  "output_version": "v6",
+  "asset_train": {
+    "source": "数据资产\\finetune\\阶段1_三类_v5_生成痕迹精修\\train.jsonl",
+    "output": "数据资产\\finetune\\阶段1_三类_v6_漏字归类修订\\train.jsonl",
+    "migrated": [
+      {
+        "line": 18,
+        "original_text": "工智能",
+        "correction": "人工智能"
+      },
+      {
+        "line": 19,
+        "original_text": "危险有害素",
+        "correction": "危险有害因素"
+      },
+      {
+        "line": 95,
+        "original_text": "基理念",
+        "correction": "基本理念"
+      },
+      {
+        "line": 133,
+        "original_text": "成核-生长机相变",
+        "correction": "成核-生长机理相变"
+      },
+      {
+        "line": 252,
+        "original_text": "人在情景",
+        "correction": "人在情景中"
+      },
+      {
+        "line": 303,
+        "original_text": "运动训",
+        "correction": "运动训练"
+      },
+      {
+        "line": 329,
+        "original_text": "首",
+        "correction": "首先"
+      },
+      {
+        "line": 422,
+        "original_text": "要手段",
+        "correction": "主要手段"
+      },
+      {
+        "line": 436,
+        "original_text": "成立条",
+        "correction": "成立条件"
+      },
+      {
+        "line": 451,
+        "original_text": "行调度",
+        "correction": "进行调度"
+      },
+      {
+        "line": 467,
+        "original_text": "长期股权投",
+        "correction": "长期股权投资"
+      },
+      {
+        "line": 488,
+        "original_text": "理论联系",
+        "correction": "理论联系实际"
+      },
+      {
+        "line": 494,
+        "original_text": "核共振仪",
+        "correction": "核磁共振仪"
+      },
+      {
+        "line": 503,
+        "original_text": "滥用市支配地位",
+        "correction": "滥用市场支配地位"
+      },
+      {
+        "line": 550,
+        "original_text": "修课程",
+        "correction": "必修课程"
+      },
+      {
+        "line": 726,
+        "original_text": "法定款",
+        "correction": "法定存款"
+      },
+      {
+        "line": 772,
+        "original_text": "文化中心义",
+        "correction": "文化中心主义"
+      },
+      {
+        "line": 789,
+        "original_text": "无产阶",
+        "correction": "无产阶级"
+      },
+      {
+        "line": 1021,
+        "original_text": "按份共人",
+        "correction": "按份共有人"
+      },
+      {
+        "line": 1024,
+        "original_text": "联合国运输专家委员",
+        "correction": "联合国运输专家委员会"
+      },
+      {
+        "line": 1054,
+        "original_text": "结",
+        "correction": "结合"
+      },
+      {
+        "line": 1147,
+        "original_text": "各",
+        "correction": "各自"
+      },
+      {
+        "line": 1215,
+        "original_text": "中心离为",
+        "correction": "中心离子为"
+      },
+      {
+        "line": 1227,
+        "original_text": "全命周期",
+        "correction": "全生命周期"
+      },
+      {
+        "line": 1288,
+        "original_text": "既常用",
+        "correction": "既是常用"
+      },
+      {
+        "line": 1348,
+        "original_text": "存款乘",
+        "correction": "存款乘数"
+      },
+      {
+        "line": 1359,
+        "original_text": "stuct",
+        "correction": "struct"
+      },
+      {
+        "line": 1404,
+        "original_text": "滤",
+        "correction": "过滤"
+      },
+      {
+        "line": 1474,
+        "original_text": "距",
+        "correction": "距离"
+      }
+    ],
+    "normalized_option_error_type": [],
+    "counts_before": {
+      "错别字": 600,
+      "语义不清": 600,
+      "选项结构错误": 300
+    },
+    "counts_after": {
+      "错别字": 571,
+      "语义不清": 629,
+      "选项结构错误": 300
+    },
+    "positive_after": {
+      "错别字": 390,
+      "语义不清": 385,
+      "选项结构错误": 125
+    },
+    "total": 1500
+  },
+  "asset_val": {
+    "source": "数据资产\\finetune\\阶段1_三类_v5_生成痕迹精修\\val.jsonl",
+    "output": "数据资产\\finetune\\阶段1_三类_v6_漏字归类修订\\val.jsonl",
+    "migrated": [
+      {
+        "line": 195,
+        "original_text": "hufman",
+        "correction": "huffman"
+      }
+    ],
+    "normalized_option_error_type": [
+      5,
+      15,
+      16,
+      25,
+      28,
+      48,
+      49,
+      50,
+      55,
+      69,
+      72,
+      79,
+      85,
+      88,
+      100,
+      104,
+      109,
+      111,
+      121,
+      125,
+      144,
+      155,
+      158,
+      160,
+      164,
+      166,
+      167,
+      172,
+      173,
+      184,
+      192,
+      196,
+      205,
+      217,
+      237,
+      248,
+      262,
+      271,
+      277
+    ],
+    "counts_before": {
+      "语义不清": 88,
+      "错别字": 99,
+      "选项结构错误": 92
+    },
+    "counts_after": {
+      "语义不清": 89,
+      "错别字": 98,
+      "选项结构错误": 92
+    },
+    "positive_after": {
+      "错别字": 48,
+      "选项结构错误": 39,
+      "语义不清": 38
+    },
+    "total": 279
+  },
+  "training_train": {
+    "source": "数据资产\\finetune\\阶段1_三类_v5_生成痕迹精修\\train.jsonl",
+    "output": "训练集-微调版提示词\\train_v2\\train_v2.jsonl",
+    "migrated": [
+      {
+        "line": 18,
+        "original_text": "工智能",
+        "correction": "人工智能"
+      },
+      {
+        "line": 19,
+        "original_text": "危险有害素",
+        "correction": "危险有害因素"
+      },
+      {
+        "line": 95,
+        "original_text": "基理念",
+        "correction": "基本理念"
+      },
+      {
+        "line": 133,
+        "original_text": "成核-生长机相变",
+        "correction": "成核-生长机理相变"
+      },
+      {
+        "line": 252,
+        "original_text": "人在情景",
+        "correction": "人在情景中"
+      },
+      {
+        "line": 303,
+        "original_text": "运动训",
+        "correction": "运动训练"
+      },
+      {
+        "line": 329,
+        "original_text": "首",
+        "correction": "首先"
+      },
+      {
+        "line": 422,
+        "original_text": "要手段",
+        "correction": "主要手段"
+      },
+      {
+        "line": 436,
+        "original_text": "成立条",
+        "correction": "成立条件"
+      },
+      {
+        "line": 451,
+        "original_text": "行调度",
+        "correction": "进行调度"
+      },
+      {
+        "line": 467,
+        "original_text": "长期股权投",
+        "correction": "长期股权投资"
+      },
+      {
+        "line": 488,
+        "original_text": "理论联系",
+        "correction": "理论联系实际"
+      },
+      {
+        "line": 494,
+        "original_text": "核共振仪",
+        "correction": "核磁共振仪"
+      },
+      {
+        "line": 503,
+        "original_text": "滥用市支配地位",
+        "correction": "滥用市场支配地位"
+      },
+      {
+        "line": 550,
+        "original_text": "修课程",
+        "correction": "必修课程"
+      },
+      {
+        "line": 726,
+        "original_text": "法定款",
+        "correction": "法定存款"
+      },
+      {
+        "line": 772,
+        "original_text": "文化中心义",
+        "correction": "文化中心主义"
+      },
+      {
+        "line": 789,
+        "original_text": "无产阶",
+        "correction": "无产阶级"
+      },
+      {
+        "line": 1021,
+        "original_text": "按份共人",
+        "correction": "按份共有人"
+      },
+      {
+        "line": 1024,
+        "original_text": "联合国运输专家委员",
+        "correction": "联合国运输专家委员会"
+      },
+      {
+        "line": 1054,
+        "original_text": "结",
+        "correction": "结合"
+      },
+      {
+        "line": 1147,
+        "original_text": "各",
+        "correction": "各自"
+      },
+      {
+        "line": 1215,
+        "original_text": "中心离为",
+        "correction": "中心离子为"
+      },
+      {
+        "line": 1227,
+        "original_text": "全命周期",
+        "correction": "全生命周期"
+      },
+      {
+        "line": 1288,
+        "original_text": "既常用",
+        "correction": "既是常用"
+      },
+      {
+        "line": 1348,
+        "original_text": "存款乘",
+        "correction": "存款乘数"
+      },
+      {
+        "line": 1359,
+        "original_text": "stuct",
+        "correction": "struct"
+      },
+      {
+        "line": 1404,
+        "original_text": "滤",
+        "correction": "过滤"
+      },
+      {
+        "line": 1474,
+        "original_text": "距",
+        "correction": "距离"
+      }
+    ],
+    "normalized_option_error_type": [],
+    "counts_before": {
+      "错别字": 600,
+      "语义不清": 600,
+      "选项结构错误": 300
+    },
+    "counts_after": {
+      "错别字": 571,
+      "语义不清": 629,
+      "选项结构错误": 300
+    },
+    "positive_after": {
+      "错别字": 390,
+      "语义不清": 385,
+      "选项结构错误": 125
+    },
+    "total": 1500
+  },
+  "training_val": {
+    "source": "数据资产\\finetune\\阶段1_三类_v5_生成痕迹精修\\val.jsonl",
+    "output": "训练集-微调版提示词\\train_v2\\val_v2.jsonl",
+    "migrated": [
+      {
+        "line": 195,
+        "original_text": "hufman",
+        "correction": "huffman"
+      }
+    ],
+    "normalized_option_error_type": [
+      5,
+      15,
+      16,
+      25,
+      28,
+      48,
+      49,
+      50,
+      55,
+      69,
+      72,
+      79,
+      85,
+      88,
+      100,
+      104,
+      109,
+      111,
+      121,
+      125,
+      144,
+      155,
+      158,
+      160,
+      164,
+      166,
+      167,
+      172,
+      173,
+      184,
+      192,
+      196,
+      205,
+      217,
+      237,
+      248,
+      262,
+      271,
+      277
+    ],
+    "counts_before": {
+      "语义不清": 88,
+      "错别字": 99,
+      "选项结构错误": 92
+    },
+    "counts_after": {
+      "语义不清": 89,
+      "错别字": 98,
+      "选项结构错误": 92
+    },
+    "positive_after": {
+      "错别字": 48,
+      "选项结构错误": 39,
+      "语义不清": 38
+    },
+    "total": 279
+  },
+  "training_test": {
+    "source": "训练集-微调版提示词\\train_v1\\test_v1.jsonl",
+    "output": "训练集-微调版提示词\\train_v2\\test_v2.jsonl",
+    "migrated": [
+      {
+        "line": 130,
+        "original_text": "根本则",
+        "correction": "根本原则"
+      }
+    ],
+    "normalized_option_error_type": [],
+    "counts_before": {
+      "语义不清": 78,
+      "选项结构错误": 78,
+      "错别字": 78
+    },
+    "counts_after": {
+      "语义不清": 79,
+      "选项结构错误": 78,
+      "错别字": 77
+    },
+    "positive_after": {
+      "选项结构错误": 39,
+      "语义不清": 41,
+      "错别字": 38
+    },
+    "total": 234
+  },
+  "sha256": {
+    "数据资产\\finetune\\阶段1_三类_v6_漏字归类修订\\train.jsonl": "8302f0006e1d73fbf6984102ec69fd26013b1b1d24c92086a34c335958577f60",
+    "数据资产\\finetune\\阶段1_三类_v6_漏字归类修订\\val.jsonl": "234407847d1f15a9a0153075b06e74dd1c1642d3c10b56daa332e0c7cf85ed67",
+    "数据资产\\finetune\\阶段1_三类_v6_漏字归类修订\\train_manifest.jsonl": "c518f4f2f5330080f9be281558d6dc018e2bf6a3ffc6c68b870d2bce64805537",
+    "数据资产\\finetune\\阶段1_三类_v6_漏字归类修订\\val_manifest.jsonl": "246741d5238702d6b08dcfdc0e8b5a6c0ea306467c501e988eae0851e7b723e9",
+    "训练集-微调版提示词\\train_v2\\train_v2.jsonl": "8302f0006e1d73fbf6984102ec69fd26013b1b1d24c92086a34c335958577f60",
+    "训练集-微调版提示词\\train_v2\\val_v2.jsonl": "234407847d1f15a9a0153075b06e74dd1c1642d3c10b56daa332e0c7cf85ed67",
+    "训练集-微调版提示词\\train_v2\\test_v2.jsonl": "04f8d67000746491792bfaa5091de2c8d73192db1171c41e11778a4349d92bca"
+  }
+}

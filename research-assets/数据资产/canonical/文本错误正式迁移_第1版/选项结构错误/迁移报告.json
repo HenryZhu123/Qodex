@@ -1,0 +1,34 @@
+{
+  "schema_version": "CanonicalCategoryMigrationReport.v1",
+  "dataset_category": "选项结构错误",
+  "counts": {
+    "source_records": 980,
+    "canonical_records": 980,
+    "quarantined_records": 0,
+    "positive": 490,
+    "negative": 490,
+    "train": 789,
+    "dev": 92,
+    "test": 99,
+    "verified_lineage_samples": 116,
+    "provisional_lineage_samples": 864,
+    "localization_warning_rows": 0,
+    "task_fixed_error_type_mismatch_findings": 495
+  },
+  "task_counts": {
+    "options_check": 980
+  },
+  "checks": {
+    "canonical_schema_passed": true,
+    "original_and_tuned_non_system_messages_equal": true,
+    "source_file_hash_unchanged": true,
+    "exact_source_export_sha256_matches_tuned_source": true,
+    "cross_split_lineage_leakage": 0
+  },
+  "notes": [
+    "标准答案原样迁移，不对gold语义做改写。",
+    "跨字段定位失败的源样本保存在待修复样本中，不进入train/dev/test。",
+    "task_fixed_error_type_mismatch只反映TaskCatalog旧固定名称与真实gold名称差异，不修改样本。",
+    "provisional仅表示尚未完成改写/注错变体的近重复血缘归并。"
+  ]
+}

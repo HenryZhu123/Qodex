@@ -1,0 +1,35 @@
+{
+    "workbook":  "C:\\hyt-agent\\数据集\\错别字_测试集4-加入真实错误_v3.xlsx",
+    "workbook_total":  874,
+    "workbook_positive":  397,
+    "workbook_negative":  477,
+    "workbook_positive_detailed_types":  {
+                                             "音近字+形近字":  2,
+                                             "形近字":  143,
+                                             "形近字+音近字":  2,
+                                             "音近字":  246,
+                                             "近义误用":  1,
+                                             "同音近形字":  1,
+                                             "同音字":  2
+                                         },
+    "train":  "C:\\hyt-agent\\训练集-微调版提示词\\train_v1.1\\train_v1.1.jsonl",
+    "train_typo_total":  600,
+    "train_positive":  330,
+    "train_negative":  270,
+    "strict_v4_positive":  330,
+    "disallowed_positive":  0,
+    "negative_matching_workbook_error":  0,
+    "positive_matching_workbook_correct_only":  0,
+    "positive_found_in_workbook_error_set":  283,
+    "matched_workbook_positive_detailed_types":  {
+                                                     "音近字+形近字":  1,
+                                                     "形近字":  100,
+                                                     "形近字+音近字":  1,
+                                                     "音近字":  180,
+                                                     "同音字":  1
+                                                 },
+    "non_v4_workbook_type_positive":  0,
+    "negative_found_in_workbook_correct_set":  166,
+    "replacement_required":  false,
+    "suspicious_file":  "C:\\hyt-agent\\训练集-微调版提示词\\train_v1.1\\错别字边界待替换样本.jsonl"
+}

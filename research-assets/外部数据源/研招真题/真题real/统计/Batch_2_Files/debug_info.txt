@@ -1,0 +1,25 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 8.71366548538208,
+      "题目提取": 319.46445870399475,
+      "试卷间查重": 633.2387280464172,
+      "后处理": 0.0005135536193847656,
+      "总耗时": 961.4173657894135
+    },
+    "total_time": 961.4173657894135,
+    "total_questions": 37,
+    "total_errors": 0,
+    "avg_time_per_question": 25.98425312944361
+  },
+  "session_info": {
+    "uploaded_files_count": 2,
+    "errors_count": 0,
+    "exam_name": "865-A卷.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-30B-A3B-Instruct-2507",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

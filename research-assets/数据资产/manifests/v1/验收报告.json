@@ -1,0 +1,18 @@
+{
+  "schema_version": "ManifestValidationReport.v1",
+  "validated_at": "2026-08-05T05:51:12.782647Z",
+  "passed": true,
+  "summary": {
+    "source_records": 25,
+    "dataset_manifests": 2,
+    "dataset_categories": 12,
+    "task_records": 20,
+    "failures": 0,
+    "warnings": 2
+  },
+  "failures": [],
+  "warnings": [
+    "original 有 1587 行gold error_type与Task Card不一致，共 1800 个错误项",
+    "tuned 有 1587 行gold error_type与Task Card不一致，共 1800 个错误项"
+  ]
+}

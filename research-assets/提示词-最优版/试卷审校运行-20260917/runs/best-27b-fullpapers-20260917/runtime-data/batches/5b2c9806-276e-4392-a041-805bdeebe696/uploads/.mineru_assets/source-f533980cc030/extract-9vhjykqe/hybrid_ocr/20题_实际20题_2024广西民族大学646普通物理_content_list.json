@@ -1,0 +1,827 @@
+[
+    {
+        "type": "text",
+        "text": "2024 年硕士研究生招生初试试题",
+        "text_level": 1,
+        "bbox": [
+            270,
+            85,
+            724,
+            112
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "【B】卷",
+        "text_level": 1,
+        "bbox": [
+            462,
+            124,
+            537,
+            148
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "科目代码及名称：646 普通物理",
+        "bbox": [
+            114,
+            167,
+            403,
+            185
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "考生须知",
+        "text_level": 2,
+        "bbox": [
+            115,
+            196,
+            201,
+            212
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1. 答案须写在报考点提供的答题纸上，一律使用黑色钢笔或签字笔。",
+            "2. 考毕，须将试题和答卷放入试题袋内密封后加贴封条，并在封条与试卷袋骑缝处签名。"
+        ],
+        "bbox": [
+            147,
+            215,
+            878,
+            269
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "一、选择题（每小题5分，共8小题，共40分）",
+        "text_level": 2,
+        "bbox": [
+            152,
+            298,
+            594,
+            315
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. 某质点作直线运动的运动学方程为 $x = 3t - 5t^3 + 6$ (SI)，则该质点作",
+        "bbox": [
+            115,
+            317,
+            729,
+            334
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "(A)匀加速直线运动，加速度沿 x 轴正方向.",
+            "(B)匀加速直线运动，加速度沿 x 轴负方向.",
+            "(C)变加速直线运动，加速度沿 x 轴正方向.",
+            "(D)变加速直线运动，加速度沿 x 轴负方向."
+        ],
+        "bbox": [
+            152,
+            338,
+            534,
+            416
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "2. 水平地面上放一物体 A，它与地面间的滑动摩擦系数为 $\\mu$ ．现加一恒力 $\\bar{F}$ 如图所示．欲使物体 A 有最大加速度，则恒力 $\\bar{F}$ 与水平方向夹角",
+        "bbox": [
+            112,
+            419,
+            880,
+            458
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "应满足",
+        "bbox": [
+            115,
+            460,
+            179,
+            475
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(A) $\\sin\\theta=\\mu$ .",
+        "bbox": [
+            152,
+            479,
+            280,
+            495
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(B) $\\cos \\theta = \\mu$ .",
+        "bbox": [
+            349,
+            479,
+            475,
+            495
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(C) $\\operatorname{tg}\\theta = \\mu$ .",
+        "bbox": [
+            152,
+            499,
+            267,
+            516
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(D) $\\operatorname{ctg}\\theta = \\mu$ .",
+        "bbox": [
+            347,
+            499,
+            472,
+            516
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/07583f9a0b7d694d1740bea2afc3bbd1a00e05a37b3073334da559e8e8889b39.jpg",
+        "image_caption": [
+            "图 1"
+        ],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            625,
+            458,
+            806,
+            525
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "3. 质量为 $m$ 的质点, 以不变速率 $v$ 沿图 2 中正三角形 $ABC$ 的水平光滑轨道运动. 质点越过 A 角时, 轨道作用于质点的冲量的大小为",
+        "bbox": [
+            112,
+            586,
+            880,
+            621
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(A) mv.",
+        "bbox": [
+            151,
+            625,
+            218,
+            643
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(B) $\\sqrt{3}mv.$",
+        "bbox": [
+            329,
+            624,
+            420,
+            643
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(C) $\\sqrt{2} mv$ .",
+        "bbox": [
+            154,
+            661,
+            248,
+            681
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(D) 2mv.",
+        "bbox": [
+            327,
+            665,
+            405,
+            681
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/9c7b49366b247ccdff7f69fbbdc98cbdd1fc19c88651d264429695044517c414.jpg",
+        "image_caption": [
+            "图 2"
+        ],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            645,
+            613,
+            789,
+            719
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "4. 有一半径为 $R$ 的水平圆转台, 可绕通过其中心的竖直固定光滑轴转动, 转动惯量为 $J$ , 开始时转台以匀角速度 $\\omega_0$ 转动, 此时有一质量为 $m$ 的人站在转台中心. 随后人沿半径向外跑去, 当人到达转台边缘时, 转台的角速度为",
+        "bbox": [
+            112,
+            734,
+            880,
+            808
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(A) $\\frac{J}{J + mR^{2}}\\omega_{0}$ .",
+        "bbox": [
+            154,
+            810,
+            305,
+            845
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(B) $\\frac{J}{(J + m)R^2}\\omega_0$ .",
+        "bbox": [
+            366,
+            810,
+            527,
+            847
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(C) $\\frac{J}{mR^{2}}\\omega_{0}$ .",
+        "bbox": [
+            152,
+            851,
+            268,
+            884
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "(D) $\\omega_{0}$ .",
+        "bbox": [
+            361,
+            859,
+            433,
+            876
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "5. 如图 3 所示，在坐标 $(a, 0)$ 处放置一点电荷 $+q$ ，在坐标 $(-a, 0)$ 处放置另一点电荷",
+        "bbox": [
+            112,
+            885,
+            880,
+            904
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "广西民族大学\nGUANGXI MINZU UNIVERSITY",
+        "bbox": [
+            114,
+            28,
+            359,
+            73
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "footer",
+        "text": "考试科目代码及名称: 646 普通物理",
+        "bbox": [
+            126,
+            922,
+            415,
+            938
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "第 1 页 共 3 页",
+        "bbox": [
+            430,
+            940,
+            566,
+            954
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "$-q$ ． $P$ 点是 $y$ 轴上的一点，坐标为 $(0, y)$ ．当 $y >> a$ 时，该点场强的大小为：",
+        "bbox": [
+            115,
+            83,
+            783,
+            101
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "(A) $\\frac{q}{4\\pi\\varepsilon_0y^2}$ .",
+            "(B) $\\frac{q}{2\\pi\\varepsilon_0y^2}$ .",
+            "(C) $\\frac{qa}{2\\pi\\varepsilon_0y^3}$ .",
+            "(D) $\\frac{qa}{4\\pi\\varepsilon_0y^3}$ ."
+        ],
+        "bbox": [
+            154,
+            105,
+            273,
+            259
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/842d03dff637add808f897610dcbe91104e2dda8eca0bd6709be33710df887ae.jpg",
+        "image_caption": [
+            "图 3"
+        ],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            584,
+            114,
+            768,
+            237
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "6. 距一根载有电流为 $3 \\times 10^{4} \\mathrm{~A}$ 的电线 $1 \\mathrm{~m}$ 处的磁感强度的大小为:",
+        "bbox": [
+            112,
+            262,
+            697,
+            279
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(A) $3 \\times 10^{-5}$ T.",
+        "bbox": [
+            144,
+            281,
+            273,
+            298
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(B) $6 \\times 10^{-3} \\mathrm{T}$ .",
+        "bbox": [
+            314,
+            281,
+            440,
+            298
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(C) $1.9 \\times 10^{-2} \\mathrm{T}$ .",
+        "bbox": [
+            462,
+            281,
+            600,
+            298
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(D) 0.6 T.",
+        "bbox": [
+            638,
+            281,
+            739,
+            298
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(已知真空的磁导率 $\\mu_{0}=4\\pi\\times10^{-7}$ T m/A)",
+        "bbox": [
+            149,
+            307,
+            500,
+            326
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "7. 在感应电场中电磁感应定律可写成 $\\oint_{L}\\vec{E}_{K}\\cdot\\mathrm{d}\\vec{l}=-\\frac{\\mathrm{d}\\Phi}{\\mathrm{d}t}$ ，式中 $\\vec{E}_{K}$ 为感应电场的电场强度．上式表明：",
+        "bbox": [
+            112,
+            338,
+            880,
+            390
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "(A) 闭合曲线 L 上 $\\bar{E}_{K}$ 处处相等.",
+            "(B) 感应电场是保守力场.",
+            "(C) 感应电场的电场强度线不是闭合曲线.",
+            "(D) 在感应电场中不能像对静电场那样引入电势的概念."
+        ],
+        "bbox": [
+            152,
+            393,
+            647,
+            467
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "8. 波长为 $\\lambda$ 的单色光垂直入射于光栅常数为 $d$ 、缝宽为 $a$ 、总缝数为 $N$ 的光栅上. 取 $k = 0, \\pm 1, \\pm 2, \\ldots$ , 则决定出现主极大的衍射角 $\\theta$ 的公式可写成:",
+        "bbox": [
+            112,
+            469,
+            878,
+            504
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(A) N a sin θ = k.",
+        "bbox": [
+            205,
+            508,
+            347,
+            523
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(B) $a \\sin \\theta = k$ .",
+        "bbox": [
+            416,
+            508,
+            536,
+            523
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(C) N d sin θ = k.",
+        "bbox": [
+            206,
+            526,
+            346,
+            541
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(D) $d \\sin \\theta = k$ .",
+        "bbox": [
+            416,
+            526,
+            537,
+            541
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "二、填空题（每空4分，共10小空，共40分）",
+        "text_level": 2,
+        "bbox": [
+            112,
+            560,
+            532,
+            576
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "9. 将波长为 $\\lambda$ 的平行单色光垂直投射于一狭缝上, 若对应于衍射图样的第一级暗纹位置的衍射角的绝对值为 $\\theta$ , 则缝的宽度等于①.",
+            "10. 假设作用在一质量为 $10 \\mathrm{~kg}$ 的物体上的力, 在 4 秒内均匀地从零增加到 $50 \\mathrm{~N}$ , 使物体沿力的方向由静止开始作直线运动。则物体最后的速率 $v = ①$ .",
+            "11. 一质量为 $M$ 的质点沿 $x$ 轴正向运动, 假设该质点通过坐标为 $x$ 的位置时速度的大小为 $kx$ ( $k$ 为正值常量), 则此时作用于该质点上的力 $F = \\underline{①}$ , 该质点从 $x = x_0$ 点出发运动到 $x = x_1$ 处所经历的时间 $\\Delta t = \\underline{②}$ .",
+            "12. 已知地球质量为 $M$ ，半径为 $R$ 。一质量为 $m$ 的火箭从地面上升到距地面高度为 $2R$ 处。在此过程中，地球引力对火箭作的功为①。",
+            "13. 哈雷慧星绕太阳的轨道是以太阳为一个焦点的椭圆．它离太阳最近的距离是 $r_{1}=8.75\\times10^{10}$ m，此时它的速率是 $v_{1}=5.46\\times10^{4}$ m/s．它离太阳最远时的速率是 $v_{2}=9.08\\times10^{2}$ m/s，这时它离太阳的距离是 $r_{2}=①$ .",
+            "14. 电荷分别为 $q_{1}$ 和 $q_{2}$ 的两个点电荷单独在空间各点产生的静电场强分别为 $\\vec{E}_{1}$ 和 $\\vec{E}_{2}$ , 空间各点总场强为 $\\vec{E} = \\vec{E}_{1} + \\vec{E}_{2}$ . 现在作一封闭曲面 S,"
+        ],
+        "bbox": [
+            112,
+            577,
+            880,
+            846
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "如图 4 所示，则以下两式分别给出通过 S 的电场强度通量",
+        "bbox": [
+            112,
+            854,
+            623,
+            873
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\oint \\vec {E} _ {1} \\cdot d \\vec {\\mathrm{s}} = \\underline {{①}}, \\quad \\oint \\vec {E} \\cdot d \\vec {\\mathrm{s}} = \\underline {{②}}.\n$$",
+        "text_format": "latex",
+        "bbox": [
+            115,
+            879,
+            366,
+            904
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/74ec3b48545ce21e5fcd5193c380a9aef7bf485fa6a30073986ad97c1e47d06e.jpg",
+        "image_caption": [
+            "图 4"
+        ],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            737,
+            818,
+            875,
+            895
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "header",
+        "text": "广西民族大学\nGUANGXI MINZU UNIVERSITY",
+        "bbox": [
+            115,
+            28,
+            359,
+            73
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "footer",
+        "text": "考试科目代码及名称: 646 普通物理",
+        "bbox": [
+            126,
+            922,
+            415,
+            938
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "第 2 页 共 3 页",
+        "bbox": [
+            430,
+            940,
+            566,
+            954
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "15. 载有一定电流的圆线圈在周围空间产生的磁场与圆线圈半径 $R$ 有关, 当圆线圈半径增大时圆线圈中心点(即圆心)的磁场①, 圆线圈轴线上各点的磁场②.",
+        "bbox": [
+            112,
+            83,
+            880,
+            120
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "三、简答题（每题10分，共1小题，共10分）",
+        "text_level": 2,
+        "bbox": [
+            132,
+            130,
+            552,
+            147
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "16. 什么叫半波带?单缝衍射中怎样划分半波带?对应于单缝衍射第3级明条纹和第4级暗条纹，单缝处波面各可分成几个半波带?",
+        "bbox": [
+            112,
+            148,
+            877,
+            184
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "四、计算题（每题15分，共4小题，共60分）",
+        "text_level": 2,
+        "bbox": [
+            132,
+            193,
+            552,
+            211
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "17. 在夫琅禾费圆孔衍射中，设圆孔半径为0.10mm，透镜焦距为50cm，所用单色光波长为500nm，求在透镜焦平面处屏幕上呈现的艾里斑半径.",
+            "18. 图 5 示质量为 $M_{1} = 24 \\mathrm{~kg}$ 的圆轮, 可绕水平光滑固定轴转动, 一轻绳缠绕于轮上, 另一端通过质量为 $M_{2} = 5 \\mathrm{~kg}$ 的圆盘形定滑轮悬有 $m = 10 \\mathrm{~kg}$ 的物体. 求当重物由静止开始下降了 $h = 0.5 \\mathrm{~m}$ 时, (1) 物体的速度; (2) 绳中张力. (设绳与定滑轮间无相对滑动, 圆轮、定滑轮绕通过轮心且垂直于横截面的水平光滑轴的转动惯"
+        ],
+        "bbox": [
+            112,
+            212,
+            878,
+            323
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "量分别为 $J_{1} = \\frac{1}{2} M_{1}R^{2}, J_{2} = \\frac{1}{2} M_{2}r^{2})$",
+        "bbox": [
+            114,
+            326,
+            448,
+            360
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/672dd0bfe83b878be97862341593483bcd01d91741ee6f3778d64dc7c74fd764.jpg",
+        "image_caption": [
+            "图 5"
+        ],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            700,
+            338,
+            873,
+            456
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "19. 图 6 示两个半径均为 $R$ 的非导体球壳, 表面上均匀带电, 电荷分别为 $+Q$ 和 $-Q$ , 两球心相距为 $d (\\mathrm{d} >> 2R)$ . 求两球心间的电势差.",
+        "bbox": [
+            112,
+            491,
+            867,
+            526
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/728c5da858e77d747dba9402a753c5242cb310296851e14301b05f6eed7c842a.jpg",
+        "image_caption": [
+            "图6"
+        ],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            650,
+            519,
+            850,
+            618
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "20. 一根无限长导线弯成如图 7 形状，设各线段都在同一平面内(纸面内)，其中第二段是半径为 R 的四分之一圆弧，其余为直线．导线中通有电流 I，求图中 O 点处的磁感强度.",
+        "bbox": [
+            112,
+            653,
+            880,
+            708
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/c0636535169a7cd63f0420158596cfa9b91ec9cb8adf96172541f93e455432f7.jpg",
+        "image_caption": [
+            "图7"
+        ],
+        "image_footnote": [],
+        "content": "",
+        "bbox": [
+            648,
+            711,
+            857,
+            766
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "广西民族大学\nGUANGXI MINZU UNIVERSITY",
+        "bbox": [
+            115,
+            28,
+            359,
+            73
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "footer",
+        "text": "考试科目代码及名称: 646 普通物理",
+        "bbox": [
+            126,
+            922,
+            415,
+            938
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "第 3 页 共 3 页",
+        "bbox": [
+            430,
+            939,
+            566,
+            954
+        ],
+        "page_idx": 2
+    }
+]

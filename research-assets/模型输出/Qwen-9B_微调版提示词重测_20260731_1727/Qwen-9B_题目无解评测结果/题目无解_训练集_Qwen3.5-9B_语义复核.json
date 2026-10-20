@@ -1,0 +1,642 @@
+{
+  "193": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "238": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "374": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "603": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "604": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "605": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "607": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "615": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "621": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "623": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "625": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "632": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "637": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "645": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "646": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "649": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "650": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "656": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "663": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "665": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "666": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "667": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "675": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "676": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "682": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "687": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "691": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "692": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "700": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "709": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "734": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "737": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "742": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "744": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "752": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "759": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "764": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "772": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "782": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "785": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "792": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "793": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "797": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "803": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "804": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "805": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "806": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "810": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "816": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "818": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "825": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "828": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "830": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "831": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "834": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "840": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "841": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "842": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "844": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "848": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "849": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "850": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "853": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "857": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "861": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "863": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "866": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "872": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "884": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "888": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "889": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "895": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型判断题目存在可解性问题，但正确项数量、具体根因或修正方案存在偏差。",
+    "review_method": "Codex离线语义复核"
+  },
+  "897": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "899": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "901": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "902": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "908": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "909": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "912": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "916": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "918": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "920": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "921": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "922": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "935": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "936": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "937": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "939": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "941": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "943": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "947": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "964": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "970": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "972": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "973": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "975": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "977": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "978": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "983": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "984": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "988": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "990": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "993": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "995": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "998": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1010": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1013": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1014": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1015": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1016": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1020": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1023": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1034": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1040": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1042": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1051": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1053": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1054": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1057": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1058": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1060": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1065": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1068": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1071": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1076": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1082": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型所称条件缺失、无正确项或公式冲突不成立，或未命中标准答案对应的无解根因。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1087": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1092": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案一致的无解根因，替代修正方案仍能恢复可解性。",
+    "review_method": "Codex离线语义复核"
+  }
+}

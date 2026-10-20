@@ -1,0 +1,727 @@
+{
+  "207": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未识别实际缺失内容，或补充了无关、错误的信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "211": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未识别实际缺失内容，或补充了无关、错误的信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "212": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "214": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "215": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未识别实际缺失内容，或补充了无关、错误的信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "220": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "221": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "222": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "223": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "224": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "225": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "226": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "227": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "228": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "231": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "232": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "233": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "235": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "236": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "237": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "238": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "240": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "241": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "242": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "245": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "247": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "250": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "252": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "254": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "259": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "264": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "266": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "275": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "286": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "287": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "288": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "290": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "291": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "292": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "293": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "296": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "297": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "298": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "302": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "303": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "304": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "306": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "307": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "308": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "309": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "310": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "312": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "316": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "320": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "322": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "323": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "324": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "326": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未识别实际缺失内容，或补充了无关、错误的信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "333": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "337": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "338": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "340": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "341": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "344": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未识别实际缺失内容，或补充了无关、错误的信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "345": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "346": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "348": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未识别实际缺失内容，或补充了无关、错误的信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "350": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "351": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "353": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "354": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "356": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "357": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "358": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "359": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "361": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "363": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "364": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "365": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "366": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "367": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "368": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "374": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "376": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "377": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "380": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "381": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "382": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "387": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "388": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "389": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "390": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "391": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "392": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "393": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "394": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "395": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "396": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "397": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "398": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "399": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "400": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "401": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "402": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "407": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "408": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "409": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "410": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "411": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "419": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "420": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "421": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "422": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "423": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "424": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "425": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "427": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "428": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "430": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "432": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "433": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "436": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "437": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "438": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "444": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "445": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "448": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了缺失位置，但补充内容不准确、不完整或只恢复了部分目标。",
+    "review_method": "Codex离线语义复核"
+  },
+  "449": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "450": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "453": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "454": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "455": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "456": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "468": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "469": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "470": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "471": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "472": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "473": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "474": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "475": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "476": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "477": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "478": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "479": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别缺失位置，并恢复了内容或给出了合理占位修复。",
+    "review_method": "Codex离线语义复核"
+  }
+}

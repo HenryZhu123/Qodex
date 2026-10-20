@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 0.8684408664703369,
+      "题目提取": 296.9416010379791,
+      "AI内容检测": 199.3415060043335,
+      "内部查重检测": 0.2095661163330078,
+      "历史查重检测": 0.29355287551879883,
+      "后处理": 0.0007061958312988281,
+      "总耗时": 497.65537309646606
+    },
+    "total_time": 497.65537309646606,
+    "total_questions": 57,
+    "total_errors": 9,
+    "avg_time_per_question": 8.730796019236246
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 9,
+    "exam_name": "2026 338+生物化学.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

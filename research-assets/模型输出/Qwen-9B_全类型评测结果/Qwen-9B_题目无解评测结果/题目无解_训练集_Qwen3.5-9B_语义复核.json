@@ -1,0 +1,1092 @@
+{
+  "14": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "62": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "72": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "118": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "209": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "259": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "341": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "362": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "381": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "390": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "500": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题目可解，模型误报无解或条件不足。",
+    "review_method": "Codex离线语义复核"
+  },
+  "595": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "596": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "597": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "598": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "599": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "600": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "601": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "602": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "603": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "604": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "605": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "609": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "612": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "616": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "617": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "621": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "622": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "633": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "640": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "643": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "644": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "645": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "646": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "647": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "648": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "649": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "653": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "654": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "655": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "656": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "657": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "659": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "660": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "661": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "662": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "663": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "664": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "665": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "666": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "668": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "669": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "670": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "672": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "673": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "674": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "675": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "676": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "677": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "678": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "679": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "680": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "681": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "682": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "683": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "687": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "688": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "691": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "693": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "695": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "700": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "708": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "709": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "711": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "713": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到题目不可唯一作答的核心问题，但存在额外报错、重复报错或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "719": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "721": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "729": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "731": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "732": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "734": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "735": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "736": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "744": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "745": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "746": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "752": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "753": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "755": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "771": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "772": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "773": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "778": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "779": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "782": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "784": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "786": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "792": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "793": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "797": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "804": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "805": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "806": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "809": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "810": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "813": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "818": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "820": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "822": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "825": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "826": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "827": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "828": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "830": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "831": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "837": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "838": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "839": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "840": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "841": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "842": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "843": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "845": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "846": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "849": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "853": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "857": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "859": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "860": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "863": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "864": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "867": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "870": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "872": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "880": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "885": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "889": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "892": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "894": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "895": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "899": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "900": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到题目不可唯一作答的核心问题，但存在额外报错、重复报错或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "901": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "903": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "904": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "907": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "908": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "909": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "912": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "920": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "921": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "923": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "925": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "928": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "929": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "931": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "932": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "933": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "935": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "936": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "939": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "941": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "944": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "945": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "952": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "953": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "956": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "963": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "964": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "966": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "975": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "978": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "980": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到题目不可唯一作答的核心问题，但存在额外报错、重复报错或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "981": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "990": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "992": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "994": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "995": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "998": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到题目不可唯一作答的核心问题，但存在额外报错、重复报错或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "999": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1001": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到题目不可唯一作答的核心问题，但存在额外报错、重复报错或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1005": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1010": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1012": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1013": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1014": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1015": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1018": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1020": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1022": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1025": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1028": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1032": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1034": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1040": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1041": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1042": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1045": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1046": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1051": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1053": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1054": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1057": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1058": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1059": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1060": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1068": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1069": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1071": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1072": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1074": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1076": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1082": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1086": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1087": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1089": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1090": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1092": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别题目无解或解不唯一的核心原因；补充约束、修改数据或调整提问均为有效修正方向。",
+    "review_method": "Codex离线语义复核"
+  }
+}

@@ -1,0 +1,422 @@
+{
+  "8": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "9": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "18": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "25": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "30": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "34": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "42": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "65": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "90": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "102": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "121": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "133": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "166": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "176": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "186": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "188": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "204": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "206": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "209": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "217": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "322": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "333": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "364": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "384": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "397": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "398": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "406": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "409": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "410": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "418": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "433": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "434": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "445": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "454": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "457": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "462": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "464": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "466": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "469": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "489": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "502": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "522": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "530": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "533": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "538": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "542": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "550": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "554": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "558": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "577": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "601": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "654": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "686": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "702": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "709": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "710": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "718": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "769": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "790": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "797": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "829": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "850": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "866": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "890": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "893": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "909": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "914": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "916": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "934": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "957": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "959": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1025": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价且成立的日语表达，能够消除目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1058": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1083": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1086": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1125": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1150": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1158": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1162": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1185": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1218": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1224": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的日语问题，且替换后的词形、助词或句意不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1239": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1242": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分日语问题，但存在漏报、额外误报，或具体活用、助词、表记修改仍不成立。",
+    "review_method": "Codex离线语义复核"
+  }
+}

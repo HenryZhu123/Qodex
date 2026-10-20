@@ -1,0 +1,25 @@
+{
+  "input": "C:\\hyt-agent\\训练集-微调版提示词\\标点符号错误_训练集.jsonl",
+  "output": "C:\\hyt-agent\\模型输出\\Qwen3.8-Max_标点符号规则修订验证_20260824\\remaining_5_retest.jsonl",
+  "model": "qwen3.8-max",
+  "base_url": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+  "concurrency": 5,
+  "temperature": 0.0,
+  "requested_rows": 5,
+  "previously_completed": 0,
+  "attempted_this_run": 5,
+  "results_present": 5,
+  "status_counts": {
+    "success": 5
+  },
+  "basic_schema_invalid": 0,
+  "has_error_counts": {
+    "true": 5
+  },
+  "usage_this_run": {
+    "prompt_tokens": 8241,
+    "total_tokens": 12482,
+    "completion_tokens": 4241
+  },
+  "elapsed_seconds": 50.3
+}

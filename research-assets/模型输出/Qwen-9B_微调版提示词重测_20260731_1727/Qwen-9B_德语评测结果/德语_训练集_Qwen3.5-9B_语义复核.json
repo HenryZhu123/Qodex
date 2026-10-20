@@ -1,0 +1,192 @@
+{
+  "25": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "46": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "58": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决标准答案对应的德语问题，或修改后句子仍存在相同的结构错误。",
+    "review_method": "Codex离线语义复核"
+  },
+  "70": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "91": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "95": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "112": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "148": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决标准答案对应的德语问题，或修改后句子仍存在相同的结构错误。",
+    "review_method": "Codex离线语义复核"
+  },
+  "152": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "154": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "164": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "165": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "169": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "200": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "203": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "211": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决标准答案对应的德语问题，或修改后句子仍存在相同的结构错误。",
+    "review_method": "Codex离线语义复核"
+  },
+  "220": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决标准答案对应的德语问题，或修改后句子仍存在相同的结构错误。",
+    "review_method": "Codex离线语义复核"
+  },
+  "226": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型使用了与标准答案等价的德语结构，能够完整消除目标语法问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "229": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "268": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "274": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "347": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "362": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "365": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "419": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "422": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "439": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "440": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "457": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决标准答案对应的德语问题，或修改后句子仍存在相同的结构错误。",
+    "review_method": "Codex离线语义复核"
+  },
+  "481": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "484": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决标准答案对应的德语问题，或修改后句子仍存在相同的结构错误。",
+    "review_method": "Codex离线语义复核"
+  },
+  "487": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "494": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "495": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决标准答案对应的德语问题，或修改后句子仍存在相同的结构错误。",
+    "review_method": "Codex离线语义复核"
+  },
+  "497": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决标准答案对应的德语问题，或修改后句子仍存在相同的结构错误。",
+    "review_method": "Codex离线语义复核"
+  },
+  "500": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "505": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "518": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了部分德语问题，但漏掉其他目标，或给出的语序、变格、搭配修改仍不完整。",
+    "review_method": "Codex离线语义复核"
+  }
+}

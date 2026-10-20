@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-08-12T11:11:46+08:00",
+  "input_records": 234,
+  "evaluated_records": 234,
+  "excluded_records": 0,
+  "answer_quality": {
+    "total": 234,
+    "tp": 89,
+    "fp": 17,
+    "fn": 29,
+    "tn": 112,
+    "precision": 0.839622641509434,
+    "recall": 0.7542372881355932,
+    "f1": 0.7946428571428571,
+    "fully_correct": 201,
+    "accuracy": 0.8589743589743589
+  },
+  "by_task": {
+    "语义不清": {
+      "total": 78,
+      "tp": 29,
+      "fp": 5,
+      "fn": 11,
+      "tn": 35,
+      "precision": 0.8529411764705882,
+      "recall": 0.725,
+      "f1": 0.7837837837837837,
+      "fully_correct": 64,
+      "accuracy": 0.8205128205128205
+    },
+    "选项结构错误": {
+      "total": 78,
+      "tp": 30,
+      "fp": 9,
+      "fn": 9,
+      "tn": 39,
+      "precision": 0.7692307692307693,
+      "recall": 0.7692307692307693,
+      "f1": 0.7692307692307693,
+      "fully_correct": 69,
+      "accuracy": 0.8846153846153846
+    },
+    "错别字": {
+      "total": 78,
+      "tp": 30,
+      "fp": 3,
+      "fn": 9,
+      "tn": 38,
+      "precision": 0.9090909090909091,
+      "recall": 0.7692307692307693,
+      "f1": 0.8333333333333333,
+      "fully_correct": 68,
+      "accuracy": 0.8717948717948718
+    }
+  },
+  "latency": {
+    "count": 0
+  },
+  "latency_by_task": {}
+}

@@ -1,0 +1,42 @@
+﻿{
+    "generated_at":  "2026-08-26T11:37:31",
+    "decision_total":  152,
+    "recovered_total":  126,
+    "unrecovered_decision_indices":  [
+                                         1,
+                                         5,
+                                         10,
+                                         13,
+                                         20,
+                                         27,
+                                         32,
+                                         39,
+                                         46,
+                                         53,
+                                         59,
+                                         66,
+                                         69,
+                                         81,
+                                         86,
+                                         91,
+                                         100,
+                                         103,
+                                         114,
+                                         120,
+                                         126,
+                                         131,
+                                         136,
+                                         141,
+                                         146,
+                                         151
+                                     ],
+    "recovered_by_source":  {
+                                "2022重庆理工大学.xlsx":  26,
+                                "2022重庆理工大学（2）.xlsx":  26,
+                                "2023重庆理工大学.xlsx":  26,
+                                "2023重庆理工大学（2）.xlsx":  26,
+                                "广西民族大学.xlsx":  22
+                            },
+    "exact_one_replacement":  true,
+    "unique_source_rows":  true
+}

@@ -1,0 +1,190 @@
+{
+  "schema_version": "PunctuationPositiveSemanticAuditReport.v1",
+  "audit_id": "标点符号错误_有错误样本专项审核_第1版",
+  "created_at": "2026-08-05T08:11:47.254269Z",
+  "scope": {
+    "source_file": "数据资产/raw_snapshot/v1/训练集-微调版提示词/标点符号错误_训练集.jsonl",
+    "source_records": 1061,
+    "reviewed_positive_records": 580,
+    "reviewed_source_rows": "482-1061",
+    "negative_records_not_in_this_audit": 481
+  },
+  "criteria": {
+    "semantic_basis": "只保留会实际改变题意、语气、范围、层级、边界或数值含义的问题",
+    "excluded": "仅影响句末规范、出版美观、选项标号样式、空格换行和LaTeX/公式符号的问题",
+    "response_quality": "定位可检索、修改最小、说明准确、建议可执行"
+  },
+  "counts": {
+    "reviewed": 580,
+    "pass": 10,
+    "fixable": 9,
+    "reject": 560,
+    "needs_review": 1,
+    "semantically_correct_including_fixable": 19
+  },
+  "rates": {
+    "direct_pass_rate": 0.017241379310344827,
+    "semantic_correct_rate_including_fixable": 0.032758620689655175,
+    "reject_rate": 0.9655172413793104
+  },
+  "issue_counts": {
+    "FALSE_POSITIVE_UNDER_CURRENT_TASK_CARD": 560,
+    "TITLE_OR_SHORT_PROMPT_STYLE_ONLY": 398,
+    "NO_FUNCTIONAL_IMPACT": 79,
+    "FORMULA_OR_LATEX_OUT_OF_SCOPE": 53,
+    "CORRECTION_NOT_MINIMAL": 25,
+    "OPTION_BOUNDARY_ALREADY_CLEAR": 17,
+    "SEMANTIC_CORRECT_BUT_RESPONSE_NOT_MINIMAL": 9,
+    "INSUFFICIENT_FUNCTIONAL_IMPACT": 6,
+    "NON_MINIMAL_OR_WRONG_CORRECTION": 6,
+    "INTENTIONAL_PUNCTUATION_TASK_CONTENT": 1,
+    "CLAUSE_BOUNDARY_JUDGMENT_UNCERTAIN": 1
+  },
+  "question_type_counts": {
+    "简答题": 156,
+    "名词解释": 120,
+    "论述题": 79,
+    "选择题": 40,
+    "判断题": 38,
+    "计算题": 20,
+    "单项选择题": 19,
+    "选择与填空": 12,
+    "词语翻译题": 10,
+    "判断并说明原因": 9,
+    "金融学": 7,
+    "解释下列各组概念": 7,
+    "简述题": 7,
+    "名词解释题": 6,
+    "民法学试题": 6,
+    "综合题": 4,
+    "填空题": 4,
+    "业务分析题": 4,
+    "判断分析题": 3,
+    "案例分析题": 3,
+    "作品赏析题": 3,
+    "民事诉讼法学试题": 3,
+    "语言分析与翻译题": 2,
+    "材料分析题": 2,
+    "分析思考题": 2,
+    "公司理财": 2,
+    "计算与分析题": 2,
+    "证明题": 2,
+    "应用文写作": 1,
+    "议论文写作": 1,
+    "作文题": 1,
+    "材料题": 1,
+    "句子翻译题": 1,
+    "古文标点题": 1,
+    "案例分析": 1,
+    "单选题": 1
+  },
+  "top_original_to_correction_pairs": [
+    {
+      "original_text": "，",
+      "correction": "。",
+      "count": 286
+    },
+    {
+      "original_text": "，",
+      "correction": "？",
+      "count": 40
+    },
+    {
+      "original_text": ",",
+      "correction": ".",
+      "count": 8
+    },
+    {
+      "original_text": "，",
+      "correction": "：",
+      "count": 8
+    },
+    {
+      "original_text": "。",
+      "correction": "？",
+      "count": 7
+    },
+    {
+      "original_text": "，",
+      "correction": ".$",
+      "count": 6
+    },
+    {
+      "original_text": "，",
+      "correction": "；",
+      "count": 4
+    },
+    {
+      "original_text": "？",
+      "correction": "。",
+      "count": 4
+    },
+    {
+      "original_text": "，",
+      "correction": "软权力",
+      "count": 2
+    },
+    {
+      "original_text": "，",
+      "correction": "政策规划",
+      "count": 2
+    },
+    {
+      "original_text": "\\ \\\\ \\\\ \\\\ ），",
+      "correction": " \\ \\ \\ ）.",
+      "count": 2
+    },
+    {
+      "original_text": "，",
+      "correction": "欧洲文坛三杰",
+      "count": 1
+    },
+    {
+      "original_text": "，",
+      "correction": "三曹",
+      "count": 1
+    },
+    {
+      "original_text": "，",
+      "correction": "中国四大民间传说",
+      "count": 1
+    },
+    {
+      "original_text": "，",
+      "correction": "五音（亦称“五声”）",
+      "count": 1
+    },
+    {
+      "original_text": "，",
+      "correction": "四大文明古国",
+      "count": 1
+    },
+    {
+      "original_text": "通则久。",
+      "correction": "通则久。”",
+      "count": 1
+    },
+    {
+      "original_text": "，",
+      "correction": "人工智能",
+      "count": 1
+    },
+    {
+      "original_text": "，",
+      "correction": "系统思维能力",
+      "count": 1
+    },
+    {
+      "original_text": "，",
+      "correction": "自由",
+      "count": 1
+    }
+  ],
+  "checks": {
+    "all_positive_records_covered": true,
+    "duplicate_review_rows": 0,
+    "disposition_count_matches_reviewed": true,
+    "source_file_modified": false,
+    "source_sha256": "04ba1f8e03f5080245f5e1f707cb39e47e8f2b34db32d77e857fc3dabd55c025"
+  }
+}

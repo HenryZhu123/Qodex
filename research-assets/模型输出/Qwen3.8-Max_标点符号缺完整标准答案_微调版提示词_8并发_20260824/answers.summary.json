@@ -1,0 +1,26 @@
+{
+  "input": "C:\\hyt-agent\\训练集-微调版提示词\\标点符号错误_训练集.jsonl",
+  "output": "C:\\hyt-agent\\模型输出\\Qwen3.8-Max_标点符号缺完整标准答案_微调版提示词_8并发_20260824\\answers.jsonl",
+  "model": "qwen3.8-max",
+  "base_url": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+  "concurrency": 8,
+  "temperature": 0.0,
+  "requested_rows": 37,
+  "previously_completed": 0,
+  "attempted_this_run": 37,
+  "results_present": 37,
+  "status_counts": {
+    "success": 37
+  },
+  "basic_schema_invalid": 0,
+  "has_error_counts": {
+    "false": 34,
+    "true": 3
+  },
+  "usage_this_run": {
+    "prompt_tokens": 33211,
+    "total_tokens": 48750,
+    "completion_tokens": 15539
+  },
+  "elapsed_seconds": 64.44
+}

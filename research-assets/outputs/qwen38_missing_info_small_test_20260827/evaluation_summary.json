@@ -1,0 +1,34 @@
+{
+  "total": 24,
+  "generation_success": 24,
+  "schema_valid": 24,
+  "classification_correct": 17,
+  "localization_valid": 16,
+  "exact_restoration": 4,
+  "by_action": {
+    "converted_to_negative": {
+      "total": 4,
+      "classification_correct": 4,
+      "localization_valid": 4,
+      "exact_restoration": 4
+    },
+    "reconstructed_core_question": {
+      "total": 6,
+      "classification_correct": 2,
+      "localization_valid": 2,
+      "exact_restoration": 0
+    },
+    "reconstructed_formula": {
+      "total": 6,
+      "classification_correct": 3,
+      "localization_valid": 3,
+      "exact_restoration": 0
+    },
+    "reconstructed_option": {
+      "total": 8,
+      "classification_correct": 8,
+      "localization_valid": 7,
+      "exact_restoration": 0
+    }
+  }
+}

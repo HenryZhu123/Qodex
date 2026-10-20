@@ -1,0 +1,82 @@
+{
+  "462": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型定位了其他位置或给出无效修改，未解决标准答案标注的标点问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "634": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型定位了其他位置或给出无效修改，未解决标准答案标注的标点问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "679": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "739": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到目标标点问题，但同时额外改动正确标点，或替换符号仍不适合该位置。",
+    "review_method": "Codex离线语义复核"
+  },
+  "741": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到目标标点问题，但同时额外改动正确标点，或替换符号仍不适合该位置。",
+    "review_method": "Codex离线语义复核"
+  },
+  "881": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型定位了其他位置或给出无效修改，未解决标准答案标注的标点问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "888": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "891": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "895": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "968": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "970": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "971": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "987": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "990": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1049": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到目标标点问题，但同时额外改动正确标点，或替换符号仍不适合该位置。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1052": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位到相同标点位置，删除或替换后的句界/选项边界与标准答案语义等价。",
+    "review_method": "Codex离线语义复核"
+  }
+}

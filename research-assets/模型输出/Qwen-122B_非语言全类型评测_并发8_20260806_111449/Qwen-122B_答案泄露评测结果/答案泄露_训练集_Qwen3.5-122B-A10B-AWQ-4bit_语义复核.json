@@ -1,0 +1,237 @@
+{
+  "86": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "90": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "91": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "92": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "94": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "95": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "98": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "99": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "100": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "101": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "103": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "104": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "105": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "107": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "108": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "109": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "110": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "112": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "113": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "114": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "118": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "120": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "121": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "123": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "124": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "125": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "126": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "127": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "128": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "129": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "130": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "131": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "133": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "134": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "135": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "137": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "139": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "141": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "142": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "151": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "159": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "164": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "165": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "168": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "178": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "179": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  },
+  "182": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别并移除了题干或选项中的答案泄露信息。",
+    "review_method": "Codex离线语义复核"
+  }
+}

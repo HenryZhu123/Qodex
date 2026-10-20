@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 7.047569751739502,
+      "题目提取": 187.5589416027069,
+      "AI内容检测": 130.61513471603394,
+      "内部查重检测": 0.15474319458007812,
+      "历史查重检测": 0.00044536590576171875,
+      "后处理": 0.00046539306640625,
+      "总耗时": 325.3773000240326
+    },
+    "total_time": 325.3773000240326,
+    "total_questions": 9,
+    "total_errors": 3,
+    "avg_time_per_question": 36.153033336003624
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 3,
+    "exam_name": "861电路原理.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 8.458261251449585,
+      "题目提取": 278.9237570762634,
+      "AI内容检测": 474.33092188835144,
+      "内部查重检测": 0.32734060287475586,
+      "历史查重检测": 0.0005204677581787109,
+      "后处理": 0.00025081634521484375,
+      "总耗时": 762.0410521030426
+    },
+    "total_time": 762.0410521030426,
+    "total_questions": 67,
+    "total_errors": 4,
+    "avg_time_per_question": 11.373747046314069
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 4,
+    "exam_name": "641-生物化学与分子生物学.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

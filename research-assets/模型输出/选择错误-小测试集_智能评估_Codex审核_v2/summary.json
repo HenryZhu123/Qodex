@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-08-11T17:12:09+08:00",
+  "input_records": 980,
+  "evaluated_records": 977,
+  "excluded_records": 3,
+  "has_error_detection": {
+    "total": 977,
+    "tp": 487,
+    "fp": 2,
+    "fn": 0,
+    "tn": 488,
+    "precision": 0.9959100204498977,
+    "recall": 1.0,
+    "f1": 0.9979508196721312,
+    "fully_correct": 975,
+    "accuracy": 0.9979529170931423
+  },
+  "end_to_end": {
+    "total": 977,
+    "tp": 437,
+    "fp": 52,
+    "fn": 50,
+    "tn": 488,
+    "precision": 0.8936605316973415,
+    "recall": 0.8973305954825462,
+    "f1": 0.8954918032786885,
+    "fully_correct": 925,
+    "accuracy": 0.946775844421699
+  },
+  "by_task": {
+    "选项错误": {
+      "total": 977,
+      "tp": 437,
+      "fp": 52,
+      "fn": 50,
+      "tn": 488,
+      "precision": 0.8936605316973415,
+      "recall": 0.8973305954825462,
+      "f1": 0.8954918032786885,
+      "fully_correct": 925,
+      "accuracy": 0.946775844421699
+    }
+  },
+  "latency": {
+    "count": 0
+  },
+  "latency_by_task": {}
+}

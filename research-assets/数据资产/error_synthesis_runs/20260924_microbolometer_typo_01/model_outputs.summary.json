@@ -1,0 +1,28 @@
+{
+  "input": "/Users/softzephyr/Desktop/hyt-agent/数据资产/error_synthesis_runs/20260924_microbolometer_typo_01/candidate_input.jsonl",
+  "output": "/Users/softzephyr/Desktop/hyt-agent/数据资产/error_synthesis_runs/20260924_microbolometer_typo_01/model_outputs.jsonl",
+  "requested_model": "qwen-plus",
+  "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+  "concurrency": 8,
+  "requested_rows": 1,
+  "previously_completed": 0,
+  "pending_rows": 1,
+  "prompt_sha256": [
+    "ec572b232084a41820a16c0fbfae33fe5c8ae6382b49cd6448035644b570bb04"
+  ],
+  "attempted_this_run": 1,
+  "results_present": 1,
+  "status_counts": {
+    "success": 1
+  },
+  "basic_schema_invalid": 0,
+  "returned_models": {
+    "qwen-plus": 1
+  },
+  "usage_this_run": {
+    "total_tokens": 964,
+    "completion_tokens": 117,
+    "prompt_tokens": 847
+  },
+  "elapsed_seconds": 3.026
+}

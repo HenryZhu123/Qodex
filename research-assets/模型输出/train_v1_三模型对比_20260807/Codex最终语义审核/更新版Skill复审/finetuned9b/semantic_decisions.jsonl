@@ -1,0 +1,234 @@
+{"id": "1", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "2", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "3", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'选项结构错误': 1} 模型={}", "per_error": []}
+{"id": "4", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "5", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "6", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "7", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "8", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "9", "pass": false, "exclude": false, "gold_issue": false, "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。"}]}
+{"id": "10", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "11", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "12", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "13", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "14", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "15", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "16", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "17", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "18", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "19", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "20", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "21", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。"}]}
+{"id": "22", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "23", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "24", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "25", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "26", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "27", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "28", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "29", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "30", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "31", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "32", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "33", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "34", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "35", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "36", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "37", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "38", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "39", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "40", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "41", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "42", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "43", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "44", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "45", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "46", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "47", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "48", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "49", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "50", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "51", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "52", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "53", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "54", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "55", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "56", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "57", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "58", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "59", "pass": true, "exclude": false, "gold_issue": false, "reason": "模型在“题目文本中“闭环控制系统通常对（ ）进行直接或间接地测量，通过反馈环节去影响控制信号。”所在位置”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "semantic-unclear-missing-position-correct", "reason": "模型在“题目文本中“闭环控制系统通常对（ ）进行直接或间接地测量，通过反馈环节去影响控制信号。”所在位置”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。"}]}
+{"id": "60", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'错别字': 1} 模型={}", "per_error": []}
+{"id": "61", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "62", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "63", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "64", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "65", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "66", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "67", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "68", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。"}]}
+{"id": "69", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "70", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "71", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "72", "pass": false, "exclude": false, "gold_issue": false, "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。"}]}
+{"id": "73", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "74", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "75", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "76", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "77", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "78", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "79", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "80", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "81", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "82", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "83", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "84", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "85", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "86", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "87", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "88", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "89", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "90", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "91", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "92", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。"}]}
+{"id": "93", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "94", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'语义不清': 1}", "per_error": [{"model_error_index": 1, "gold_error_index": null, "pass": false, "rule_id": "answer-quality-fail", "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'语义不清': 1}"}]}
+{"id": "95", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "96", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "97", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "98", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "99", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "100", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "101", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "102", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "103", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "104", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "105", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "106", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "107", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "108", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "109", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "110", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "111", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "112", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "113", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "114", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "115", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "116", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "117", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "118", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "119", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "120", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "121", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "122", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "123", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "124", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "125", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "126", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "127", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "128", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "129", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "130", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "131", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "132", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "133", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "134", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "135", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "136", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "137", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "138", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "139", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "140", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "141", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "142", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "143", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "144", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。"}]}
+{"id": "145", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}", "per_error": [{"model_error_index": 1, "gold_error_index": null, "pass": false, "rule_id": "answer-quality-fail", "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}"}]}
+{"id": "146", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "147", "pass": false, "exclude": false, "gold_issue": false, "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。"}]}
+{"id": "148", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "149", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "150", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "151", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "152", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "153", "pass": false, "exclude": false, "gold_issue": false, "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。"}]}
+{"id": "154", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "155", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}", "per_error": [{"model_error_index": 1, "gold_error_index": null, "pass": false, "rule_id": "answer-quality-fail", "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}"}]}
+{"id": "156", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "157", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "158", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "159", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "160", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "161", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "162", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "163", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "164", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "165", "pass": false, "exclude": false, "gold_issue": false, "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。"}]}
+{"id": "166", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}", "per_error": [{"model_error_index": 1, "gold_error_index": null, "pass": false, "rule_id": "answer-quality-fail", "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}"}]}
+{"id": "167", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "168", "pass": true, "exclude": false, "gold_issue": false, "reason": "模型在“题目文本中“简述来源原则的及其发展过程。”所在位置”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "semantic-unclear-missing-position-correct", "reason": "模型在“题目文本中“简述来源原则的及其发展过程。”所在位置”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。"}]}
+{"id": "169", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "170", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "171", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "172", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "173", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}", "per_error": [{"model_error_index": 1, "gold_error_index": null, "pass": false, "rule_id": "answer-quality-fail", "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}"}]}
+{"id": "174", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "175", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "176", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "177", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "178", "pass": true, "exclude": false, "gold_issue": false, "reason": "模型在“题目文本中“时间序列在长期内呈现出来的某种持续向上或持续下降称为（ ）”所在位置”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "semantic-unclear-missing-position-correct", "reason": "模型在“题目文本中“时间序列在长期内呈现出来的某种持续向上或持续下降称为（ ）”所在位置”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。"}]}
+{"id": "179", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "180", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "181", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "182", "pass": false, "exclude": false, "gold_issue": false, "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。"}]}
+{"id": "183", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "184", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "185", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}", "per_error": [{"model_error_index": 1, "gold_error_index": null, "pass": false, "rule_id": "answer-quality-fail", "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}"}]}
+{"id": "186", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "187", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "188", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "189", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "190", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "191", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "192", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "193", "pass": false, "exclude": false, "gold_issue": false, "reason": "total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'选项结构错误': 2} 模型={'选项结构错误': 1}", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'选项结构错误': 2} 模型={'选项结构错误': 1}"}]}
+{"id": "194", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}", "per_error": [{"model_error_index": 1, "gold_error_index": null, "pass": false, "rule_id": "answer-quality-fail", "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}"}]}
+{"id": "195", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "196", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "197", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "198", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "199", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "200", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "201", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'语义不清': 1}", "per_error": [{"model_error_index": 1, "gold_error_index": null, "pass": false, "rule_id": "answer-quality-fail", "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'语义不清': 1}"}]}
+{"id": "202", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "203", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "204", "pass": true, "exclude": false, "gold_issue": false, "reason": "模型在“题目文本中“B.银行汇票存款”所在位置”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "semantic-unclear-missing-position-correct", "reason": "模型在“题目文本中“B.银行汇票存款”所在位置”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。"}]}
+{"id": "205", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "206", "pass": false, "exclude": false, "gold_issue": false, "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": false, "rule_id": "answer-quality-fail", "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。"}]}
+{"id": "207", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "208", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "209", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "210", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "211", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "212", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "213", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "214", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "215", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "216", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "217", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "218", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "219", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "220", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "221", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "222", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "223", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "224", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "225", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "226", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "227", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "228", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "229", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "230", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "231", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "232", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "233", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "codex-full-semantic-review", "reason": "沿用逐题审核结论：回答完整通过。"}]}
+{"id": "234", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}

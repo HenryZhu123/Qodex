@@ -1,0 +1,8 @@
+{
+  "prepared": 123,
+  "positive": 109,
+  "negative": 14,
+  "dataset": "C:\\hyt-agent\\训练集-微调版提示词\\信息缺失_训练集.jsonl",
+  "prompt_dir": "C:\\hyt-agent\\提示词-新版",
+  "input": "C:\\hyt-agent\\outputs\\qwen38_missing_info_new_prompt_full_20260827\\request_input.jsonl"
+}

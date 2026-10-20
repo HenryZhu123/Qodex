@@ -1,0 +1,24 @@
+{
+  "input": "训练集-微调版提示词\\train_v3\\train_v3.jsonl",
+  "records": 1498,
+  "counts": {
+    "错别字": 571,
+    "错别字:positive": 390,
+    "语义不清": 627,
+    "语义不清:positive": 383,
+    "选项结构错误": 300,
+    "选项结构错误:negative": 175,
+    "选项结构错误:positive": 125,
+    "语义不清:negative": 244,
+    "错别字:negative": 181
+  },
+  "protocol_issue_records": 0,
+  "semantic_risk_records": 215,
+  "issue_counts": {
+    "error[1].original_text过长": 83,
+    "error[1].修改跨度明显扩大": 105,
+    "error[1].correction过长": 16,
+    "error[1].correction包含占位或操作指令": 29,
+    "error[2].correction包含占位或操作指令": 4
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "dataset_version": "stage1-three-types-v3-quality-audited",
+  "source_dataset": "数据资产\\finetune\\阶段1_三类_v2",
+  "audit_scope": {
+    "selected_records": 1500,
+    "candidate_records_checked": 2318,
+    "deterministic_checks": [
+      "消息与JSON Schema",
+      "答案计数一致性",
+      "原文与锚点定位",
+      "题面乱码",
+      "选项标号序列",
+      "选项内容完全重复"
+    ],
+    "targeted_semantic_review": [
+      "历史模型与负样本标准答案冲突的错别字6条",
+      "历史模型与负样本标准答案冲突的语义不清9条",
+      "历史报告确认的错别字漏标1条"
+    ],
+    "limitation": "语义不清负样本的全量学科级语义正确性无法仅靠确定性规则证明；本版只自动处置高置信问题，并保留完整审计记录。"
+  },
+  "original_dispositions": {
+    "pass": 1372,
+    "fixable": 103,
+    "reject": 25
+  },
+  "issue_counts": {
+    "ERROR_TYPE_PROMPT_MISMATCH": 129,
+    "OPTION_GOLD_TEMPLATE_LOW_QUALITY": 101,
+    "OPTION_POSITIVE_MISSING_LABEL_UNSUPPORTED": 23,
+    "CORRECTION_INVALID": 1,
+    "TYPO_CORRECTION_UNCHANGED": 1,
+    "TYPO_POSITIVE_MISSED_SECOND_ERROR": 1,
+    "TYPO_NEGATIVE_FALSE_LABEL": 1,
+    "OPTION_POSITIVE_FALSE_LABEL": 1
+  },
+  "issue_sample_counts": {
+    "ERROR_TYPE_PROMPT_MISMATCH": 125,
+    "OPTION_GOLD_TEMPLATE_LOW_QUALITY": 101,
+    "OPTION_POSITIVE_MISSING_LABEL_UNSUPPORTED": 23,
+    "CORRECTION_INVALID": 1,
+    "TYPO_CORRECTION_UNCHANGED": 1,
+    "TYPO_POSITIVE_MISSED_SECOND_ERROR": 1,
+    "TYPO_NEGATIVE_FALSE_LABEL": 1,
+    "OPTION_POSITIVE_FALSE_LABEL": 1
+  },
+  "actions": {
+    "replacements": 25,
+    "repaired_samples": 127,
+    "option_answers_regenerated": 125
+  },
+  "post_export_validation": {
+    "records": 1500,
+    "blocking_or_major_schema_location_issues": 0,
+    "option_label_disagreements": 0,
+    "message_role_failures": 0
+  },
+  "train_distribution": {
+    "错别字": {
+      "positive": 419,
+      "negative": 181,
+      "total": 600
+    },
+    "语义不清": {
+      "positive": 356,
+      "negative": 244,
+      "total": 600
+    },
+    "选项结构错误": {
+      "positive": 125,
+      "negative": 175,
+      "total": 300
+    }
+  },
+  "split_overlaps": {
+    "train_vs_validation": {
+      "sample_id": 0,
+      "lineage_id": 0,
+      "user_content": 0
+    },
+    "train_vs_test": {
+      "sample_id": 0,
+      "lineage_id": 0,
+      "user_content": 0
+    },
+    "validation_vs_test": {
+      "sample_id": 0,
+      "lineage_id": 0,
+      "user_content": 0
+    }
+  },
+  "output_schema": {
+    "train.jsonl": [
+      "messages"
+    ],
+    "val.jsonl": [
+      "messages"
+    ],
+    "metadata": "审计、替换、修复和血缘信息均在旁路文件中，不进入训练样本。"
+  },
+  "sha256": {
+    "train.jsonl": "225b6189bc053b3c2e581b1192f9831b2101599628afdea0f99bd724743960f0",
+    "val.jsonl": "f809e6971d4ddb1bc1bcfa3314c728f3ce228e29a885b68bd7e28a3ce2b95ced",
+    "train_manifest.jsonl": "466e9674e3bbd95afc17e0c42e6a776b1fc4721ba4d0221cbf6be0e511e06b7d",
+    "val_manifest.jsonl": "3ae85ba636d14a5c32646a3d0af5d8d37419df4840734a9a99d4b2859b6638a8",
+    "quality_audit.jsonl": "7d257ab4a527a0e80e25782b0a9da7f5822999fe018d34041248b8432fbcf3a1",
+    "replacements.jsonl": "07ced187825e8a1d293510d56c6921c97489df87f86561d1ef47ac8e3866abc4",
+    "repairs.jsonl": "ec3246e35b9f040bd35e5b83fbf1e8dc4f2167d7761104289266b34bd6e9c893"
+  }
+}

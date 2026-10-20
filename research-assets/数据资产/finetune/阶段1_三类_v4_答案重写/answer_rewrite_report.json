@@ -1,0 +1,6 @@
+{
+    "dataset_version":  "stage1-three-types-v4-reverted-to-v3",
+    "source_dataset":  "数据资产\\finetune\\阶段1_三类_v3_质量审核",
+    "status":  "reverted",
+    "note":  "先前的批量答案改写已全部撤销；train.jsonl与val.jsonl均恢复为v3原始内容。"
+}

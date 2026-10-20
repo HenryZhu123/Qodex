@@ -1,0 +1,217 @@
+{
+  "510": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "549": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "550": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "551": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "552": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "553": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "554": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "555": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "573": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "580": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "585": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "647": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "650": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "652": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "653": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "672": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "675": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "680": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了其他位置或使用了错误标点，未解决标准答案标注的问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "690": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "694": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了其他位置或使用了错误标点，未解决标准答案标注的问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "732": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "734": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了其他位置或使用了错误标点，未解决标准答案标注的问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "739": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了其他位置或使用了错误标点，未解决标准答案标注的问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "746": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "770": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "829": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了其他位置或使用了错误标点，未解决标准答案标注的问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "882": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "888": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "889": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "890": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "891": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "892": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "896": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了其他位置或使用了错误标点，未解决标准答案标注的问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "901": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "909": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "916": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了其他位置或使用了错误标点，未解决标准答案标注的问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "937": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "968": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "971": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1009": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1010": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了核心标点异常，但替换符号、标点位置或最小修改与标准答案不完全一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1049": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1052": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的标点问题，修改粒度不同但结果语义等价。",
+    "review_method": "Codex离线语义复核"
+  }
+}

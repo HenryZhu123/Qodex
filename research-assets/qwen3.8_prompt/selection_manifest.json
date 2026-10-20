@@ -1,0 +1,372 @@
+{
+  "model": "Qwen3.8-27B-FP8",
+  "generated_at": "2026-09-15",
+  "selection_policy": {
+    "fpr_strictly_below_percent": 10,
+    "similar_recall_threshold_percentage_points": 2,
+    "flash_preference": [
+      "explicit",
+      "disabled"
+    ],
+    "pro_preference": [
+      "native",
+      "explicit",
+      "disabled"
+    ],
+    "tie_breaker": "Recall 差距不超过 2pp 且耗时明显更短时选择更快模式"
+  },
+  "selections": [
+    {
+      "error_type": "错别字",
+      "task_id": "typo_check",
+      "flash": {
+        "think_mode": "disabled",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/typo_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/typo_check.txt",
+        "sha256": "ac8605fec96b986e664c8083bb3ef21fce4d2383884903492c5b3764866aa551",
+        "evidence": {
+          "recall": 93.2,
+          "fpr": 6.8,
+          "minutes": 15.7,
+          "run_id": "cycle-009-confirm-full-r2-20260903+repair-cycle-009-confirm-full-r2-20260903-retry95",
+          "note": "完整合并结果；与已发布 v002 为同一候选"
+        },
+        "validated": true
+      },
+      "pro": {
+        "think_mode": "disabled",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/typo_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/typo_check.txt",
+        "sha256": "ac8605fec96b986e664c8083bb3ef21fce4d2383884903492c5b3764866aa551",
+        "evidence": {
+          "recall": 93.2,
+          "fpr": 6.8,
+          "minutes": 15.7,
+          "run_id": "cycle-009-confirm-full-r2-20260903+repair-cycle-009-confirm-full-r2-20260903-retry95",
+          "note": "native Recall 91.7%、31.7 min，disabled 更优且更快"
+        },
+        "validated": true
+      }
+    },
+    {
+      "error_type": "选项错误",
+      "task_id": "options_check",
+      "flash": {
+        "think_mode": "disabled",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/options_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/options_check.txt",
+        "sha256": "6e080c81247cc6c5595252b212f31253bb1f7f6365e0cbdfc3a6f1cf859f63f8",
+        "evidence": {
+          "recall": 99.4,
+          "fpr": 0.4,
+          "minutes": 10.1,
+          "run_id": "baseline-local-qwen38-fp8-think-v2-disabled-20260901-options_check",
+          "note": "完整评测"
+        },
+        "validated": true
+      },
+      "pro": {
+        "think_mode": "disabled",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/options_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/options_check.txt",
+        "sha256": "6e080c81247cc6c5595252b212f31253bb1f7f6365e0cbdfc3a6f1cf859f63f8",
+        "evidence": {
+          "recall": 99.4,
+          "fpr": 0.4,
+          "minutes": 10.1,
+          "run_id": "baseline-local-qwen38-fp8-think-v2-disabled-20260901-options_check",
+          "note": "native Recall 仅高 0.2pp，但耗时 56.5 min"
+        },
+        "validated": true
+      }
+    },
+    {
+      "error_type": "语义不清",
+      "task_id": "ambiguity_check",
+      "flash": {
+        "think_mode": "disabled",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/ambiguity_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/data/prompt_iteration/targets/ambiguity_check/modes/disabled/runs/ambiguity-disabled-r7-recall-20260915/candidate.txt",
+        "sha256": "ecb4b1748f09dd79f3803991699987fb36270c3b6baf506531232190bfa715b8",
+        "evidence": {
+          "recall": 87.1,
+          "fpr": 8.0,
+          "minutes": 10.3,
+          "run_id": "ambiguity-disabled-r7-recall-full-20260915",
+          "note": "完整评测"
+        },
+        "validated": true
+      },
+      "pro": {
+        "think_mode": "native",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/ambiguity_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/data/prompt_iteration/targets/ambiguity_check/modes/native/runs/20260909-103032-ac21d36b/candidate.txt",
+        "sha256": "98266f3a5e0362bb4d6497397de65886b265b9ac1475753ac5f9878846fc0e74",
+        "evidence": {
+          "recall": 92.6,
+          "fpr": 9.1,
+          "minutes": 58.8,
+          "run_id": "ambiguity-native-fp8-r2-full-20260909",
+          "note": "3 跳过行；Recall 比 disabled R7 高 5.5pp"
+        },
+        "validated": true
+      }
+    },
+    {
+      "error_type": "标点符号",
+      "task_id": "punctuation_check",
+      "flash": {
+        "think_mode": "explicit",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/punctuation_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/punctuation_check.txt",
+        "sha256": "5240aa501c4f9bedc70bb66ee6d6df706cb39603eb91493dcbf661746cd86b3a",
+        "evidence": {
+          "recall": 94.3,
+          "fpr": 7.9,
+          "minutes": 15.557,
+          "run_id": "r4v2-local-base-full",
+          "note": "1041 条清洗版完整评测；R4 Prompt"
+        },
+        "validated": true
+      },
+      "pro": {
+        "think_mode": "native",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/punctuation_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/data/prompt_iteration/targets/punctuation_check/modes/native/runs/punctuation-native-validation-20260914/candidate.txt",
+        "sha256": "9871fc3fcbc9637e2c6819bff36d96ddba79f0ca00c65221c88566880260b503",
+        "evidence": {
+          "recall": 97.4,
+          "fpr": 7.2,
+          "minutes": 56.6,
+          "run_id": "punctuation-native-new-full-20260914",
+          "note": "6 跳过行；Recall 比 explicit 候选高约 4pp"
+        },
+        "validated": true
+      }
+    },
+    {
+      "error_type": "题目和题型不一致",
+      "task_id": "mismatch_check",
+      "flash": {
+        "think_mode": "disabled",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/mismatch_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/mismatch_check.txt",
+        "sha256": "a87e03a7138fd85605a38a70471332354ca56bd48b6148eaf6bdce76005149ed",
+        "evidence": {
+          "recall": 96.6,
+          "fpr": 1.1,
+          "minutes": 7.9,
+          "run_id": "baseline-local-qwen38-fp8-think-v2-disabled-20260901-mismatch_check",
+          "note": "完整评测"
+        },
+        "validated": true
+      },
+      "pro": {
+        "think_mode": "disabled",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/mismatch_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/mismatch_check.txt",
+        "sha256": "a87e03a7138fd85605a38a70471332354ca56bd48b6148eaf6bdce76005149ed",
+        "evidence": {
+          "recall": 96.6,
+          "fpr": 1.1,
+          "minutes": 7.9,
+          "run_id": "baseline-local-qwen38-fp8-think-v2-disabled-20260901-mismatch_check",
+          "note": "native Recall 94.2%、33.3 min，disabled 更优且更快"
+        },
+        "validated": true
+      }
+    },
+    {
+      "error_type": "信息缺失",
+      "task_id": "missing_check",
+      "flash": {
+        "think_mode": "disabled",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/missing_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/missing_check.txt",
+        "sha256": "b421e554e9f95fd323c4dc5e110411c0800aa5bb58be95859bc4d6a4af034e18",
+        "evidence": {
+          "recall": 91.5,
+          "fpr": 1.8,
+          "minutes": 4.1,
+          "run_id": "missing-disabled-r1-full-20260910",
+          "note": "完整评测"
+        },
+        "validated": true
+      },
+      "pro": {
+        "think_mode": "disabled",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/missing_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/missing_check.txt",
+        "sha256": "b421e554e9f95fd323c4dc5e110411c0800aa5bb58be95859bc4d6a4af034e18",
+        "evidence": {
+          "recall": 91.5,
+          "fpr": 1.8,
+          "minutes": 4.1,
+          "run_id": "missing-disabled-r1-full-20260910",
+          "note": "native Recall 84.2%、29.0 min，disabled 更优且更快"
+        },
+        "validated": true
+      }
+    },
+    {
+      "error_type": "题目无解",
+      "task_id": "unsolvability_check",
+      "flash": {
+        "think_mode": "explicit",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/unsolvability_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/unsolvability_check.txt",
+        "sha256": "f764de4fbd844340c04efee4407ac1a6cccbe0f79abbceedecc09e1a3c827696",
+        "evidence": {
+          "recall": 67.5,
+          "fpr": 8.1,
+          "minutes": 23.43,
+          "run_id": "unsolvability-explicit-original-baseline-full-20260910",
+          "note": "完整评测"
+        },
+        "validated": true
+      },
+      "pro": {
+        "think_mode": "explicit",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/unsolvability_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/unsolvability_check.txt",
+        "sha256": "f764de4fbd844340c04efee4407ac1a6cccbe0f79abbceedecc09e1a3c827696",
+        "evidence": {
+          "recall": 67.5,
+          "fpr": 8.1,
+          "minutes": 23.43,
+          "run_id": "unsolvability-explicit-original-baseline-full-20260910",
+          "note": "native FPR 10.1%，不满足门槛"
+        },
+        "validated": true
+      }
+    },
+    {
+      "error_type": "答案泄露",
+      "task_id": "answer_leak_check",
+      "flash": {
+        "think_mode": "explicit",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/answer_leak_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/data/prompt_iteration/targets/answer_leak_check/modes/explicit/runs/answer-leak-explicit-validation-20260914/candidate.txt",
+        "sha256": "87bc73f9e37023501c3393704d537407b8a3ed58ed6bc1617052f77339945af4",
+        "evidence": {
+          "recall": 96.1,
+          "fpr": 1.2,
+          "minutes": 3.39,
+          "run_id": "answer-leak-explicit-new-full-20260914",
+          "note": "完整评测"
+        },
+        "validated": true
+      },
+      "pro": {
+        "think_mode": "explicit",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/answer_leak_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/data/prompt_iteration/targets/answer_leak_check/modes/explicit/runs/answer-leak-explicit-validation-20260914/candidate.txt",
+        "sha256": "87bc73f9e37023501c3393704d537407b8a3ed58ed6bc1617052f77339945af4",
+        "evidence": {
+          "recall": 96.1,
+          "fpr": 1.2,
+          "minutes": 3.39,
+          "run_id": "answer-leak-explicit-new-full-20260914",
+          "note": "native Recall 高 1.9pp，但耗时约 13.3 min，为 explicit 的约 3.9 倍"
+        },
+        "validated": true
+      }
+    },
+    {
+      "error_type": "图文不一致",
+      "task_id": "image_consistency_check",
+      "flash": {
+        "think_mode": "explicit",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/image_consistency_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/image_consistency_check.txt",
+        "sha256": "666bc3d049769f240eabb9c36ba5e17aa19162a3e6c89b845ce3d7fb77dcfe55",
+        "evidence": {
+          "recall": null,
+          "fpr": null,
+          "minutes": null,
+          "run_id": null,
+          "note": "暂无 Qwen3.8 完整评测，保留原版待验证"
+        },
+        "validated": false
+      },
+      "pro": {
+        "think_mode": "native",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/image_consistency_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/image_consistency_check.txt",
+        "sha256": "666bc3d049769f240eabb9c36ba5e17aa19162a3e6c89b845ce3d7fb77dcfe55",
+        "evidence": {
+          "recall": null,
+          "fpr": null,
+          "minutes": null,
+          "run_id": null,
+          "note": "暂无 Qwen3.8 完整评测，按 Pro 默认优先 native，保留原版待验证"
+        },
+        "validated": false
+      }
+    },
+    {
+      "error_type": "逻辑错误",
+      "task_id": "logic_check",
+      "flash": {
+        "think_mode": "explicit",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/logic_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/logic_check.txt",
+        "sha256": "7d3a7ae68719126f2e460e54af140ac8789c063a1af4652d631d6d6bab66d2d8",
+        "evidence": {
+          "recall": null,
+          "fpr": null,
+          "minutes": null,
+          "run_id": null,
+          "note": "暂无 Qwen3.8 完整评测，保留原版待验证"
+        },
+        "validated": false
+      },
+      "pro": {
+        "think_mode": "native",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/logic_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/logic_check.txt",
+        "sha256": "7d3a7ae68719126f2e460e54af140ac8789c063a1af4652d631d6d6bab66d2d8",
+        "evidence": {
+          "recall": null,
+          "fpr": null,
+          "minutes": null,
+          "run_id": null,
+          "note": "暂无 Qwen3.8 完整评测，按 Pro 默认优先 native，保留原版待验证"
+        },
+        "validated": false
+      }
+    },
+    {
+      "error_type": "引导语检查",
+      "task_id": "guide_stem_check",
+      "flash": {
+        "think_mode": "explicit",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/flash/guide_stem_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/guide_stem_check.txt",
+        "sha256": "ce38e54e5c60d72d86ebefff8b8bba9fd73f2cb141cbb9cc5a6020dce9816568",
+        "evidence": {
+          "recall": null,
+          "fpr": null,
+          "minutes": null,
+          "run_id": null,
+          "note": "暂无独立 Qwen3.8 完整评测，保留原版待验证"
+        },
+        "validated": false
+      },
+      "pro": {
+        "think_mode": "native",
+        "prompt_file": "/Users/softzephyr/Desktop/hyt-agent/qwen3.8_prompt/pro/guide_stem_check.txt",
+        "source_file": "/Users/softzephyr/Desktop/hyt-agent/exam_checker_agent/backend/assets/prompt/profiles/qwen38_27b/tasks/guide_stem_check.txt",
+        "sha256": "ce38e54e5c60d72d86ebefff8b8bba9fd73f2cb141cbb9cc5a6020dce9816568",
+        "evidence": {
+          "recall": null,
+          "fpr": null,
+          "minutes": null,
+          "run_id": null,
+          "note": "暂无独立 Qwen3.8 完整评测，按 Pro 默认优先 native，保留原版待验证"
+        },
+        "validated": false
+      }
+    }
+  ]
+}

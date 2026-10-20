@@ -1,0 +1,36 @@
+{
+    "passed":  true,
+    "total":  300,
+    "positive":  150,
+    "negative":  150,
+    "unique_questions":  255,
+    "invalid_json":  0,
+    "invalid_schema":  0,
+    "prompt_mismatch":  0,
+    "invalid_typo_v4_positive":  0,
+    "train_question_overlap":  0,
+    "old_test_question_overlap":  0,
+    "cross_task_duplicate_groups":  0,
+    "mismatch_valid_pair_groups":  45,
+    "mismatch_invalid_pair_groups":  0,
+    "task_stats":  {
+                       "错别字":  {
+                                   "total":  120,
+                                   "positive":  60,
+                                   "negative":  60,
+                                   "unique_questions":  120
+                               },
+                       "选项结构错误":  {
+                                      "total":  90,
+                                      "positive":  45,
+                                      "negative":  45,
+                                      "unique_questions":  90
+                                  },
+                       "题目与题型不一致":  {
+                                        "total":  90,
+                                        "positive":  45,
+                                        "negative":  45,
+                                        "unique_questions":  45
+                                    }
+                   }
+}

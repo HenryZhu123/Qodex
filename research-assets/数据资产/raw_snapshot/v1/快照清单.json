@@ -1,0 +1,282 @@
+{
+    "schema_version":  "RawSnapshotManifest.v1",
+    "snapshot_id":  "training-data-v1",
+    "created_at":  "2026-08-05T01:58:18.1972692Z",
+    "workspace_root":  "D:\\hyt-agent",
+    "snapshot_root":  "D:\\hyt-agent\\数据资产\\raw_snapshot\\v1",
+    "immutable_intent":  true,
+    "hash_algorithm":  "SHA256",
+    "content_set_sha256":  "4c03cefc16ebe7f45380ceecdac23b4154b8e420bf273e661acecf4ca28875a8",
+    "datasets":  [
+                     {
+                         "name":  "训练集",
+                         "source_path":  "D:\\hyt-agent\\训练集",
+                         "snapshot_path":  "D:\\hyt-agent\\数据资产\\raw_snapshot\\v1\\训练集",
+                         "file_count":  12,
+                         "jsonl_file_count":  12,
+                         "jsonl_rows":  9800,
+                         "total_bytes":  159685711
+                     },
+                     {
+                         "name":  "训练集-微调版提示词",
+                         "source_path":  "D:\\hyt-agent\\训练集-微调版提示词",
+                         "snapshot_path":  "D:\\hyt-agent\\数据资产\\raw_snapshot\\v1\\训练集-微调版提示词",
+                         "file_count":  13,
+                         "jsonl_file_count":  12,
+                         "jsonl_rows":  9595,
+                         "total_bytes":  39807917
+                     }
+                 ],
+    "files":  [
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/标点符号错误_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\标点符号错误_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:49.7432203+08:00",
+                      "size_bytes":  12162701,
+                      "jsonl_rows":  1061,
+                      "sha256":  "9667cf37c989b9b91433ed3498353df3df4f355033a2f5e7d12de167230a392f",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/错别字_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\错别字_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:50.5732199+08:00",
+                      "size_bytes":  10185304,
+                      "jsonl_rows":  989,
+                      "sha256":  "6341c71893afd53414c67bb32b80bee0d5d63a61751ab6233440dd1ba7000db8",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/答案泄露_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\答案泄露_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:49.8812219+08:00",
+                      "size_bytes":  2705098,
+                      "jsonl_rows":  182,
+                      "sha256":  "456a65ab535deaa7d01a8168ecdb918bdd947a7e39868689dee960c7f1c3858c",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/德语_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\德语_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:49.4004967+08:00",
+                      "size_bytes":  11623598,
+                      "jsonl_rows":  672,
+                      "sha256":  "affa6e2c39e54d0b9475460581265522a128da38907d460e499a8b9cc5e4fbcf",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/法语_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\法语_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:49.8452220+08:00",
+                      "size_bytes":  7590368,
+                      "jsonl_rows":  477,
+                      "sha256":  "b7cf749237a303cb0056cc7651bdb390e5cb6f593f74c4349dce93183d087249",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/日语_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\日语_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:49.6123378+08:00",
+                      "size_bytes":  20424157,
+                      "jsonl_rows":  1432,
+                      "sha256":  "da5893e899032390f7a0f920d675529ec5c27a5daa9acc6fe566b0fd2bf73ca0",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/题目无解_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\题目无解_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:51.0562219+08:00",
+                      "size_bytes":  31747871,
+                      "jsonl_rows":  1093,
+                      "sha256":  "21b429bbd48e23ff474e42cc874f0013dc36c9f2b9999172887fb231f5753970",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/题目与题型不一致_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\题目与题型不一致_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:50.6622216+08:00",
+                      "size_bytes":  6889507,
+                      "jsonl_rows":  910,
+                      "sha256":  "74c5958386fb738748bc320c4ae7427b8f50eff7744d50177274924d6e886ba7",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/信息缺失_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\信息缺失_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:49.2600179+08:00",
+                      "size_bytes":  9549604,
+                      "jsonl_rows":  479,
+                      "sha256":  "a56b3d5f97dc2ef0fe1f3ca519fa2e80b8722dfd12fefd328611de050794b61a",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/选项结构错误_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\选项结构错误_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:50.3942267+08:00",
+                      "size_bytes":  7830373,
+                      "jsonl_rows":  980,
+                      "sha256":  "c24ad33b67227815e8cd6369dad164387eeada0588910d295a91f00e8104a7fe",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/英语_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\英语_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:50.0042461+08:00",
+                      "size_bytes":  11463826,
+                      "jsonl_rows":  615,
+                      "sha256":  "5c9dd05132b7d6ad2824e857f97d2c272f50227a520e66fe5f00726d7a1df43e",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集",
+                      "relative_path":  "训练集/语义不清_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集\\语义不清_训练集.jsonl",
+                      "source_last_write_time":  "2026-07-30T11:46:50.2542216+08:00",
+                      "size_bytes":  27513304,
+                      "jsonl_rows":  910,
+                      "sha256":  "f09423b5ec9d521a38f49eab9d9995eaa46c75176dae54391067619d93006a35",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/标点符号错误_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\标点符号错误_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.1431712+08:00",
+                      "size_bytes":  4160639,
+                      "jsonl_rows":  1061,
+                      "sha256":  "04ba1f8e03f5080245f5e1f707cb39e47e8f2b34db32d77e857fc3dabd55c025",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/错别字_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\错别字_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:06.9042192+08:00",
+                      "size_bytes":  3757793,
+                      "jsonl_rows":  989,
+                      "sha256":  "a9a2cac302b610277c00079a4026170ab13691a878590f570d797617357326d3",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/答案泄露_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\答案泄露_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.4012930+08:00",
+                      "size_bytes":  770074,
+                      "jsonl_rows":  182,
+                      "sha256":  "60d9f27dacad9567c71c739fffa3a2cb059c6bbc46ea0d41c69db34ca69a5251",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/德语_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\德语_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.5884954+08:00",
+                      "size_bytes":  2516430,
+                      "jsonl_rows":  672,
+                      "sha256":  "560f962a9d3f57f3232de12fa92018df5e4d6caee271b7b8ddd88d6350019ee0",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/法语_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\法语_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.4530272+08:00",
+                      "size_bytes":  1675409,
+                      "jsonl_rows":  477,
+                      "sha256":  "a1b4493e884dbca0f23f459b6e800f2749889284f875c8ac90fc4e6c4d061676",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/日语_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\日语_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.7037699+08:00",
+                      "size_bytes":  5530283,
+                      "jsonl_rows":  1432,
+                      "sha256":  "5f7b0b6c235633f141d8621eee8e6eb6053b754c97150958eaf74fd03e6607d5",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/题目无解_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\题目无解_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.3823961+08:00",
+                      "size_bytes":  6032860,
+                      "jsonl_rows":  1093,
+                      "sha256":  "9d6678e4bcbd8488c8c7cce6b9821674a001c18e7e7582c645c1643e51338c4a",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/题目与题型不一致_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\题目与题型不一致_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.2377254+08:00",
+                      "size_bytes":  3860117,
+                      "jsonl_rows":  910,
+                      "sha256":  "b51e76ade8f99eb84b97239cb205f866884a3be5f176841b6197b55a7a8d103c",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/微调版提示词测试集清单.json",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\微调版提示词测试集清单.json",
+                      "source_last_write_time":  "2026-08-03T17:18:07.7047785+08:00",
+                      "size_bytes":  9032,
+                      "jsonl_rows":  null,
+                      "sha256":  "6286a2332aa6a9126bd6ef04325a9be5eaeb9d09b5294b87d8bfbdc43751f54e",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/信息缺失_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\信息缺失_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.1877966+08:00",
+                      "size_bytes":  2068103,
+                      "jsonl_rows":  479,
+                      "sha256":  "ca0d8c90b886bca63555f62721cfbf0fb5befbf0a7b5e2715077573e7c421aa5",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/选项结构错误_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\选项结构错误_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.0730172+08:00",
+                      "size_bytes":  4032873,
+                      "jsonl_rows":  980,
+                      "sha256":  "76b7e200c0830e77608264d49ac1155c09777828367ea69c0b44da14b3334c8a",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/英语_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\英语_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.5109339+08:00",
+                      "size_bytes":  1580130,
+                      "jsonl_rows":  410,
+                      "sha256":  "8dcac8f5a91277c414005f612fdc8ded33ee2f22d94411324aea04ea5c8ba40a",
+                      "snapshot_hash_verified":  true
+                  },
+                  {
+                      "dataset":  "训练集-微调版提示词",
+                      "relative_path":  "训练集-微调版提示词/语义不清_训练集.jsonl",
+                      "source_path":  "D:\\hyt-agent\\训练集-微调版提示词\\语义不清_训练集.jsonl",
+                      "source_last_write_time":  "2026-08-03T17:18:07.0125006+08:00",
+                      "size_bytes":  3814174,
+                      "jsonl_rows":  910,
+                      "sha256":  "ad459de6b75a6a71a5485301e6cc3b0481bd30713c0a578dfbd62fbf34cea536",
+                      "snapshot_hash_verified":  true
+                  }
+              ]
+}

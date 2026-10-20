@@ -1,0 +1,49 @@
+{
+  "schema_version": "CanonicalSample.v3-lite",
+  "sample_id": "cs_demo0001",
+  "lineage_id": "ln_demo0001",
+  "lineage_status": "verified",
+  "source_ref": {
+    "source_id": "src_demo",
+    "source_row": 1
+  },
+  "question": {
+    "input_payload": {
+      "reference": "【学科】语文\n【题型或其它信息】单项选择题",
+      "detection_content": "小王的老师告诉小李，他明天参加比赛。"
+    },
+    "metadata": {
+      "language": "zh",
+      "subject": "语文",
+      "question_type": "single_choice"
+    }
+  },
+  "annotation": {
+    "task_id": "ambiguity_check",
+    "rubric_version": "ambiguity.zh.v3",
+    "scope": {
+      "annotated_task_ids": [
+        "ambiguity_check"
+      ],
+      "unannotated_task_ids_are_negative": false
+    },
+    "status": "adjudicated",
+    "gold": {
+      "reason": "发现1处指代不明确。",
+      "has_error": true,
+      "total_errors": 1,
+      "errors": [
+        {
+          "error_type": "语义不清",
+          "position": "句末分句",
+          "original_text": "他明天参加比赛",
+          "anchor_text": "小王的老师告诉小李，他明天参加比赛。",
+          "correction": "小王的老师告诉小李，小王明天参加比赛。",
+          "description": "代词“他”可能指小王、老师或小李，指代对象不明确。",
+          "suggestion": "根据实际语义，将代词“他”替换为明确的人名。"
+        }
+      ]
+    }
+  },
+  "split": "unassigned"
+}

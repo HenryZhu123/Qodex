@@ -1,0 +1,25 @@
+{
+  "schema_version": "LineageSplitPolicy.v1",
+  "split_policy_version": "global-lineage.v2",
+  "unit": "lineage_id",
+  "algorithm": "sha256(lineage_id + '|' + split_policy_version)前16位转整数后mod 10000",
+  "thresholds": {
+    "train": "0-7999",
+    "dev": "8000-8999",
+    "test": "9000-9999"
+  },
+  "target_ratio": {
+    "train": 0.8,
+    "dev": 0.1,
+    "test": 0.1
+  },
+  "guarantees": [
+    "同一lineage_id只能进入一个split。",
+    "同题跨任务完全重复样本不会分散到训练集和测试集。",
+    "相同输入和策略版本可重复得到相同切分。"
+  ],
+  "known_limitations": [
+    "当前verified血缘只覆盖reference+detection_content完全相同的题目。",
+    "改写、注错或纠错变体仍为provisional，后续归并血缘时必须重新做泄漏检查。"
+  ]
+}

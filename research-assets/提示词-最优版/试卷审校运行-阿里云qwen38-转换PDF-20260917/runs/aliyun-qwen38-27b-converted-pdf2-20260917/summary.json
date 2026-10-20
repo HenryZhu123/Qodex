@@ -1,0 +1,111 @@
+{
+  "run_id": "aliyun-qwen38-27b-converted-pdf2-20260917",
+  "source": "incoming",
+  "batch_id": "9218d2fd-f310-41c4-953d-41cd1f08005b",
+  "model_name": "qwen3.8-27b",
+  "model_mode": "local",
+  "environment": "local",
+  "threads": 40,
+  "think_mode": "",
+  "runtime": {
+    "environment": "local",
+    "model_name": "qwen3.8-27b",
+    "provider": "local",
+    "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "credential_source": "env:QWEN_API_KEY",
+    "credential_fingerprint": "cbd48d4e1cbe265c",
+    "data_dir": "/Users/softzephyr/Desktop/hyt-agent/提示词-最优版/试卷审校运行-阿里云qwen38-转换PDF-20260917/runs/aliyun-qwen38-27b-converted-pdf2-20260917/runtime-data"
+  },
+  "review_defaults": {
+    "seed": 42,
+    "temperature": {
+      "thinking": 1,
+      "non_thinking": 0
+    },
+    "retry": {
+      "timeout_max": 3,
+      "timeout_global_max": 0,
+      "timeout_backoff_min": 3,
+      "timeout_backoff_max": 8,
+      "rate_limit_backoff_min": 1,
+      "rate_limit_backoff_max": 5,
+      "sdk_max_retries": 0
+    },
+    "cache": {
+      "strategy": "review-chain-default",
+      "client_cache": "enabled",
+      "provider_prefix_cache": "provider-managed"
+    }
+  },
+  "target_task_id": "",
+  "prompt_candidate": {},
+  "dataset_files": [
+    {
+      "path": "/Users/softzephyr/Desktop/hyt-agent/提示词-最优版/试卷审校运行-20260917/服务器转换PDF/180题档_实际190题_2019昆明理工大学628西医综合A卷.pdf",
+      "sha256": "ac77eea8e2c9dfb8ead455adee3a9075de6ec8792e0a19f958fec4466eafebc3"
+    },
+    {
+      "path": "/Users/softzephyr/Desktop/hyt-agent/提示词-最优版/试卷审校运行-20260917/服务器转换PDF/60题档_实际62题_641生物化学与分子生物学.pdf",
+      "sha256": "e9dbdb43834dfea781cdd7abb3ef13684b997d45fecb6d757d9fd5954199b5bb"
+    }
+  ],
+  "images_root": "",
+  "detection_error_types": [
+    "错别字",
+    "语义不清",
+    "选项错误",
+    "标点符号",
+    "题目与题型不一致",
+    "信息缺失",
+    "题目无解",
+    "答案泄露",
+    "图文不一致",
+    "事实/逻辑错误"
+  ],
+  "config": {
+    "name": "best27b-converted-pdf2-aliyun-qwen38",
+    "threads": 40,
+    "reviewDetailLevel": "pro",
+    "similarityThreshold": 85,
+    "modelName": "",
+    "modelMode": "local",
+    "models": {
+      "local": "Qwen3.5-122B-A10B-AWQ-4bit",
+      "cloud": "qwen3.5-122b-a10b"
+    },
+    "judgeModel": "qwen3.6-plus",
+    "detectionTypes": [],
+    "reviewRoutingEnabled": false,
+    "correctorModel": null,
+    "textExtractionProvider": "mineru",
+    "plagiarism": {
+      "basic": false,
+      "cross": false,
+      "history": false
+    }
+  },
+  "papers": [
+    "180题档_实际190题_2019昆明理工大学628西医综合A卷.pdf",
+    "60题档_实际62题_641生物化学与分子生物学.pdf"
+  ],
+  "papers_meta": {
+    "180题档_实际190题_2019昆明理工大学628西医综合A卷.pdf": "plain",
+    "60题档_实际62题_641生物化学与分子生物学.pdf": "plain"
+  },
+  "tasks": [
+    {
+      "task_id": "task_1789637731365_43959b",
+      "paper": "60题档_实际62题_641生物化学与分子生物学.pdf",
+      "status": "success",
+      "finding_count": 11
+    },
+    {
+      "task_id": "task_1789637731365_7c8b40",
+      "paper": "180题档_实际190题_2019昆明理工大学628西医综合A卷.pdf",
+      "status": "success",
+      "finding_count": 203
+    }
+  ],
+  "total_findings": 214,
+  "created_at": "2026-09-17T09:51:12Z"
+}

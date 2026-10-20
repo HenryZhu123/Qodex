@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 0.7792925834655762,
+      "题目提取": 286.4676761627197,
+      "AI内容检测": 185.81708240509033,
+      "内部查重检测": 157.05746841430664,
+      "历史查重检测": 234.54728603363037,
+      "后处理": 0.0009033679962158203,
+      "总耗时": 864.6697089672089
+    },
+    "total_time": 864.6697089672089,
+    "total_questions": 29,
+    "total_errors": 8,
+    "avg_time_per_question": 29.816196860938238
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 8,
+    "exam_name": "2026A卷--研究生入学考试-高等数学A（608）.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-30B-A3B-Instruct-2507",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

@@ -1,0 +1,232 @@
+{
+  "298": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "317": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "334": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "339": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "347": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "351": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "356": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "361": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "362": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "370": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "382": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "393": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "394": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "415": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "425": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分错字或正确位置，但存在漏报、错误数量不一致，或替换词不能完全恢复标准语义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "433": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "434": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "436": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "457": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分错字或正确位置，但存在漏报、错误数量不一致，或替换词不能完全恢复标准语义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "469": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "470": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "471": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分错字或正确位置，但存在漏报、错误数量不一致，或替换词不能完全恢复标准语义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "486": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分错字或正确位置，但存在漏报、错误数量不一致，或替换词不能完全恢复标准语义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "488": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分错字或正确位置，但存在漏报、错误数量不一致，或替换词不能完全恢复标准语义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "492": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分错字或正确位置，但存在漏报、错误数量不一致，或替换词不能完全恢复标准语义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "493": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分错字或正确位置，但存在漏报、错误数量不一致，或替换词不能完全恢复标准语义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "586": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "595": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "598": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "618": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "623": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "632": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "737": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "746": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "757": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "785": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案对应的错字或漏字，局部替换与整词替换属于等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "798": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "804": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "864": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分错字或正确位置，但存在漏报、错误数量不一致，或替换词不能完全恢复标准语义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "909": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分错字或正确位置，但存在漏报、错误数量不一致，或替换词不能完全恢复标准语义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "915": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "945": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "970": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "975": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "977": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  },
+  "978": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的错别字，或给出的替换会形成错误术语、错误句意。",
+    "review_method": "Codex离线语义复核"
+  }
+}

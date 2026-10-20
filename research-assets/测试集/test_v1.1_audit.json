@@ -1,0 +1,35 @@
+{
+    "passed":  true,
+    "total":  234,
+    "positive":  118,
+    "negative":  116,
+    "unique_questions":  234,
+    "duplicate_question_groups":  0,
+    "train_question_overlap":  0,
+    "val_question_overlap":  0,
+    "non_v4_typo_positive":  0,
+    "task_stats":  {
+                       "选项结构错误":  {
+                                      "total":  78,
+                                      "positive":  39,
+                                      "negative":  39
+                                  },
+                       "错别字":  {
+                                   "total":  77,
+                                   "positive":  38,
+                                   "negative":  39
+                               },
+                       "题目与题型不一致":  {
+                                        "total":  79,
+                                        "positive":  41,
+                                        "negative":  38
+                                    }
+                   },
+    "replaced_old_typo_positive":  9,
+    "replaced_old_typo_negative":  4,
+    "replaced_old_option_positive":  0,
+    "replaced_old_option_negative":  1,
+    "mismatch_from_dedicated_source":  13,
+    "mismatch_synthesized_positive":  28,
+    "mismatch_synthesized_negative":  38
+}

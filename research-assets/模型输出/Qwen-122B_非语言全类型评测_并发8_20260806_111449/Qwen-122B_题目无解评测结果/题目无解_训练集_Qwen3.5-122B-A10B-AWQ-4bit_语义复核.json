@@ -1,0 +1,1237 @@
+{
+  "30": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "71": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "74": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "109": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "147": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "289": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "345": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "464": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "498": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "582": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "595": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "596": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "597": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "599": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "600": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "601": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "602": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "603": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "606": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "607": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "609": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "611": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "616": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "617": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "618": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "619": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "620": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "621": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "622": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "623": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "625": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "627": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "628": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "629": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "630": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "632": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "637": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "638": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "640": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "641": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "642": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "643": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "645": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "646": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "648": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "649": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "651": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "653": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "655": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "656": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "657": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "658": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "659": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "660": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "661": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "662": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "663": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "664": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "665": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "666": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "667": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "668": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "669": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "670": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "671": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "672": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "673": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "674": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "675": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "676": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "677": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "678": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "679": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "680": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "681": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "683": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "686": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "688": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "691": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "700": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "704": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "707": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "709": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "710": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "715": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "718": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "722": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "736": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "737": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "739": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "740": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "742": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "743": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "749": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "752": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "755": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "760": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "761": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "763": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "764": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "767": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "769": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "770": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "771": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "773": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "774": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "778": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "779": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "781": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "782": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "783": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "787": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "791": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "793": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "797": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "799": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "801": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "805": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "806": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "810": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "813": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "814": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "815": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "820": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "822": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "824": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "826": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "827": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "831": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "832": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "837": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "840": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "842": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "843": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "844": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "846": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "854": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "857": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "858": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "859": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "860": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "861": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "863": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "864": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "865": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "867": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "870": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "872": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "876": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "878": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "882": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "883": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "884": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "886": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "888": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "889": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "891": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "892": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "893": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "894": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "897": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "898": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "899": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "901": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "903": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "904": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "906": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "908": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "912": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "917": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "920": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "921": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "922": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "924": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "926": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "927": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "928": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "930": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "931": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "933": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "936": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "937": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "941": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "942": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "944": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "945": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "949": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "950": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "951": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "952": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "955": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "956": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "958": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "960": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "961": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "963": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "964": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "966": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "970": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "974": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "978": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "979": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "983": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "984": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "987": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "988": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "989": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "990": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "995": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "996": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "998": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1000": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1009": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1010": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1011": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1013": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1014": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1015": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1016": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1020": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1028": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1029": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1030": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1034": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1039": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1042": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1043": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1044": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1046": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1051": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1053": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1054": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题面存在可作答性问题，但具体学科判断或修正方案不完全成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1055": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1058": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1059": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1060": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1061": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1064": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1070": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1071": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1078": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1080": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1081": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1082": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1085": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面按通常学科约定可以作答，模型声称无解的理由不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1087": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1092": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别多解、无正确项、条件冲突或必要条件缺失。",
+    "review_method": "Codex离线语义复核"
+  }
+}

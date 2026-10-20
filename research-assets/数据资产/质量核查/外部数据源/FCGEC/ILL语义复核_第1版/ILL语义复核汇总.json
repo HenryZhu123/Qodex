@@ -1,0 +1,27 @@
+{
+  "review_version": "fcgec_ill_semantic_review.v1",
+  "source_file": "D:\\hyt-agent\\外部数据源\\FCGEC\\data\\FCGEC_train_filtered.json",
+  "source_sha256": "2f8ecb9c9159b10fcac6c7217a5480e3679957f6552509ffc86fe4af9dfc6e5a",
+  "source_ill_rows": 3499,
+  "full_mapping_review_counts": {
+    "supported_as_illogical_semantic_candidate": 3487,
+    "outside_current_semantic_prompt_boundary": 6,
+    "semantic_context_missing": 2,
+    "supported_but_reference_unusable": 4
+  },
+  "codex_manual_sample": {
+    "seed": 20260806,
+    "size": 100,
+    "counts": {
+      "reference_defect": 18,
+      "no_obvious_defect_found": 78,
+      "semantic_boundary_or_context_missing": 4
+    },
+    "method": "固定种子抽样后逐条阅读原句与全部参考改写"
+  },
+  "conclusion": {
+    "sentence_level": "ILL总体可作为语义不清中的‘不合逻辑’候选来源，但不能把来源标签等同于高质量SFT金标。",
+    "exam_level": "由于缺少原题指令和选项角色，全部样本均不能直接判为整道试题的真实质量错误。",
+    "subtype": "建议在规范资产中使用可选subtype=illogical_expression；当前生产输出协议未包含subtype时，不导出到assistant消息。"
+  }
+}

@@ -1,0 +1,902 @@
+{
+  "186": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认选项结构正常，模型报告的是不存在的选项结构问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "491": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "493": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "494": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "497": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "498": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "500": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "502": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "505": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "508": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "512": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "513": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "514": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "516": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "520": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "528": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "530": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "531": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "533": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "534": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "536": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "538": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "540": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "549": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "551": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "552": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "554": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "556": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "558": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "559": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "560": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "561": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "571": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "572": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "574": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "575": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：题面选项标识符本身连续，模型给出的内容重排没有解决标准答案设定的目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "578": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "579": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "580": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "581": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "582": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "588": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "591": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "597": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "598": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "599": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "602": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "603": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "605": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "606": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "610": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "613": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "614": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "616": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "622": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "625": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "627": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "633": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "638": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "643": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "645": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "646": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "648": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "649": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "653": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "655": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "657": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "659": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "662": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "665": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "668": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "670": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "671": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "672": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "675": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "680": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "683": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "686": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "687": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "690": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "692": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "697": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "706": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "708": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "709": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "712": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "713": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "721": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "724": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "729": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "735": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "737": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "739": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "743": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "744": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "745": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "746": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "747": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "749": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "753": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "758": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "759": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "762": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "764": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "765": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "767": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "770": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "771": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "777": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "780": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "782": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "783": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "785": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "789": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "790": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "796": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "798": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "809": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "810": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "812": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "816": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "817": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "822": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "823": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "826": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "827": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "831": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "832": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "833": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "835": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "837": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "838": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "839": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "844": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "845": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "846": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "847": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "850": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "851": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "853": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "854": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "856": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "860": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "862": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "863": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "865": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "868": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "871": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "874": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "875": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "882": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "883": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "884": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "885": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "890": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "891": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "893": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "896": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "897": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "898": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "901": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "903": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "905": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "908": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "910": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "913": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "921": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "923": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "930": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "932": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "935": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "939": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "941": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "944": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：修正结果与标准答案语义一致，仅错误原文的截取粒度不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "948": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "953": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "966": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "967": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "969": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：识别了相同的标识符或重复项问题，修改后结构连续或重复被消除；替换粒度不同不影响结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "977": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到选项标识符或重复项问题，但修改后仍有缺号、重复、乱序、无效替换，或错误数量不一致。",
+    "review_method": "Codex离线语义复核"
+  }
+}

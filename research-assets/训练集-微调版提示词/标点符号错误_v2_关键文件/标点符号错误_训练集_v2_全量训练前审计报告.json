@@ -1,0 +1,16 @@
+﻿{
+    "generated_at":  "2026-08-27T15:50:19",
+    "total_records":  1061,
+    "positive_records":  580,
+    "negative_records":  481,
+    "system_prompt_variants":  1,
+    "records_with_issues":  0,
+    "positive_records_with_issues":  0,
+    "negative_records_with_issues":  0,
+    "duplicate_exact_answer_groups":  1,
+    "duplicate_exact_answer_records":  481,
+    "issue_counts":  [
+
+                     ],
+    "training_sha256":  "A7CA08009743A454A8D7280D5DC5697EC2A4E6EFA64D258DE6A60BEEA46D7870"
+}

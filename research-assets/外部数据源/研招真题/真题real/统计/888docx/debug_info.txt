@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 4.921911716461182,
+      "题目提取": 685.5140364170074,
+      "AI内容检测": 308.6351821422577,
+      "内部查重检测": 7.533338785171509,
+      "历史查重检测": 29.718652486801147,
+      "后处理": 0.0011680126190185547,
+      "总耗时": 1036.324289560318
+    },
+    "total_time": 1036.324289560318,
+    "total_questions": 54,
+    "total_errors": 28,
+    "avg_time_per_question": 19.191190547413296
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 28,
+    "exam_name": "888.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-30B-A3B-Instruct-2507",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

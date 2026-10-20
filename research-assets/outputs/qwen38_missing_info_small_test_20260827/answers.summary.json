@@ -1,0 +1,26 @@
+{
+  "input": "C:\\hyt-agent\\outputs\\qwen38_missing_info_small_test_20260827\\probe_input.jsonl",
+  "output": "C:\\hyt-agent\\outputs\\qwen38_missing_info_small_test_20260827\\answers.jsonl",
+  "model": "qwen3.8-max",
+  "base_url": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+  "concurrency": 8,
+  "temperature": 0.0,
+  "requested_rows": 24,
+  "previously_completed": 0,
+  "attempted_this_run": 24,
+  "results_present": 24,
+  "status_counts": {
+    "success": 24
+  },
+  "basic_schema_invalid": 0,
+  "has_error_counts": {
+    "false": 11,
+    "true": 13
+  },
+  "usage_this_run": {
+    "prompt_tokens": 21739,
+    "total_tokens": 40628,
+    "completion_tokens": 18889
+  },
+  "elapsed_seconds": 106.068
+}

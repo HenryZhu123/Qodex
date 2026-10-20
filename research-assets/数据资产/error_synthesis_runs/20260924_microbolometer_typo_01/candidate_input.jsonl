@@ -1,0 +1,1 @@
+{"sample_id":"microbolometer_typo_001","messages":[{"role":"system","content":"由 --system-part 覆盖"},{"role":"user","content":"[INPUT_PAYLOAD]\n{\"reference\":\"【学科】光电基础\\n【试卷标题】# 南京理工大学 2020光电基础\\n【题型或其它信息】简答题\",\"detection_content\":\"微测辐射热计红外焦平面阵列的微桥结构有何特点？微桥与Si读出电路之间的间隙一搬为多少？为什么？\"}"}]}

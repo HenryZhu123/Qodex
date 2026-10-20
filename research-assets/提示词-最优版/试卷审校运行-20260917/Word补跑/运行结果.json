@@ -1,0 +1,102 @@
+{
+  "run_id": "best-27b-wordpdf-retry-20260917",
+  "batch_id": "64508460-df39-44b9-a449-73d11292fee5",
+  "model": "Qwen3.8-27B-FP8",
+  "model_endpoint": "http://10.1.7.39:8034/v1",
+  "mineru_endpoint": "http://10.1.7.39:9999/file_parse",
+  "threads": 40,
+  "total_papers": 2,
+  "total_questions": 55,
+  "total_findings": 69,
+  "wall_seconds": 1531.938,
+  "review_seconds_sum": 445.602,
+  "avg_wall_seconds_per_question": 27.853,
+  "avg_review_seconds_per_question": 8.102,
+  "papers": [
+    {
+      "task_id": "task_1789635442330_1e8da8",
+      "paper": "180题档_实际190题_2019昆明理工大学628西医综合A卷.pdf",
+      "status": "success",
+      "finding_count": 18,
+      "questions": 13,
+      "parse_seconds": 791.443,
+      "review_seconds": 145.494,
+      "error_message": ""
+    },
+    {
+      "task_id": "task_1789635442330_665f1d",
+      "paper": "60题档_实际62题_641生物化学与分子生物学.pdf",
+      "status": "success",
+      "finding_count": 51,
+      "questions": 42,
+      "parse_seconds": 287.692,
+      "review_seconds": 300.108,
+      "error_message": ""
+    }
+  ],
+  "prompt_profile": {
+    "base_profile": "system-qwen38-27b-v1",
+    "profile_sha256": "10ae2049bc5971353d42e99b32218a01d9715dec5ab5ad884e2ee81e51f6c2a4",
+    "task_think_modes": {
+      "typo_check": "disabled",
+      "ambiguity_check": "disabled",
+      "options_check": "disabled",
+      "punctuation_check": "explicit",
+      "mismatch_check": "disabled",
+      "missing_check": "disabled",
+      "unsolvability_check": "explicit",
+      "answer_leak_check": "explicit",
+      "image_consistency_check": "explicit",
+      "guide_stem_check": "explicit",
+      "logic_check": "explicit",
+      "ja_spelling_check": "explicit",
+      "ja_grammar_check": "explicit",
+      "ja_logic_check": "explicit",
+      "ja_punctuation_check": "explicit",
+      "de_spelling_check": "explicit",
+      "de_grammer_check": "explicit",
+      "de_punctuation_check": "explicit",
+      "fren_spelling_check": "explicit",
+      "fren_grammar_check": "explicit",
+      "fren_punctuation_check": "explicit",
+      "en_spelling_check": "explicit",
+      "en_grammar_check": "explicit",
+      "en_punctuation_check": "explicit"
+    },
+    "selected_prompt_files": {
+      "typo_check": {
+        "file": "错别字_disabled.txt",
+        "mode": "disabled"
+      },
+      "options_check": {
+        "file": "选项错误_disabled.txt",
+        "mode": "disabled"
+      },
+      "ambiguity_check": {
+        "file": "语义不清_disabled.txt",
+        "mode": "disabled"
+      },
+      "punctuation_check": {
+        "file": "标点符号_explicit.txt",
+        "mode": "explicit"
+      },
+      "mismatch_check": {
+        "file": "题目和题型不一致_disabled.txt",
+        "mode": "disabled"
+      },
+      "missing_check": {
+        "file": "信息缺失_disabled.txt",
+        "mode": "disabled"
+      },
+      "unsolvability_check": {
+        "file": "题目无解_explicit.txt",
+        "mode": "explicit"
+      },
+      "answer_leak_check": {
+        "file": "答案泄露_explicit.txt",
+        "mode": "explicit"
+      }
+    }
+  },
+  "source_summary": "/Users/softzephyr/Desktop/hyt-agent/提示词-最优版/试卷审校运行-20260917/Word补跑/runs/best-27b-wordpdf-retry-20260917/summary.json"
+}

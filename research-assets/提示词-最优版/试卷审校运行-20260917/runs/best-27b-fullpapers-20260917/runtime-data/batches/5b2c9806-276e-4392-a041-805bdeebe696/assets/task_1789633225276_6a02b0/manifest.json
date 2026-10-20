@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "taskId": "task_1789633225276_6a02b0",
+  "items": [
+    {
+      "placeholder": "<img0/>",
+      "assetId": "91970a39941f2339ac7cf7d3f478ce86655487f8ab86fdd595436874c6ee9cae",
+      "fileName": "91970a39941f2339ac7cf7d3f478ce86655487f8ab86fdd595436874c6ee9cae.jpg",
+      "contentType": "image/jpeg",
+      "width": 301,
+      "height": 156,
+      "displayWidth": 400.0,
+      "available": true,
+      "error": ""
+    },
+    {
+      "placeholder": "<img1/>",
+      "assetId": "945e02feb77d601ff01f3e92536c041826cc385dfc8945c611f8a07c3167d8b6",
+      "fileName": "945e02feb77d601ff01f3e92536c041826cc385dfc8945c611f8a07c3167d8b6.jpg",
+      "contentType": "image/jpeg",
+      "width": 240,
+      "height": 248,
+      "displayWidth": 400.0,
+      "available": true,
+      "error": ""
+    },
+    {
+      "placeholder": "<img2/>",
+      "assetId": "51c0511fedd58d13a304cf56844e72a5780b0ec2f073694c9a3593304268c3bc",
+      "fileName": "51c0511fedd58d13a304cf56844e72a5780b0ec2f073694c9a3593304268c3bc.jpg",
+      "contentType": "image/jpeg",
+      "width": 304,
+      "height": 290,
+      "displayWidth": 400.0,
+      "available": true,
+      "error": ""
+    },
+    {
+      "placeholder": "<img3/>",
+      "assetId": "51212fe26cbea05044a0f57a285d626c33bee454a36fb7419579895f21de402b",
+      "fileName": "51212fe26cbea05044a0f57a285d626c33bee454a36fb7419579895f21de402b.jpg",
+      "contentType": "image/jpeg",
+      "width": 229,
+      "height": 181,
+      "displayWidth": 400.0,
+      "available": true,
+      "error": ""
+    },
+    {
+      "placeholder": "<img4/>",
+      "assetId": "0470269ead27fd8471fb89cdfaf34af6a8ffd74d3dc06535b0951ebf301b03d3",
+      "fileName": "0470269ead27fd8471fb89cdfaf34af6a8ffd74d3dc06535b0951ebf301b03d3.jpg",
+      "contentType": "image/jpeg",
+      "width": 287,
+      "height": 276,
+      "displayWidth": 400.0,
+      "available": true,
+      "error": ""
+    },
+    {
+      "placeholder": "<img5/>",
+      "assetId": "7845f1c1c7fa6e585428fcd4c4e10c13fffececc3bad843b9aaabb063831020a",
+      "fileName": "7845f1c1c7fa6e585428fcd4c4e10c13fffececc3bad843b9aaabb063831020a.jpg",
+      "contentType": "image/jpeg",
+      "width": 331,
+      "height": 232,
+      "displayWidth": 400.0,
+      "available": true,
+      "error": ""
+    },
+    {
+      "placeholder": "<img6/>",
+      "assetId": "779de463d97290e54b8a4869304ffce0c35270b445eed34700b217da87070d5c",
+      "fileName": "779de463d97290e54b8a4869304ffce0c35270b445eed34700b217da87070d5c.jpg",
+      "contentType": "image/jpeg",
+      "width": 345,
+      "height": 131,
+      "displayWidth": 400.0,
+      "available": true,
+      "error": ""
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "workbook": "C:\\hyt-agent\\数据集\\信息缺失完整数据集.xlsx",
+  "backup": "C:\\hyt-agent\\数据集\\信息缺失完整数据集_正常作答位改造前备份_20260827.xlsx",
+  "images_modified": 0,
+  "affected_answer_slot_records": 123,
+  "actions": {
+    "converted_to_negative": 14,
+    "reconstructed_core_question": 32,
+    "reconstructed_option": 66,
+    "reconstructed_formula": 11
+  },
+  "deleted_option_labels": {
+    "A": 17,
+    "B": 17,
+    "C": 16,
+    "D": 16
+  },
+  "standard_answers_filled": 123,
+  "before": {
+    "total": 479,
+    "positive": 274,
+    "negative": 205,
+    "positive_ratio": 0.572025,
+    "negative_ratio": 0.427975,
+    "subtypes": {
+      "下划线缺失": 36,
+      "公式缺失": 121,
+      "括号或作答标记缺失": 73,
+      "编号或序号缺失": 2,
+      "选项信息缺失": 42
+    },
+    "subtype_ratios_within_positive": {
+      "下划线缺失": 0.131387,
+      "公式缺失": 0.441606,
+      "括号或作答标记缺失": 0.266423,
+      "编号或序号缺失": 0.007299,
+      "选项信息缺失": 0.153285
+    }
+  },
+  "after": {
+    "total": 479,
+    "positive": 260,
+    "negative": 219,
+    "positive_ratio": 0.542797,
+    "negative_ratio": 0.457203,
+    "subtypes": {
+      "公式缺失": 118,
+      "编号或序号缺失": 2,
+      "选项信息缺失": 108,
+      "题干核心提问成分缺失": 32
+    },
+    "subtype_ratios_within_positive": {
+      "公式缺失": 0.453846,
+      "编号或序号缺失": 0.007692,
+      "选项信息缺失": 0.415385,
+      "题干核心提问成分缺失": 0.123077
+    }
+  }
+}

@@ -1,0 +1,333 @@
+{
+  "schema_version": "CanonicalMigrationSummary.v1",
+  "migration_id": "文本错误正式迁移_第1版",
+  "created_at": "2026-08-05T06:53:52.457481Z",
+  "scope": {
+    "included_categories": [
+      "错别字",
+      "语义不清",
+      "选项结构错误",
+      "标点符号错误",
+      "信息缺失",
+      "题目与题型不一致",
+      "题目无解",
+      "答案泄露"
+    ],
+    "excluded_multilingual_categories": [
+      "英语",
+      "法语",
+      "德语",
+      "日语"
+    ],
+    "excluded_image_text_category": "当前不存在可迁移训练集文件",
+    "prompt_profile": "tuned"
+  },
+  "split_policy_version": "global-lineage.v2",
+  "counts": {
+    "source_records": 6604,
+    "canonical_records": 6449,
+    "quarantined_records": 155,
+    "lineages": 5986,
+    "positive": 3206,
+    "negative": 3243,
+    "train_records": 5143,
+    "dev_records": 630,
+    "test_records": 676,
+    "train_lineages": 4785,
+    "dev_lineages": 573,
+    "test_lineages": 628,
+    "exact_duplicate_groups": 429,
+    "verified_lineage_samples": 892,
+    "provisional_lineage_samples": 5557,
+    "localization_warning_rows": 155,
+    "task_fixed_error_type_mismatch_findings": 1075
+  },
+  "category_reports": {
+    "错别字": {
+      "schema_version": "CanonicalCategoryMigrationReport.v1",
+      "dataset_category": "错别字",
+      "counts": {
+        "source_records": 989,
+        "canonical_records": 989,
+        "quarantined_records": 0,
+        "positive": 512,
+        "negative": 477,
+        "train": 796,
+        "dev": 99,
+        "test": 94,
+        "verified_lineage_samples": 51,
+        "provisional_lineage_samples": 938,
+        "localization_warning_rows": 0,
+        "task_fixed_error_type_mismatch_findings": 0
+      },
+      "task_counts": {
+        "typo_check": 989
+      },
+      "checks": {
+        "canonical_schema_passed": true,
+        "original_and_tuned_non_system_messages_equal": true,
+        "source_file_hash_unchanged": true,
+        "exact_source_export_sha256_matches_tuned_source": true,
+        "cross_split_lineage_leakage": 0
+      },
+      "notes": [
+        "标准答案原样迁移，不对gold语义做改写。",
+        "跨字段定位失败的源样本保存在待修复样本中，不进入train/dev/test。",
+        "task_fixed_error_type_mismatch只反映TaskCatalog旧固定名称与真实gold名称差异，不修改样本。",
+        "provisional仅表示尚未完成改写/注错变体的近重复血缘归并。"
+      ]
+    },
+    "语义不清": {
+      "schema_version": "CanonicalCategoryMigrationReport.v1",
+      "dataset_category": "语义不清",
+      "counts": {
+        "source_records": 910,
+        "canonical_records": 910,
+        "quarantined_records": 0,
+        "positive": 442,
+        "negative": 468,
+        "train": 733,
+        "dev": 88,
+        "test": 89,
+        "verified_lineage_samples": 94,
+        "provisional_lineage_samples": 816,
+        "localization_warning_rows": 0,
+        "task_fixed_error_type_mismatch_findings": 0
+      },
+      "task_counts": {
+        "ambiguity_check": 910
+      },
+      "checks": {
+        "canonical_schema_passed": true,
+        "original_and_tuned_non_system_messages_equal": true,
+        "source_file_hash_unchanged": true,
+        "exact_source_export_sha256_matches_tuned_source": true,
+        "cross_split_lineage_leakage": 0
+      },
+      "notes": [
+        "标准答案原样迁移，不对gold语义做改写。",
+        "跨字段定位失败的源样本保存在待修复样本中，不进入train/dev/test。",
+        "task_fixed_error_type_mismatch只反映TaskCatalog旧固定名称与真实gold名称差异，不修改样本。",
+        "provisional仅表示尚未完成改写/注错变体的近重复血缘归并。"
+      ]
+    },
+    "选项结构错误": {
+      "schema_version": "CanonicalCategoryMigrationReport.v1",
+      "dataset_category": "选项结构错误",
+      "counts": {
+        "source_records": 980,
+        "canonical_records": 980,
+        "quarantined_records": 0,
+        "positive": 490,
+        "negative": 490,
+        "train": 789,
+        "dev": 92,
+        "test": 99,
+        "verified_lineage_samples": 116,
+        "provisional_lineage_samples": 864,
+        "localization_warning_rows": 0,
+        "task_fixed_error_type_mismatch_findings": 495
+      },
+      "task_counts": {
+        "options_check": 980
+      },
+      "checks": {
+        "canonical_schema_passed": true,
+        "original_and_tuned_non_system_messages_equal": true,
+        "source_file_hash_unchanged": true,
+        "exact_source_export_sha256_matches_tuned_source": true,
+        "cross_split_lineage_leakage": 0
+      },
+      "notes": [
+        "标准答案原样迁移，不对gold语义做改写。",
+        "跨字段定位失败的源样本保存在待修复样本中，不进入train/dev/test。",
+        "task_fixed_error_type_mismatch只反映TaskCatalog旧固定名称与真实gold名称差异，不修改样本。",
+        "provisional仅表示尚未完成改写/注错变体的近重复血缘归并。"
+      ]
+    },
+    "标点符号错误": {
+      "schema_version": "CanonicalCategoryMigrationReport.v1",
+      "dataset_category": "标点符号错误",
+      "counts": {
+        "source_records": 1061,
+        "canonical_records": 1061,
+        "quarantined_records": 0,
+        "positive": 580,
+        "negative": 481,
+        "train": 826,
+        "dev": 108,
+        "test": 127,
+        "verified_lineage_samples": 179,
+        "provisional_lineage_samples": 882,
+        "localization_warning_rows": 0,
+        "task_fixed_error_type_mismatch_findings": 580
+      },
+      "task_counts": {
+        "punctuation_check": 1061
+      },
+      "checks": {
+        "canonical_schema_passed": true,
+        "original_and_tuned_non_system_messages_equal": true,
+        "source_file_hash_unchanged": true,
+        "exact_source_export_sha256_matches_tuned_source": true,
+        "cross_split_lineage_leakage": 0
+      },
+      "notes": [
+        "标准答案原样迁移，不对gold语义做改写。",
+        "跨字段定位失败的源样本保存在待修复样本中，不进入train/dev/test。",
+        "task_fixed_error_type_mismatch只反映TaskCatalog旧固定名称与真实gold名称差异，不修改样本。",
+        "provisional仅表示尚未完成改写/注错变体的近重复血缘归并。"
+      ]
+    },
+    "信息缺失": {
+      "schema_version": "CanonicalCategoryMigrationReport.v1",
+      "dataset_category": "信息缺失",
+      "counts": {
+        "source_records": 479,
+        "canonical_records": 479,
+        "quarantined_records": 0,
+        "positive": 274,
+        "negative": 205,
+        "train": 386,
+        "dev": 44,
+        "test": 49,
+        "verified_lineage_samples": 117,
+        "provisional_lineage_samples": 362,
+        "localization_warning_rows": 0,
+        "task_fixed_error_type_mismatch_findings": 0
+      },
+      "task_counts": {
+        "missing_info_check": 479
+      },
+      "checks": {
+        "canonical_schema_passed": true,
+        "original_and_tuned_non_system_messages_equal": true,
+        "source_file_hash_unchanged": true,
+        "exact_source_export_sha256_matches_tuned_source": true,
+        "cross_split_lineage_leakage": 0
+      },
+      "notes": [
+        "标准答案原样迁移，不对gold语义做改写。",
+        "跨字段定位失败的源样本保存在待修复样本中，不进入train/dev/test。",
+        "task_fixed_error_type_mismatch只反映TaskCatalog旧固定名称与真实gold名称差异，不修改样本。",
+        "provisional仅表示尚未完成改写/注错变体的近重复血缘归并。"
+      ]
+    },
+    "题目与题型不一致": {
+      "schema_version": "CanonicalCategoryMigrationReport.v1",
+      "dataset_category": "题目与题型不一致",
+      "counts": {
+        "source_records": 910,
+        "canonical_records": 910,
+        "quarantined_records": 0,
+        "positive": 465,
+        "negative": 445,
+        "train": 726,
+        "dev": 86,
+        "test": 98,
+        "verified_lineage_samples": 134,
+        "provisional_lineage_samples": 776,
+        "localization_warning_rows": 0,
+        "task_fixed_error_type_mismatch_findings": 0
+      },
+      "task_counts": {
+        "question_type_mismatch_check": 910
+      },
+      "checks": {
+        "canonical_schema_passed": true,
+        "original_and_tuned_non_system_messages_equal": true,
+        "source_file_hash_unchanged": true,
+        "exact_source_export_sha256_matches_tuned_source": true,
+        "cross_split_lineage_leakage": 0
+      },
+      "notes": [
+        "标准答案原样迁移，不对gold语义做改写。",
+        "跨字段定位失败的源样本保存在待修复样本中，不进入train/dev/test。",
+        "task_fixed_error_type_mismatch只反映TaskCatalog旧固定名称与真实gold名称差异，不修改样本。",
+        "provisional仅表示尚未完成改写/注错变体的近重复血缘归并。"
+      ]
+    },
+    "题目无解": {
+      "schema_version": "CanonicalCategoryMigrationReport.v1",
+      "dataset_category": "题目无解",
+      "counts": {
+        "source_records": 1093,
+        "canonical_records": 938,
+        "quarantined_records": 155,
+        "positive": 345,
+        "negative": 593,
+        "train": 741,
+        "dev": 95,
+        "test": 102,
+        "verified_lineage_samples": 184,
+        "provisional_lineage_samples": 754,
+        "localization_warning_rows": 155,
+        "task_fixed_error_type_mismatch_findings": 0
+      },
+      "task_counts": {
+        "unsolvable_check": 938
+      },
+      "checks": {
+        "canonical_schema_passed": true,
+        "original_and_tuned_non_system_messages_equal": true,
+        "source_file_hash_unchanged": true,
+        "exact_source_export_sha256_matches_tuned_source": true,
+        "cross_split_lineage_leakage": 0
+      },
+      "notes": [
+        "标准答案原样迁移，不对gold语义做改写。",
+        "跨字段定位失败的源样本保存在待修复样本中，不进入train/dev/test。",
+        "task_fixed_error_type_mismatch只反映TaskCatalog旧固定名称与真实gold名称差异，不修改样本。",
+        "provisional仅表示尚未完成改写/注错变体的近重复血缘归并。"
+      ]
+    },
+    "答案泄露": {
+      "schema_version": "CanonicalCategoryMigrationReport.v1",
+      "dataset_category": "答案泄露",
+      "counts": {
+        "source_records": 182,
+        "canonical_records": 182,
+        "quarantined_records": 0,
+        "positive": 98,
+        "negative": 84,
+        "train": 146,
+        "dev": 18,
+        "test": 18,
+        "verified_lineage_samples": 17,
+        "provisional_lineage_samples": 165,
+        "localization_warning_rows": 0,
+        "task_fixed_error_type_mismatch_findings": 0
+      },
+      "task_counts": {
+        "answer_leakage_check": 182
+      },
+      "checks": {
+        "canonical_schema_passed": true,
+        "original_and_tuned_non_system_messages_equal": true,
+        "source_file_hash_unchanged": true,
+        "exact_source_export_sha256_matches_tuned_source": true,
+        "cross_split_lineage_leakage": 0
+      },
+      "notes": [
+        "标准答案原样迁移，不对gold语义做改写。",
+        "跨字段定位失败的源样本保存在待修复样本中，不进入train/dev/test。",
+        "task_fixed_error_type_mismatch只反映TaskCatalog旧固定名称与真实gold名称差异，不修改样本。",
+        "provisional仅表示尚未完成改写/注错变体的近重复血缘归并。"
+      ]
+    }
+  },
+  "checks": {
+    "canonical_schema_passed": true,
+    "source_files_modified": false,
+    "all_category_source_exports_match_sha256": true,
+    "duplicate_sample_ids": 0,
+    "lineage_id_hash_collisions": 0,
+    "cross_split_lineage_leakage": 0
+  },
+  "notes": [
+    "本轮按项目方案的多语言口径排除英语、法语、德语和日语。",
+    "图文类任务当前无训练集JSONL，未生成空目录。",
+    "切分用于数据治理和训练导出，不会作为消息内容传给模型。",
+    "标准答案未做语义重审或修订；跨字段定位失败样本已隔离，TaskCatalog命名差异原样记录。"
+  ]
+}

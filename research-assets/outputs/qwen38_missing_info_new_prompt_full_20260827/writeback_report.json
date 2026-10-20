@@ -1,0 +1,30 @@
+{
+  "written": true,
+  "dataset": "C:\\hyt-agent\\训练集-微调版提示词\\信息缺失_训练集.jsonl",
+  "backup": "C:\\hyt-agent\\outputs\\qwen38_missing_info_new_prompt_full_20260827\\信息缺失_训练集_新版提示词写回前备份.jsonl",
+  "requested": 123,
+  "accepted_and_written": 107,
+  "false_negative_count": 16,
+  "false_negative_source_lines": [
+    218,
+    301,
+    306,
+    307,
+    356,
+    371,
+    372,
+    379,
+    403,
+    437,
+    438,
+    456,
+    458,
+    459,
+    460,
+    465
+  ],
+  "other_rejected_count": 0,
+  "other_rejected_source_lines": [],
+  "sha256_before": "9e81d4cd1824fbac6859ed70ed55001d46195e29f45ff067f21ba46b39d631be",
+  "sha256_after": "aec106170dda14b7c25c5a065e9bcaf4f1b92e45d1c9ea5093908652e4c48de2"
+}

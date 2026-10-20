@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 8.759182453155518,
+      "题目提取": 410.5942702293396,
+      "AI内容检测": 375.91238832473755,
+      "内部查重检测": 0.24328875541687012,
+      "历史查重检测": 0.0008528232574462891,
+      "后处理": 0.0008845329284667969,
+      "总耗时": 795.5108671188354
+    },
+    "total_time": 795.5108671188354,
+    "total_questions": 51,
+    "total_errors": 23,
+    "avg_time_per_question": 15.598252296447754
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 23,
+    "exam_name": "611物理化学.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

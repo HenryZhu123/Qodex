@@ -1,0 +1,127 @@
+{
+  "296": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "323": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "351": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "380": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "382": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "384": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "422": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "432": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "433": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "461": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "488": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型只修复了标准答案中的部分错别字，仍有目标问题遗漏。",
+    "review_method": "Codex离线语义复核"
+  },
+  "489": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "492": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "623": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "628": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "730": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "737": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "757": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "773": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "804": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "887": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "936": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "970": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "972": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标错别字；具体替换范围不同但语义等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "980": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中目标错别字，或给出的替换本身不成立。",
+    "review_method": "Codex离线语义复核"
+  }
+}

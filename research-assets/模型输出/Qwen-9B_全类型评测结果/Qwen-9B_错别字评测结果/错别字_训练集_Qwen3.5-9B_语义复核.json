@@ -1,0 +1,277 @@
+{
+  "280": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "281": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "314": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "319": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "333": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "334": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "339": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "344": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "356": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "358": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型报告的是另一处标点问题，未识别标准答案标注的字符混淆。",
+    "review_method": "Codex离线语义复核"
+  },
+  "382": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "384": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "388": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "394": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "417": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "433": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "435": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "441": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "448": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "455": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "456": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "457": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "469": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "471": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "473": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "486": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "488": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "492": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "493": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "595": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "623": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "631": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "634": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "641": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "714": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "757": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "769": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "770": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "773": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "784": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "798": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "804": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "861": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "865": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "867": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "872": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "887": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "894": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "896": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "898": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的字词替换能恢复为语义通顺且符合题意的表达；允许与标准答案粒度或措辞不同。",
+    "review_method": "Codex离线语义复核"
+  },
+  "909": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "915": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "945": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "970": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  },
+  "977": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型定位到可疑字词或命中部分目标，但替换词不等价、存在漏报/额外误报，或修正后仍不通顺。",
+    "review_method": "Codex离线语义复核"
+  }
+}

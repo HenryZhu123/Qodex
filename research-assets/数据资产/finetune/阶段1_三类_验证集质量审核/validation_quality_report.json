@@ -1,0 +1,64 @@
+{
+  "dataset": "stage1-three-types-validation",
+  "records": 279,
+  "distribution": {
+    "错别字": {
+      "positive": 49,
+      "negative": 50,
+      "total": 99
+    },
+    "语义不清": {
+      "positive": 37,
+      "negative": 51,
+      "total": 88
+    },
+    "选项结构错误": {
+      "positive": 39,
+      "negative": 53,
+      "total": 92
+    }
+  },
+  "dispositions": {
+    "pass": 203,
+    "fixable": 76
+  },
+  "issue_sample_counts": {
+    "GOLD_GENERATION_META_LANGUAGE": 75,
+    "SEMANTIC_GOLD_LOCATION_LOW_QUALITY": 1,
+    "OPTION_POSITIVE_MANUALLY_VALIDATED": 11,
+    "ERROR_TYPE_PROMPT_MISMATCH": 39,
+    "OPTION_GOLD_TEMPLATE_LOW_QUALITY": 28
+  },
+  "baseline_label_conflicts": {
+    "错别字|expected=True|predicted=False": 19,
+    "语义不清|expected=True|predicted=False": 12,
+    "语义不清|expected=False|predicted=True": 3,
+    "选项结构错误|expected=False|predicted=True": 3,
+    "选项结构错误|expected=True|predicted=False": 2
+  },
+  "audit_scope": {
+    "deterministic": [
+      "消息与JSON Schema",
+      "答案数量一致性",
+      "原文与锚点定位",
+      "题面乱码",
+      "选项标号序列与内容完全重复"
+    ],
+    "semantic_priority": "历史模型与标准标签冲突样本需逐题复核，模型结论仅作风险信号，不直接作为真值。"
+  },
+  "manual_review": {
+    "baseline_conflict_samples_reviewed": 39,
+    "confirmed_question_or_label_rejects": 0,
+    "option_parser_flags_reviewed": 11,
+    "conclusion": "已复核的高风险题面与有错/无错标签均可保留；问题集中的‘难免离子’为选矿学术语。",
+    "answer_rewrite_required": {
+      "语义不清_positive": 37,
+      "选项结构错误_positive": 39,
+      "total_samples": 76
+    }
+  },
+  "sha256": {
+    "validation_quality_audit.jsonl": "6fa8ac74fcfbf32d0b9f49eff854c1d316375695222bb25bb25b418f099a8961",
+    "validation_flagged.jsonl": "37f55a614b9967ae5bf240d6d72eee8ec06e1c8619fca8d4c88f546015a75288"
+  }
+}

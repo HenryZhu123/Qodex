@@ -1,0 +1,682 @@
+{
+  "62": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型对题型结构的判断不成立，或仅修改知识内容而没有识别实际题型错配。",
+    "review_method": "Codex离线语义复核"
+  },
+  "449": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "451": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "454": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "467": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "468": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "472": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "473": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "475": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "476": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "477": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "481": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "482": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "484": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "485": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "489": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "501": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "509": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "510": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "511": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "515": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "525": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型对题型结构的判断不成立，或仅修改知识内容而没有识别实际题型错配。",
+    "review_method": "Codex离线语义复核"
+  },
+  "526": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "527": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "528": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型对题型结构的判断不成立，或仅修改知识内容而没有识别实际题型错配。",
+    "review_method": "Codex离线语义复核"
+  },
+  "533": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "534": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "537": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "538": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "540": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "545": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "548": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "557": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "561": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "564": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "569": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "570": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "578": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "579": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "581": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "586": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "589": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "595": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "597": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "606": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "607": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "608": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "612": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "615": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "623": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "625": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "626": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "627": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "628": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "629": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "630": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "631": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "634": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "638": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "639": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "642": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "649": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "656": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "659": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "660": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "666": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "668": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "671": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "672": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "673": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "677": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "679": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "686": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "691": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "692": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "694": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "703": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "707": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "718": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "723": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "725": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "728": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "731": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "733": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "735": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "738": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "742": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "743": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "745": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "749": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "750": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "752": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "754": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "756": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "765": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "766": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "767": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "772": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "776": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "778": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "779": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "781": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "784": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "785": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "796": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "797": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "799": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "802": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "810": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "811": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "819": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "824": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "835": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "836": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "839": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "841": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "843": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "856": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "861": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "862": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "870": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "876": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "879": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "882": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "883": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "884": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "885": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "886": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "887": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "891": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "894": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "895": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "899": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型准确识别实际作答形式与标注题型不一致，并给出了可行的改题干或改题型方向。",
+    "review_method": "Codex离线语义复核"
+  },
+  "904": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "906": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  },
+  "910": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到题型错配，但给出的 correction 仍未真正转换为目标题型，回答只完成了部分任务。",
+    "review_method": "Codex离线语义复核"
+  }
+}

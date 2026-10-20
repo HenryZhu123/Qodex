@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 1.111832857131958,
+      "题目提取": 179.26508116722107,
+      "AI内容检测": 476.2682988643646,
+      "内部查重检测": 0.15213823318481445,
+      "历史查重检测": 0.28368425369262695,
+      "后处理": 0.0016105175018310547,
+      "总耗时": 657.0826458930969
+    },
+    "total_time": 657.0826458930969,
+    "total_questions": 25,
+    "total_errors": 30,
+    "avg_time_per_question": 26.283305835723876
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 30,
+    "exam_name": "651普通物理.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

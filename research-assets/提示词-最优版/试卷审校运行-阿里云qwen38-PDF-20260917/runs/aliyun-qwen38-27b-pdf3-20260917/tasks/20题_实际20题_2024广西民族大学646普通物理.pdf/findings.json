@@ -1,0 +1,125 @@
+{
+  "paper": "20题_实际20题_2024广西民族大学646普通物理.pdf",
+  "findings": [
+    {
+      "question_number": "2.13",
+      "error_type": "错别字",
+      "error_level": "严重",
+      "anchor_text": "哈雷慧星绕太阳的轨道是以太阳为一个焦点的椭圆",
+      "description": "“慧”为同音误用，正确写法应为“彗”。",
+      "recommendation": "将“哈雷慧星”修改为“哈雷彗星”。",
+      "section": "题干开头部分",
+      "position": "题干开头部分",
+      "source": "ai_detection:typo_check",
+      "confidence": null
+    },
+    {
+      "question_number": "4.18",
+      "error_type": "语义不清",
+      "error_level": "中等",
+      "anchor_text": "圆轮、定滑轮绕通过轮心且垂直于横截面的水平光滑轴的转动惯量分别为 $J_{1} = \\frac{1}{2} M_{1}R^{2}, J_{2} = \\frac{1}{2} M_{2}r^{2}$",
+      "description": "题干中公式使用了半径符号 R 和 r，但未在文字中明确定义其物理含义，且未提供具体数值，导致物理量指代不明且动力学方程无法闭合求解。",
+      "recommendation": "在题干中补充圆轮半径 R 和定滑轮半径 r 的具体数值，并明确符号定义。",
+      "section": "题干末尾括号内关于转动惯量的设定部分",
+      "position": "题干末尾括号内关于转动惯量的设定部分",
+      "source": "ai_detection:ambiguity_check",
+      "confidence": null
+    },
+    {
+      "question_number": "4.17",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "求在透镜焦平面处屏幕上呈现的艾里斑半径.",
+      "description": "中文句子末尾误用了英文句点。",
+      "recommendation": "将英文句点改为中文句号：'...艾里斑半径。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.13",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "这时它离太阳的距离是 $r_{2}=①$ .",
+      "description": "中文试题题干末尾应使用中文句号，原文使用了英文句点。",
+      "recommendation": "将英文句点改为中文句号：'这时它离太阳的距离是 $r_{2}=①$ 。'",
+      "section": "题干末尾，填空位 r_{2}=① 之后",
+      "position": "题干末尾，填空位 r_{2}=① 之后",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.2",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "则恒力 $\\bar{F}$ 与水平方向夹角应满足",
+      "description": "完整题干进入选项前误用逗号，导致句子边界不清。",
+      "recommendation": "将题干末尾的逗号改为句号：'...应满足。'",
+      "section": "题干末尾，'应满足'之后",
+      "position": "题干末尾，'应满足'之后",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.9",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "则缝的宽度等于①.",
+      "description": "填空位编号后误用英文句点，不符合中文试题书写规范。",
+      "recommendation": "删除填空位后的英文句点：'则缝的宽度等于①'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.15",
+      "error_type": "语义不清",
+      "error_level": "中等",
+      "anchor_text": "当圆线圈半径增大时圆线圈中心点(即圆心)的磁场①, 圆线圈轴线上各点的磁场②.",
+      "description": "原句在名词“磁场”后直接接序号占位符，缺少表示变化状态的谓语动词（如“增大/减小”），导致句子成分残缺，无法构成完整命题。",
+      "recommendation": "在两个填空前分别添加“将”字，使句子结构变为“主语+将+填空”，以承载表示变化的答案。",
+      "section": "题干末尾两处填空处",
+      "position": "题干末尾两处填空处",
+      "source": "ai_detection:ambiguity_check",
+      "confidence": null
+    },
+    {
+      "question_number": "4.18",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "圆轮、定滑轮绕通过轮心且垂直于横截面的水平光滑轴的转动惯量分别为 $J_{1} = \\frac{1}{2} M_{1}R^{2}, J_{2} = \\frac{1}{2} M_{2}r^{2}$",
+      "description": "题干末尾缺少句号。",
+      "recommendation": "在公式末尾添加句号。",
+      "section": "题干末尾，转动惯量公式之后",
+      "position": "题干末尾，转动惯量公式之后",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.2",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "恒力 $\\bar{F}$ 与水平方向夹角\n\n应满足",
+      "description": "题干在“夹角”后直接接“应满足”，缺少具体的角度变量符号（如θ），导致句子主干不完整，语义不清。",
+      "recommendation": "在“夹角”和“应满足”之间补充角度变量符号：'...与水平方向夹角 θ 应满足'",
+      "section": "题干末尾，'夹角'之后、'应满足'之前",
+      "position": "题干末尾，'夹角'之后、'应满足'之前",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.15",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "圆线圈轴线上各点的磁场②.",
+      "description": "题干末尾使用了英文句点，不符合中文试题标点规范。",
+      "recommendation": "将英文句点改为中文句号：'...磁场②。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    }
+  ]
+}

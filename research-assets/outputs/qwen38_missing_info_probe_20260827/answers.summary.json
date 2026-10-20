@@ -1,0 +1,25 @@
+{
+  "input": "C:\\hyt-agent\\训练集-微调版提示词\\信息缺失_训练集.jsonl",
+  "output": "C:\\hyt-agent\\outputs\\qwen38_missing_info_probe_20260827\\answers.jsonl",
+  "model": "qwen3.8-max",
+  "base_url": "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+  "concurrency": 1,
+  "temperature": 0.0,
+  "requested_rows": 1,
+  "previously_completed": 0,
+  "attempted_this_run": 1,
+  "results_present": 1,
+  "status_counts": {
+    "success": 1
+  },
+  "basic_schema_invalid": 0,
+  "has_error_counts": {
+    "false": 1
+  },
+  "usage_this_run": {
+    "prompt_tokens": 900,
+    "total_tokens": 1171,
+    "completion_tokens": 271
+  },
+  "elapsed_seconds": 13.244
+}

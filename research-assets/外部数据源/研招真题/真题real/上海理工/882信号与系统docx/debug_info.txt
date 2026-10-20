@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 7.6399245262146,
+      "题目提取": 211.36765694618225,
+      "AI内容检测": 207.1451051235199,
+      "内部查重检测": 0.20535945892333984,
+      "历史查重检测": 0.00030684471130371094,
+      "后处理": 0.000762939453125,
+      "总耗时": 426.3591158390045
+    },
+    "total_time": 426.3591158390045,
+    "total_questions": 24,
+    "total_errors": 21,
+    "avg_time_per_question": 17.764963159958523
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 21,
+    "exam_name": "882信号与系统.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

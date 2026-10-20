@@ -1,0 +1,82 @@
+{
+  "100": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "139": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "163": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "170": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认该样本无需报告此类语言错误，模型产生了误报。",
+    "review_method": "Codex离线语义复核"
+  },
+  "181": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "193": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "202": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "214": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "220": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "226": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "265": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "280": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "325": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型修正后的外语表达语法成立且保留原意，属于与标准答案等价的改写。",
+    "review_method": "Codex离线语义复核"
+  },
+  "334": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "412": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "424": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到至少一个相关语言问题，但存在漏报、额外误报、未实际修改或修正后语法/语义仍不成立。",
+    "review_method": "Codex离线语义复核"
+  }
+}

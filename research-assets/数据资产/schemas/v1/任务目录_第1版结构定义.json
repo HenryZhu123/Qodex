@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hyt-agent:schema:task-catalog:v1",
+  "title": "TaskCatalog.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "catalog_id",
+    "created_at",
+    "active_prompt_profile",
+    "canonical_schema_ref",
+    "output_contract",
+    "prompt_profiles",
+    "dataset_categories",
+    "tasks"
+  ],
+  "properties": {
+    "schema_version": {"const": "TaskCatalog.v1"},
+    "catalog_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "active_prompt_profile": {"enum": ["original", "tuned"]},
+    "canonical_schema_ref": {"type": "string", "minLength": 1},
+    "output_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["top_level_fields", "error_fields"],
+      "properties": {
+        "top_level_fields": {
+          "const": ["reason", "has_error", "total_errors", "errors"]
+        },
+        "error_fields": {
+          "const": [
+            "error_type",
+            "position",
+            "original_text",
+            "anchor_text",
+            "correction",
+            "description",
+            "suggestion"
+          ]
+        }
+      }
+    },
+    "prompt_profiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["original", "tuned"],
+      "properties": {
+        "original": {"$ref": "#/$defs/prompt_profile"},
+        "tuned": {"$ref": "#/$defs/prompt_profile"}
+      }
+    },
+    "dataset_categories": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/task"}
+    }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "content_sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "prompt_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "bundle_separator", "json_contract"],
+      "properties": {
+        "profile_id": {"enum": ["original", "tuned"]},
+        "bundle_separator": {"type": "string"},
+        "shared_core": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/component"}
+          ]
+        },
+        "json_contract": {"$ref": "#/$defs/component"}
+      }
+    },
+    "task_prompt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_card_version",
+        "rubric_version",
+        "task_card_path",
+        "task_card_content_sha256",
+        "prompt_bundle_sha256"
+      ],
+      "properties": {
+        "task_card_version": {"type": "string", "minLength": 1},
+        "rubric_version": {"type": "string", "minLength": 1},
+        "task_card_path": {"type": "string", "minLength": 1},
+        "task_card_content_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "prompt_bundle_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "display_name",
+        "task_card_name",
+        "default_dataset_category",
+        "language_scope",
+        "fixed_error_type",
+        "prompt_versions"
+      ],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]{2,63}$"},
+        "display_name": {"type": "string", "minLength": 1},
+        "task_card_name": {"type": "string", "minLength": 1},
+        "default_dataset_category": {"type": "string", "minLength": 1},
+        "language_scope": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 2}
+        },
+        "fixed_error_type": {"type": "string", "minLength": 1},
+        "prompt_versions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["original", "tuned"],
+          "properties": {
+            "original": {"$ref": "#/$defs/task_prompt"},
+            "tuned": {"$ref": "#/$defs/task_prompt"}
+          }
+        }
+      }
+    }
+  }
+}

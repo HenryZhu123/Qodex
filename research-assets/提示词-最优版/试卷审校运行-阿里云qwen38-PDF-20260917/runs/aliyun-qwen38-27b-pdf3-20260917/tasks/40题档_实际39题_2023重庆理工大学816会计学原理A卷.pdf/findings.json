@@ -1,0 +1,77 @@
+{
+  "paper": "40题档_实际39题_2023重庆理工大学816会计学原理A卷.pdf",
+  "findings": [
+    {
+      "question_number": "6.4",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "生产产品领用 A 材料 12 000 元。",
+      "description": "题目只提供了具体的经济业务内容，但缺少明确的作答任务（如“编制会计分录”），导致考生无法确定需要完成的具体操作。",
+      "recommendation": "在题干末尾补充任务指令：“要求：编制上述经济业务的会计分录。”",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "6.14",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "计算本月实现的净利润，并结转“利润分配”账户。",
+      "description": "题目要求计算净利润，但未提供任何用于计算的财务数据（如收入、成本、费用等）。",
+      "recommendation": "在题干中补充必要的财务数据或引用前文已给出的具体业务记录。",
+      "section": "题干部分",
+      "position": "题干部分",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "6.14",
+      "error_type": "题目无解",
+      "error_level": "严重",
+      "anchor_text": "甲企业 2021 年 12 月份发生的部分经济业务如下: 要求：编制上述经济业务的会计分录。",
+      "description": "题干仅说明有经济业务但未列出具体数据和内容，导致无法计算净利润和编制分录。",
+      "recommendation": "在题干中补充完整的 12 月份经济业务列表及对应金额。",
+      "section": "阅读材料及要求部分",
+      "position": "阅读材料及要求部分",
+      "source": "ai_detection:unsolvability_check",
+      "confidence": null
+    },
+    {
+      "question_number": "3.2",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "原始凭证",
+      "description": "题目仅列出名词“原始凭证”，未包含任何解释、定义或说明的引导词，导致任务不明确。",
+      "recommendation": "在名词后补充解释性引导语，如：“原始凭证：请解释其含义。”",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "3.3",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "负债",
+      "description": "题干只有名词“负债”，缺少要求考生进行解释的任务词或引导结构。",
+      "recommendation": "在名词后补充解释任务指令，如：“负债：请解释该会计概念的含义。”",
+      "section": "题目末尾",
+      "position": "题目末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "3.1",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "可变现净值",
+      "description": "题干仅列出名词，未提供“解释”、“说明”等任务词或填空位，无法确定作答形式。",
+      "recommendation": "在名词后补充任务指令，如：“可变现净值：请解释该概念。”",
+      "section": "题目末尾",
+      "position": "题目末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "run_id": "aliyun-qwen38-27b-converted-pdf2-20260917",
+  "batch_id": "9218d2fd-f310-41c4-953d-41cd1f08005b",
+  "model": "qwen3.8-27b",
+  "model_endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "mineru_endpoint": "http://10.1.7.39:9999/file_parse",
+  "input_sha256": {
+    "180题档_实际190题_2019昆明理工大学628西医综合A卷.pdf": "ac77eea8e2c9dfb8ead455adee3a9075de6ec8792e0a19f958fec4466eafebc3",
+    "60题档_实际62题_641生物化学与分子生物学.pdf": "e9dbdb43834dfea781cdd7abb3ef13684b997d45fecb6d757d9fd5954199b5bb"
+  },
+  "threads": 40,
+  "total_papers": 2,
+  "total_questions": 264,
+  "total_findings": 214,
+  "wall_seconds": 942.355,
+  "review_seconds_sum": 411.145,
+  "avg_wall_seconds_per_question": 3.57,
+  "avg_review_seconds_per_question": 1.557,
+  "papers": [
+    {
+      "task_id": "task_1789637731365_43959b",
+      "paper": "60题档_实际62题_641生物化学与分子生物学.pdf",
+      "status": "success",
+      "finding_count": 11,
+      "questions": 67,
+      "parse_seconds": 99.957,
+      "review_seconds": 82.832,
+      "error_message": ""
+    },
+    {
+      "task_id": "task_1789637731365_7c8b40",
+      "paper": "180题档_实际190题_2019昆明理工大学628西医综合A卷.pdf",
+      "status": "success",
+      "finding_count": 203,
+      "questions": 197,
+      "parse_seconds": 420.768,
+      "review_seconds": 328.313,
+      "error_message": ""
+    }
+  ],
+  "prompt_profile": {
+    "base_profile": "system-qwen38-27b-v1",
+    "profile_sha256": "10ae2049bc5971353d42e99b32218a01d9715dec5ab5ad884e2ee81e51f6c2a4",
+    "task_think_modes": {
+      "typo_check": "disabled",
+      "ambiguity_check": "disabled",
+      "options_check": "disabled",
+      "punctuation_check": "explicit",
+      "mismatch_check": "disabled",
+      "missing_check": "disabled",
+      "unsolvability_check": "explicit",
+      "answer_leak_check": "explicit",
+      "image_consistency_check": "explicit",
+      "guide_stem_check": "explicit",
+      "logic_check": "explicit",
+      "ja_spelling_check": "explicit",
+      "ja_grammar_check": "explicit",
+      "ja_logic_check": "explicit",
+      "ja_punctuation_check": "explicit",
+      "de_spelling_check": "explicit",
+      "de_grammer_check": "explicit",
+      "de_punctuation_check": "explicit",
+      "fren_spelling_check": "explicit",
+      "fren_grammar_check": "explicit",
+      "fren_punctuation_check": "explicit",
+      "en_spelling_check": "explicit",
+      "en_grammar_check": "explicit",
+      "en_punctuation_check": "explicit"
+    },
+    "selected_prompt_files": {
+      "typo_check": {
+        "file": "错别字_disabled.txt",
+        "mode": "disabled"
+      },
+      "options_check": {
+        "file": "选项错误_disabled.txt",
+        "mode": "disabled"
+      },
+      "ambiguity_check": {
+        "file": "语义不清_disabled.txt",
+        "mode": "disabled"
+      },
+      "punctuation_check": {
+        "file": "标点符号_explicit.txt",
+        "mode": "explicit"
+      },
+      "mismatch_check": {
+        "file": "题目和题型不一致_disabled.txt",
+        "mode": "disabled"
+      },
+      "missing_check": {
+        "file": "信息缺失_disabled.txt",
+        "mode": "disabled"
+      },
+      "unsolvability_check": {
+        "file": "题目无解_explicit.txt",
+        "mode": "explicit"
+      },
+      "answer_leak_check": {
+        "file": "答案泄露_explicit.txt",
+        "mode": "explicit"
+      }
+    }
+  },
+  "source_summary": "/Users/softzephyr/Desktop/hyt-agent/提示词-最优版/试卷审校运行-阿里云qwen38-转换PDF-20260917/runs/aliyun-qwen38-27b-converted-pdf2-20260917/summary.json"
+}

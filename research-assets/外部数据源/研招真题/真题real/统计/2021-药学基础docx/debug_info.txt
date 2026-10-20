@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 4.634430408477783,
+      "题目提取": 264.40949845314026,
+      "AI内容检测": 159.36974930763245,
+      "内部查重检测": 18.2570378780365,
+      "历史查重检测": 29.897359371185303,
+      "后处理": 0.0007071495056152344,
+      "总耗时": 476.5687825679779
+    },
+    "total_time": 476.5687825679779,
+    "total_questions": 48,
+    "total_errors": 13,
+    "avg_time_per_question": 9.92851630349954
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 13,
+    "exam_name": "2021-药学基础.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-30B-A3B-Instruct-2507",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

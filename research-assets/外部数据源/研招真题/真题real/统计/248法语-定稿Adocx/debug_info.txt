@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 4.928789854049683,
+      "题目提取": 567.6945524215698,
+      "AI内容检测": 165.19042992591858,
+      "内部查重检测": 0.22759366035461426,
+      "历史查重检测": 0.3870375156402588,
+      "后处理": 0.0009009838104248047,
+      "总耗时": 738.4293043613434
+    },
+    "total_time": 738.4293043613434,
+    "total_questions": 43,
+    "total_errors": 26,
+    "avg_time_per_question": 17.17277452003124
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 26,
+    "exam_name": "248法语-定稿A.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-30B-A3B-Instruct-2507",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

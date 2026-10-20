@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 0.853369951248169,
+      "题目提取": 291.6367883682251,
+      "AI内容检测": 488.8039000034332,
+      "内部查重检测": 0.2984635829925537,
+      "历史查重检测": 0.0004169940948486328,
+      "后处理": 0.0008311271667480469,
+      "总耗时": 781.5937700271606
+    },
+    "total_time": 781.5937700271606,
+    "total_questions": 53,
+    "total_errors": 26,
+    "avg_time_per_question": 14.747052264663408
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 26,
+    "exam_name": "808+机械制造专业综合.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

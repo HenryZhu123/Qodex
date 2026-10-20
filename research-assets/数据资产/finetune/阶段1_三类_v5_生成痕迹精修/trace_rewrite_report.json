@@ -1,0 +1,23 @@
+{
+    "dataset_version":  "stage1-three-types-v5-four-targeted-answer-fixes",
+    "source_dataset":  "数据资产\\finetune\\阶段1_三类_v3_质量审核",
+    "policy":  "以v3为基线，仅针对4条含明确生成痕迹的答案进行题目相关改写；不改题目、标签和数据划分。",
+    "changes":  {
+                    "train_changed_rows":  2,
+                    "train_lines":  [
+                                        391,
+                                        833
+                                    ],
+                    "val_changed_rows":  2,
+                    "val_lines":  [
+                                      79,
+                                      100
+                                  ]
+                },
+    "verification":  {
+                         "source_train_sha256":  "225b6189bc053b3c2e581b1192f9831b2101599628afdea0f99bd724743960f0",
+                         "target_train_sha256":  "f657dbba238cce1f3917738cafeedad32d6188ab1b5f792e2db7addec461b35e",
+                         "source_val_sha256":  "f809e6971d4ddb1bc1bcfa3314c728f3ce228e29a885b68bd7e28a3ce2b95ced",
+                         "target_val_sha256":  "110a6f3e7efb23bde8d4e3ea8ef71dea14cffbe9c1903ed161cfaaefe14bfe7f"
+                     }
+}

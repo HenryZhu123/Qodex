@@ -1,0 +1,234 @@
+{"id": "1", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "2", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "3", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "4", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "5", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "6", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "7", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "8", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "9", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "10", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "11", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "12", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "13", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "14", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "15", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "16", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "17", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "18", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "19", "pass": true, "exclude": false, "gold_issue": false, "reason": "模型在“题干第一句”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "semantic-unclear-missing-position-correct", "reason": "模型在“题干第一句”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。"}]}
+{"id": "20", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "21", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "22", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "23", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "24", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "25", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "26", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "27", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "28", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "29", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "30", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "31", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "32", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'错别字': 1} 模型={}", "per_error": []}
+{"id": "33", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "34", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "35", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "36", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "37", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "38", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "39", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "40", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "41", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "42", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "43", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "44", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "45", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "46", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "47", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "48", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "49", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "50", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "51", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "52", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "53", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'语义不清': 1}", "per_error": []}
+{"id": "54", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "55", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "56", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "57", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "58", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "59", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "60", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'错别字': 1} 模型={}", "per_error": []}
+{"id": "61", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "62", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "63", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "64", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "65", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "66", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "67", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "68", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'错别字': 1} 模型={}", "per_error": []}
+{"id": "69", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "70", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "71", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'语义不清': 1}", "per_error": []}
+{"id": "72", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "73", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "74", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "75", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "76", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "77", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "78", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "79", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "80", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "81", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "82", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "83", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "84", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "85", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "86", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "87", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "88", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "89", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "90", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "91", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "92", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "93", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "94", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "95", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "96", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "97", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "98", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "99", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "100", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "101", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "102", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "103", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "104", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "105", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "106", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "107", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "108", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "109", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "110", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "111", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "112", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "113", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "114", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "115", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "116", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "117", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "118", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "119", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "120", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "121", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "122", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "123", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "124", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "125", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "126", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "127", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "128", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "129", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "130", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "131", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "132", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "133", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "134", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "135", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "136", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "137", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "138", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "139", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "140", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "141", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'语义不清': 1}", "per_error": []}
+{"id": "142", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "143", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "144", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "145", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "146", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "147", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "148", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "149", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "150", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "151", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'错别字': 1} 模型={}", "per_error": []}
+{"id": "152", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "153", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "154", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "155", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "156", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "157", "pass": false, "exclude": false, "gold_issue": false, "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。", "per_error": []}
+{"id": "158", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "159", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "160", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "161", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "162", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "163", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "164", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "165", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "166", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "167", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "168", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "169", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "170", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "171", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "172", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "173", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "174", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "175", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "176", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "177", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "178", "pass": true, "exclude": false, "gold_issue": false, "reason": "模型在“题干末尾括号前”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "semantic-unclear-missing-position-correct", "reason": "模型在“题干末尾括号前”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。"}]}
+{"id": "179", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "180", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "181", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "182", "pass": false, "exclude": false, "gold_issue": false, "reason": "模型报告了语义问题，但未识别标准所标的实际删除位置，仍判为未通过。", "per_error": []}
+{"id": "183", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "184", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "185", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "186", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "187", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'错别字': 1} 模型={}", "per_error": []}
+{"id": "188", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "189", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "190", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "191", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={} 模型={'错别字': 1}", "per_error": []}
+{"id": "192", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "193", "pass": false, "exclude": false, "gold_issue": false, "reason": "total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'选项结构错误': 2} 模型={'选项结构错误': 1}", "per_error": []}
+{"id": "194", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "195", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "196", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "197", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "198", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "199", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "200", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "201", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "202", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "203", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "204", "pass": true, "exclude": false, "gold_issue": false, "reason": "模型在“选项C”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。", "per_error": [{"model_error_index": 1, "gold_error_index": 1, "pass": true, "rule_id": "semantic-unclear-missing-position-correct", "reason": "模型在“选项C”识别了标准所标的删减位置；补充内容无需与标准一致，按更新后的缺失位置规则通过。"}]}
+{"id": "205", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "206", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "207", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "208", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "209", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "210", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "211", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "212", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "213", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'错别字': 1} 模型={}", "per_error": []}
+{"id": "214", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "215", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'错别字': 1} 模型={}", "per_error": []}
+{"id": "216", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "217", "pass": false, "exclude": false, "gold_issue": false, "reason": "Codex逐条审核：定位、改法或最终题意与标准答案不一致，或修改后仍存在错误。", "per_error": []}
+{"id": "218", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "219", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "220", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "221", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "222", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "223", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "224", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "225", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "226", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "227", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "228", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "229", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "230", "pass": false, "exclude": false, "gold_issue": false, "reason": "has_error不一致；total_errors与标准答案错误数量不一致；errors数量不一致；error_type计数不一致：标准={'语义不清': 1} 模型={}", "per_error": []}
+{"id": "231", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "232", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "233", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}
+{"id": "234", "pass": true, "exclude": false, "gold_issue": false, "reason": "沿用逐题审核结论：回答完整通过。", "per_error": []}

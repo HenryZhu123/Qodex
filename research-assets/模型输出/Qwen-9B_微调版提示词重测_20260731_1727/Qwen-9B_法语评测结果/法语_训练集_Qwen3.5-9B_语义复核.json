@@ -1,0 +1,102 @@
+{
+  "61": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分法语问题或给出部分可行修改，但仍有漏报、额外误报或修正后表达不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "85": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的法语问题，且给出的变位、搭配或拼写修正不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "94": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的法语修正能消除标准答案对应的问题，属于语义等价的有效改写。",
+    "review_method": "Codex离线语义复核"
+  },
+  "139": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的法语问题，且给出的变位、搭配或拼写修正不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "181": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的法语修正能消除标准答案对应的问题，属于语义等价的有效改写。",
+    "review_method": "Codex离线语义复核"
+  },
+  "193": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的法语问题，且给出的变位、搭配或拼写修正不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "199": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分法语问题或给出部分可行修改，但仍有漏报、额外误报或修正后表达不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "226": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的法语问题，且给出的变位、搭配或拼写修正不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "232": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的法语修正能消除标准答案对应的问题，属于语义等价的有效改写。",
+    "review_method": "Codex离线语义复核"
+  },
+  "244": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的法语修正能消除标准答案对应的问题，属于语义等价的有效改写。",
+    "review_method": "Codex离线语义复核"
+  },
+  "280": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的法语问题，且给出的变位、搭配或拼写修正不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "293": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分法语问题或给出部分可行修改，但仍有漏报、额外误报或修正后表达不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "296": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分法语问题或给出部分可行修改，但仍有漏报、额外误报或修正后表达不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "329": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分法语问题或给出部分可行修改，但仍有漏报、额外误报或修正后表达不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "334": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的法语问题，且给出的变位、搭配或拼写修正不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "346": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的法语修正能消除标准答案对应的问题，属于语义等价的有效改写。",
+    "review_method": "Codex离线语义复核"
+  },
+  "361": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未命中标准答案对应的法语问题，且给出的变位、搭配或拼写修正不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "412": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分法语问题或给出部分可行修改，但仍有漏报、额外误报或修正后表达不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "424": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了部分法语问题或给出部分可行修改，但仍有漏报、额外误报或修正后表达不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "425": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型给出的法语修正能消除标准答案对应的问题，属于语义等价的有效改写。",
+    "review_method": "Codex离线语义复核"
+  }
+}

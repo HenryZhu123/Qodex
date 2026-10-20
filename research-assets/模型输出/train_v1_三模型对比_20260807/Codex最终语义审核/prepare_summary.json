@@ -1,0 +1,23 @@
+{
+  "finetuned9b": {
+    "negative_structural_pass": 108,
+    "structure_fail": 14,
+    "codex_review_required": 39,
+    "deterministic_core_match": 55,
+    "deterministic_same_corrected_text": 18
+  },
+  "base9b": {
+    "negative_structural_pass": 106,
+    "deterministic_same_corrected_text": 20,
+    "codex_review_required": 57,
+    "structure_fail": 37,
+    "deterministic_core_match": 14
+  },
+  "base122b": {
+    "negative_structural_pass": 112,
+    "deterministic_same_corrected_text": 28,
+    "codex_review_required": 43,
+    "deterministic_core_match": 30,
+    "structure_fail": 21
+  }
+}

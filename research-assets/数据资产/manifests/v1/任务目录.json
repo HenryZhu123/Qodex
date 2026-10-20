@@ -1,0 +1,583 @@
+{
+  "schema_version": "TaskCatalog.v1",
+  "catalog_id": "exam-checker-tasks-v1",
+  "created_at": "2026-08-05T03:45:38.664511Z",
+  "active_prompt_profile": "tuned",
+  "canonical_schema_ref": "数据资产/schemas/v1/统一规范样本_第3版精简结构定义.json",
+  "output_contract": {
+    "top_level_fields": [
+      "reason",
+      "has_error",
+      "total_errors",
+      "errors"
+    ],
+    "error_fields": [
+      "error_type",
+      "position",
+      "original_text",
+      "anchor_text",
+      "correction",
+      "description",
+      "suggestion"
+    ]
+  },
+  "prompt_profiles": {
+    "original": {
+      "profile_id": "original",
+      "bundle_separator": "\n\n",
+      "shared_core": null,
+      "json_contract": {
+        "path": "提示词/JSON约束.txt",
+        "content_sha256": "aa13101689625ea3d48f13d4b230ae798b0a56cce3b36052dc06e5408a75533d"
+      }
+    },
+    "tuned": {
+      "profile_id": "tuned",
+      "bundle_separator": "\n",
+      "shared_core": {
+        "path": "提示词-微调版/共享核心.txt",
+        "content_sha256": "1c440f0cb20307934389f67b50cd5a2e82be47de6a8cc35b44b4710f2abfdc20"
+      },
+      "json_contract": {
+        "path": "提示词-微调版/JSON约束.txt",
+        "content_sha256": "62daadeeb0190274cafa2ccc33d1d8e495eda155eb442acda8fd3cdacd22366d"
+      }
+    }
+  },
+  "dataset_categories": [
+    "信息缺失",
+    "德语",
+    "日语",
+    "标点符号错误",
+    "法语",
+    "答案泄露",
+    "英语",
+    "语义不清",
+    "选项结构错误",
+    "错别字",
+    "题目与题型不一致",
+    "题目无解"
+  ],
+  "tasks": [
+    {
+      "task_id": "typo_check",
+      "display_name": "错别字",
+      "task_card_name": "错别字",
+      "default_dataset_category": "错别字",
+      "language_scope": [
+        "zh"
+      ],
+      "fixed_error_type": "错别字",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "typo_check.original.v1",
+          "rubric_version": "typo_check.original.rubric.v1",
+          "task_card_path": "提示词/错别字.txt",
+          "task_card_content_sha256": "fb2f731f41fa087cbbd6661877a7033a26d390cb2f53edbae17b8497979c6b91",
+          "prompt_bundle_sha256": "ba904c94ad69850a9092328dd88a0f2d32a525fd4311f65125432b093f36bf1b"
+        },
+        "tuned": {
+          "task_card_version": "typo_check.tuned.v1",
+          "rubric_version": "typo_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/错别字.txt",
+          "task_card_content_sha256": "d4f43feede4caa64fb396e6bc70fca8ba933e2fdfafe19d743d0c771d3ce9bff",
+          "prompt_bundle_sha256": "48aaaf44d68b495da5b2977351e89340e903cbc06a1c13a20c7c76b46f27f1a2"
+        }
+      }
+    },
+    {
+      "task_id": "ambiguity_check",
+      "display_name": "语义不清",
+      "task_card_name": "语义不清",
+      "default_dataset_category": "语义不清",
+      "language_scope": [
+        "zh"
+      ],
+      "fixed_error_type": "语义不清",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "ambiguity_check.original.v1",
+          "rubric_version": "ambiguity_check.original.rubric.v1",
+          "task_card_path": "提示词/语义不清.txt",
+          "task_card_content_sha256": "8b84f498fce3eae05e0b26be84faa7a918cc0b4d98fbb090ff2509d45663b512",
+          "prompt_bundle_sha256": "8a72b5e8f8f2f8532abfdb5f7b1f9f2e969fff9d173d15df2bd97d8f7745c3bf"
+        },
+        "tuned": {
+          "task_card_version": "ambiguity_check.tuned.v1",
+          "rubric_version": "ambiguity_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/语义不清.txt",
+          "task_card_content_sha256": "f09bd5cbacd7f926bbeb20a450abb7749240cc1485608c99a0d1ebec579099cb",
+          "prompt_bundle_sha256": "7c91765b4dabfc052d3b46ff2d78789d628c1e5e41332010188f547ddd4f6fe4"
+        }
+      }
+    },
+    {
+      "task_id": "options_check",
+      "display_name": "选项结构错误",
+      "task_card_name": "选项结构错误",
+      "default_dataset_category": "选项结构错误",
+      "language_scope": [
+        "zh"
+      ],
+      "fixed_error_type": "选项错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "options_check.original.v1",
+          "rubric_version": "options_check.original.rubric.v1",
+          "task_card_path": "提示词/选项结构错误.txt",
+          "task_card_content_sha256": "c6f7a714d60f06a8e778e567f1ac405b3d73e85e9e321138201905175bc0fac6",
+          "prompt_bundle_sha256": "608986176bf5ccbf94f3012d5cf7fee190679b2e007d97c9f06b4a3bd73ed9aa"
+        },
+        "tuned": {
+          "task_card_version": "options_check.tuned.v1",
+          "rubric_version": "options_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/选项结构错误.txt",
+          "task_card_content_sha256": "e59056db89443f7237977d9c6ca2e43724f35cb70d545a24ebf42f74e7503b58",
+          "prompt_bundle_sha256": "3a511f3bec8ca191ef410538416ddc158b50533ab4aed7f28030722851c83636"
+        }
+      }
+    },
+    {
+      "task_id": "punctuation_check",
+      "display_name": "标点符号错误",
+      "task_card_name": "标点符号错误",
+      "default_dataset_category": "标点符号错误",
+      "language_scope": [
+        "zh"
+      ],
+      "fixed_error_type": "标点符号",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "punctuation_check.original.v1",
+          "rubric_version": "punctuation_check.original.rubric.v1",
+          "task_card_path": "提示词/标点符号错误.txt",
+          "task_card_content_sha256": "29431f9e2cf54064bfc27b654f2b800512cfbe039c94323ae649d7342f6cf7f6",
+          "prompt_bundle_sha256": "02c2543f0b4aa6acdfd6d321f668c7a4ef20b2f85bcae0eada1b20723d3e1cd4"
+        },
+        "tuned": {
+          "task_card_version": "punctuation_check.tuned.v1",
+          "rubric_version": "punctuation_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/标点符号错误.txt",
+          "task_card_content_sha256": "a2a389e9c0d15f62a17ee3e87e0ebdd64f7ba6fb2fb56be994695f01c038426b",
+          "prompt_bundle_sha256": "efb78d62f4a4926b1e5e5940e7b65934da4bbec7965515ea4296eeefc391f982"
+        }
+      }
+    },
+    {
+      "task_id": "missing_info_check",
+      "display_name": "信息缺失",
+      "task_card_name": "信息缺失",
+      "default_dataset_category": "信息缺失",
+      "language_scope": [
+        "zh"
+      ],
+      "fixed_error_type": "信息缺失",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "missing_info_check.original.v1",
+          "rubric_version": "missing_info_check.original.rubric.v1",
+          "task_card_path": "提示词/信息缺失.txt",
+          "task_card_content_sha256": "dd9686e6fff0eb21326ca941fabaff43d568e7742070e74ed2ee1760be25d810",
+          "prompt_bundle_sha256": "52176934c626fdf5ffb09ecf9e15ffa15d68c8050b27d36825c037ccab8f2cef"
+        },
+        "tuned": {
+          "task_card_version": "missing_info_check.tuned.v1",
+          "rubric_version": "missing_info_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/信息缺失.txt",
+          "task_card_content_sha256": "f440128292ebffaedc27e573e5047b7f2a5272f3029ddd05e9ceaa3e82d767f7",
+          "prompt_bundle_sha256": "8a48bc01673b064cea85eac4e1af465e289a94d72ffd6c729eed713e7eb00145"
+        }
+      }
+    },
+    {
+      "task_id": "question_type_mismatch_check",
+      "display_name": "题目与题型不一致",
+      "task_card_name": "题目与题型不一致",
+      "default_dataset_category": "题目与题型不一致",
+      "language_scope": [
+        "zh"
+      ],
+      "fixed_error_type": "题目与题型不一致",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "question_type_mismatch_check.original.v1",
+          "rubric_version": "question_type_mismatch_check.original.rubric.v1",
+          "task_card_path": "提示词/题目与题型不一致.txt",
+          "task_card_content_sha256": "2719e24ff27d6912b4c1a936faf19ce21e4b32c414b9faed61a93a38a388c293",
+          "prompt_bundle_sha256": "b2093a92bc75f3bea8acd487c61f8bcd5f77b4b0d1ad92345645b2bab7d8f712"
+        },
+        "tuned": {
+          "task_card_version": "question_type_mismatch_check.tuned.v1",
+          "rubric_version": "question_type_mismatch_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/题目与题型不一致.txt",
+          "task_card_content_sha256": "fa6709496e9802b7c67dc78a9da6db805314c25f9136d7498a3eadd7f27ed24d",
+          "prompt_bundle_sha256": "ecd1511aa7c8e80e3ca096ec938b249cbf61fb05e24eef5e1d28e369c103088e"
+        }
+      }
+    },
+    {
+      "task_id": "unsolvable_check",
+      "display_name": "题目无解",
+      "task_card_name": "题目无解",
+      "default_dataset_category": "题目无解",
+      "language_scope": [
+        "zh"
+      ],
+      "fixed_error_type": "题目无解",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "unsolvable_check.original.v1",
+          "rubric_version": "unsolvable_check.original.rubric.v1",
+          "task_card_path": "提示词/题目无解.txt",
+          "task_card_content_sha256": "78a32fac985d20aa099d0ab2a2392a781993977b0a6450cf480175a9b2f23cdf",
+          "prompt_bundle_sha256": "c041e4c616f5010395c847a4aeb886e17d0e5e582385304fada69f575e42c36b"
+        },
+        "tuned": {
+          "task_card_version": "unsolvable_check.tuned.v1",
+          "rubric_version": "unsolvable_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/题目无解.txt",
+          "task_card_content_sha256": "a890503f07817e88cd2500c1fa5ef78cca61606fd1cc22a8e0ad98a3ccf1573f",
+          "prompt_bundle_sha256": "6bbde8ae12e1a13f1d1dc16c5670bdc35a5aa4e71df65082c68c0732de99d1a7"
+        }
+      }
+    },
+    {
+      "task_id": "answer_leakage_check",
+      "display_name": "答案泄露",
+      "task_card_name": "答案泄露",
+      "default_dataset_category": "答案泄露",
+      "language_scope": [
+        "zh"
+      ],
+      "fixed_error_type": "答案泄露",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "answer_leakage_check.original.v1",
+          "rubric_version": "answer_leakage_check.original.rubric.v1",
+          "task_card_path": "提示词/答案泄露.txt",
+          "task_card_content_sha256": "182178f68015d3d68a3403d2efa49e1f9b2f10efcfa2df4490879722b0aed5ad",
+          "prompt_bundle_sha256": "a279df89bc21db248f04c1a4187505c09a0f80f01ea63dfda0e265c4388f0641"
+        },
+        "tuned": {
+          "task_card_version": "answer_leakage_check.tuned.v1",
+          "rubric_version": "answer_leakage_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/答案泄露.txt",
+          "task_card_content_sha256": "99d808f4b64b143798f5c059a90210e522d698d75fc614e6e9eeb16e3e31cee5",
+          "prompt_bundle_sha256": "944620312481eb9eb8761939ed26c7b18396b0c949791933157c8acf51a75430"
+        }
+      }
+    },
+    {
+      "task_id": "french_spelling_check",
+      "display_name": "法语拼写错误",
+      "task_card_name": "法语_拼写错误",
+      "default_dataset_category": "法语",
+      "language_scope": [
+        "fr"
+      ],
+      "fixed_error_type": "法语：拼写错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "french_spelling_check.original.v1",
+          "rubric_version": "french_spelling_check.original.rubric.v1",
+          "task_card_path": "提示词/法语_拼写错误.txt",
+          "task_card_content_sha256": "7ef3c8decd25dd33f148528f39f456edacc6ee9538b3af536ee3030af29cd7ba",
+          "prompt_bundle_sha256": "1c0698e54bf72a16a02669ed28e07a8c1242ca54c6578d6c20b58c71d9fa39f2"
+        },
+        "tuned": {
+          "task_card_version": "french_spelling_check.tuned.v1",
+          "rubric_version": "french_spelling_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/法语_拼写错误.txt",
+          "task_card_content_sha256": "9814ee5c4cd424f65d3e78bcbc8d6f70a0e3cb1b0c8a0ded4e5c53a8276d862a",
+          "prompt_bundle_sha256": "5fe7e89924574bddec76d49ee17646c5d3d71d3a2395978caa316c1c24b385e6"
+        }
+      }
+    },
+    {
+      "task_id": "french_punctuation_check",
+      "display_name": "法语标点符号错误",
+      "task_card_name": "法语_标点符号错误",
+      "default_dataset_category": "法语",
+      "language_scope": [
+        "fr"
+      ],
+      "fixed_error_type": "法语：标点符号错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "french_punctuation_check.original.v1",
+          "rubric_version": "french_punctuation_check.original.rubric.v1",
+          "task_card_path": "提示词/法语_标点符号错误.txt",
+          "task_card_content_sha256": "116d477c586090783b7de3e5e076c55ea0ad7798dacc0c759e5e1c94044f81d9",
+          "prompt_bundle_sha256": "5537dc0e4dd78c2f0c8f977e72d1637cc3097770768f94fd0d59ca5cc72b4d25"
+        },
+        "tuned": {
+          "task_card_version": "french_punctuation_check.tuned.v1",
+          "rubric_version": "french_punctuation_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/法语_标点符号错误.txt",
+          "task_card_content_sha256": "47b0f2da5b5fbb4546c43dc681ad85795ed9324aa566ec324529e72a58deb8dd",
+          "prompt_bundle_sha256": "bc634c3f88b443abd93816b5eebfba924b89f7b09c669a8ed1abec3228b9e89a"
+        }
+      }
+    },
+    {
+      "task_id": "french_grammar_check",
+      "display_name": "法语语法错误",
+      "task_card_name": "法语_语法错误",
+      "default_dataset_category": "法语",
+      "language_scope": [
+        "fr"
+      ],
+      "fixed_error_type": "法语：语法错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "french_grammar_check.original.v1",
+          "rubric_version": "french_grammar_check.original.rubric.v1",
+          "task_card_path": "提示词/法语_语法错误.txt",
+          "task_card_content_sha256": "652cec4e4bdb9313ef82d9ad7e7e9d85a2547f725bbd882df72d80d892254d12",
+          "prompt_bundle_sha256": "77288827a61412bbd48a1707251ab677762e5c41166b52ca2d58641316533103"
+        },
+        "tuned": {
+          "task_card_version": "french_grammar_check.tuned.v1",
+          "rubric_version": "french_grammar_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/法语_语法错误.txt",
+          "task_card_content_sha256": "ba31f6e39fb6682d31f0b9315899e18e66c61dc182b4c10efb36452a1eed96ce",
+          "prompt_bundle_sha256": "5af789a5436c7f577a2d32d0e753e5cb10f7956f645f6e10cab697022bba338e"
+        }
+      }
+    },
+    {
+      "task_id": "english_spelling_check",
+      "display_name": "英语拼写错误",
+      "task_card_name": "英语_拼写错误",
+      "default_dataset_category": "英语",
+      "language_scope": [
+        "en"
+      ],
+      "fixed_error_type": "英语：拼写错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "english_spelling_check.original.v1",
+          "rubric_version": "english_spelling_check.original.rubric.v1",
+          "task_card_path": "提示词/英语_拼写错误.txt",
+          "task_card_content_sha256": "09f330910d530a229f7bdad8eea64c07f087c5cda4a466ea36062df8e549d88c",
+          "prompt_bundle_sha256": "0c4e5e5c48de02232ee034ae440bb7ad896badd8d0fb1d3672f85cc8452f124b"
+        },
+        "tuned": {
+          "task_card_version": "english_spelling_check.tuned.v1",
+          "rubric_version": "english_spelling_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/英语_拼写错误.txt",
+          "task_card_content_sha256": "9c5963669f596e5db05076b46820f164a9071aa81ec0775aa09cca9186942496",
+          "prompt_bundle_sha256": "ad64d011169a872c558a20d8daf5d4a651488b6a79f034f2167d2ce5943b12fe"
+        }
+      }
+    },
+    {
+      "task_id": "english_punctuation_check",
+      "display_name": "英语标点符号错误",
+      "task_card_name": "英语_标点符号错误",
+      "default_dataset_category": "英语",
+      "language_scope": [
+        "en"
+      ],
+      "fixed_error_type": "英语：标点符号错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "english_punctuation_check.original.v1",
+          "rubric_version": "english_punctuation_check.original.rubric.v1",
+          "task_card_path": "提示词/英语_标点符号错误.txt",
+          "task_card_content_sha256": "b7f003c843c081772fa8c9db0e4e0f64fddd1311337dc0879cf3176e1ae6b811",
+          "prompt_bundle_sha256": "de0e73eacd74e0f633501fe09212285489e9454da786cc078b0a4d7963df4838"
+        },
+        "tuned": {
+          "task_card_version": "english_punctuation_check.tuned.v1",
+          "rubric_version": "english_punctuation_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/英语_标点符号错误.txt",
+          "task_card_content_sha256": "1676c87cdf81916f310ca47de5434bafd3db292000d43d8624c91fc8d11853b2",
+          "prompt_bundle_sha256": "4314d2a62eaa7857ee8fdf7046743d0c634bde9e19dacaea50bab9a9e5015baf"
+        }
+      }
+    },
+    {
+      "task_id": "german_spelling_check",
+      "display_name": "德语拼写错误",
+      "task_card_name": "德语_拼写错误",
+      "default_dataset_category": "德语",
+      "language_scope": [
+        "de"
+      ],
+      "fixed_error_type": "德语：拼写错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "german_spelling_check.original.v1",
+          "rubric_version": "german_spelling_check.original.rubric.v1",
+          "task_card_path": "提示词/德语_拼写错误.txt",
+          "task_card_content_sha256": "b5c510692c47bd80f79f85a8415473a8d0b30590023d35fde2708046de5e8c0e",
+          "prompt_bundle_sha256": "7ed2d1b41d437a16610aed46db6e4434acdd2e1d0da94bb5d83abbe5d179ae42"
+        },
+        "tuned": {
+          "task_card_version": "german_spelling_check.tuned.v1",
+          "rubric_version": "german_spelling_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/德语_拼写错误.txt",
+          "task_card_content_sha256": "c532729da6bc3750271fd80a1ce916896c362e2299d4fcc877abfc5e5cef87fa",
+          "prompt_bundle_sha256": "68303896eafc7fdecbd271325c6bfe18df38374c8c424cc8d33b561c44a8ef81"
+        }
+      }
+    },
+    {
+      "task_id": "german_punctuation_check",
+      "display_name": "德语标点符号错误",
+      "task_card_name": "德语_标点符号错误",
+      "default_dataset_category": "德语",
+      "language_scope": [
+        "de"
+      ],
+      "fixed_error_type": "德语：标点符号错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "german_punctuation_check.original.v1",
+          "rubric_version": "german_punctuation_check.original.rubric.v1",
+          "task_card_path": "提示词/德语_标点符号错误.txt",
+          "task_card_content_sha256": "f51401fe2be433d278e05cafca146f709d4702393a9dead2a690f745f964e21b",
+          "prompt_bundle_sha256": "e2dc528c2b066fa250df0fe172666354ea2034b51264547282606d939da07f51"
+        },
+        "tuned": {
+          "task_card_version": "german_punctuation_check.tuned.v1",
+          "rubric_version": "german_punctuation_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/德语_标点符号错误.txt",
+          "task_card_content_sha256": "7b2a49fbe48201db1c54fff7f40518e87b8db00fce1e4585eaba0512b317a88b",
+          "prompt_bundle_sha256": "844a09375daf9c59a5fb4f47bc03cfa0b482c40e74bc861a97f1937ea0348827"
+        }
+      }
+    },
+    {
+      "task_id": "german_grammar_check",
+      "display_name": "德语语法错误",
+      "task_card_name": "德语_语法错误",
+      "default_dataset_category": "德语",
+      "language_scope": [
+        "de"
+      ],
+      "fixed_error_type": "德语：语法错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "german_grammar_check.original.v1",
+          "rubric_version": "german_grammar_check.original.rubric.v1",
+          "task_card_path": "提示词/德语_语法错误.txt",
+          "task_card_content_sha256": "835a88c6ad1fd4b91d4097a166ebcf4602c25a2226b1b8997443448cfcbcf674",
+          "prompt_bundle_sha256": "b98342b3c63bb1f2e8f11ebcb53042a7aabb7559d9d9314a7e1bfb1dd7ec3628"
+        },
+        "tuned": {
+          "task_card_version": "german_grammar_check.tuned.v1",
+          "rubric_version": "german_grammar_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/德语_语法错误.txt",
+          "task_card_content_sha256": "229d98267ef4d020debc9d41adf514561464ffb450c04789b6e9837a77af97a4",
+          "prompt_bundle_sha256": "bd497406cdd82416b2cb6adea1029a9a79c76e3a10c913b812045f647b3bc385"
+        }
+      }
+    },
+    {
+      "task_id": "japanese_spelling_check",
+      "display_name": "日语拼写错误",
+      "task_card_name": "日语_拼写错误",
+      "default_dataset_category": "日语",
+      "language_scope": [
+        "ja"
+      ],
+      "fixed_error_type": "日文：拼写错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "japanese_spelling_check.original.v1",
+          "rubric_version": "japanese_spelling_check.original.rubric.v1",
+          "task_card_path": "提示词/日语_拼写错误.txt",
+          "task_card_content_sha256": "d54ff476630745a451bf3c85379e7461de915f63d628a88da37b3b312ad58173",
+          "prompt_bundle_sha256": "c0fc0d27c19a52aaa4f4190ef776527b5e8abe3019f183964c93d58d9888b357"
+        },
+        "tuned": {
+          "task_card_version": "japanese_spelling_check.tuned.v1",
+          "rubric_version": "japanese_spelling_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/日语_拼写错误.txt",
+          "task_card_content_sha256": "7cd4ffbcc821c6b827d8891a0de58685a94944f296615497e7d91bb2cad87e3d",
+          "prompt_bundle_sha256": "bd4e7b037a22e32572a22972264b8f4ff5aef9baac4785961d1f49b6367b3617"
+        }
+      }
+    },
+    {
+      "task_id": "japanese_punctuation_check",
+      "display_name": "日语标点符号错误",
+      "task_card_name": "日语_标点符号错误",
+      "default_dataset_category": "日语",
+      "language_scope": [
+        "ja"
+      ],
+      "fixed_error_type": "日文：标点符号错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "japanese_punctuation_check.original.v1",
+          "rubric_version": "japanese_punctuation_check.original.rubric.v1",
+          "task_card_path": "提示词/日语_标点符号错误.txt",
+          "task_card_content_sha256": "24089d9fb9a525084ec5eba34c4c52ffabb6dbaabdf57d554ae4fb41cbdeaaaf",
+          "prompt_bundle_sha256": "c3a8a2144d85a07d636cf97f3c392f247cad3336bc6b6b5c85a272f1fbb84291"
+        },
+        "tuned": {
+          "task_card_version": "japanese_punctuation_check.tuned.v1",
+          "rubric_version": "japanese_punctuation_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/日语_标点符号错误.txt",
+          "task_card_content_sha256": "d6e93974f05899763814c15be6f161542c399d19c8938d387ad09a2c511fcabb",
+          "prompt_bundle_sha256": "be5c1a3baba02a22bbb60c8b0baacbcd49de909f7adc48b59a5b869c888c25ea"
+        }
+      }
+    },
+    {
+      "task_id": "japanese_grammar_check",
+      "display_name": "日语语法错误",
+      "task_card_name": "日语_语法错误",
+      "default_dataset_category": "日语",
+      "language_scope": [
+        "ja"
+      ],
+      "fixed_error_type": "日文：语法错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "japanese_grammar_check.original.v1",
+          "rubric_version": "japanese_grammar_check.original.rubric.v1",
+          "task_card_path": "提示词/日语_语法错误.txt",
+          "task_card_content_sha256": "731fb70d7bbc4a28bc07f68677e10361d7bcf93a46aebf02b9ac523bbecb1f90",
+          "prompt_bundle_sha256": "b05caef1ddf1a5e5e607aa776bbcdf1f3ac375c022d5a29316cb842e431496a5"
+        },
+        "tuned": {
+          "task_card_version": "japanese_grammar_check.tuned.v1",
+          "rubric_version": "japanese_grammar_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/日语_语法错误.txt",
+          "task_card_content_sha256": "b8b77667f42b2483c5e5e67d5a02dacfa5dee067a95b1fc43dec93fe529acccd",
+          "prompt_bundle_sha256": "1925df0dc22e4aa037a7a612d7e8d463b1c7f4d67f8afb12fa59e87349517abd"
+        }
+      }
+    },
+    {
+      "task_id": "japanese_logic_check",
+      "display_name": "日语逻辑错误",
+      "task_card_name": "日语_逻辑错误",
+      "default_dataset_category": "日语",
+      "language_scope": [
+        "ja"
+      ],
+      "fixed_error_type": "日文：逻辑错误",
+      "prompt_versions": {
+        "original": {
+          "task_card_version": "japanese_logic_check.original.v1",
+          "rubric_version": "japanese_logic_check.original.rubric.v1",
+          "task_card_path": "提示词/日语_逻辑错误.txt",
+          "task_card_content_sha256": "da31fc30aeb7b1caed0afeeb90136f2bda6510fa01c12b64e346c6c4b19206eb",
+          "prompt_bundle_sha256": "a39be0eb7930ffc1371836043c7478c0048d86ded64a1dc617b54f2f342d5693"
+        },
+        "tuned": {
+          "task_card_version": "japanese_logic_check.tuned.v1",
+          "rubric_version": "japanese_logic_check.tuned.rubric.v1",
+          "task_card_path": "提示词-微调版/日语_逻辑错误.txt",
+          "task_card_content_sha256": "30d17f319fb1234809f223849739684fd2ede45689772ca89f089be25658fb09",
+          "prompt_bundle_sha256": "8e3f6381b5a3fadab734ff7e746ae5b2939812a5d1e3721d3e0bcf26ad2db01b"
+        }
+      }
+    }
+  ]
+}

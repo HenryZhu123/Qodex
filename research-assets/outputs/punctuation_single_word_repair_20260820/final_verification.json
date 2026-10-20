@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "issues": [],
+  "workbookRows": 1061,
+  "changedRows": 152,
+  "realErrors": 580,
+  "typeCounts": {
+    "破折号、连接号误用": 74,
+    "引号滥用或缺失": 118,
+    "引号内外标点位置": 118,
+    "省略号误用": 118,
+    "句末点号误用": 103,
+    "标点冗余或缺失": 6,
+    "引号、括号、书名号等配对错误": 15,
+    "停顿符号误用": 2,
+    "选项与编号标点误用": 6,
+    "冒号、分号误用": 16,
+    "间隔号误用": 4
+  },
+  "manifestRows": 152,
+  "uniqueSourceFingerprints": 152,
+  "batchRegistryRows": 304,
+  "formulaErrorScan": "{\"kind\":\"notice\",\"message\":\"Cell search matched 0 entries.\"}"
+}

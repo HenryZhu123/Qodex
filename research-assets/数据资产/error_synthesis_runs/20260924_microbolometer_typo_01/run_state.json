@@ -1,0 +1,47 @@
+{
+  "run_id": "20260924_microbolometer_typo_01",
+  "target_dataset": "/Users/softzephyr/Desktop/hyt-agent/训练集-微调版提示词/错别字_训练集.jsonl",
+  "current_phase": 4,
+  "status": "complete",
+  "phase_1_approval": {
+    "approved_at": "2026-09-24T14:23:30+08:00",
+    "quoted_approval": "批准阶段2"
+  },
+  "phase_2_approval": {
+    "approved_at": "2026-09-24T14:23:30+08:00",
+    "quoted_approval": "批准阶段2"
+  },
+  "phase_3_approval": {
+    "approved_at": "2026-09-24T14:26:36+08:00",
+    "quoted_approval": "批准阶段3"
+  },
+  "phase_4_approval": {
+    "approved_at": "2026-09-24T14:33:39+08:00",
+    "quoted_approval": "批准阶段4"
+  },
+  "requested_counts": {
+    "total": 1,
+    "错别字": 1,
+    "音近字误用": 1
+  },
+  "output_paths": {
+    "plan": "plan.md",
+    "source_selection": "source_selection.jsonl",
+    "mutation_manifest": "mutation_manifest.jsonl",
+    "constructed_questions": "constructed_questions_v1.jsonl",
+    "candidate_input": "candidate_input.jsonl",
+    "model_outputs": "model_outputs.jsonl",
+    "model_outputs_summary": "model_outputs.summary.json",
+    "answer_provenance": "answer_provenance.jsonl",
+    "audit_report": "audit_report.md",
+    "final_dataset": "final_dataset_v1.jsonl"
+  },
+  "model_configuration": {
+    "requested_model": "qwen-plus",
+    "returned_model": "qwen-plus",
+    "endpoint": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+    "concurrency": 8,
+    "temperature": 0.0,
+    "prompt_sha256": "ec572b232084a41820a16c0fbfae33fe5c8ae6382b49cd6448035644b570bb04"
+  }
+}

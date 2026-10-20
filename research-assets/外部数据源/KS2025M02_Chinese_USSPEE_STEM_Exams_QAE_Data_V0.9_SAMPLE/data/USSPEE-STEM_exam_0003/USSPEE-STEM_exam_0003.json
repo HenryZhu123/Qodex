@@ -1,0 +1,92 @@
+{
+  "metadata": {
+    "exam_id": "d33fb2cc15ec4885a8394ac955c6d87f",
+    "exam_title": "宁波大学2021年高代解析",
+    "exam_type": "USSPEE",
+    "exam_date": "2021-00-00",
+    "exam_subject": "Advanced Algebra",
+    "exam_subject_zh": "高等代数"
+  },
+  "data": [
+    {
+      "index": 1,
+      "question_type": "short_answer",
+      "question": "求一个4次实系数多项式  $f(x)$  ，使得  $f(x)$  被  $x^{2} + 1$  除余  $x + 1$  ，被  $x^{3} + x^{2} + 1$ 除余  $x^{2} - 1$ 。",
+      "choices": null,
+      "explanation": "令  $f(x) = (a x^{2} + b x + c)(x^{2} + 1) + x + 1$  ，其中，  $a,b,c\\in \\mathbb{R}$  且  $a\\neq 0$  ，故\n\n$$\n{\\begin{array}{r l}&{f(x)=(a x^{2}+b x+c)(x^{2}+1)+x+1}\\\\ &{\\qquad=a x^{4}+b x^{3}+c x^{2}+a x^{2}+b x+c+x+1}\\\\ &{\\qquad=a x^{4}+b x^{3}+(a+c)x^{2}+(b+1)x+c+1}\\\\ &{\\qquad=(a x+b - a)(x^{3}+x^{2}+1)+(2a - b + c) x^{2} + (-a + b + 1) x + a - b + c + 1}\\end{array}}\n$$\n\n$f(x)$  被  $x^{3} + x^{2} + 1$  除余  $x^{2} - 1$  ，故\n\n$$\n\\begin{cases}\n2a - b + c = 1 \\\\\n-a + b + 1 = 0 \\\\\na - b + c + 1 = -1\n\\end{cases}\n$$\n\n求解上述方程组，可得\n\n$$\n\\left\\{a = 3, b = 4, c = 0\\right.\n$$\n\n故\n\n$$\nf(x) = 3 x^{4} + 4 x^{3} + 3 x - 2.\n$$",
+      "answer": "$f(x) = 3 x^{4} + 4 x^{3} + 3 x - 2$ 。"
+    },
+    {
+      "index": 2,
+      "question_type": "short_answer",
+      "question": "计算  $n$ 阶行列式det(A)，其中  $\\nabla_{\\lambda}\\nabla_{\\lambda}\\nabla_{\\lambda}\\nabla_{\\lambda}\\nabla_{\\lambda}\\nabla_{\\lambda}\\nabla_{\\lambda}\\nabla_{\\lambda}\\mathcal{A}_{\\lambda} = |\\lambda_{\\lambda} - \\lambda_{\\lambda}|$ ，条件  $1 \\leq \\lambda_{\\lambda} \\leq \\cdots \\leq \\lambda_{\\lambda}$。",
+      "choices": null,
+      "explanation": "【解答】\n\n![Image](images/main_1.jpg)\n\n# 【备注1】\n\n本题见题解精粹第2讲2.1例6。",
+      "answer": "（图片题解见上）"
+    },
+    {
+      "index": 3,
+      "question_type": "proof",
+      "question": "设 $\\mathcal{A}$ 为 $n$ 阶非零实方阵，$\\mathcal{A}^{\\bullet}$为$\\mathcal{A}$的伴随矩阵，$\\mathcal{A}^T$为$\\mathcal{A}$的转置矩阵，当$\\mathcal{A}^T = \\mathcal{A}^{\\bullet}$时，证明：$\\det(\\mathcal{A}) \\neq 0$。",
+      "choices": null,
+      "explanation": null,
+      "answer": "$\\mathcal{A}$  为  $n$  阶非零实方阵，故  $\\mathcal{A}^T\\mathcal{A}$  为半正定但非零的矩阵。\n\n$\\boldsymbol{A}^{T} = \\boldsymbol{A}^{\\bullet}$，故\n\n$$\n\\boldsymbol{A}^{T}\\boldsymbol{A} = \\boldsymbol{A}^\\bullet \\boldsymbol{A} = \\det(\\boldsymbol{A}) \\boldsymbol{E}.\n$$\n\n又 $\\boldsymbol{A}^T \\boldsymbol{A}$ 为半正定但非零的矩阵，故必然有 $\\det(\\boldsymbol{A}) > 0$，故 $\\det(\\boldsymbol{A}) \\neq 0$。"
+    },
+    {
+      "index": 4,
+      "question_type": "short_answer",
+      "question": "设\n\n$$\n\\boldsymbol{A} = \\begin{pmatrix}1 & 1 & -1 \\\\ 2 & 1 & 0 \\\\ 1 & -1 & 0 \\end{pmatrix}, \\quad \\boldsymbol{B} = \\boldsymbol{A}' = 2\\boldsymbol{A}' \\boldsymbol{A} 3 \\boldsymbol{E},\n$$\n\n其中 $E$ 为单位矩阵。问 $B$ 是否可逆，若可逆，求 $B^{-1}$；若不可逆，说明理由。",
+      "choices": null,
+      "explanation": "$A$ 的特征多项式为\n\n$$\nf(x) = |x E - A| = x^3 - 2 x^2 - 3.\n$$\n\n令 $g(x) = x^5 - 2 x^4 +3$，进行欧几里得算法计算：\n\n$$\n\\begin{array}{rl}\n& \\left(\\begin{array}{ccc} f(x) & 1 & 0 \\\\ g(x) & 0 & 1 \\end{array}\\right) = \\cdots \\rightarrow \\left(\\begin{array}{ccc} -x -1 & \\frac{1}{3} x^{3} - \\frac{2}{3} x^{2} + 1 & -\\frac{1}{3} x + \\frac{2}{3} \\\\ 1 & \\frac{1}{6} (x^{4} - 3x^{3} + x^{2} + 3x -3) & \\frac{1}{6}(-x^{2} +3x -1) \\end{array}\\right)\n\\end{array}\n$$\n\n故\n\n$$\n\\frac{1}{6}(x^{4} - 3x^{3} + x^{2} + 3x -3) f(x) + \\frac{1}{6}(-x^{2} + 3x - 1) g(x) = 1.\n$$\n\n代入矩阵 $A$ 得\n\n$$\nE = \\frac{1}{6}(-A^2 + 3A - E) B,\n$$\n\n故 $B$ 可逆，且\n\n$$\nB^{-1} = \\frac{1}{6}(-A^2 + 3A - E) = \\frac{1}{6} \\left[- \\begin{pmatrix}1 & 1 & -1 \\\\ 2 & 1 & 0 \\\\ 1 & -1 & 0 \\end{pmatrix}^2 + 3 \\begin{pmatrix}1 & 1 & -1 \\\\ 2 & 1 & 0 \\\\ 1 & -1 & 0 \\end{pmatrix} - E \\right].\n$$\n\n计算后，\n\n$$\nB^{-1} = \\begin{pmatrix} 0 & 0 & -\\frac{1}{3} \\\\ \\frac{1}{3} & -\\frac{1}{6} & \\frac{1}{3} \\\\ \\frac{2}{3} & \\frac{1}{2} & 0 \\end{pmatrix}.\n$$",
+      "answer": "$B$ 可逆，且\n\n$$\nB^{-1} = \\begin{pmatrix} 0 & 0 & -\\frac{1}{3} \\\\ \\frac{1}{3} & -\\frac{1}{6} & \\frac{1}{3} \\\\ \\frac{2}{3} & \\frac{1}{2} & 0 \\end{pmatrix}.\n$$"
+    },
+    {
+      "index": 5,
+      "question_type": "short_answer",
+      "question": "设\n\n$$\nA = \\begin{pmatrix} a & 0 \\\\ b & c \\end{pmatrix},\n$$\n\n其中 $a,b,c$ 为实数，试求 $a,b,c$ 的一切可能值，使得\n\n$$\nA^{20} = \\begin{pmatrix}1 & 0 \\\\ 0 & 1 \\end{pmatrix}.\n$$",
+      "choices": null,
+      "explanation": "$A$ 的特征值为 $a,c$，均为实数。$A^{20}$ 的特征值为 $a^{20}, c^{20}$。\n\n若 $A^{20} = E$，则 $a^{20} = c^{20} = 1$，故 $a = \\pm 1$，$c = \\pm 1$。\n\n(1) 若 $a,c$ 一为 $1$，一为 $-1$，则 $A$ 相似于\n\n$$\n\\begin{pmatrix}1 & 0 \\\\ 0 & -1 \\end{pmatrix},\n$$\n\n故 $A^{20} = E$。\n\n(2) 若 $a = c = 1$，则\n\n$$\nA = \\begin{pmatrix}1 & 0 \\\\ b & 1 \\end{pmatrix} = E_2 + b \\begin{pmatrix}0 & 0 \\\\ 1 & 0 \\end{pmatrix}.\n$$\n\n利用二项式定理得\n\n$$\nA^{20} = E_2 + 20 b \\begin{pmatrix}0 & 0 \\\\ 1 & 0 \\end{pmatrix}.\n$$\n\n故 $A^{20} = E_2$ 当且仅当 $b=0$。\n\n(3) 若 $a = c = -1$，则\n\n$$\nA^{20} = \\left(\\begin{pmatrix} -1 & 0 \\\\ b & -1 \\end{pmatrix}\\right)^{20} = \\left(\\begin{pmatrix}1 & 0 \\\\ -b & 1 \\end{pmatrix}\\right)^{20}.\n$$\n\n故 $-b=0$，即 $b=0$。\n\n综上，\n\n- $a,c$ 一为 $1$，一为 $-1$，$b$ 任意实数；\n- 或 $a = c =1, b=0$；\n- 或 $a=c=-1, b=0$。",
+      "answer": "$$\n\\begin{cases}\na = 1, c = -1, b \\in \\mathbb{R}, \\text{ 或 } \\\\\na = -1, c = 1, b \\in \\mathbb{R}, \\text{ 或 } \\\\\na = c = 1, b = 0, \\text{ 或 } \\\\\na = c = -1, b = 0.\n\\end{cases}\n$$"
+    },
+    {
+      "index": 6,
+      "question_type": "short_answer",
+      "question": "用非退化线性替换化二次型\n\n$$\nf(x_1, x_2, x_3, x_4, x_5) = x_1 x_2 + x_2 x_3 + x_2 x_4 + x_4 x_5\n$$\n\n为标准形。",
+      "choices": null,
+      "explanation": "二次型 $f$ 的矩阵为\n\n$$\nA = \\begin{pmatrix}\n0 & \\frac{1}{2} & 0 & 0 & 0 \\\\\n\\frac{1}{2} & 0 & \\frac{1}{2} & \\frac{1}{2} & 0 \\\\\n0 & \\frac{1}{2} & 0 & 0 & 0 \\\\\n0 & \\frac{1}{2} & 0 & 0 & \\frac{1}{2} \\\\\n0 & 0 & 0 & \\frac{1}{2} & 0\n\\end{pmatrix}.\n$$\n\n（注：原矩阵排版可能有误，以上为对称形式）\n\n具体过程见下图：\n\n![](images/fab5fe2375fa648cdb7433d0d88f39d41e10da1bce3c0e831eae6011e4c5a601.jpg)\n\n![](images/e0b1744afd6f38de90e2760cef8276eece21ea08881c3dbfe5198e17690085e1.jpg)\n\n![](images/3dd3e5a748435e4e5f5f7529f6aaeba04e7f58a4483c72b87ac1125317a1b054.jpg)\n\n利用配方法和初等变换可化为标准形。",
+      "answer": "标准形已由图片演算给出，详见图片。"
+    },
+    {
+      "index": 7,
+      "question_type": "short_answer",
+      "question": "设\n\n$$\nA = \\begin{pmatrix}\n1 & -3 & 0 & 3 \\\\\n-2 & -6 & 0 & 13 \\\\\n0 & -3 & 1 & 3 \\\\\n-1 & -4 & 0 & 8\n\\end{pmatrix},\n$$\n\n求矩阵 $A$ 的若当标准形。",
+      "choices": null,
+      "explanation": "$A$ 的特征多项式为\n\n$$\n\\begin{aligned}\n|\\lambda E - A| &= \\begin{vmatrix}\n\\lambda -1 & 3 & 0 & -3 \\\\\n2 & \\lambda +6 & 0 & -13 \\\\\n0 & 3 & \\lambda -1 & -3 \\\\\n1 & 4 & 0 & \\lambda -8\n\\end{vmatrix} \\\\\n&= (\\lambda -1)^4.\n\\end{aligned}\n$$\n\n故特征值为 $1$ 重数4。\n\n计算\n\n$$\nA - E = \\begin{pmatrix}\n0 & -3 & 0 & 3 \\\\\n-2 & -7 & 0 & 13 \\\\\n0 & -3 & 0 & 3 \\\\\n-1 & -4 & 0 & 7\n\\end{pmatrix} \\to \\begin{pmatrix}\n1 & 4 & 0 & -7 \\\\\n0 & 1 & 0 & -1 \\\\\n0 & 0 & 0 & 0 \\\\\n0 & 0 & 0 & 0\n\\end{pmatrix},\n$$\n\n故秩 $r(A - E) = 2$，有 $2$ 个线性无关特征向量。\n\n计算\n\n$$\n(A - E)^2 = \\begin{pmatrix}\n3 & 9 & 0 & -18 \\\\\n1 & 3 & 0 & -6 \\\\\n3 & 9 & 0 & -18 \\\\\n1 & 3 & 0 & -6\n\\end{pmatrix}, \\quad (A - E)^3 = 0.\n$$\n\n故 $(\\lambda -1)^3$ 为最小多项式，最大Jordan块阶数为3。\n\n$A$ 的若当标准形为\n\n$$\n\\begin{pmatrix}\n1 & 0 & 0 & 0 \\\\\n0 & 1 & 1 & 0 \\\\\n0 & 0 & 1 & 1 \\\\\n0 & 0 & 0 & 1\n\\end{pmatrix}.\n$$",
+      "answer": "$A$ 的若当标准形为\n\n$$\n\\begin{pmatrix}\n1 & 0 & 0 & 0 \\\\\n0 & 1 & 1 & 0 \\\\\n0 & 0 & 1 & 1 \\\\\n0 & 0 & 0 & 1\n\\end{pmatrix}.\n$$"
+    },
+    {
+      "index": 8,
+      "question_type": "short_answer",
+      "question": "设 $T$ 为 $R^3 \\to R^3$ 的线性变换，已知：\n\n$$\nT(1,0,0) = (1,0,1), \\quad T(0,1,0) = (2,1,1), \\quad T(0,0,1) = (-1,1,-2).\n$$\n\n(1) 用矩阵 $A$ 表示此变换：\n\n$$\nT(x_1, x_2, x_3) = (x_1, x_2, x_3) A.\n$$\n\n(2) 求出满足 $TX = 0 (X \\in R^3)$ 的全体点 $X$。",
+      "choices": null,
+      "explanation": "(1) 根据线性变换定义：\n\n$$\nT(x_1,x_2,x_3) = x_1 T(1,0,0) + x_2 T(0,1,0) + x_3 T(0,0,1) = (x_1, x_2, x_3) \\begin{pmatrix}1 & 2 & -1 \\\\ 0 & 1 & 1 \\\\ 1 & 1 & -2 \\end{pmatrix}.\n$$\n\n故取\n\n$$\nA = \\begin{pmatrix} 1 & 2 & -1 \\\\ 0 & 1 & 1 \\\\ 1 & 1 & -2 \\end{pmatrix}.\n$$\n\n(2) 求解 $TX=0$ 即\n\n$$\n(x_1, x_2, x_3) A = 0,\n$$\n\n即\n\n$$\nA^T \\begin{pmatrix} x_1 \\\\ x_2 \\\\ x_3 \\end{pmatrix} = 0,\n$$\n\n考虑 $A^T = \\begin{pmatrix}\n1 & 0 & 1 \\\\\n2 & 1 & 1 \\\\\n-1 & 1 & -2\n\\end{pmatrix}$，对其化简得：\n\n$$\n\\begin{pmatrix}\n1 & 0 & 1 \\\\\n0 & 1 & 1 \\\\\n0 & 0 & 0\n\\end{pmatrix}.\n$$\n\n解得通解为\n\n$$\nX = k \\begin{pmatrix} 3 \\\\ -1 \\\\ 1 \\end{pmatrix}, \\quad k \\in \\mathbf{R}.\n$$",
+      "answer": "(1) 线性变换矩阵\n\n$$\nA = \\begin{pmatrix} 1 & 2 & -1 \\\\ 0 & 1 & 1 \\\\ 1 & 1 & -2 \\end{pmatrix}.\n$$\n\n(2) 核空间基为\n\n$$\n\\{(3, -1, 1)\\}, \\quad TX=0 \\text{ 的全体点为 } X = k(3, -1, 1), k \\in \\mathbf{R}.\n$$"
+    },
+    {
+      "index": 9,
+      "question_type": "proof",
+      "question": "设 $A$ 为 $n$ 阶实对称矩阵，$C$ 为 $n$ 阶实反对称矩阵，且 $AC = CA$，$A - C$ 为满秩矩阵。证明：\n\n$$\n(A + C)(A - C)^{-1} \\text{ 为正交矩阵}.\n$$",
+      "choices": null,
+      "explanation": null,
+      "answer": "有\n\n$$\n\\begin{aligned}\n&\\left[(A+C)(A-C)^{-1}\\right]^T (A+C)(A-C)^{-1} \\\\\n= & \\left[(A - C)^{-1}\\right]^T (A+C)^T (A+C)(A-C)^{-1} \\\\\n= & \\left[(A - C)^T\\right]^{-1} (A^T + C^T)(A+C)(A-C)^{-1} \\\\\n= & (A^T - C^T)^{-1} (A^T + C^T)(A + C)(A - C)^{-1} \\\\\n= & (A - C)^{-1} (A + C)(A + C)(A - C)^{-1} \\quad \\text{（$A^T=A$, $C^T=-C$，且 $AC=CA$）} \\\\\n= & E.\n\\end{aligned}\n$$\n\n因此，\n\n$$\n\\left[(A + C)(A - C)^{-1}\\right]^T (A + C)(A - C)^{-1} = E,\n$$\n\n证明了该矩阵为正交矩阵。"
+    },
+    {
+      "index": 10,
+      "question_type": "proof",
+      "question": "设 $A$ 是 $n$ 阶方阵。证明：\n\n$$\nA^{2} = E \\iff r(A + E) + r(A - E) = n,\n$$\n\n其中 $E$ 为 $n$ 阶单位矩阵。",
+      "choices": null,
+      "explanation": null,
+      "answer": "引入结论：\n\n设 $A \\in P^{n\\times n}$，$f(x), g(x) \\in P[x]$ 满足 $\\gcd(f,g) = 1$，$W, W_f, W_g$ 分别为线性方程组\n\n$$\nf(A) g(A) x = 0, \\quad f(A) x = 0, \\quad g(A) x = 0\n$$\n\n的解空间，则\n\n$$\nW = W_f \\oplus W_g.\n$$\n\n证明如下：\n\n由 $\\gcd(f,g) = 1$，存在 $u(x), v(x)$ 使得\n\n$$\nu(x)f(x) + v(x)g(x) = 1,\n$$\n\n代入矩阵 $A$ 得\n\n$$\nu(A) f(A) + v(A) g(A) = I.\n$$\n\n对任意 $\\alpha \\in W$，有\n\n$$\nf(A) g(A) \\alpha = 0, \\quad \\text{则}\n$$\n\n$$\n\\alpha = u(A) f(A) \\alpha + v(A) g(A) \\alpha,\n$$\n\n且\n\n$$\ng(A) u(A) f(A) \\alpha = 0, \\quad f(A) v(A) g(A) \\alpha = 0,\n$$\n\n故\n\n$$\nu(A) f(A) \\alpha \\in W_g, \\quad v(A) g(A) \\alpha \\in W_f.\n$$\n\n由此\n\n$$\nW = W_f + W_g, \\quad W_f \\cap W_g = \\{0\\},\n$$\n\n故\n\n$$\nW = W_f \\oplus W_g.\n$$\n\n于是维数满足\n\n$$\n\\dim W = \\dim W_f + \\dim W_g,\n$$\n\n即\n\n$$\nn - r(f(A) g(A)) = n - r(f(A)) + n - r(g(A)),\n$$\n\n即\n\n$$\nr(f(A) g(A)) = r(f(A)) + r(g(A)) - n.\n$$\n\n设 $f(x) = x - 1$, $g(x) = x + 1$，则 $(f,g) = 1$。\n\n由条件 $A^2 = E$，即 $(A + E)(A - E) = 0$。\n\n故\n\n$$\nr((A + E)(A - E)) = 0 \\iff r(A + E) + r(A - E) = n.\n$$"
+    }
+  ]
+}

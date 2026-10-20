@@ -1,0 +1,10 @@
+{
+  "dataset_category": "题目与题型不一致",
+  "records": 910,
+  "rule_pass": 910,
+  "rule_warning": 0,
+  "rule_fail": 0,
+  "candidate_records_after_rule_audit": 910,
+  "semantic_pending": 910,
+  "issue_counts": {}
+}

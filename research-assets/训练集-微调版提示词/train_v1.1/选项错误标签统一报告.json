@@ -1,0 +1,52 @@
+{
+    "completed_at":  "2026-08-24 14:37:04",
+    "required_error_type":  "选项错误",
+    "files":  [
+                  {
+                      "path":  "C:\\hyt-agent\\训练集-微调版提示词\\train_v1_restart\\选项结构错误_训练集_450.jsonl",
+                      "changed_samples":  63,
+                      "changed_error_items":  63,
+                      "before":  {
+                                     "total_lines":  450,
+                                     "option_samples":  450,
+                                     "option_positive":  188,
+                                     "option_negative":  262,
+                                     "old_label_items":  63,
+                                     "current_label_items":  129,
+                                     "ordered_question_digest":  "e2fbdc07729787495cabfa056e67faf817a5b077348731ed77596c1e9a3219fc"
+                                 },
+                      "after":  {
+                                    "total_lines":  450,
+                                    "option_samples":  450,
+                                    "option_positive":  188,
+                                    "option_negative":  262,
+                                    "old_label_items":  0,
+                                    "current_label_items":  192,
+                                    "ordered_question_digest":  "e2fbdc07729787495cabfa056e67faf817a5b077348731ed77596c1e9a3219fc"
+                                }
+                  },
+                  {
+                      "path":  "C:\\hyt-agent\\训练集-微调版提示词\\train_v1.1\\train_v1.1.jsonl",
+                      "changed_samples":  63,
+                      "changed_error_items":  63,
+                      "before":  {
+                                     "total_lines":  1500,
+                                     "option_samples":  450,
+                                     "option_positive":  188,
+                                     "option_negative":  262,
+                                     "old_label_items":  63,
+                                     "current_label_items":  129,
+                                     "ordered_question_digest":  "cad3a737e92971ddaf6d245f2fa3a385910b173216400385424acddc959054a4"
+                                 },
+                      "after":  {
+                                    "total_lines":  1500,
+                                    "option_samples":  450,
+                                    "option_positive":  188,
+                                    "option_negative":  262,
+                                    "old_label_items":  0,
+                                    "current_label_items":  192,
+                                    "ordered_question_digest":  "cad3a737e92971ddaf6d245f2fa3a385910b173216400385424acddc959054a4"
+                                }
+                  }
+              ]
+}

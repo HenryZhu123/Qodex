@@ -1,0 +1,137 @@
+{
+  "paper": "60题档_实际62题_641生物化学与分子生物学.pdf",
+  "findings": [
+    {
+      "question_number": "2.5",
+      "error_type": "错别字",
+      "error_level": "严重",
+      "anchor_text": "B. 吡哆醇（维生素 B5，pyridoxine）",
+      "description": "选项B中吡哆醇（pyridoxine）对应的维生素编号标注错误，应为B6而非B5。",
+      "recommendation": "将选项B中的“维生素 B5”修改为“维生素 B6”。",
+      "section": "选项B括号内",
+      "position": "选项B括号内",
+      "source": "ai_detection:typo_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.7",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "真核生物转录发生在（）\n\\nA. 细胞质",
+      "description": "完整题干末尾缺少句号。",
+      "recommendation": "在题干末尾添加句号：'真核生物转录发生在（）。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.3",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "结构域 (Domain)",
+      "description": "题目仅列出名词，未提供“解释”、“简述”等任务指令，导致考生无法明确作答要求。",
+      "recommendation": "在名词后补充任务指令，如：“结构域 (Domain)：请解释其含义。”",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.6",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "氨酰 tRNA 合成需要（）\n\\nA. ATP",
+      "description": "完整题干末尾缺少句号。",
+      "recommendation": "在题干末尾添加句号：'氨酰 tRNA 合成需要（）。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.2",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "必需氨基酸（Essential Amino Acids）",
+      "description": "题面只给出了名词，没有提供需要考生填写的解释、定义或相关属性等任务说明。",
+      "recommendation": "在名词后补充解释要求或作答位，例如：'必需氨基酸（Essential Amino Acids）：______'。",
+      "section": "题目末尾",
+      "position": "题目末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.5",
+      "error_type": "错别字",
+      "error_level": "严重",
+      "anchor_text": "A. 泛酸（维生素 B6，pantothenic acid）",
+      "description": "选项A中泛酸（pantothenic acid）对应的维生素编号标注错误，应为B5而非B6。",
+      "recommendation": "将选项A中的“维生素 B6”修改为“维生素 B5”。",
+      "section": "选项A括号内",
+      "position": "选项A括号内",
+      "source": "ai_detection:typo_check",
+      "confidence": null
+    },
+    {
+      "question_number": "5.2",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "原核细胞和真核细胞的蛋白质合成有什么主要区别，如果要在原核细胞中高效表达真核细胞的基因",
+      "description": "两个完整的疑问句之间误用逗号，导致句子结构不清，应使用问号分隔。",
+      "recommendation": "将第一个问题末尾的逗号改为问号：'原核细胞和真核细胞的蛋白质合成有什么主要区别？如果要在原核细胞中高效表达真核细胞的基因，需要注意什么？'",
+      "section": "题干中第一个问题与第二个问题之间的连接处",
+      "position": "题干中第一个问题与第二个问题之间的连接处",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.14",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "凝胶过滤层析法分离蛋白质主要依据蛋白质的（）",
+      "description": "完整题干末尾缺少句号，导致句子未正确收束。",
+      "recommendation": "在题干末尾添加句号：'凝胶过滤层析法分离蛋白质主要依据蛋白质的（）。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.20",
+      "error_type": "题目无解",
+      "error_level": "严重",
+      "anchor_text": "B. FAD 作为辅酶在电子传递链中可与蛋白质形成共价结合 C. 辅酶核苷酸不衍生自核苷酸结构 D. $NAD^{+}/NADH$ 在氧化态/还原态之间循环，是重要的电子载体",
+      "description": "单选题中 B 和 D 均为正确陈述，导致无法选出唯一正确答案。",
+      "recommendation": "将 D 选项改为错误表述，如 'NAD+/NADH 不是电子载体'，确保仅有一个正确选项。",
+      "section": "选项 B 和 D",
+      "position": "选项 B 和 D",
+      "source": "ai_detection:unsolvability_check",
+      "confidence": null
+    },
+    {
+      "question_number": "3.0",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "判断题，正确的题请填写“√”，错误的题请填写“×”",
+      "description": "完整指令句末尾误用逗号，未能正确收束句子。",
+      "recommendation": "将句末逗号改为句号：'判断题，正确的题请填写“√”，错误的题请填写“×”。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "2.9",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "增强基因组织特异性表达的序列是（）",
+      "description": "完整题干末尾缺少句号。",
+      "recommendation": "在题干末尾添加句号：'增强基因组织特异性表达的序列是（）。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    }
+  ]
+}

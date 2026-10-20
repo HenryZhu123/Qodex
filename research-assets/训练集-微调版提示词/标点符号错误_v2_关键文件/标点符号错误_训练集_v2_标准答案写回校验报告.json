@@ -1,0 +1,13 @@
+﻿{
+    "generated_at":  "2026-08-27T15:42:36",
+    "total_changed_records":  196,
+    "qwen_answers_retained":  110,
+    "codex_answers_for_qwen_no_error":  55,
+    "codex_answers_for_invalid_qwen":  31,
+    "codex_total":  86,
+    "codex_unique_reasons":  86,
+    "codex_unique_descriptions":  86,
+    "codex_unique_suggestions":  86,
+    "final_invalid_records":  0,
+    "training_sha256":  "A7CA08009743A454A8D7280D5DC5697EC2A4E6EFA64D258DE6A60BEEA46D7870"
+}

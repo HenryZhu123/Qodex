@@ -1,0 +1,262 @@
+{
+  "85": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到答案泄露现象，但修正仍保留答案、留空位置错误或未真正完成删除。",
+    "review_method": "Codex离线语义复核"
+  },
+  "90": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "91": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到答案泄露现象，但修正仍保留答案、留空位置错误或未真正完成删除。",
+    "review_method": "Codex离线语义复核"
+  },
+  "92": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "93": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "94": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "95": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "96": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "97": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "98": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "99": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "100": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "101": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "103": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "104": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "105": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "107": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "108": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "109": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "110": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "111": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "112": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "113": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "114": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "115": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "116": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "118": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "119": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到答案泄露现象，但修正仍保留答案、留空位置错误或未真正完成删除。",
+    "review_method": "Codex离线语义复核"
+  },
+  "120": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "121": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到答案泄露现象，但修正仍保留答案、留空位置错误或未真正完成删除。",
+    "review_method": "Codex离线语义复核"
+  },
+  "123": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "124": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "125": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "126": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "128": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "129": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到答案泄露现象，但修正仍保留答案、留空位置错误或未真正完成删除。",
+    "review_method": "Codex离线语义复核"
+  },
+  "133": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "134": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "136": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "138": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "139": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "140": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "141": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "142": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "145": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型检查了错误的作答位置，未识别标准答案标注的实际泄露内容。",
+    "review_method": "Codex离线语义复核"
+  },
+  "159": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "161": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "165": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "167": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "168": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：识别到答案泄露现象，但修正仍保留答案、留空位置错误或未真正完成删除。",
+    "review_method": "Codex离线语义复核"
+  },
+  "170": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  },
+  "171": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了已填入的答案，并给出了删除答案或恢复为空白作答位的等价修正。",
+    "review_method": "Codex离线语义复核"
+  }
+}

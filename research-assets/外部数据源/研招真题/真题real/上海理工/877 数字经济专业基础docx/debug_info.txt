@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 0.8567006587982178,
+      "题目提取": 114.66505765914917,
+      "AI内容检测": 88.78165030479431,
+      "内部查重检测": 0.10547232627868652,
+      "历史查重检测": 0.0003933906555175781,
+      "后处理": 0.0003209114074707031,
+      "总耗时": 204.40959525108337
+    },
+    "total_time": 204.40959525108337,
+    "total_questions": 15,
+    "total_errors": 3,
+    "avg_time_per_question": 13.627306350072224
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 3,
+    "exam_name": "877 数字经济专业基础.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

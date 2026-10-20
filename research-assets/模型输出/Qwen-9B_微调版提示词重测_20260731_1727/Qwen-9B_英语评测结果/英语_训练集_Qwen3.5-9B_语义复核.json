@@ -1,0 +1,102 @@
+{
+  "1": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "13": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "16": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未修复标准答案标注的英语问题，给出的替换无法使原句成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "46": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "65": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未修复标准答案标注的英语问题，给出的替换无法使原句成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "71": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "101": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "111": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "127": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型修正比标准答案更符合原句语境，应接受为正确的等价答案。",
+    "review_method": "Codex离线语义复核"
+  },
+  "181": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "191": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "203": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未修复标准答案标注的英语问题，给出的替换无法使原句成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "239": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "249": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "250": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "259": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "273": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "287": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "295": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  },
+  "309": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型命中了标准答案中的部分英语问题，但存在漏报、额外误报或无效修改。",
+    "review_method": "Codex离线语义复核"
+  }
+}

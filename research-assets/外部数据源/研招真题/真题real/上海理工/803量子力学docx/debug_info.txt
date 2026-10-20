@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 4.938080549240112,
+      "题目提取": 261.0349066257477,
+      "AI内容检测": 145.59053301811218,
+      "内部查重检测": 0.189178466796875,
+      "历史查重检测": 0.19083786010742188,
+      "后处理": 0.0009906291961669922,
+      "总耗时": 411.94452714920044
+    },
+    "total_time": 411.94452714920044,
+    "total_questions": 14,
+    "total_errors": 7,
+    "avg_time_per_question": 29.424609082085745
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 7,
+    "exam_name": "803量子力学.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

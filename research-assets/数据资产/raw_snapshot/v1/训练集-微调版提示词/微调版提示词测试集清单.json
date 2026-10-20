@@ -1,0 +1,229 @@
+{
+  "format": "共享核心.txt + '\\n' + 当前类别任务卡 + '\\n' + JSON约束.txt",
+  "source_input_dir": "D:\\hyt-agent\\训练集",
+  "old_prompt_dir": "D:\\hyt-agent\\提示词",
+  "new_prompt_dir": "D:\\hyt-agent\\提示词-微调版",
+  "output_dir": "D:\\hyt-agent\\训练集-微调版提示词",
+  "shared_core_sha256": "1c440f0cb20307934389f67b50cd5a2e82be47de6a8cc35b44b4710f2abfdc20",
+  "json_contract_sha256": "62daadeeb0190274cafa2ccc33d1d8e495eda155eb442acda8fd3cdacd22366d",
+  "types": {
+    "错别字": {
+      "source_file": "D:\\hyt-agent\\训练集\\错别字_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\错别字_训练集.jsonl",
+      "source_count": 989,
+      "output_count": 989,
+      "included_by_card": {
+        "错别字": 989
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "错别字": 1371
+      },
+      "system_prompt_sha256": {
+        "错别字": "48aaaf44d68b495da5b2977351e89340e903cbc06a1c13a20c7c76b46f27f1a2"
+      }
+    },
+    "语义不清": {
+      "source_file": "D:\\hyt-agent\\训练集\\语义不清_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\语义不清_训练集.jsonl",
+      "source_count": 910,
+      "output_count": 910,
+      "included_by_card": {
+        "语义不清": 910
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "语义不清": 1467
+      },
+      "system_prompt_sha256": {
+        "语义不清": "7c91765b4dabfc052d3b46ff2d78789d628c1e5e41332010188f547ddd4f6fe4"
+      }
+    },
+    "选项结构错误": {
+      "source_file": "D:\\hyt-agent\\训练集\\选项结构错误_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\选项结构错误_训练集.jsonl",
+      "source_count": 980,
+      "output_count": 980,
+      "included_by_card": {
+        "选项结构错误": 980
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "选项结构错误": 1430
+      },
+      "system_prompt_sha256": {
+        "选项结构错误": "3a511f3bec8ca191ef410538416ddc158b50533ab4aed7f28030722851c83636"
+      }
+    },
+    "标点符号错误": {
+      "source_file": "D:\\hyt-agent\\训练集\\标点符号错误_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\标点符号错误_训练集.jsonl",
+      "source_count": 1061,
+      "output_count": 1061,
+      "included_by_card": {
+        "标点符号错误": 1061
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "标点符号错误": 1385
+      },
+      "system_prompt_sha256": {
+        "标点符号错误": "efb78d62f4a4926b1e5e5940e7b65934da4bbec7965515ea4296eeefc391f982"
+      }
+    },
+    "信息缺失": {
+      "source_file": "D:\\hyt-agent\\训练集\\信息缺失_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\信息缺失_训练集.jsonl",
+      "source_count": 479,
+      "output_count": 479,
+      "included_by_card": {
+        "信息缺失": 479
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "信息缺失": 1488
+      },
+      "system_prompt_sha256": {
+        "信息缺失": "8a48bc01673b064cea85eac4e1af465e289a94d72ffd6c729eed713e7eb00145"
+      }
+    },
+    "题目与题型不一致": {
+      "source_file": "D:\\hyt-agent\\训练集\\题目与题型不一致_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\题目与题型不一致_训练集.jsonl",
+      "source_count": 910,
+      "output_count": 910,
+      "included_by_card": {
+        "题目与题型不一致": 910
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "题目与题型不一致": 1485
+      },
+      "system_prompt_sha256": {
+        "题目与题型不一致": "ecd1511aa7c8e80e3ca096ec938b249cbf61fb05e24eef5e1d28e369c103088e"
+      }
+    },
+    "题目无解": {
+      "source_file": "D:\\hyt-agent\\训练集\\题目无解_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\题目无解_训练集.jsonl",
+      "source_count": 1093,
+      "output_count": 1093,
+      "included_by_card": {
+        "题目无解": 1093
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "题目无解": 1927
+      },
+      "system_prompt_sha256": {
+        "题目无解": "6bbde8ae12e1a13f1d1dc16c5670bdc35a5aa4e71df65082c68c0732de99d1a7"
+      }
+    },
+    "答案泄露": {
+      "source_file": "D:\\hyt-agent\\训练集\\答案泄露_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\答案泄露_训练集.jsonl",
+      "source_count": 182,
+      "output_count": 182,
+      "included_by_card": {
+        "答案泄露": 182
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "答案泄露": 1448
+      },
+      "system_prompt_sha256": {
+        "答案泄露": "944620312481eb9eb8761939ed26c7b18396b0c949791933157c8acf51a75430"
+      }
+    },
+    "法语": {
+      "source_file": "D:\\hyt-agent\\训练集\\法语_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\法语_训练集.jsonl",
+      "source_count": 477,
+      "output_count": 477,
+      "included_by_card": {
+        "法语_拼写错误": 159,
+        "法语_标点符号错误": 159,
+        "法语_语法错误": 159
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "法语_拼写错误": 1327,
+        "法语_语法错误": 1327,
+        "法语_标点符号错误": 1308
+      },
+      "system_prompt_sha256": {
+        "法语_拼写错误": "5fe7e89924574bddec76d49ee17646c5d3d71d3a2395978caa316c1c24b385e6",
+        "法语_语法错误": "5af789a5436c7f577a2d32d0e753e5cb10f7956f645f6e10cab697022bba338e",
+        "法语_标点符号错误": "bc634c3f88b443abd93816b5eebfba924b89f7b09c669a8ed1abec3228b9e89a"
+      }
+    },
+    "英语": {
+      "source_file": "D:\\hyt-agent\\训练集\\英语_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\英语_训练集.jsonl",
+      "source_count": 615,
+      "output_count": 410,
+      "included_by_card": {
+        "英语_拼写错误": 205,
+        "英语_标点符号错误": 205
+      },
+      "excluded_by_card": {
+        "语义不清": 205
+      },
+      "system_prompt_chars": {
+        "英语_拼写错误": 1331,
+        "英语_标点符号错误": 1347
+      },
+      "system_prompt_sha256": {
+        "英语_拼写错误": "ad64d011169a872c558a20d8daf5d4a651488b6a79f034f2167d2ce5943b12fe",
+        "英语_标点符号错误": "4314d2a62eaa7857ee8fdf7046743d0c634bde9e19dacaea50bab9a9e5015baf"
+      }
+    },
+    "德语": {
+      "source_file": "D:\\hyt-agent\\训练集\\德语_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\德语_训练集.jsonl",
+      "source_count": 672,
+      "output_count": 672,
+      "included_by_card": {
+        "德语_拼写错误": 224,
+        "德语_标点符号错误": 224,
+        "德语_语法错误": 224
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "德语_拼写错误": 1345,
+        "德语_语法错误": 1328,
+        "德语_标点符号错误": 1300
+      },
+      "system_prompt_sha256": {
+        "德语_拼写错误": "68303896eafc7fdecbd271325c6bfe18df38374c8c424cc8d33b561c44a8ef81",
+        "德语_语法错误": "bd497406cdd82416b2cb6adea1029a9a79c76e3a10c913b812045f647b3bc385",
+        "德语_标点符号错误": "844a09375daf9c59a5fb4f47bc03cfa0b482c40e74bc861a97f1937ea0348827"
+      }
+    },
+    "日语": {
+      "source_file": "D:\\hyt-agent\\训练集\\日语_训练集.jsonl",
+      "output_file": "D:\\hyt-agent\\训练集-微调版提示词\\日语_训练集.jsonl",
+      "source_count": 1432,
+      "output_count": 1432,
+      "included_by_card": {
+        "日语_拼写错误": 358,
+        "日语_标点符号错误": 358,
+        "日语_语法错误": 358,
+        "日语_逻辑错误": 358
+      },
+      "excluded_by_card": {},
+      "system_prompt_chars": {
+        "日语_拼写错误": 1326,
+        "日语_语法错误": 1327,
+        "日语_逻辑错误": 1382,
+        "日语_标点符号错误": 1304
+      },
+      "system_prompt_sha256": {
+        "日语_拼写错误": "bd4e7b037a22e32572a22972264b8f4ff5aef9baac4785961d1f49b6367b3617",
+        "日语_语法错误": "1925df0dc22e4aa037a7a612d7e8d463b1c7f4d67f8afb12fa59e87349517abd",
+        "日语_逻辑错误": "8e3f6381b5a3fadab734ff7e746ae5b2939812a5d1e3721d3e0bcf26ad2db01b",
+        "日语_标点符号错误": "be5c1a3baba02a22bbb60c8b0baacbcd49de909f7adc48b59a5b869c888c25ea"
+      }
+    }
+  }
+}

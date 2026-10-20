@@ -1,0 +1,10 @@
+{
+  "dataset_category": "选项结构错误",
+  "records": 980,
+  "rule_pass": 980,
+  "rule_warning": 0,
+  "rule_fail": 0,
+  "candidate_records_after_rule_audit": 980,
+  "semantic_pending": 980,
+  "issue_counts": {}
+}

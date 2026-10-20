@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 0.8046035766601562,
+      "题目提取": 156.8498568534851,
+      "AI内容检测": 458.23053908348083,
+      "内部查重检测": 0.1606142520904541,
+      "历史查重检测": 0.0005042552947998047,
+      "后处理": 0.0006506443023681641,
+      "总耗时": 616.0467686653137
+    },
+    "total_time": 616.0467686653137,
+    "total_questions": 23,
+    "total_errors": 9,
+    "avg_time_per_question": 26.784642115883205
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 9,
+    "exam_name": "818智能化创意基础.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

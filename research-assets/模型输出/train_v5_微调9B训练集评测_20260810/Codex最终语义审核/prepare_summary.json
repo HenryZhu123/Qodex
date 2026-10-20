@@ -1,0 +1,11 @@
+{
+  "dataset": "D:\\hyt-agent\\数据资产\\finetune\\阶段1_三类_v5_生成痕迹精修\\train.jsonl",
+  "raw": "D:\\hyt-agent\\模型输出\\train_v5_微调9B训练集评测_20260810\\finetuned9b_test_v1_raw.jsonl",
+  "model": "finetuned9b-step100",
+  "records": 1500,
+  "raw_records": 1500,
+  "review_all": true,
+  "dispositions": {
+    "codex_review_required": 1500
+  }
+}

@@ -1,0 +1,757 @@
+{
+  "54": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型误报不存在的结构问题，或修正后仍未恢复正确选项结构。",
+    "review_method": "Codex离线语义复核"
+  },
+  "491": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "493": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "496": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "497": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "498": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "502": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "503": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "505": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "508": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "512": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "514": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "516": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "525": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "529": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "531": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "533": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "536": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "539": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "542": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "546": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "548": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "549": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "551": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "552": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "556": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "557": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "558": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "559": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "560": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "561": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "571": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "572": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "574": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "576": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "578": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "579": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "580": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "581": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "582": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "585": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "588": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "591": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "593": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "595": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "597": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "598": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "599": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "601": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "602": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "606": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "610": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "613": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "614": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "621": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "623": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "625": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "627": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "633": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "646": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "653": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "655": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "667": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "668": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "669": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "677": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "678": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "680": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "683": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "687": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "692": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "695": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "706": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "707": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "709": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "712": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "713": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "718": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "722": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "727": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "729": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "737": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "739": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "744": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "747": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "749": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "755": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "758": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "759": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "762": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "764": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "767": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "770": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "772": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "776": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "782": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "783": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "785": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "790": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "791": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "798": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "800": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "809": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "812": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "817": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "823": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "826": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "827": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "830": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "837": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "845": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "846": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "847": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "850": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "851": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "854": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "855": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "862": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "865": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "868": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "871": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "874": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "878": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "882": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "883": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "884": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "890": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "897": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "898": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "901": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "908": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "912": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "913": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "918": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "921": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "922": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "926": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型误报不存在的结构问题，或修正后仍未恢复正确选项结构。",
+    "review_method": "Codex离线语义复核"
+  },
+  "930": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "931": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "932": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "935": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "936": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "939": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "941": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "942": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "944": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "948": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "957": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "969": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到核心结构问题，但重编号或内容恢复不完整，修后仍有错位。",
+    "review_method": "Codex离线语义复核"
+  },
+  "970": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  },
+  "971": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别重复、缺号、乱序或大小写问题，并给出有效修复。",
+    "review_method": "Codex离线语义复核"
+  }
+}

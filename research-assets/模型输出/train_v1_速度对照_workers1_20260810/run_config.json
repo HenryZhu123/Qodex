@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-08-10T09:45:39+08:00",
+  "input": "D:\\hyt-agent\\训练集-微调版提示词\\train_v1\\test_v1.jsonl",
+  "input_sha256": "92cd1202c3279b08162eae09ae7ee6ec16fc61095d16a248f7ed20e88772d41a",
+  "request_config": {
+    "messages": "测试集原始system+user；assistant标准答案不发送",
+    "temperature": 0.0,
+    "max_tokens": 2048,
+    "enable_thinking": false,
+    "stream": false,
+    "timeout_seconds": 300.0,
+    "retries": 2
+  },
+  "models": {
+    "finetuned9b": {
+      "display_name": "微调9B step-100",
+      "api_url": "http://10.1.7.39:8001/v1",
+      "model": "exam-checker-qwen35-9b-sft-v1-step100",
+      "workers": 1,
+      "output": "D:\\hyt-agent\\模型输出\\train_v1_速度对照_workers1_20260810\\finetuned9b_test_v1_raw.jsonl",
+      "status": 0
+    },
+    "base9b": {
+      "display_name": "原始Qwen3.5-9B",
+      "api_url": "http://10.1.7.39:8021/v1",
+      "model": "Qwen3.5-9B",
+      "workers": 1,
+      "output": "D:\\hyt-agent\\模型输出\\train_v1_速度对照_workers1_20260810\\base9b_test_v1_raw.jsonl",
+      "status": 0
+    }
+  },
+  "note": "workers仅控制客户端并发，不进入模型请求，不改变生成参数。"
+}

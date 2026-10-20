@@ -1,0 +1,20 @@
+# 统一输出约束
+
+只输出一个可解析的 JSON 对象，不输出 Markdown、解释或思维过程。
+
+无错误时：
+{"reason":"未发现本任务范围内的错误。","has_error":false,"total_errors":0,"errors":[]}
+
+有错误时：
+{"reason":"一句话结论。","has_error":true,"total_errors":1,"errors":[{"error_type":"当前任务固定类别","position":"人类可读的位置","original_text":"最短连续原文","anchor_text":"可唯一检索的连续上下文","correction":"修改后的内容","description":"错误说明","suggestion":"明确修改指令"}]}
+
+必须满足：
+
+1. `reason` 不超过 60 个汉字；`description` 不超过 2 句话；`suggestion` 不超过 3 句话。
+2. `total_errors` 等于 `errors` 长度；无错误时必须为 `false / 0 / []`。
+3. `error_type` 只能使用当前任务卡指定的固定值。
+4. `original_text` 是最短连续原文；`anchor_text` 是更长且可唯一定位的连续原文。不得改写或拼接不连续片段。
+5. 纯缺失错误确实没有可摘录文字时，`original_text` 可为空字符串，但 `position` 和 `anchor_text` 必须定位缺失处。
+6. `correction` 只做最小修改；无法确定应补内容时使用 `[缺失内容]`，不得编造答案。
+7. 同一根因只报告一次；不确定时不报。
+8. 面向用户的字段不得出现输入变量名、内部图片标记或模型自我反思。

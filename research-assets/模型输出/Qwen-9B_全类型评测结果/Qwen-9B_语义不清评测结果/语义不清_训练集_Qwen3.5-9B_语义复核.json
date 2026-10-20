@@ -1,0 +1,787 @@
+{
+  "7": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "10": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "18": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "19": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "25": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "28": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：触及了题面表达问题，但解释、修正或错误数量仍不完整，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "35": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "38": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "42": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "44": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "45": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：触及了题面表达问题，但解释、修正或错误数量仍不完整，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "48": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "50": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "52": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "53": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "54": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "57": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "60": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "61": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "63": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "70": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "74": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "75": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "81": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "82": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "84": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "87": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：触及了题面表达问题，但解释、修正或错误数量仍不完整，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "89": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "92": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "94": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "95": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "97": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "100": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "103": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "108": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "110": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "112": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "113": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "116": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "120": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "124": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "126": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "128": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "130": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "131": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "132": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "134": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "140": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "141": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "147": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "150": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "151": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "152": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "159": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "161": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "170": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "171": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "172": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "174": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "185": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "189": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "197": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "201": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "202": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "206": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "208": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "213": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "221": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "230": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "232": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "234": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "237": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "238": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "239": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "242": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "243": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "245": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "246": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "247": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "249": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "250": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "251": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "252": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "256": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "258": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "261": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "262": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "264": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "265": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "270": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "271": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "273": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "274": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "275": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "276": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "283": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "285": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "288": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "292": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "296": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "297": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "299": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "300": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "302": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "304": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "305": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "313": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "314": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "318": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "321": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "322": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "324": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "326": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "328": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "329": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "335": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "347": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "350": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "351": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "358": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "359": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "361": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "362": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "365": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "368": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "375": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "378": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "380": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "391": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认语义清楚，模型报告的是不存在或不成立的歧义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "392": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认语义清楚，模型报告的是不存在或不成立的歧义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "393": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认语义清楚，模型报告的是不存在或不成立的歧义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "652": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认语义清楚，模型报告的是不存在或不成立的歧义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "735": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认语义清楚，模型报告的是不存在或不成立的歧义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "791": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认语义清楚，模型报告的是不存在或不成立的歧义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "806": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认语义清楚，模型报告的是不存在或不成立的歧义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "810": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认语义清楚，模型报告的是不存在或不成立的歧义。",
+    "review_method": "Codex离线语义复核"
+  },
+  "860": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "865": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "866": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "868": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "872": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "875": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "876": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "878": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "879": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "883": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "887": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "890": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "894": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "895": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "896": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "901": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "902": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "903": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "905": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "906": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "909": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案一致的语义缺口；补充等价限定语或改写为无歧义表述可接受。",
+    "review_method": "Codex离线语义复核"
+  }
+}

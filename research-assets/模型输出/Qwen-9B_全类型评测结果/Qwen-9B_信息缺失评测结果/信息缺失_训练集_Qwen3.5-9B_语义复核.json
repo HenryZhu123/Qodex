@@ -1,0 +1,642 @@
+{
+  "141": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题面信息完整，模型将完整题目误判为信息缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "184": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：标准答案确认题面信息完整，模型将完整题目误判为信息缺失。",
+    "review_method": "Codex离线语义复核"
+  },
+  "207": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "208": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "211": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "214": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "220": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "221": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "223": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "224": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "225": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "226": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "227": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "228": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "231": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "232": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "233": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "236": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "237": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "241": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "242": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "243": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "245": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "247": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "248": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "252": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "259": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "262": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "264": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "265": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "275": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "278": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "286": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "287": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "288": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "290": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "291": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "292": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "293": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "296": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "297": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "300": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "302": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "304": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "306": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "307": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "308": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "312": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "316": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "317": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "320": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "322": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "324": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "326": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "333": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "337": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "338": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "340": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "341": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "342": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "344": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "345": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "348": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "350": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "351": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "353": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "354": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "355": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "363": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "364": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "365": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "366": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "367": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "368": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "375": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "376": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "377": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "380": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "381": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "382": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "388": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "390": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "394": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "395": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "396": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "400": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "401": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "402": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "404": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "405": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "407": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "408": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "409": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "410": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "411": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "419": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "420": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "421": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "424": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "425": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "427": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "428": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "430": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "432": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "433": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "436": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "437": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "438": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "442": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "444": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "445": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "448": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "449": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "450": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "453": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "454": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "455": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "456": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了信息缺口，但补写内容与题意不符、补全不完整、补写位置不当，或错误数量与实际缺失不一致，不能计为完全正确。",
+    "review_method": "Codex离线语义复核"
+  },
+  "468": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "469": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "470": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "471": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "472": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型识别并定位到了与标准答案一致的信息缺口；使用等价文本、空白或缺失内容占位符恢复题目结构，语义上可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "473": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "474": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "476": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "478": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  },
+  "479": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位了与标准答案相同的缺失位置；使用空白占位符而非补写唯一文本不影响缺失识别结论。",
+    "review_method": "Codex离线语义复核"
+  }
+}

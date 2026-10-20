@@ -1,0 +1,437 @@
+{
+  "208": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "212": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了另一处内容，未识别标准答案标注的实际缺项位置。",
+    "review_method": "Codex离线语义复核"
+  },
+  "213": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "220": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "221": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "223": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "224": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "228": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "231": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "232": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "233": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "235": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "236": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "237": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "240": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "241": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "244": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "252": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "258": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "261": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "267": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "270": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "275": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "278": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "279": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "280": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "290": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "292": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "293": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "294": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "296": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "297": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "298": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "300": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "304": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "306": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "312": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "315": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "316": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "317": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "320": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "322": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "324": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "329": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "332": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "333": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "337": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "338": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "339": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "340": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "343": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "344": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "345": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "348": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "350": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "351": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "353": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "355": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了另一处内容，未识别标准答案标注的实际缺项位置。",
+    "review_method": "Codex离线语义复核"
+  },
+  "360": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "374": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型修改了另一处内容，未识别标准答案标注的实际缺项位置。",
+    "review_method": "Codex离线语义复核"
+  },
+  "375": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型意识到题面存在缺项，但定位、补全对象或最终修正与标准答案只部分一致。",
+    "review_method": "Codex离线语义复核"
+  },
+  "376": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "380": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "382": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "387": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "395": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "400": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "407": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "421": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "427": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "428": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "432": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "434": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "437": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "438": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "443": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "450": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "453": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "468": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "469": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "470": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "471": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "473": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "474": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "476": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "478": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  },
+  "479": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型指出了与标准答案相同的缺项位置；对无法由残缺题面唯一还原的内容，使用占位符或等价补全可接受。",
+    "review_method": "Codex离线语义复核"
+  }
+}

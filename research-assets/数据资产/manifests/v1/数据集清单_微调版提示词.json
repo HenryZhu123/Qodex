@@ -1,0 +1,298 @@
+{
+  "schema_version": "DatasetManifest.v1",
+  "created_at": "2026-08-05T03:45:38.664511Z",
+  "lifecycle_status": "frozen_pre_migration",
+  "snapshot_id": "training-data-v1",
+  "source_manifest_ref": "数据资产/manifests/v1/来源清单.json",
+  "task_catalog_ref": "数据资产/manifests/v1/任务目录.json",
+  "current_format": "messages_jsonl",
+  "target_sample_schema": "CanonicalSample.v3-lite",
+  "assistant_output_schema_ref": "数据资产/schemas/v1/统一规范样本_第3版精简结构定义.json#/$defs/gold",
+  "message_roles": [
+    "system",
+    "user",
+    "assistant"
+  ],
+  "split": {
+    "applied": false,
+    "split_policy_version": "global-lineage.v2",
+    "counts": {
+      "unassigned": 9595
+    }
+  },
+  "canonicalization_status": "not_started",
+  "dataset_id": "exam-checker-tuned-prompts-v1",
+  "parent_dataset_ids": [
+    "exam-checker-original-prompts-v1"
+  ],
+  "prompt_profile_id": "tuned",
+  "record_count": 9595,
+  "source_ids": [
+    "src_0b24b9391e52b63d57d35e95",
+    "src_133a8278a7232598779f7532",
+    "src_29eb0395970853011936c2a3",
+    "src_33ccb2b47f531d2db7457c6d",
+    "src_5e085e7aec1bef0d840bf262",
+    "src_5f9d6d4fb5e3d8e98b4224d1",
+    "src_6bb7a7963220bd97dc5f7c5d",
+    "src_6f7aae8f2e75deec6cb9d623",
+    "src_755881509f70025c1df7a605",
+    "src_7f3130a2873ae8fe3e2d7392",
+    "src_d016c72b45ae560268866d13",
+    "src_f09b1b5d7c2c17310ba22cd8"
+  ],
+  "category_counts": {
+    "信息缺失": 479,
+    "德语": 672,
+    "日语": 1432,
+    "标点符号错误": 1061,
+    "法语": 477,
+    "答案泄露": 182,
+    "英语": 410,
+    "语义不清": 910,
+    "选项结构错误": 980,
+    "错别字": 989,
+    "题目与题型不一致": 910,
+    "题目无解": 1093
+  },
+  "task_counts": {
+    "ambiguity_check": 910,
+    "answer_leakage_check": 182,
+    "english_punctuation_check": 205,
+    "english_spelling_check": 205,
+    "french_grammar_check": 159,
+    "french_punctuation_check": 159,
+    "french_spelling_check": 159,
+    "german_grammar_check": 224,
+    "german_punctuation_check": 224,
+    "german_spelling_check": 224,
+    "japanese_grammar_check": 358,
+    "japanese_logic_check": 358,
+    "japanese_punctuation_check": 358,
+    "japanese_spelling_check": 358,
+    "missing_info_check": 479,
+    "options_check": 980,
+    "punctuation_check": 1061,
+    "question_type_mismatch_check": 910,
+    "typo_check": 989,
+    "unsolvable_check": 1093
+  },
+  "data_quality": {
+    "error_type_mismatch_rows": 1587,
+    "error_type_mismatch_findings": 1800,
+    "error_type_mismatch_examples": [
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 11,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 14,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 21,
+        "task_id": "german_punctuation_check",
+        "expected_error_type": "德语：标点符号错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 35,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 35,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 36,
+        "task_id": "german_punctuation_check",
+        "expected_error_type": "德语：标点符号错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 38,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 56,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 65,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 86,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 89,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 92,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 95,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 95,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 98,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 116,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 122,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 122,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 137,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 141,
+        "task_id": "german_punctuation_check",
+        "expected_error_type": "德语：标点符号错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 146,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 152,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 156,
+        "task_id": "german_punctuation_check",
+        "expected_error_type": "德语：标点符号错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 164,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      },
+      {
+        "dataset_category": "德语",
+        "source_file": "训练集-微调版提示词/德语_训练集.jsonl",
+        "source_row": 164,
+        "task_id": "german_spelling_check",
+        "expected_error_type": "德语：拼写错误",
+        "actual_error_type": "德语：语法错误"
+      }
+    ]
+  },
+  "exclusions": [
+    {
+      "dataset_category": "英语",
+      "task_id": "ambiguity_check",
+      "count": 205,
+      "reason": "微调版提示词构建时剔除不属于该类别目标任务的样本。"
+    }
+  ],
+  "notes": [
+    "微调版提示词训练数据的冻结迁移输入，共12个数据集类别。",
+    "英语类别相较原版剔除205条使用语义不清Task Card的通用样本。"
+  ]
+}

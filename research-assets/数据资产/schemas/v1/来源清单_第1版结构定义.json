@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:hyt-agent:schema:source-manifest:v1",
+  "title": "SourceManifest.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "created_at",
+    "workspace_root",
+    "snapshot_ref",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {"const": "SourceManifest.v1"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "created_at": {"type": "string", "format": "date-time"},
+    "workspace_root": {"type": "string", "minLength": 1},
+    "snapshot_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["snapshot_id", "snapshot_root", "content_set_sha256"],
+      "properties": {
+        "snapshot_id": {"type": "string", "minLength": 1},
+        "snapshot_root": {"type": "string", "minLength": 1},
+        "content_set_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/source"}
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "dataset_variant",
+        "source_type",
+        "snapshot_relative_path",
+        "sha256",
+        "size_bytes",
+        "authorization_status",
+        "sensitivity_status"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "pattern": "^src_[a-f0-9]{24}$"
+        },
+        "dataset_variant": {
+          "type": "string",
+          "enum": ["original_prompts", "tuned_prompts"]
+        },
+        "source_type": {
+          "type": "string",
+          "enum": ["historical", "derived_prompt_render", "generation_manifest"]
+        },
+        "snapshot_relative_path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "jsonl_rows": {"type": "integer", "minimum": 0},
+        "parent_source_id": {
+          "type": "string",
+          "pattern": "^src_[a-f0-9]{24}$"
+        },
+        "authorization_status": {
+          "type": "string",
+          "enum": ["authorized", "not_recorded", "restricted"]
+        },
+        "sensitivity_status": {
+          "type": "string",
+          "enum": ["assessed_clear", "contains_sensitive", "not_assessed"]
+        },
+        "desensitization_version": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "dataset_version": "stage1-three-types-v2",
+  "seed": 42,
+  "selection_policy": {
+    "total_train": 1500,
+    "positive": 900,
+    "negative": 600,
+    "types": [
+      "错别字",
+      "语义不清",
+      "选项结构错误"
+    ],
+    "positive_strategy": "错别字与语义不清保留全部唯一正样本；选项结构错误仅保留困难正样本",
+    "negative_strategy": "减少错别字与语义不清的易负样本；选项结构错误仍以困难负样本为主",
+    "within_bucket_order": "先基线判错/语义不正确/协议不合规，再按seed=42稳定散列"
+  },
+  "source_train_metrics": {
+    "错别字": {
+      "samples": 796,
+      "tp": 282,
+      "fp": 6,
+      "tn": 371,
+      "fn": 137,
+      "unknown": 0,
+      "precision": 0.9791666666666666,
+      "recall": 0.6730310262529833,
+      "specificity": 0.9840848806366048,
+      "positive_semantic_exact": 0.5894988066825776,
+      "negative_semantic_exact": 0.9840848806366048
+    },
+    "语义不清": {
+      "samples": 733,
+      "tp": 250,
+      "fp": 9,
+      "tn": 368,
+      "fn": 104,
+      "unknown": 2,
+      "precision": 0.9652509652509652,
+      "recall": 0.7062146892655368,
+      "specificity": 0.9761273209549072,
+      "positive_semantic_exact": 0.46348314606741575,
+      "negative_semantic_exact": 0.9761273209549072
+    },
+    "选项结构错误": {
+      "samples": 789,
+      "tp": 401,
+      "fp": 35,
+      "tn": 347,
+      "fn": 5,
+      "unknown": 1,
+      "precision": 0.9197247706422018,
+      "recall": 0.9876847290640394,
+      "specificity": 0.9083769633507853,
+      "positive_semantic_exact": 0.7592137592137592,
+      "negative_semantic_exact": 0.9083769633507853
+    }
+  },
+  "train_distribution": {
+    "错别字": {
+      "positive": 419,
+      "negative": 181,
+      "total": 600
+    },
+    "语义不清": {
+      "positive": 356,
+      "negative": 244,
+      "total": 600
+    },
+    "选项结构错误": {
+      "positive": 125,
+      "negative": 175,
+      "total": 300
+    }
+  },
+  "validation_distribution": {
+    "错别字": {
+      "positive": 49,
+      "negative": 50,
+      "total": 99
+    },
+    "语义不清": {
+      "positive": 37,
+      "negative": 51,
+      "total": 88
+    },
+    "选项结构错误": {
+      "positive": 39,
+      "negative": 53,
+      "total": 92
+    }
+  },
+  "unused_train_candidates": 818,
+  "unique_counts": {
+    "train_samples": 1500,
+    "train_lineages": 1492,
+    "train_user_contents": 1492,
+    "validation_samples": 279,
+    "validation_lineages": 271,
+    "validation_user_contents": 271
+  },
+  "split_overlaps": {
+    "train_vs_validation": {
+      "sample_id": 0,
+      "lineage_id": 0,
+      "user_content": 0
+    },
+    "train_vs_test": {
+      "sample_id": 0,
+      "lineage_id": 0,
+      "user_content": 0
+    },
+    "validation_vs_test": {
+      "sample_id": 0,
+      "lineage_id": 0,
+      "user_content": 0
+    }
+  },
+  "output_schema": {
+    "train.jsonl": [
+      "messages"
+    ],
+    "val.jsonl": [
+      "messages"
+    ],
+    "metadata": "sample_id/lineage_id/task_id and baseline fields are stored in *_manifest.jsonl"
+  },
+  "sha256": {
+    "train.jsonl": "52f8bf558857c92d16b477051e0780b4a2f5cda7591d2b2f38359678a456da17",
+    "val.jsonl": "f809e6971d4ddb1bc1bcfa3314c728f3ce228e29a885b68bd7e28a3ce2b95ced",
+    "train_manifest.jsonl": "a52b93db60fb6c3d050b2319e91eeb0a17d143fbf39571d7dc87b3cd84fec6b0",
+    "val_manifest.jsonl": "3ae85ba636d14a5c32646a3d0af5d8d37419df4840734a9a99d4b2859b6638a8"
+  }
+}

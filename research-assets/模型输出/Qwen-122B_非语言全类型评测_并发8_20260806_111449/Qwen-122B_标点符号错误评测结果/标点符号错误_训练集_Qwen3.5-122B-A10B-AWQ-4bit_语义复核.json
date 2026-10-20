@@ -1,0 +1,187 @@
+{
+  "387": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型误报标点问题，或修改了错误位置而未解决目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "549": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到标点异常，但具体替换不完全等价或修后仍不够规范。",
+    "review_method": "Codex离线语义复核"
+  },
+  "554": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到标点异常，但具体替换不完全等价或修后仍不够规范。",
+    "review_method": "Codex离线语义复核"
+  },
+  "555": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到标点异常，但具体替换不完全等价或修后仍不够规范。",
+    "review_method": "Codex离线语义复核"
+  },
+  "679": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "692": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到标点异常，但具体替换不完全等价或修后仍不够规范。",
+    "review_method": "Codex离线语义复核"
+  },
+  "693": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "739": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "819": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "829": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "878": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到标点异常，但具体替换不完全等价或修后仍不够规范。",
+    "review_method": "Codex离线语义复核"
+  },
+  "879": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "881": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到标点异常，但具体替换不完全等价或修后仍不够规范。",
+    "review_method": "Codex离线语义复核"
+  },
+  "882": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到标点异常，但具体替换不完全等价或修后仍不够规范。",
+    "review_method": "Codex离线语义复核"
+  },
+  "883": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到标点异常，但具体替换不完全等价或修后仍不够规范。",
+    "review_method": "Codex离线语义复核"
+  },
+  "884": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别到标点异常，但具体替换不完全等价或修后仍不够规范。",
+    "review_method": "Codex离线语义复核"
+  },
+  "888": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "889": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "890": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "891": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "892": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "895": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "897": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "959": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型误报标点问题，或修改了错误位置而未解决目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "968": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "969": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型误报标点问题，或修改了错误位置而未解决目标问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "970": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "971": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "977": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "983": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "990": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1041": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1049": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1050": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1051": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1052": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  },
+  "1053": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型定位并修复了目标标点问题；替换粒度不同但结果等价。",
+    "review_method": "Codex离线语义复核"
+  }
+}

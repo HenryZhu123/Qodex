@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 0.8666203022003174,
+      "题目提取": 256.7176949977875,
+      "AI内容检测": 289.8345482349396,
+      "内部查重检测": 0.21913385391235352,
+      "历史查重检测": 0.34149765968322754,
+      "后处理": 0.0012214183807373047,
+      "总耗时": 547.9807164669037
+    },
+    "total_time": 547.9807164669037,
+    "total_questions": 47,
+    "total_errors": 6,
+    "avg_time_per_question": 11.659164180146886
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 6,
+    "exam_name": "841+细胞生物学.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

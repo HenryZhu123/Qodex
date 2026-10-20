@@ -1,0 +1,13 @@
+{
+  "dataset_category": "题目无解",
+  "records": 1093,
+  "rule_pass": 938,
+  "rule_warning": 0,
+  "rule_fail": 155,
+  "candidate_records_after_rule_audit": 938,
+  "semantic_pending": 1093,
+  "issue_counts": {
+    "ORIGINAL_TEXT_NOT_LOCATABLE": 155,
+    "ANCHOR_DOES_NOT_CONTAIN_ORIGINAL": 155
+  }
+}

@@ -1,0 +1,27 @@
+﻿{
+    "generated_at":  "2026-08-27T09:57:45",
+    "original_unchanged":  true,
+    "original_sha256":  "0C4C5A362A513C014A3FAEC5A6B3F0912FC021444016B8EECE2F2B7FE77D662C",
+    "output_sha256":  "1399ECDA9308CC03AECBB6C379C6EDB814B2AB7FE740B43145EC76D973FB5890",
+    "total_records":  1061,
+    "positive_records":  580,
+    "negative_records":  481,
+    "clean_quote_position_records":  40,
+    "retained_clean_recovered_quote_position_records":  15,
+    "new_clean_quote_position_records":  25,
+    "removed_post_item_7_records":  18,
+    "redistributed_records":  96,
+    "invalid_answers":  0,
+    "wrong_system_prompt":  0,
+    "duplicate_detection_groups":  0,
+    "failed_round_trip_records":  0,
+    "distribution":  {
+                         "省略号误用":  142,
+                         "引号滥用或缺失":  142,
+                         "句末点号误用":  127,
+                         "破折号、连接号误用":  98,
+                         "引号内外标点位置":  40,
+                         "冒号、分号误用":  16,
+                         "引号、括号、书名号等配对错误":  15
+                     }
+}

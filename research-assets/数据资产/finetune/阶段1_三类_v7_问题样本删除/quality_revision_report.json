@@ -1,0 +1,115 @@
+{
+  "source_version": "v6",
+  "output_version": "v7",
+  "deleted_from_train": [
+    {
+      "source_line": 1158,
+      "error_case": "语义不清-80",
+      "reason": "题面存在句式杂糅，但标准答案与模型答案均不能形成唯一可靠的原题修复。",
+      "detection_content": "简述多花黑麦草的植物学特征和生物学特性以全面了解其生态适应性为中心。",
+      "standard_answer": {
+        "reason": "本句包含1处错误：将“简述……”的任务要求与“以……为中心”的表达框架杂糅，形成‘简述……以……为中心’的不兼容结构。",
+        "has_error": true,
+        "total_errors": 1,
+        "errors": [
+          {
+            "error_type": "语义不清",
+            "position": "题目文本中“物学特征和生物学特性以全面了解其生态适应性为中心。”所在位置",
+            "original_text": "性以全面了解其生态适应性为中心。",
+            "anchor_text": "物学特征和生物学特性以全面了解其生态适应性为中心。",
+            "correction": "性。",
+            "description": "本句包含1处错误：将“简述……”的任务要求与“以……为中心”的表达框架杂糅，形成‘简述……以……为中心’的不兼容结构。",
+            "suggestion": "将“性以全面了解其生态适应性为中心。”修改为“性。”。"
+          }
+        ]
+      }
+    },
+    {
+      "source_line": 1497,
+      "error_case": "语义不清-102",
+      "reason": "题面存在句式杂糅，且标准答案错误地要求删除完整定义片段。",
+      "detection_content": "致死中量是指能引起一半受试动物死亡的剂量所造成的。",
+      "standard_answer": {
+        "reason": "本句包含1处错误：将“是……”和“由……造成的”两种句式杂糅，形成被动与判断句式冲突。",
+        "has_error": true,
+        "total_errors": 1,
+        "errors": [
+          {
+            "error_type": "语义不清",
+            "position": "题目文本中“致死中量是指能引起一半受试动物死亡的剂量所造成的。”所在位置",
+            "original_text": "是指能引起一半受试动物死亡的剂量所造成的。",
+            "anchor_text": "致死中量是指能引起一半受试动物死亡的剂量所造成的。",
+            "correction": "删除该错误片段",
+            "description": "本句包含1处错误：将“是……”和“由……造成的”两种句式杂糅，形成被动与判断句式冲突。",
+            "suggestion": "将“是指能引起一半受试动物死亡的剂量所造成的。”修改为“删除该错误片段”。"
+          }
+        ]
+      }
+    }
+  ],
+  "quality_flagged_but_retained": [
+    {
+      "source_line": 1150,
+      "error_case": "语义不清-78",
+      "reason": "题面质量较差，标准答案补入新主语缺乏唯一依据。"
+    },
+    {
+      "source_line": 1346,
+      "error_case": "语义不清-93",
+      "reason": "术语标题是否必须使用连接号不构成稳定的语义不清判据。"
+    }
+  ],
+  "model_answers_accepted": [
+    {
+      "source_line": 1163,
+      "error_case": "语义不清-82"
+    },
+    {
+      "source_line": 1185,
+      "error_case": "语义不清-83"
+    },
+    {
+      "source_line": 1378,
+      "error_case": "语义不清-94"
+    },
+    {
+      "source_line": 1478,
+      "error_case": "语义不清-100"
+    },
+    {
+      "source_line": 1493,
+      "error_case": "语义不清-101"
+    }
+  ],
+  "counts": {
+    "train_total": 1498,
+    "positive": 898,
+    "negative": 600,
+    "by_task": {
+      "错别字": {
+        "positive": 390,
+        "negative": 181,
+        "total": 571
+      },
+      "语义不清": {
+        "positive": 383,
+        "negative": 244,
+        "total": 627
+      },
+      "选项结构错误": {
+        "positive": 125,
+        "negative": 175,
+        "total": 300
+      }
+    }
+  },
+  "sha256": {
+    "数据资产\\finetune\\阶段1_三类_v7_问题样本删除\\train.jsonl": "4782b215ef52207bd0a1e79ab1fcc1ac0a982ea5b06af48082d72ff7135f217a",
+    "数据资产\\finetune\\阶段1_三类_v7_问题样本删除\\val.jsonl": "234407847d1f15a9a0153075b06e74dd1c1642d3c10b56daa332e0c7cf85ed67",
+    "数据资产\\finetune\\阶段1_三类_v7_问题样本删除\\train_manifest.jsonl": "99fa2bc7cc1ddba88b9395d3bf36509acb7e9237cc500fb4011ef12caa5aac68",
+    "数据资产\\finetune\\阶段1_三类_v7_问题样本删除\\val_manifest.jsonl": "246741d5238702d6b08dcfdc0e8b5a6c0ea306467c501e988eae0851e7b723e9",
+    "训练集-微调版提示词\\train_v3\\train_v3.jsonl": "4782b215ef52207bd0a1e79ab1fcc1ac0a982ea5b06af48082d72ff7135f217a",
+    "训练集-微调版提示词\\train_v3\\val_v3.jsonl": "234407847d1f15a9a0153075b06e74dd1c1642d3c10b56daa332e0c7cf85ed67",
+    "训练集-微调版提示词\\train_v3\\test_v3.jsonl": "04f8d67000746491792bfaa5091de2c8d73192db1171c41e11778a4349d92bca"
+  }
+}

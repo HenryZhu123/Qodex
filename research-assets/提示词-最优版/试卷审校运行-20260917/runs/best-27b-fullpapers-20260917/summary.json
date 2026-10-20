@@ -1,0 +1,147 @@
+{
+  "run_id": "best-27b-fullpapers-20260917",
+  "source": "incoming",
+  "batch_id": "5b2c9806-276e-4392-a041-805bdeebe696",
+  "model_name": "Qwen3.8-27B-FP8",
+  "model_mode": "local",
+  "environment": "local",
+  "threads": 40,
+  "think_mode": "",
+  "runtime": {
+    "environment": "local",
+    "model_name": "Qwen3.8-27B-FP8",
+    "provider": "local",
+    "endpoint": "http://10.1.7.39:8034/v1",
+    "credential_source": "env:QWEN_API_KEY",
+    "credential_fingerprint": "67f2d22514622d1b",
+    "data_dir": "/Users/softzephyr/Desktop/hyt-agent/提示词-最优版/试卷审校运行-20260917/runs/best-27b-fullpapers-20260917/runtime-data"
+  },
+  "review_defaults": {
+    "seed": 42,
+    "temperature": {
+      "thinking": 1,
+      "non_thinking": 0
+    },
+    "retry": {
+      "timeout_max": 3,
+      "timeout_global_max": 0,
+      "timeout_backoff_min": 3,
+      "timeout_backoff_max": 8,
+      "rate_limit_backoff_min": 1,
+      "rate_limit_backoff_max": 5,
+      "sdk_max_retries": 0
+    },
+    "cache": {
+      "strategy": "review-chain-default",
+      "client_cache": "enabled",
+      "provider_prefix_cache": "provider-managed"
+    }
+  },
+  "target_task_id": "",
+  "prompt_candidate": {},
+  "dataset_files": [
+    {
+      "path": "/Users/softzephyr/Desktop/hyt-agent/外部数据源/完整试卷测试集/10题_实际10题_2024广西民族大学824西方科技史.pdf",
+      "sha256": "e9b191788e71993b9f133bcdeebc928a47fcb2a921e5a7f9293169070218ffcc"
+    },
+    {
+      "path": "/Users/softzephyr/Desktop/hyt-agent/外部数据源/完整试卷测试集/180题档_实际190题_2019昆明理工大学628西医综合A卷.doc",
+      "sha256": "51a6c9bf15f10faf30b580fbacead20b2936d81cfe30011b4b56fe20b011d2b8"
+    },
+    {
+      "path": "/Users/softzephyr/Desktop/hyt-agent/外部数据源/完整试卷测试集/20题_实际20题_2024广西民族大学646普通物理.pdf",
+      "sha256": "b947451ad83f70672c7cbbb54a59fef180c07c2f865cb394c3fa26fcd1bc694f"
+    },
+    {
+      "path": "/Users/softzephyr/Desktop/hyt-agent/外部数据源/完整试卷测试集/40题档_实际39题_2023重庆理工大学816会计学原理A卷.pdf",
+      "sha256": "e6f12645529240f0d2fae8e123c65accf44850621e84516024e5dbc5ac116e00"
+    },
+    {
+      "path": "/Users/softzephyr/Desktop/hyt-agent/外部数据源/完整试卷测试集/60题档_实际62题_641生物化学与分子生物学.docx",
+      "sha256": "87ea9f1013fb5a09bb57bdf2fed2a2bbcb533d1959a1d7575340cc62e6995365"
+    }
+  ],
+  "images_root": "",
+  "detection_error_types": [
+    "错别字",
+    "语义不清",
+    "选项错误",
+    "标点符号",
+    "题目与题型不一致",
+    "信息缺失",
+    "题目无解",
+    "答案泄露",
+    "图文不一致",
+    "事实/逻辑错误"
+  ],
+  "config": {
+    "name": "best27b-fullpapers",
+    "threads": 40,
+    "reviewDetailLevel": "pro",
+    "similarityThreshold": 85,
+    "modelName": "",
+    "modelMode": "local",
+    "models": {
+      "local": "Qwen3.5-122B-A10B-AWQ-4bit",
+      "cloud": "qwen3.5-122b-a10b"
+    },
+    "judgeModel": "qwen3.6-plus",
+    "detectionTypes": [],
+    "reviewRoutingEnabled": false,
+    "correctorModel": null,
+    "textExtractionProvider": "mineru",
+    "plagiarism": {
+      "basic": false,
+      "cross": false,
+      "history": false
+    }
+  },
+  "papers": [
+    "10题_实际10题_2024广西民族大学824西方科技史.pdf",
+    "180题档_实际190题_2019昆明理工大学628西医综合A卷.doc",
+    "20题_实际20题_2024广西民族大学646普通物理.pdf",
+    "40题档_实际39题_2023重庆理工大学816会计学原理A卷.pdf",
+    "60题档_实际62题_641生物化学与分子生物学.docx"
+  ],
+  "papers_meta": {
+    "10题_实际10题_2024广西民族大学824西方科技史.pdf": "plain",
+    "180题档_实际190题_2019昆明理工大学628西医综合A卷.doc": "plain",
+    "20题_实际20题_2024广西民族大学646普通物理.pdf": "plain",
+    "40题档_实际39题_2023重庆理工大学816会计学原理A卷.pdf": "plain",
+    "60题档_实际62题_641生物化学与分子生物学.docx": "plain"
+  },
+  "tasks": [
+    {
+      "task_id": "task_1789633225276_36a035",
+      "paper": "40题档_实际39题_2023重庆理工大学816会计学原理A卷.pdf",
+      "status": "success",
+      "finding_count": 6
+    },
+    {
+      "task_id": "task_1789633225276_590dbd",
+      "paper": "10题_实际10题_2024广西民族大学824西方科技史.pdf",
+      "status": "success",
+      "finding_count": 6
+    },
+    {
+      "task_id": "task_1789633225276_679465",
+      "paper": "60题档_实际62题_641生物化学与分子生物学.docx",
+      "status": "failed",
+      "finding_count": 0
+    },
+    {
+      "task_id": "task_1789633225276_6a02b0",
+      "paper": "20题_实际20题_2024广西民族大学646普通物理.pdf",
+      "status": "success",
+      "finding_count": 26
+    },
+    {
+      "task_id": "task_1789633225276_8666c7",
+      "paper": "180题档_实际190题_2019昆明理工大学628西医综合A卷.doc",
+      "status": "failed",
+      "finding_count": 0
+    }
+  ],
+  "total_findings": 38,
+  "created_at": "2026-09-17T08:41:16Z"
+}

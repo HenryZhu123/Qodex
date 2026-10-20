@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 0.808128833770752,
+      "题目提取": 273.07150316238403,
+      "AI内容检测": 226.88541769981384,
+      "内部查重检测": 0.17963075637817383,
+      "历史查重检测": 0.241286039352417,
+      "后处理": 0.0007414817810058594,
+      "总耗时": 501.1867079734802
+    },
+    "total_time": 501.1867079734802,
+    "total_questions": 33,
+    "total_errors": 15,
+    "avg_time_per_question": 15.187475999196371
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 15,
+    "exam_name": "831材料科学基础.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-Next-80B-A3B-Instruct",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

@@ -1,0 +1,832 @@
+{
+  "7": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "8": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "10": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "12": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "14": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "17": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "18": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "20": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "25": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "31": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "35": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "37": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "38": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "41": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "42": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "43": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "44": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "47": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "50": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "52": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "53": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "54": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "55": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "56": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "58": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "59": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "60": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "61": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "63": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "64": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "65": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决目标语义问题，或改写后句子仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "70": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "78": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "79": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "81": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "84": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "88": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "94": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "100": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "103": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "105": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "106": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "107": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "108": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "109": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "112": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决目标语义问题，或改写后句子仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "113": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "114": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "115": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "130": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "131": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "132": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "133": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "136": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "142": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "143": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "144": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "147": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "148": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "151": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "152": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "154": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "157": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "158": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "159": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "161": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "163": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "165": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "170": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "172": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "174": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "175": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "181": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "184": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "185": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "189": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "196": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "197": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "198": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "201": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "206": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "207": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "208": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "209": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "213": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "221": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "222": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "229": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "232": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "238": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "239": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "243": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "245": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "248": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "250": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "251": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "252": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "255": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "256": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "258": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "261": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "264": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "265": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "270": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决目标语义问题，或改写后句子仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "272": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "275": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "276": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "278": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "282": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "283": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "284": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "285": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "286": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "287": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "288": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决目标语义问题，或改写后句子仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "291": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "292": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "293": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "294": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "296": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "297": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "299": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "300": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "301": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "302": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "305": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "314": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "315": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "321": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "322": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "323": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "324": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "328": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "329": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "330": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "332": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "334": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "341": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "344": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "348": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "356": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "358": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "362": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "364": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决目标语义问题，或改写后句子仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "367": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "368": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "375": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "376": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "380": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "382": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "387": {
+    "result": "partially_correct",
+    "reason": "Codex离线语义复核：模型识别了成分残缺，但补出的中心词改变了原意，或修正仍不完整。",
+    "review_method": "Codex离线语义复核"
+  },
+  "388": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "860": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "866": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决目标语义问题，或改写后句子仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "868": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "872": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "875": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "876": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "878": {
+    "result": "incorrect",
+    "reason": "Codex离线语义复核：模型未解决目标语义问题，或改写后句子仍不成立。",
+    "review_method": "Codex离线语义复核"
+  },
+  "880": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "894": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "895": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "899": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "901": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "902": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  },
+  "903": {
+    "result": "correct",
+    "reason": "Codex离线语义复核：模型正确识别成分残缺或句式杂糅，给出的改写能够消除原问题。",
+    "review_method": "Codex离线语义复核"
+  }
+}

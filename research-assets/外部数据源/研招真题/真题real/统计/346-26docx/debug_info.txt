@@ -1,0 +1,27 @@
+{
+  "detection_time_stats": {
+    "stage_times": {
+      "初始化": 4.787722587585449,
+      "题目提取": 376.5911545753479,
+      "AI内容检测": 0.27156496047973633,
+      "内部查重检测": 802.0104138851166,
+      "历史查重检测": 284.82083201408386,
+      "后处理": 0.0024018287658691406,
+      "总耗时": 1468.4840898513794
+    },
+    "total_time": 1468.4840898513794,
+    "total_questions": 102,
+    "total_errors": 24,
+    "avg_time_per_question": 14.39690284168019
+  },
+  "session_info": {
+    "uploaded_files_count": 1,
+    "errors_count": 24,
+    "exam_name": "346-26.docx"
+  },
+  "model_info": {
+    "model": "Qwen3-30B-A3B-Instruct-2507",
+    "deploy_mode": "private"
+  },
+  "error_aggregation_logs": []
+}

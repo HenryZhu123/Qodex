@@ -1,0 +1,10 @@
+{
+  "dataset_category": "答案泄露",
+  "records": 182,
+  "rule_pass": 182,
+  "rule_warning": 0,
+  "rule_fail": 0,
+  "candidate_records_after_rule_audit": 182,
+  "semantic_pending": 182,
+  "issue_counts": {}
+}

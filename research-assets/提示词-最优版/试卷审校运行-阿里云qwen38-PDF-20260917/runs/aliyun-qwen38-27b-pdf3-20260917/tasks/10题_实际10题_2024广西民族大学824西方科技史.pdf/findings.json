@@ -1,0 +1,77 @@
+{
+  "paper": "10题_实际10题_2024广西民族大学824西方科技史.pdf",
+  "findings": [
+    {
+      "question_number": "1.3",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "晶体管",
+      "description": "题目仅列出名词，未提供明确的解释任务或填空位，导致考生无法确定作答形式。",
+      "recommendation": "在名词后补充解释要求或作答横线，如：'晶体管：______'。",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.4",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "互补原理",
+      "description": "题目仅给出名词，未明确说明需要考生进行何种操作（如解释、定义等），导致任务指令缺失。",
+      "recommendation": "在名词后补充明确的作答要求，例如：'请解释“互补原理”。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.1",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "大翻译运动",
+      "description": "题目仅列出名词，未提供明确的作答任务或填空位。",
+      "recommendation": "在名词后补充冒号及横线作为作答位：'大翻译运动：____'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "3.1",
+      "error_type": "标点符号",
+      "error_level": "中等",
+      "anchor_text": "论述第一次工业革命在英国发生的技术、经济与社会条件？",
+      "description": "“论述”是作答指令，属于陈述句性质，句末不应使用问号。",
+      "recommendation": "将句末问号改为句号：'论述第一次工业革命在英国发生的技术、经济与社会条件。'",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:punctuation_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.2",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "开普勒",
+      "description": "题面仅列出名词，未提供解释任务或填空位，导致无法明确作答要求。",
+      "recommendation": "在名词后补充解释要求或作答横线，如'开普勒：______'。",
+      "section": "题目末尾",
+      "position": "题目末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    },
+    {
+      "question_number": "1.5",
+      "error_type": "信息缺失",
+      "error_level": "中等",
+      "anchor_text": "耗散结构",
+      "description": "题目仅列出名词，未提供明确的解释任务或填空位。",
+      "recommendation": "在名词后补充解释要求，如“耗散结构：请解释其含义。”",
+      "section": "题干末尾",
+      "position": "题干末尾",
+      "source": "ai_detection:missing_check",
+      "confidence": null
+    }
+  ]
+}
