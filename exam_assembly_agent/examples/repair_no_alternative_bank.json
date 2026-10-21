@@ -1,0 +1,52 @@
+[
+  {
+    "question_id": "MOCK_STACK_1",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "栈",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "栈中元素按什么顺序出栈？",
+    "options": {
+      "A": "先进先出",
+      "B": "后进先出",
+      "C": "随机顺序",
+      "D": "按数值排序"
+    },
+    "answer": "B",
+    "explanation": "栈遵循后进先出。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "MOCK_STACK_2",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "栈",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "栈中元素按什么顺序出栈？",
+    "options": {
+      "A": "先进先出",
+      "B": "后进先出",
+      "C": "随机顺序",
+      "D": "按数值排序"
+    },
+    "answer": "B",
+    "explanation": "栈遵循后进先出。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  }
+]

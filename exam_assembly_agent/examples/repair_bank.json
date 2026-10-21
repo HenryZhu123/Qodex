@@ -1,0 +1,77 @@
+[
+  {
+    "question_id": "MOCK_STACK_1",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "栈",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "栈中元素按什么顺序出栈？",
+    "options": {
+      "A": "先进先出",
+      "B": "后进先出",
+      "C": "随机顺序",
+      "D": "按数值排序"
+    },
+    "answer": "B",
+    "explanation": "栈遵循后进先出。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "MOCK_STACK_2",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "栈",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "栈中元素按什么顺序出栈？",
+    "options": {
+      "A": "先进先出",
+      "B": "后进先出",
+      "C": "随机顺序",
+      "D": "按数值排序"
+    },
+    "answer": "B",
+    "explanation": "栈遵循后进先出。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "MOCK_STACK_3",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "栈",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "一个初始为空的栈依次执行 push(1)、push(2)、pop()、push(3)，此时栈顶元素是？",
+    "options": {
+      "A": "1",
+      "B": "2",
+      "C": "3",
+      "D": "栈为空"
+    },
+    "answer": "C",
+    "explanation": "弹出 2 后栈中剩下 1，再压入 3，因此栈顶是 3。",
+    "source": "本项目开发用合成示例",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "接口演示用占位结果，未经真实审校模块验收"
+    }
+  }
+]

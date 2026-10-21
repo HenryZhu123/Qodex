@@ -1,0 +1,16 @@
+{
+  "request_id": "REPAIR_DEMO",
+  "subject": "数据结构",
+  "question_type": "single_choice",
+  "question_count": 2,
+  "score_per_question": 2,
+  "total_score": 4,
+  "topic_counts": {
+    "栈": 2
+  },
+  "difficulty_counts": {
+    "easy": 2
+  },
+  "max_repair_rounds": 3,
+  "allow_mock_reviews": true
+}

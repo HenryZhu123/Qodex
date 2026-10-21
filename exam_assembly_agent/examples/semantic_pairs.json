@@ -1,0 +1,20 @@
+[
+  {
+    "question_id": "SEM_DEV_1", "version": 1, "topic": "栈",
+    "stem": "栈中元素按什么顺序出栈？",
+    "options": {"A": "先进先出", "B": "后进先出", "C": "随机", "D": "按数值排序"},
+    "answer": "B", "explanation": "栈遵循后进先出。"
+  },
+  {
+    "question_id": "SEM_DEV_2", "version": 1, "topic": "栈",
+    "stem": "对于栈，最后放入的元素会最先取出，这种规则称为什么？",
+    "options": {"A": "后进先出", "B": "先进先出", "C": "按优先级", "D": "随机"},
+    "answer": "A", "explanation": "该规则为后进先出。"
+  },
+  {
+    "question_id": "SEM_DEV_3", "version": 1, "topic": "栈",
+    "stem": "空栈依次执行 push(1)、push(2)、pop()、push(3)，此时栈顶是什么？",
+    "options": {"A": "1", "B": "2", "C": "3", "D": "空栈"},
+    "answer": "C", "explanation": "2 被弹出后压入 3，栈顶为 3。"
+  }
+]
