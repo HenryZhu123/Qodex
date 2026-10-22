@@ -1,2 +1,5 @@
 .DS_Store
 Qodex.pdf
+
+# Ignore all PDF files
+*.pdf
