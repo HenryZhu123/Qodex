@@ -1,5 +1,23 @@
 # AI 智能组卷：逐步开发
 
+## 当前独立开发约定
+
+按用户确认，先使用已筛选题的模拟题库独立开发，最终再与审校模块整合。
+详见 LOCAL_BANK_CONTRACT.md。默认 examples/question_bank.json 含 20 道带答案和解析的开发题。
+成功组卷会导出完整的 student_exam.html 和独立 answer_key.html，并保留 JSON 与报告。
+HTML 可直接用浏览器查看/打印，不需要第三方依赖；PDF 是可选导出。
+
+在 github-upload 仓库根目录执行：
+
+```powershell
+python exam_assembly_agent/main.py --output-dir exam_assembly_agent/outputs/complete_exam_1
+```
+
+需要 PDF 时，先安装 requirements-pdf.txt，再给同一命令加 --pdf（使用新输出目录）。
+Pi 工具也会返回 HTML 路径，export_pdf=true 时另外生成 PDF。
+学生卷不包含答案；report.json 是教师/调试文件，可能含答案，不发给学生。
+尚未整合真实题库、语义冲突自动修复；不要把模拟 PASS 称为真实审校合格。
+
 ## 第一步：约定输入和输出
 
 目标用户：需要按知识点和难度要求制作练习卷的教师。

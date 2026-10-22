@@ -10,10 +10,12 @@ if __package__:
     from .question_bank import load_questions
     from .assembly import select_questions, validate_selection, find_duplicate_stems
     from .missing_slots import build_duplicate_replenishment
+    from .exam_export import export_exam
 else:
     from question_bank import load_questions
     from assembly import select_questions, validate_selection, find_duplicate_stems
     from missing_slots import build_duplicate_replenishment
+    from exam_export import export_exam
 
 
 def validate_request(request):
@@ -179,6 +181,7 @@ def main():
     parser.add_argument("--request", type=Path, default=root / "examples/request.json")
     parser.add_argument("--bank", type=Path, default=root / "examples/question_bank.json")
     parser.add_argument("--output-dir", type=Path, help="可选：保存学生卷、答案和运行报告")
+    parser.add_argument("--pdf", action="store_true", help="同时导出 PDF，需要安装 requirements-pdf.txt")
     args = parser.parse_args()
     try:
         request = json.loads(args.request.read_text(encoding="utf-8-sig"))
@@ -190,12 +193,16 @@ def main():
         result = {"status": "INPUT_ERROR", "message": str(exc)}
     if args.output_dir:
         args.output_dir.mkdir(parents=True, exist_ok=True)
+        if any(args.output_dir.iterdir()):
+            raise ValueError("输出目录已有内容，请使用新目录保存同一份试卷和答案，避免混用旧文件")
         for name in ("student_exam", "answer_key", "replenishment_request"):
             if name in result:
                 (args.output_dir / f"{name}.json").write_text(
                     json.dumps(result[name], ensure_ascii=False, indent=2), encoding="utf-8")
             elif (args.output_dir / f"{name}.json").exists():
                 raise ValueError("输出目录包含旧试卷，请使用新的输出目录，避免混淆失败结果。")
+        if result["status"] == "STRUCTURAL_PASS":
+            result["artifacts"] = export_exam(request, result, args.output_dir, pdf=args.pdf)
         (args.output_dir / "report.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         print(json.dumps({"status": result["status"], "output_dir": str(args.output_dir)}, ensure_ascii=False))
     else:

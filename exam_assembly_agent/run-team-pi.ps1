@@ -8,7 +8,18 @@ $ErrorActionPreference = "Stop"
 if (-not $PiRoot) {
     $workspace = Split-Path -Parent $PSScriptRoot
     $parent = Split-Path -Parent $workspace
-    $PiRoot = Join-Path $parent "hku-agent-exam-checker"
+    $candidates = @(
+        (Join-Path $workspace "pi-coding-agent"),
+        (Join-Path $parent "hku-agent-exam-checker"),
+        (Join-Path (Split-Path -Parent $parent) "hku-agent-exam-checker")
+    )
+    foreach ($candidate in $candidates) {
+        if (Test-Path -LiteralPath (Join-Path $candidate "package.json")) {
+            $PiRoot = $candidate
+            break
+        }
+    }
+    if (-not $PiRoot) { throw "Team Pi repository not found. Specify -PiRoot." }
 }
 $PiRoot = (Resolve-Path -LiteralPath $PiRoot).Path
 if (Test-Path -LiteralPath (Join-Path $PiRoot "pi-coding-agent/package.json")) {

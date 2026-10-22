@@ -5,6 +5,7 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 const workspace = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const parameters = Type.Object({
+  export_pdf: Type.Optional(Type.Boolean({ description: "Also export separate student and answer PDFs; requires reportlab installed in QODEX_PYTHON. HTML documents are always exported on success." })),
   bank: Type.Union([Type.Literal("development"), Type.Literal("repair_success"), Type.Literal("repair_failure")],
     { description: "Fixed mock bank. Use development for ordinary tasks; repair banks only for explicit repair demos." }),
   request: Type.Object({
@@ -40,8 +41,10 @@ export default function (pi: ExtensionAPI) {
       const encoded = Buffer.from(JSON.stringify(params.request), "utf8").toString("base64");
       const python = process.env.QODEX_PYTHON || "python";
       try {
+        const args = ["-X", "utf8", "-m", "exam_assembly_agent.pi_bridge", "--bank", params.bank, "--request-base64", encoded];
+        if (params.export_pdf) args.push("--pdf");
         const result = await pi.exec(python,
-          ["-X", "utf8", "-m", "exam_assembly_agent.pi_bridge", "--bank", params.bank, "--request-base64", encoded],
+          args,
           { cwd: workspace, signal, timeout: 60000 });
         if (result.killed || result.code !== 0) {
           return { content: [{ type: "text", text: JSON.stringify({ status: "TOOL_ERROR", message: "Python bridge failed, was cancelled or timed out. Check QODEX_PYTHON and the local Python module." }) }],
