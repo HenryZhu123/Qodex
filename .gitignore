@@ -3,3 +3,25 @@ Qodex.pdf
 
 # Ignore all PDF files
 *.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Local virtualenvs
+.venv/
+venv/
+node_modules/
+
+# Local run outputs (knowledge-base builds, OCR review sheets, scratch dirs)
+kb_refq_out/
+kb_ocr_review/
+kb_test/
+kb_smoke_*/
+.tess_dl/
+
+# Secrets / local env
+.env
