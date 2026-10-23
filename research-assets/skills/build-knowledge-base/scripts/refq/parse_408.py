@@ -58,6 +58,15 @@ MULTI_RE = re.compile(r"^[A-D]{4,}$")
 INLINE_RE = re.compile(r"(?<![\d.])(\d{1,2})\s*[.．]\s*([A-D])(?![\u4e00-\u9fff])")
 LABELLED_RE = re.compile(r"(?<![\d.])(\d{1,2})\s*[.．]\s*[【\[]\s*参考答案\s*[】\]]\s*([A-D])")
 EXPLAIN_RE = re.compile(r"(?<![\d.])(\d{1,2})\s*[.．]\s*[【\[]?\s*解析\s*[】\]]?\s*[:：]?")
+# "<num>. X。【解析】..."  (2022 style)
+EXPLAIN_INLINE_RE = re.compile(
+    r"(?<![\d.])(\d{1,2})\s*[.．]\s*([A-D])\s*[。.．]?\s*[【\[]\s*解析\s*[】\]]", re.M
+)
+# "<num>.【参考答案】X 【解析】..."  (2023 style)
+EXPLAIN_WITH_ANSWER_RE = re.compile(
+    r"(?<![\d.])(\d{1,2})\s*[.．]\s*[【\[]\s*参考答案\s*[】\]]\s*([A-D])\s*[【\[]\s*解析\s*[】\]]",
+    re.M,
+)
 
 
 @dataclass
@@ -157,29 +166,28 @@ def parse_choices(block: str) -> list[dict[str, Any]]:
         span = block[start:stop]
         span = re.sub(r"^[ \t]*\d{1,2}[.．][ \t]*", "", span, count=1)
         body = span.strip()
-        # Options must be full "A. xxx" lines inside this item's span.
-        # Split into lines first: "$" in MULTILINE stops before the newline,
-        # so slicing by match.end() would drop the text. Working line by line
-        # keeps the option value intact.
-        lines = body.splitlines()
-        opt_starts: list[tuple[int, str, int]] = []
-        for li, line in enumerate(lines):
-            m = re.match(r"^[ \t]*([A-D])[.．][ \t]*(.*)$", line)
-            if m:
-                opt_starts.append((li, m.group(1), m.start(2)))
-        stem_lines = lines[: opt_starts[0][0]] if opt_starts else lines
-        stem = "\n".join(stem_lines).strip()
-        options: dict[str, str] = {}
-        for si, (li, letter, val_start) in enumerate(opt_starts):
-            if letter in options:
+        # PDF text extraction often places several options on one line, e.g.
+        # "A. 顺序存储B. 散列存储C. 链式存储D. 索引存储". Find every option
+        # marker anywhere in the body, not just at line starts.
+        opt_marks = [
+            m for m in re.finditer(r"(?<![A-Za-z0-9])[ \t]*([A-D])[.．][ \t]*", body)
+        ]
+        # Keep the first occurrence of each letter, in order.
+        kept: list[re.Match[str]] = []
+        seen_letters: set[str] = set()
+        for m in opt_marks:
+            letter = m.group(1)
+            if letter in seen_letters:
                 continue
-            end_line = opt_starts[si + 1][0] if si + 1 < len(opt_starts) else len(lines)
-            chunk = lines[li][val_start:]
-            if end_line > li + 1:
-                chunk += "\n" + "\n".join(lines[li + 1 : end_line])
-            value = chunk.strip()
+            seen_letters.add(letter)
+            kept.append(m)
+        stem = body[: kept[0].start()].strip() if kept else body
+        options: dict[str, str] = {}
+        for i, m in enumerate(kept):
+            end = kept[i + 1].start() if i + 1 < len(kept) else len(body)
+            value = re.sub(r"[ \t]*\n[ \t]*", " ", body[m.end():end]).strip()
             if value:
-                options[letter] = value
+                options[m.group(1)] = value
         complete = all(a in options and options[a] for a in "ABCD")
         items.append({
             "question_no": num,
@@ -229,14 +237,34 @@ def parse_paper(pdf: Path, year: int) -> Paper:
 # --------------------------------------------------------------------------
 
 def parse_explanations(text: str) -> dict[int, str]:
-    marks = [(int(m.group(1)), m.start(), m.end()) for m in EXPLAIN_RE.finditer(text)]
+    """Collect explanation bodies across the observed layouts.
+
+    Layouts:
+      A. "<n>. 解析："                        (2009-2018, 2020)
+      B. "<n>. X。【解析】"                    (2022)
+      C. "<n>.【参考答案】X 【解析】"           (2023)
+      D. MinerU "## <n>.解析："               (not used here)
+    """
+    marks: list[tuple[int, int, int]] = []
+    for regex in (EXPLAIN_WITH_ANSWER_RE, EXPLAIN_INLINE_RE):
+        for m in regex.finditer(text):
+            marks.append((int(m.group(1)), m.start(), m.end()))
+    # Plain "<n>. 解析：" style: append only numbers not already covered.
+    covered = {m[0] for m in marks}
+    for m in EXPLAIN_RE.finditer(text):
+        num = int(m.group(1))
+        if num not in covered:
+            marks.append((num, m.start(), m.end()))
+
     marks.sort(key=lambda x: x[1])
     out: dict[int, str] = {}
     for i, (num, _, end) in enumerate(marks):
         if num > 47 or num in out:
             continue
         stop = marks[i + 1][1] if i + 1 < len(marks) else len(text)
-        out[num] = re.sub(r"\s+", " ", text[end:stop]).strip()[:4000]
+        body = re.sub(r"\s+", " ", text[end:stop]).strip()
+        if body:
+            out[num] = body[:4000]
     return out
 
 
