@@ -128,9 +128,59 @@ research-assets/review_eval/dataset/
 
 ---
 
-## 6. 核心结论
+## 6. 干净题误报基线
 
-### 6.1 审校模型的本质
+**目的**：之前只有错题，无法判断"检出"是真实能力还是乱报。本次补充干净题，测量误报率。
+
+**数据**：从 408 未使用的 471 道原题中抽取 100 道，清洗后取 60 道参与测试。
+
+清洗内容：
+- 去除 PDF 着重号 `．`（如「不．符合」）：7 处，会被误判为标点错误
+- 去除占位符 `＿`：3 处
+- 按内容重新判定学科：29 条原按题号机械映射的标签有误（如排序题被标为计算机组成）
+
+**配置**：60 题 × 9 个检测任务 = 540 次调用。
+
+| 检测任务 | 误报数 | 误报率 |
+|---|---:|---:|
+| `ambiguity` 语义不清 | 16 | **27%** |
+| `punctuation` 标点符号 | 13 | **22%** |
+| `missing_info` 信息缺失 | 7 | 12% |
+| `unsolvable` 题目无解 | 5 | 8% |
+| `typo` 错别字 | 4 | 7% |
+| `option_structure` 选项结构 | 0 | 0% |
+| `type_mismatch` 题型不一致 | 0 | 0% |
+| `answer_leakage` 答案泄露 | 0 | 0% |
+| `factual_logical` 事实/逻辑错误 | 0 | 0% |
+| **合计** | **45** | **8%** |
+
+**31/60 的干净题至少被一个任务误报（52%）。**
+
+### 6.1 检出率与误报率的对比
+
+| 错误类型 | 检出率 | 误报率 | 判断 |
+|---|---:|---:|---|
+| `typo` | 90% | 7% | 明显有效 |
+| `answer_leakage` | 75% | 0% | 有效 |
+| `option_structure` | 75% | 0% | 有效 |
+| `unsolvable` | 65% | 8% | 有效 |
+| `punctuation` | 55% | 22% | 勉强 |
+| `ambiguity` | 40% | **27%** | **近乎无区分力** |
+| `missing_info` | 30% | 12% | 弱 |
+| `factual_logical` | 30% | 0% | 只漏报，不误报 |
+| `type_mismatch` | 10% | 0% | 严重漏报 |
+
+### 6.2 两个新结论
+
+**`ambiguity` 缺乏区分能力**：误报率 27% 与检出率 40% 十分接近，说明它报出的问题中很大比例是噪声。
+
+**`factual_logical` 是"零误报 + 低检出"**：从不误报，但只检出 30%。该任务过于保守，模型默认题目无问题。这为"加入怀疑条件"的改进提供了安全空间——基线误报为 0，即使提升到 10% 仍可接受。
+
+---
+
+## 7. 核心结论
+
+### 7.1 审校模型的本质
 
 **它是"读题自洽性检查器"，不是"事实核对器"。**
 
@@ -141,34 +191,51 @@ research-assets/review_eval/dataset/
 | 需外部事实（`factual_logical`） | 30% | 不做核对 |
 | 缺失后仍通顺（`missing_info`） | 30% | 无异常可发现 |
 
-### 6.2 知识库未生效的原因
+### 7.2 知识库未生效的原因
 
 不是检索质量问题（检索已验证准确），而是**审校流程没有设计成"用证据核对题目"**。模型在规定路径上就能自洽地得出"无错"，没有调用外部证据的动机。
 
-### 6.3 对 Proposal 的影响
+### 7.3 求解验证失败的原因
+
+模型存在**合理化倾向**：发现矛盾后优先假设自己理解有误，而非题面有误。若不显式禁止这种措辞，增加推理步骤反而降低检出率。
+
+### 7.4 对 Proposal 的影响
 
 Proposal 假设"知识库能提升审校质量"。**当前架构下该假设不成立。**
 
 这是一个有价值的负面结果，应如实记录。
 
+### 7.5 下一步的安全空间
+
+`factual_logical` 误报基线为 0，是唯一可以放心增加召回的任务。改进应优先在此处试验。
+
 ---
 
-## 7. 附录：产物路径
+## 8. 附录：产物路径
 
 ```text
 research-assets/review_eval/
-├── dataset/                      数据集
+├── dataset/
+│   ├── review_eval_dataset.csv    320 条（220 错题 + 100 干净题）
+│   ├── review_eval_gold.jsonl     标准答案
+│   ├── review_eval_full.jsonl     合并视图
+│   └── clean_set.jsonl            清洗后的干净题
 ├── prompts/kb_aware/             KB-aware 提示词变体
 ├── prompts/solve_verify/         求解验证提示词
 ├── runs/
 │   ├── full_v1/                  基线测试 180 条
 │   ├── ablation_v1/              知识库消融 180×2
 │   ├── ablation_probe/           提示词改动探针
-│   └── solve_probe/              求解验证探针
+│   ├── solve_probe/              求解验证探针
+│   └── clean_baseline/           干净题误报 60×9
 └── scripts/
     ├── run_review_eval.py        基线测试
     ├── run_ablation.py           消融实验
     ├── run_solve_verify.py       求解验证
+    ├── run_clean_baseline.py     干净题误报
+    ├── build_clean_set.py        干净题抽取
+    ├── clean_questions.py        干净题清洗
+    ├── export_dataset.py         数据集导出
     ├── kb_retrieval.py           知识库检索
     └── make_kb_prompts.py        提示词变体生成
 ```
