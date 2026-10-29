@@ -1,0 +1,81 @@
+{
+  "run_id": "blind_test_v1",
+  "created_at": "2026-10-29T03:27:54.908293+00:00",
+  "workflow": "question-error-synthesis (NeurIPS 2026)",
+  "source_pool_summary": {
+    "total_pool": 720,
+    "dev_set_used": 320,
+    "blind_set_new_sources": 180,
+    "remaining_unused": 216
+  },
+  "quotas": {
+    "total_blind_test_samples": 240,
+    "error_samples": 180,
+    "clean_samples": 60,
+    "by_error_type": {
+      "type_mismatch": {
+        "total": 20,
+        "new_synthesis": 20,
+        "retained_from_dev": 0,
+        "construction_policy": "Reconstruct from scratch with non-template variations"
+      },
+      "option_structure": {
+        "total": 20,
+        "new_synthesis": 20,
+        "retained_from_dev": 0,
+        "construction_policy": "Reconstruct from scratch with non-template variations"
+      },
+      "factual_logical": {
+        "total": 20,
+        "new_synthesis": 20,
+        "retained_from_dev": 0,
+        "construction_policy": "Reconstruct from scratch with non-template variations"
+      },
+      "typo": {
+        "total": 20,
+        "new_synthesis": 10,
+        "retained_from_dev": 10,
+        "construction_policy": "50% retained / 50% new synthesis"
+      },
+      "punctuation": {
+        "total": 20,
+        "new_synthesis": 10,
+        "retained_from_dev": 10,
+        "construction_policy": "50% retained / 50% new synthesis"
+      },
+      "missing_info": {
+        "total": 20,
+        "new_synthesis": 10,
+        "retained_from_dev": 10,
+        "construction_policy": "50% retained / 50% new synthesis"
+      },
+      "ambiguity": {
+        "total": 20,
+        "new_synthesis": 10,
+        "retained_from_dev": 10,
+        "construction_policy": "50% retained / 50% new synthesis"
+      },
+      "unsolvable": {
+        "total": 20,
+        "new_synthesis": 10,
+        "retained_from_dev": 10,
+        "construction_policy": "50% retained / 50% new synthesis"
+      },
+      "answer_leakage": {
+        "total": 20,
+        "new_synthesis": 10,
+        "retained_from_dev": 10,
+        "construction_policy": "50% retained / 50% new synthesis"
+      }
+    }
+  },
+  "diversity_constraints": {
+    "max_signature_concentration": "25% per error type (max 5 items per detailed subtype)",
+    "subject_balance": "Cross-discipline across DS, CO, OS, CN",
+    "forbidden_shortcuts": [
+      "No fixed trailing parenthetical markers like （多选）/（请证明） across batch",
+      "No repetitive mechanical replacement of option markers",
+      "Must represent diverse realistic paper layout & exam drafting anomalies"
+    ]
+  }
+}
