@@ -1,1609 +1,721 @@
-﻿sample_id,label,error_type,error_detailed_type,subject,year,source_record_id,full_text
-blind-type_mismatch-refq-408-2009-22,error,type_mismatch,排序题指令混入单选,operating_system,2009,refq-408-2009-22,"下列选项中，能引起外部中断的事件包括哪些？请按发生概率从大到小排列序号。
-A. 键盘输入
-B. 除数为0
-C. 浮点数运算下溢
-D. 访存缺页"
-blind-type_mismatch-refq-408-2010-31,error,type_mismatch,简答题指令混入单选,computer_network,2010,refq-408-2010-31,"请简述设置当前工作目录的设计初衷，并说明其与相对路径的关系（简答题）。
-A. 节省外存空间
-B. 节省内存空间
-C. 加快文件的检索速度
-D. 加快文件的读/写速度"
-blind-type_mismatch-refq-408-2011-24,error,type_mismatch,多选指令混入单选,operating_system,2011,refq-408-2011-24,"下列选项中，在用户态执行的是（本题为多项选择题，选出所有符合项）。
-A. 命令解释程序
-B. 缺页处理程序
-C. 进程调度程序
-D. 时钟中断处理程序"
-blind-type_mismatch-refq-408-2012-09,error,type_mismatch,作图题要求混入单选,data_structure,2012,refq-408-2012-09,"已知一棵3 阶B-树，如下图所示。删除关键字78 得到一棵新B-树，请在答题卡上画出删除关键字78后的完整B-树结构形态并标出根结点。
-A. 60
-B. 60 62
-C. 62,65
-D. 65"
-blind-type_mismatch-refq-408-2012-24,error,type_mismatch,填空与简答混入单选,operating_system,2012,refq-408-2012-24,"请简述中断处理和子程序调用保护现场的异同并填写下划线， 中断处理一定会保存而子程序调用不需要保存其
-内容的是 。
-A. 程序计数器
-B. 程序状态字寄存器
-C. 通用数据寄存器
-D. 通用地址寄存器"
-blind-type_mismatch-refq-408-2012-25,error,type_mismatch,判断题要求混入单选,operating_system,2012,refq-408-2012-25,"下列关于虚拟存储器的叙述中，（判断正误：判断下列各选项表述的对错）。
-A. 虚拟存储只能基于连续分配技术
-B. 虚拟存储只能基于非连续分配技术
-C. 虚拟存储容量只受外存容量的限制
-D. 虚拟存储容量只受内存容量的限制"
-blind-type_mismatch-refq-408-2012-29,error,type_mismatch,大题推导要求混入单选,computer_network,2012,refq-408-2012-29,"一个多道批处理系统中仅有P1和P2 两个作业，P2比P1晚5ms 到达，它们的计算和I/O 操作顺序
-如下：
-P1：计算60ms，I/O 80ms，计算20ms
-P2：计算120ms，I/O 40ms，计算40ms
-若不考虑调度和切换时间， 请画出CPU与I/O调度的时序甘特图并列出计算推导过程。
-A. 240ms
-B. 260ms
-C. 340ms
-D. 360ms"
-blind-type_mismatch-refq-408-2012-31,error,type_mismatch,多选指令混入单选,computer_network,2012,refq-408-2012-31,"下列关于进程和线程的叙述中，（多选，选出至少两项正确陈述）。
-A. 不管系统是否支待线程，进程都是资源分配的基本单位
-B. 线程是资源分配的基本单位，进程是调度的基本单位
-C. 系统级线程和用户级线程的切换都需要内核的支持
-D. 同一进程中的各个线程拥有各自不同的地址空间"
-blind-type_mismatch-refq-408-2012-32,error,type_mismatch,列举题要求混入单选,computer_network,2012,refq-408-2012-32,"请列出三条改善磁盘I/O性能的工程措施并指出不符的一项
-A. 重排I/O 请求次序
-B. 在一个磁盘上设置多个分区
-C. 预读和滞后写
-D. 优化文件物理块的分布"
-blind-type_mismatch-refq-408-2012-33,error,type_mismatch,填空题指令混入单选,computer_network,2012,refq-408-2012-33,"在TCP/IP 体系结构中，写出直接为ICMP提供服务的协议在TCP/IP体系中的协议号（填空题）。
-A. PPP
-B. IP
-C. UDP
-D. TCP"
-blind-type_mismatch-refq-408-2012-34,error,type_mismatch,外语作答指令混入单选,computer_network,2012,refq-408-2012-34,"在物理层接口特性中， （请用英文专业术语回答用于描述事件发生顺序的特性名称）。
-A. 机械特性
-B. 功能特性
-C. 过程特性
-D. 电气特性"
-blind-type_mismatch-refq-408-2012-35,error,type_mismatch,论述题要求混入单选,computer_network,2012,refq-408-2012-35,"请分别分析以太网在无连接和不可靠服务下的状态转移机理（论述题）。
-A. 无连接不可靠服务
-B. 无连接可靠服务
-C. 有连接不可靠服务
-D. 有连接可靠服务"
-blind-type_mismatch-refq-408-2012-36,error,type_mismatch,证明题要求混入单选,computer_network,2012,refq-408-2012-36,"两台主机之间的数据链路层采用后退N 帧协议(GBN)传输数据，数据传输速率为16kbps, 单向传
-播时延为270ms, 数据帧长度范围是128～512 字节，接收方总是以与数据帧等长的帧进行确认。
-请严格证明GBN协议信道利用率公式并给出推导步骤。
-A. 5
-B. 4
-C. 3
-D. 2"
-blind-type_mismatch-refq-408-2012-39,error,type_mismatch,多问简答混入单选,computer_network,2012,refq-408-2012-39,"某主机的IP 地址为180.80.77.55, 子网掩码为255.255.252.0。若该主机向其所在子网发送广播分
-组，请分别写出该子网的定向广播地址和受限广播地址（两问简答）。
-A. 180.80.76.0
-B. 180.80.76.255
-C. 180.80.77.255
-D. 180.80.79.255"
-blind-type_mismatch-refq-408-2012-40,error,type_mismatch,绘图指令混入单选,computer_network,2012,refq-408-2012-40,"若用户1 与用户2 之间发送和接收电子邮件的过程如下图所示， 则图中①、②、③阶段分别使
-用的应用层协议，并绘制出邮件客户端与服务器间的协议交互时序图。
-A. SMTP、SMTP、SMTP
-B. POP3、SMTP、POP3
-C. POP3、SMTP、SMTP
-D. SMTP、SMTP、POP3"
-blind-type_mismatch-refq-408-2013-01,error,type_mismatch,渐近证明混入单选,data_structure,2013,refq-408-2013-01,"已知两个长度分别为m 和n 的升序链表，若将它们合并为一个长度为m + n 的降序链表，则请用大O记号严格证明双链表合并算法的最坏时间复杂度下界。
-A. O(n)
-B. O(mn)
-C. O(min(m, n))
-D. O(max(m, n))"
-blind-type_mismatch-refq-408-2013-02,error,type_mismatch,列举题要求混入单选,data_structure,2013,refq-408-2013-02,"一个栈的入栈序列为1, 2, 3, …, n，其出栈序列是p1, p2, p3, …, pn。若p2 = 3，请列举出所有合法的p3取值并统计个数。
-A. n－3
-B. n－2
-C. n－1
-D. 无法确定"
-blind-type_mismatch-refq-408-2013-03,error,type_mismatch,图示题要求混入单选,data_structure,2013,refq-408-2013-03,"若将关键字1, 2, 3, 4, 5, 6, 7 依次插入到初始为空的平衡二叉树T 中，请画出插入关键字1到7过程中AVL树的各次平衡旋转调整图示。
-A. 0
-B. 1
-C. 2
-D. 3"
-blind-type_mismatch-refq-408-2013-04,error,type_mismatch,解答题要求混入单选,data_structure,2013,refq-408-2013-04,"己知三又树T 中6 个叶结点的权分别是2, 3, 4, 5, 6, 7，构造对应的带权三叉哈夫曼树并计算最小带权外部路径长度（解答题）。
-A. 27
-B. 46
-C. 54
-D. 56"
-blind-type_mismatch-refq-408-2013-05,error,type_mismatch,编程题要求混入单选,data_structure,2013,refq-408-2013-05,"若X 是后序线索二叉树中的叶结点，且X 存在左兄弟结点Y，写出二叉树后序遍历算法中求叶结点后序后继结点的C语言核心代码。
-A. X 的父结点
-B. 以Y 为根的子树的最左下结点
-C. X 的左兄弟结点Y
-D. 以Y 为根的子树的最右下结点"
-blind-option_structure-refq-408-2013-07,error,option_structure,标号重复排版,data_structure,2013,refq-408-2013-07,"设图的邻接矩阵A 如下所示。各顶点的度依次是 。
-A= ൦
-0
-1
-0
-1
-0
-0
-1
-1
-0
-1
-0
-0
-1
-0
-0
-0
-൪
-A. 1, 2, 1, 2
-B. 2, 2, 1, 1
-C.  C. 3, 4, 2, 3
-D. 4, 4, 2, 2"
-blind-option_structure-refq-408-2013-08,error,option_structure,非标标号圆圈数字,data_structure,2013,refq-408-2013-08,"若对如下无向图进行遍历，则下列选项中，不是广度优先遍历的序列的是 。
-① h, c, a, b, d, e, g, f
-B. e, a, f, g, b, h, c, d
-C. d, b, c, a, h, e, f, g
-D. a, b, c, d, h, e, f, g"
-blind-option_structure-refq-408-2013-09,error,option_structure,末尾多余顿号,data_structure,2013,refq-408-2013-09,"下列AOE 网表示一项包含8 个活动的工程，通过同时加快若干活动的进度可以缩短整个工程的
-工期。下列选项中，加快其进度就可以缩短工程工期的是 。
-A. c 和e
-B. d 和c
-C. f 和d
-D. f 和h、"
-blind-option_structure-refq-408-2013-10,error,option_structure,标号与内容粘连,data_structure,2013,refq-408-2013-10,"在一棵高度为2 的5 阶B 树中，所包含关键字的个数最少是 。
-A. 5
-B. 7
-C. 8
-D.14"
-blind-option_structure-refq-408-2013-16,error,option_structure,选项标号缺失,operating_system,2013,refq-408-2013-16,"某计算机主存地址空间大小为256MB，按字节编址，虚拟地址空间大小为4GB，采用页式存储
-管理，页面大小为4KB，TLB（快表）采用全相联映射，有4 个页表项，内容如下表所示。
-有效位
-标记
-页框号
-…
-0
-FF180H
-0002H
-…
-1
-3FFF1H
-0035H
-…
-0
-02FF3H
-0351H
-…
-1
-03FFFH
-0153H
-…
-则对虚拟地址 03FFF180H 进行虚拟地址变换的结果是 。
-015 3180H
-B. 003 5180H
-C. TLB 缺失
-D. 缺页"
-blind-option_structure-refq-408-2013-17,error,option_structure,标号使用小写字母,operating_system,2013,refq-408-2013-17,"假设变址寄存器R 的内容为1000H，指令中的形式地址为2000H；地址1000H 中的内容为
-2000H，地址2000H 中的内容为3000H，地址3000H 中的内容为4000H，则变址寻址方式下访
-问到的操作数是 。
-A. 1000H
-B. 2000H
-c. 3000H
-D. 4000H"
-blind-option_structure-refq-408-2013-18,error,option_structure,标号超出AD范围,operating_system,2013,refq-408-2013-18,"某CPU 主频为1.03GHz，采用4 级指令流水线，每个流水段的执行需要1 个时钟周期。假定
-CPU 执行了100 条指令，在其执行过程中，没有发生任何流水线阻塞，此时流水线的吞吐率
-为 。
-A. 0.25×10 9条指令/秒
-B. 0.97×10 9条指令/秒
-C. 1.0×10 9条指令/秒
-E. 1.03×10 9条指令/秒"
-blind-option_structure-refq-408-2013-20,error,option_structure,标号混用右括号,operating_system,2013,refq-408-2013-20,"下列选项中，用于提高RAID 可靠性的措施有 .
-I. 磁盘镜像
-II. 条带化
-III. 奇偶校验
-IV. 增加Cache 机制
-A. 仅I、II
-B) 仅I、III
-C. 仅I、III 和IV
-D. 仅II、III 和IV"
-blind-option_structure-refq-408-2013-21,error,option_structure,标号混用全角点,operating_system,2013,refq-408-2013-21,"某磁盘的转速为10000rpm，半均寻道时间是6ms，磁盘传输速率是20MB/s，磁盘控制器延迟为
-0.2 ms，读取一个4KB 的扇区所需的平均时间约为 。
-A．9ms
-B. 9.4ms
-C. 12ms
-D. 12.4ms"
-blind-option_structure-refq-408-2013-23,error,option_structure,选项标号重复,operating_system,2013,refq-408-2013-23,"用户在删除某文件的过程中，操作系统不可能执行的操作是
-A. 删除此文件所在的目录
-A. 删除与此文件关联的目录项
-C. 删除与此文件对应的文件控制块
-D. 释放与此文件关联的内存缓冲区"
-blind-option_structure-refq-408-2013-24,error,option_structure,标号使用顿号,operating_system,2013,refq-408-2013-24,"为支持CD-ROM 中视频文件的快速随机播放，播放性能最好的文件数据块组织方式是 。
-A. 连续结构
-B. 链式结构
-C. 直接索引结构
-D、多级索引结构"
-blind-option_structure-refq-408-2013-27,error,option_structure,末尾多余分号,computer_network,2013,refq-408-2013-27,"设系统缓冲区和用户工作区均采用单缓冲，从外设读入1 个数据块到系统缓冲区的时间为100，
-从系统缓冲区读入1 个数据块到用户工作区的时间为5，对用户工作区中的1 个数据块进行分析
-的时间为90（如下图所示）。进程从外设读入并分析2 个数据块的最短时间是
-A. 200
-B. 295
-C. 300
-D. 390；"
-blind-option_structure-refq-408-2013-29,error,option_structure,选项内容空白截断,computer_network,2013,refq-408-2013-29,"计算机开机后，操作系统最终被加载到 。
-A. BIOS
-B. ROM
-C. 
-D. RAM"
-blind-option_structure-refq-408-2013-30,error,option_structure,选项跨行粘连挤压,computer_network,2013,refq-408-2013-30,"若用户进程访问内存时产生缺页，则下列选项中，操作系统可能执行的操作是 。
-I. 处理越界错
-II. 置换页
-III. 分配内存
-A. 仅I、IIB. 仅II、III
-C. 仅II、III
-D. I、II 和III"
-blind-option_structure-refq-408-2013-31,error,option_structure,选项内容空白缺失,computer_network,2013,refq-408-2013-31,"某系统正在执行三个进程P1、P2和P3，各进程的计算（CPU）时间和I/O 时间比例如下表所示。
-进程
-计算时间
-I/O 时间
-P1
-90%
-10%
-P2
-50%
-50%
-P3
-15%
-85%
-为提高系统资源利用率，合理的进程优先级设置应为 。
-A. P1 > P2 > P3
-B. P3 > P2 > P1
-C. P2 > P1 = P3
-D. "
-blind-option_structure-refq-408-2013-32,error,option_structure,非标方括号标号,computer_network,2013,refq-408-2013-32,"下列关于银行家算法的叙述中，正确的是 。
-[A] 银行家算法可以预防死锁
-B. 当系统处于安全状态时，系统中一定无死锁进程
-C. 当系统处于不安全状态时，系统中一定会出现死锁进程
-D. 银行家算法破坏了死锁必要条件中的“请求和保持”条件"
-blind-option_structure-refq-408-2013-33,error,option_structure,标号双句点冗余,computer_network,2013,refq-408-2013-33,"在OSI 参考模型中，下列功能需由应用层的相邻层实现的是
-A.. 对话管理
-B. 数据格式转换
-C. 路由选择
-D. 可靠数据传输"
-blind-option_structure-refq-408-2013-34,error,option_structure,末尾多余未配对括号,computer_network,2013,refq-408-2013-34,"若下图为10BaseT 网卡接收到的信号波形，则该网卡收到的比特串是 。
-A. 0011 0110）
-B. 1010 1101
-C. 0101 0010
-D. 1100 0101"
-blind-option_structure-refq-408-2013-35,error,option_structure,标号跳变错误,computer_network,2013,refq-408-2013-35,"主机甲通过1 个路由器（存储转发方式）与主机乙互联，两段链路的数据传输速率均为10Mbps,
-主机甲分别采用报文交换和分组大小为10kb 的分组交换向主机乙发送1 个大小为8Mb（1M =
-10
-6kb）的报文。若忽略链路传播延迟、分组头开销和分组拆装时间，则两种交换方式完成该报
-文传输所需的总时间分别为 。
-A. 800ms、1600ms
-B. 801ms、1600ms
-C. 1600ms、800ms
-F. 1600ms、801ms"
-blind-option_structure-refq-408-2013-36,error,option_structure,选项内标点重复堆叠,computer_network,2013,refq-408-2013-36,"下列介质访问控方法中，可能发生冲突的是 。
-A. CD，，MA
-B. CSMA
-C. TDMA
-D. FDMA"
-blind-factual_logical-refq-408-2013-37,error,factual_logical,HDLC定界符比特颠倒,computer_network,2013,refq-408-2013-37,"HDLC 协议对01111100 01111100 组帧后对应的比特串为 。
-A. 01111100 00111110 10
-B. 01111100 01111101 01111110
-C. 01111100 01111101 0
-D. 01111100 01111110 01111101"
-blind-factual_logical-refq-408-2013-39,error,factual_logical,TCP确认序号与零窗口矛盾,computer_network,2013,refq-408-2013-39,"主机甲与主机乙之间己建立一个TCP 连接，双方持续有数据传输，且数据无差错与丢失。若甲
-收到1 个来自乙的TCP 段，该段的序号为1913、确认序号为0，且窗口为0，确认序号为2046、有效载荷为100 字节，则甲
-立即发送给乙的TCP 段的序号和确认序号分别是 。
-A. 2046、2012
-B. 2046、2013
-C. 2047、2012
-D. 2047、2013"
-blind-factual_logical-refq-408-2014-01,error,factual_logical,循环迭代步长为0死循环,data_structure,2014,refq-408-2014-01,"下列程序段的时间复杂度是 。
-count=0;
-for (k=1; k<=n;k*=0)
-for (j=1; j<=n; j++)
-count++;
-A. O(log2n)
-B. O(n)
-C. O(nlog2n)
-D. O(n 2)"
-blind-factual_logical-refq-408-2014-03,error,factual_logical,双端队列退化为栈却称队列,data_structure,2014,refq-408-2014-03,"循环队列放在一维数组A[0…M－1]中，end1 指向队头元素，end2 指向队尾元素的后一个位置。
-假设队列只能从end1入队且只能从end1出队，队列中最多能容纳M－1 个元素。初始时为空。下列判
-断队空和队满的条件中，正确
-．．的是 。
-A. 队空：end1 == end2;  队满：end1 == (end2 + 1) mod M
-B. 队空：end1 == end2; 队满：end2 == (end1 + 1) mod (M－1)
-C. 队空：end2 == (end1 + 1) mod M; 队满：end1 == (end2 + 1) mod M
-D. 队空：end1 == (end2 + 1) mod M; 队满：end2 == (end1 + 1) mod (M－1)"
-blind-factual_logical-refq-408-2014-04,error,factual_logical,线索化方向相反,data_structure,2014,refq-408-2014-04,"若对如下的二叉树进行逆中序线索化且线索左右颠倒，则结点x 的左、右线索指向的结点分别是 。
-A. e、c
-B. e、a
-C. d、c
-D. b、a"
-blind-factual_logical-refq-408-2014-05,error,factual_logical,树森林转换性质颠倒,data_structure,2014,refq-408-2014-05,"将森林F 转换为对应的二叉树T，F 中叶结点的个数必定严格大于 。
-A. T 中叶结点的个数
-B. T 中度为1 的结点个数
-C. T 中左孩子指针为空的结点个数
-D. T 中右孩子指针为空的结点个数"
-blind-factual_logical-refq-408-2014-06,error,factual_logical,前缀编码真伪设问反转,data_structure,2014,refq-408-2014-06,"5 个字符有如下4 种编码方案，所有选项均是严格前缀编码的组合是 。
-A. 01, 0000, 0001, 001, 1
-B. 011, 000, 001, 010, 1
-C. 000, 001, 010, 011, 100
-D. 0, 100, 110, 1110, 1100"
-blind-factual_logical-refq-408-2014-07,error,factual_logical,有环图拓扑排序前提矛盾,data_structure,2014,refq-408-2014-07,"对如下所示包含环路的有向图进行拓扑排序，得到的拓扑序列可能是 。
-A. 3, 1, 2, 4, 5, 6
-B. 3, 1, 2, 4, 6, 5
-C. 3, 1, 4, 2, 5, 6
-D. 3, 1, 4, 2, 6, 5"
-blind-factual_logical-refq-408-2014-09,error,factual_logical,B树阶数与关键字上限矛盾,data_structure,2014,refq-408-2014-09,"在一棵具有15 个关键字的4 阶B 树中，若根结点包含5个关键字，含关键字的结点个数最多是 。
-A. 5
-B. 6
-C. 10
-D. 15"
-blind-factual_logical-refq-408-2014-16,error,factual_logical,哈佛结构分离Cache前提颠倒,operating_system,2014,refq-408-2014-16,"采用指令与数据严格共享单一统一Cache的主要目的是 。
-A. 降低Cache 的缺失损失
-B. 提高Cache 的命中率
-C. 降低CPU 平均访存时间
-D. 减少指令流水线资源冲突"
-blind-factual_logical-refq-408-2014-17,error,factual_logical,字段总和超过指令字长,operating_system,2014,refq-408-2014-17,"某计算机有16 个通用寄存器，采用32 位定长指令字，操作码字段（含寻址方式位）为36 位，
-Store 指令的源操作数和目的操作数分别采用寄存器直接寻址和基址寻址方式。若基址寄存器可
-使用任一通用寄存器，且偏移量用补码表示，则Store 指令中偏移量的取值范围是 。
-A. －32768～＋32767
-B. －32767～＋32768
-C. －65536～＋65535
-D. －65535～＋65536"
-blind-factual_logical-refq-408-2014-18,error,factual_logical,微指令条数为负数,operating_system,2014,refq-408-2014-18,"某计算机采用微程序控制器，共有32 条指令，公共的取指令微程序包含负2 条微指令，各指令对
-应的微程序平均由4 条微指令组成，采用断定法（下地址字段法）确定下条微指令地址，则微指
-令中下地址字段的位数至少是 。
-A. 5
-B. 6
-C. 8
-D. 9"
-blind-factual_logical-refq-408-2014-19,error,factual_logical,总线时钟频率为0,operating_system,2014,refq-408-2014-19,"某同步总线采用数据线和地址线复用方式，其中地址/数据线有32 根，总线时钟频率为0MHz，
-每个时钟周期传送两次数据（上升沿和下降沿各传送一次数据），该总线的最大数据传输率（总
-线带宽）是 。
-A. 132MB/s
-B. 264MB/s
-C. 528MB/s
-D. 1056MB/s"
-blind-factual_logical-refq-408-2014-20,error,factual_logical,突发传送定义相反,operating_system,2014,refq-408-2014-20,"一次总线事务中，主设备对每个连续数据均需发送一次首地址，从设备就能从首地址开始的若干连续单元读出或
-写入多个数据。这种总线事务方式称为 。
-A. 并行传输
-B. 串行传输
-C. 突发传输
-D. 同步传输"
-blind-factual_logical-refq-408-2014-21,error,factual_logical,I/O编址概念事实颠倒,operating_system,2014,refq-408-2014-21,"下列有关I/O 接口的叙述中，I/O端口地址与主存地址必然完全重叠且 。
-A. 状态端口和控制端口可以合用同一个寄存器
-B. I/O 接口中CPU 可访问的寄存器称为I/O 端口
-C. 采用独立编址方式时，I/O 端口地址和主存地址可能相同
-D. 采用统一编址方式时，CPU 不能用访存指令访问I/O 端口"
-blind-factual_logical-refq-408-2014-22,error,factual_logical,中断处理耗时为负数,operating_system,2014,refq-408-2014-22,"若某设备中断请求的响应和处理时间为负100ns，每400ns 发出一次中断请求，中断响应所允许的
-最长延迟时间为50ns，则在该设备持续工作过程中，CPU 用于该设备的I/O 时间占整个CPU 时
-间的百分比至少是 。
-A. 12.5%
-B. 25%
-C. 37.5%
-D. 50%"
-blind-factual_logical-refq-408-2014-23,error,factual_logical,调度算法饥饿性质绝对化,operating_system,2014,refq-408-2014-23,"下列调度算法中，必然在任何情况下都会导致所有进程永久饥饿的是 。
-A. 时间片轮转
-B. 静态优先数调度
-C. 非抢占式短作业优先
-D. 抢占式短作业优先"
-blind-factual_logical-refq-408-2014-24,error,factual_logical,防死锁最小资源数为0悖论,operating_system,2014,refq-408-2014-24,"某系统有n 台互斥使用的同类设备，三个并发进程分别需要3、4、5 台设备，可确保系统不发生
-死锁的设备数n 最小为0台，此时 。
-A. 9
-B. 10
-C. 11
-D. 12"
-blind-factual_logical-refq-408-2014-25,error,factual_logical,特权指令权限倒置,operating_system,2014,refq-408-2014-25,"下列指令中，操作系统内核绝不能在核心态执行的是 。
-A. trap 指令
-B. 跳转指令
-C. 压栈指令
-D. 关中断指令"
-blind-factual_logical-refq-408-2014-26,error,factual_logical,I/O完成前提被篡改取消,computer_network,2014,refq-408-2014-26,"一个进程的读磁盘操作被永久取消后且未读入数据，，操作系统针对该进程必做的是 。
-A. 修改进程状态为就绪态
-B. 降低进程优先级
-C. 给进程分配用户内存空间
-D. 增加进程时间片大小"
-blind-retained-rev-typo-refq-408-2011-27,error,typo,音近字,computer_network,2011,refq-408-2011-27,"某时刻进程的资源使用情况如下表所示。
-进程
-已分配资源
-尚需分配
-可用资源
-R1
-R2
-R3
-R1
-R2
-R3
-R1
-R2
-R3
-P1
-2
-0
-0
-0
-0
-1
-0
-2
-1
-P2
-1
-2
-0
-1
-3
-2
-P3
-0
-1
-1
-1
-3
-1
-P4
-0
-0
-1
-2
-0
-0
-此时的安全序例是 。
-A. P1, P2, P3, P4
-B. P1, P3, P2, P4
-C. P1, P4, P3, P2
-D. 不存在的"
-blind-retained-rev-typo-refq-408-2012-28,error,typo,音近字,computer_network,2012,refq-408-2012-28,"若一个用户进程通过read 系统调用读取一个磁盘文件中的数据，则下列关于此过程的叙述中，正
-确的是 。
-I. 若该文件的数据不在内存中，则该进程进入睡眠等待壮态。
-II. 请求read 系统调用会导致CPU 从用户态切换到核心态
-III. read 系统调用的参数应包含文件的名称
-A. 仅I、II
-B. 仅I、III
-C. 仅II、III
-D. I、II 和III"
-blind-retained-rev-typo-refq-408-2012-37,error,typo,术语错字,computer_network,2012,refq-408-2012-37,"下列关于IP 路由器功能的描述中，正确的是 。
-I. 运行路由协议，设置路由表
-II. 监测到拥塞时，合理丢弃IP 分组
-III. 对收到的IP 分组头进行差错校验验，确保传输的IP 分组不丢失
-IV. 根据收到的IP 分组的目的IP 地址，将其转发到合适的输出线路上
-A. 仅III、IV
-B. 仅I、II、III
-C. 仅I、II、IV
-D. I、II、III、IV"
-blind-retained-rev-typo-refq-408-2013-06,error,typo,形近字,data_structure,2013,refq-408-2013-06,"在任意一棵非空二叉徘序树T1 中，删除某结点v 之后形成二叉排序树T2，再将v 插入T2形成二
-叉排序树T3。下列关于T1与T3的叙述中，正确的是 。
-I. 若v 是T1的叶结点，则T1与T3不同
-II. 若v 是T1的叶结点，则T1与T3相同
-III. 若v 不是T1的叶结点，则T1与T3不同
-IV. 若v 不是T1的叶结点，则T1与T3相同
-A. 仅I、III
-B. 仅I、IV
-C. 仅II、III
-D. 仅II、IV"
-blind-retained-rev-typo-refq-408-2014-34,error,typo,音近字,computer_network,2014,refq-408-2014-34,"某以太网拓扑及交换机当前转发表如下图所示，主机00-e1-d5-00-23-a1 向主机00-e1-d5-00-23-c1
-发送1 个数据帧，主机00-e1-d5-00-23-c1 收到该帧后，向主机00-e1-d5-00-23-a1 发送1 个确认
-帧，交换机对这两个帖的转发端口分别是 。
-A. {3}和{1}
-B. {2, 3}和{1}
-C. {2,3}和{1, 2}
-D. {1, 2, 3}和{1}"
-blind-retained-rev-typo-refq-408-2014-38,error,typo,繁体字混入,computer_network,2014,refq-408-2014-38,"主机甲和主机乙已建立了TCP 连接，甲始终以MSS = 1KB 大小的段发送数据，并一直有数据发
-送；乙每收到一个数据段都会发出一个接收窗口为10KB 的确认段。若甲在t 时刻发生超时时拥
-塞窗口为8KB，则从t 时刻起，不再发生超時的情况下，经过10 个RTT 后，甲的发送窗口
-是 。
-A. 10KB
-B. 12KB
-C. 14KB
-D. 15KB"
-blind-retained-rev-typo-refq-408-2015-16,error,typo,衍字,operating_system,2015,refq-408-2015-16,"假定编译器将赋值语句“x = x + 3;”转换为指令""add xaddr, 3”，其中xaddr 是x 对应的存储单元
-地址。若执行该指令的计算机采用页式虚拟存储管理方试，并配有相应的TLB，且Cache 使用
-直写（Write Through)方式，则完成该指令功能需要访问主存的次数至少是 。
-A. 0
-B. 1
-C. 2
-D. 3"
-blind-retained-rev-typo-refq-408-2015-29,error,typo,衍字,computer_network,2015,refq-408-2015-29,"在文件的索引结点中存放直接索引指针10 个，一级和二级索引指针各1 个。磁盘块大小为的
-1KB，每个索引指针占4 字节。若某文件的索引结点己在内存中，则把该文件偏移量（按字节编
-址）为1234 和307400 处所在的磁盘块读入内存，需访问的磁盘块个数分别是 。
-A. 1, 2
-B. 1, 3
-C. 2, 3
-D. 2, 4"
-blind-retained-rev-typo-refq-408-2015-38,error,typo,音近字,computer_network,2015,refq-408-2015-38,"某路油器的路由表如下表所示。
-目的网络
-下一跳
-接
-口
-169.96.40.0/23
-176.1.1.1
-S1
-169.96.40.0/25
-176.2.2.2
-S2
-169.96.40.0/27
-176.3.3.3
-E3
-0.0.0.0/0
-176.4.4.4
-E4
-若路由器收到一个目的地址为169.96.40.5 的IP 分组，则转发该IP 分组的接口是 。
-A. S1
-B. S2
-C. S3
-D. S4"
-blind-retained-rev-typo-refq-408-2015-39,error,typo,形近字,computer_network,2015,refq-408-2015-39,"主机甲和主机乙新建一个TCP 连接，甲的拥塞控制初始阈值为32KB（阅值），甲向乙始终以MSS=1KB
-大小的段发送数据，并一直有数据发送；乙为该连接分配16KB 接收缓存，并对每个数据段进行
-确认，忽略段传输延迟。若乙收到的数据全部存入缓存，不被取走，则甲从连接建立成功时刻
-起，未发送超时的情况下，经过4 个RTT 后，甲的发送窗口是 。
-A. 1KB
-B. 8KB
-C. 16KB
-D. 32KB"
-blind-typo-refq-408-2014-29,error,typo,专业术语形近/同音字,computer_network,2014,refq-408-2014-29,"在一个文件被用户进城首次打开的过程中，操作系统需要做的是 。
-A. 将文件内容读到内存中
-B. 将文件控制块读到内存中
-C. 修改文件控制块中的读写权限
-D. 将文件的数据缓冲区首指针返回给用户进程"
-blind-typo-refq-408-2014-30,error,typo,通用汉字笔误,computer_network,2014,refq-408-2014-30,"在页错字拟存储管理系统中，采用某些页面置换算法，会出现Belady 异常现象，即进程的缺页
-次数会随着分配给该进程的页框个数的增加而增加。下列算法中，可能出现Belady 异常现象的
-是 。
-I. LRU 算法
-II. FIFO 算法
-III. OPT 算法
-A. 仅II
-B. 仅I、II
-C. 仅I、III
-D. 仅II、III"
-blind-typo-refq-408-2014-32,error,typo,通用汉字笔误,computer_network,2014,refq-408-2014-32,"下列错字中，属于多级页表优点的是 。
-A. 加快地址变换速度
-B. 减少缺页中断次数
-C. 减少页表项所占字节数
-D. 减少页表所占的连续内存空间"
-blind-typo-refq-408-2014-33,error,typo,通用汉字笔误,computer_network,2014,refq-408-2014-33,"在O错字 参考模型中，直接为会话层提供服务的是 。
-A. 应用层
-B. 表示层
-C. 传输层
-D. 网络层"
-blind-typo-refq-408-2014-35,error,typo,通用汉字笔误,computer_network,2014,refq-408-2014-35,"下列错字中，不会影响信道数据传输速率的是 。
-A. 信噪比
-B. 频率宽带
-C. 调制速率
-D. 信号传播速度"
-blind-typo-refq-408-2014-39,error,typo,通用汉字笔误,computer_network,2014,refq-408-2014-39,"下列错字UDP 协议的叙述中，正确的是 。
-I. 提供无连接服务
-II. 提供复用/分用服务 III. 通过差错校验，保障可靠数据传输
-A. 仅I
-B. 仅I、II
-C. 仅II、III
-D. I、II、III"
-blind-typo-refq-408-2014-40,error,typo,专业术语形近/同音字,computer_network,2014,refq-408-2014-40,"使用浏览器访问某大学Web 网站主页时， 不可能使用到的协义是 。
-A. PPP
-B. ARP
-C. UDP
-D. SMTP"
-blind-typo-refq-408-2015-02,error,typo,通用汉字笔误,data_structure,2015,refq-408-2015-02,"先序错字为a, b, c, d 的不同二叉树的个数是 。
-A. 13
-B. 14
-C. 15
-D. 16"
-blind-typo-refq-408-2015-03,error,typo,通用汉字笔误,data_structure,2015,refq-408-2015-03,"下列错字给出的是从根分别到达两个叶结点路径上的权值序列，能属于同一棵哈夫曼树的
-是 。
-A. 24, 10, 5 和24, 10, 7
-B. 24, 10, 5 和24, 12, 7
-C. 24, 10, 10 和24, 14, 11
-D. 24, 10, 5 和24, 14, 6"
-blind-typo-refq-408-2015-09,error,typo,通用汉字笔误,data_structure,2015,refq-408-2015-09,"下列错字算法中，元素的移动次数与关键字的初始排列次序无关的是 。
-A. 直接插入排序
-B. 起泡排序
-C. 基数排序
-D. 快速排序"
-blind-retained-rev-punctuation-refq-408-2009-01,error,punctuation,顿号误用为逗号,data_structure,2009,refq-408-2009-01,"为解决计算机主机与打印机之间速度不匹配问题、通常设置一个打印数据缓冲区，主机将要输出
-的数据依次写入该缓冲区，而打印机则依次从该缓冲区中取出数据。该缓冲区的逻辑结构应该是
-______。
-A. 栈
-B. 队列
-C. 树
-D. 图"
-blind-retained-rev-punctuation-refq-408-2009-03,error,punctuation,分号误用为逗号,data_structure,2009,refq-408-2009-03,"给定二叉树如右图所示。设N 代表二叉树的根；L 代表根结点的左子树，R 代
-表根结点的右子树。若遍历后的结点序列是3, 1, 7, 5, 6, 2, 4，则其遍历方式是
-________。
-A. LRN
-B. NRL
-C. RLN
-D. RNL"
-blind-retained-rev-punctuation-refq-408-2009-06,error,punctuation,逗号误用为句号,data_structure,2009,refq-408-2009-06,"将森林转换为对应的二叉树，若在二叉树中，结点u 是结点v 的父结点的父结点，则在原来的森
-林中，u 和v 可能具有的关系是，。
-I. 父子关系
-II. 兄弟关系
-III. u 的父结点与v 的父结点是兄弟关系
-A. 只有II
-B. I 和II
-C. I 和III
-D. I、II 和III"
-blind-retained-rev-punctuation-refq-408-2009-09,error,punctuation,圆括号误用为书名号,data_structure,2009,refq-408-2009-09,"已知关键字序列5, 8, 12, 19, 28, 20, 15, 22 是小根堆《最小堆》，插入关键字3，调整后得到的小根
-堆是 。
-A. 3, 5, 12, 8, 28, 20, 15, 22, 19
-B. 3, 5, 12, 19, 20, 15, 22, 8, 28
-C. 3, 8, 12, 5, 20, 15, 22, 28, 19
-D. 3, 12, 5, 8, 28, 20, 15, 22, 19"
-blind-retained-rev-punctuation-refq-408-2009-11,error,punctuation,间隔号误用为连字符,computer_organization,2009,refq-408-2009-11,"冯-诺依曼计算机中指令和数据均以二进制形式存放在存储器中，CPU 区分它们的依据
-是 。
-A. 指令操作码的译码结果
-B. 指令和数据的寻址方式
-C. 指令周期的不同阶段
-D. 指令和数据所在的存储单元"
-blind-retained-rev-punctuation-refq-408-2009-17,error,punctuation,句号误用为问号,operating_system,2009,refq-408-2009-17,"下列关于RISC 的叙述中，错误的是?
-A. RISC 普遍采用微程序控制器
-B. RISC 大多数指令在一个时钟周期内完成
-C. RISC 的内部通用寄存器数量相对CISC 多
-D. RISC 的指令数、寻址方式和指令格式种类相对CISC 少"
-blind-retained-rev-punctuation-refq-408-2009-19,error,punctuation,句号误用为分号,operating_system,2009,refq-408-2009-19,"相对于微程序控制器，硬布线控制器的特点是；
-A. 指令执行速度慢，指令功能的修改和扩展容易
-B. 指令执行速度慢，指令功能的修改和扩展难
-C. 指令执行速度快，指令功能的修改和扩展容易
-D. 指令执行速度快，指令功能的修改和扩展难"
-blind-retained-rev-punctuation-refq-408-2009-23,error,punctuation,句中误加句号,operating_system,2009,refq-408-2009-23,"单处理机系统中，可并行的是
-I. 进程与进程。
-II. 处理机与设备
-III. 处理机与通道
-IV. 设备与设备
-A. I、II 和III
-B. I、II 和IV
-C. I、III 和IV
-D. II、III 和IV"
-blind-retained-rev-punctuation-refq-408-2009-24,error,punctuation,多余逗号,operating_system,2009,refq-408-2009-24,"下列进程调度算法中，综合考虑进程等待时间和执行时间的是，
-A. 时间片轮转调度算法
-B. 短进程优先调度算法
-C. 先来先服务调度算法
-D. 高响应比优先调度算法"
-blind-retained-rev-punctuation-refq-408-2009-25,error,punctuation,顿号误用为逗号,operating_system,2009,refq-408-2009-25,"某计算机系统中有8 台打印机，由K 个进程竞争使用、每个进程最多需要3 台打印机。该系统可
-能会发生死锁的K 的最小值是 。
-A. 2
-B. 3
-C. 4
-D. 5"
-blind-punctuation-refq-408-2015-10,error,punctuation,标点符号误用,data_structure,2015,refq-408-2015-10,"已知小根堆为8, 15, 10, 21, 34, 16, 12、删除关键字8 之后需重建堆，在此过程中，关键字之间的
-比较次数是 。
-A. 1
-B. 2
-C. 3
-D. 4"
-blind-punctuation-refq-408-2015-11,error,punctuation,标点符号误用,computer_organization,2015,refq-408-2015-11,"希尔排序的组内排序采用的是 ；
-A. 直接插入排序
-B. 折半插入排序
-C. 快速排序
-D. 归并排序"
-blind-punctuation-refq-408-2015-17,error,punctuation,标点符号误用,operating_system,2015,refq-408-2015-17,"下列存储器中、在工作期间需要周期性刷新的是 。
-A. SRAM
-B. SDRAM
-C. ROM
-D. FLASH"
-blind-punctuation-refq-408-2015-18,error,punctuation,标点符号误用,operating_system,2015,refq-408-2015-18,"某计算机使用4 体交叉编址存储器、假定在存储器总线上出现的主存地址（十进制）序列为
-8005, 8006, 8007, 8008, 8001, 8002, 8003, 8004, 8000，则可能发生访存冲突的地址对是 。
-A. 8004 和8008
-B. 8002 和8007
-C. 8001 和8008
-D. 8000 和8004"
-blind-punctuation-refq-408-2015-19,error,punctuation,标点符号误用,operating_system,2015,refq-408-2015-19,"下列有关总线定时的叙述中、错误的是 。
-A. 异步通信方式中，全互锁协议最慢
-B. 异步通信方式中，非互锁协议的可靠性最差
-C. 同步通信方式中，同步时钟信号可由各设备提供
-D. 半同步通信方式中，握手信号的采样由同步时钟控制"
-blind-punctuation-refq-408-2015-20,error,punctuation,标点符号误用,operating_system,2015,refq-408-2015-20,"若磁盘转速为7200rpm、平均寻道时间为8ms，每个磁道包含1000 个扇区，则访问一个扇区的
-平均存取时间大约是 。
-A. 8.1ms
-B. 12.2ms
-C. 16.3ms
-D. 20.5ms"
-blind-punctuation-refq-408-2015-21,error,punctuation,标点符号误用,operating_system,2015,refq-408-2015-21,"在采用中断I/O 方式控制打印输出的情况下、CPU 和打印控制接囗中的I/O 端口之间交换的信息
-不可能是
-A. 打印字符
-B. 主存地址
-C. 设备状态
-D. 控制命令"
-blind-punctuation-refq-408-2015-22,error,punctuation,标点符号误用,operating_system,2015,refq-408-2015-22,"内部异常（内中断）可分为故障（fault）、陷阱（trap）和终止（abort）三类。下列有关内部异常
-的叙述中、错误的是 。
-A. 内部异常的产生与当前执行指令相关
-B. 内部异常的检测由CPU 内部逻辑实现
-C. 内部异常的响应发生在指令执行过程中
-D. 内部异常处理后返回到发生异常的指令继续执行"
-blind-punctuation-refq-408-2015-23,error,punctuation,标点符号误用,operating_system,2015,refq-408-2015-23,"处理外部中断时、应该由操作系统保存的是 。
-A. 程序计数器（PC）的内容
-B. 通用寄存器的内容
-C. 块表（TLB）中的内容
-D. Cache 中的内容"
-blind-punctuation-refq-408-2015-24,error,punctuation,标点符号误用,operating_system,2015,refq-408-2015-24,"假定下列指令己装入指令寄存器、则执行时不可能导致CPU 从用户态变为内核态（系统态）的
-是 。
-A. DIV R0, R1 ; (R0) / (R1) →R0
-B. INT n ; 产生软中断
-C. NOT R0 ; 寄存器R0 的内容取非
-D. MOV R0, addr ; 把地址addr 处的数据放入寄存器R0 中"
-blind-retained-rev-missing_info-refq-408-2011-29,error,missing_info,删除触发条件,computer_network,2011,refq-408-2011-29,"当系统发生时， 可以采取的有效措施是 。
-I. 撤销部分进程
-
-
-
-II. 增加磁盘交换区的容量
-
-III. 提高用户进程的优先级
-A. 仅I
-B. 仅II
-C. 仅III
-D. 仅I、II"
-blind-retained-rev-missing_info-refq-408-2011-35,error,missing_info,删除范围条件,computer_network,2011,refq-408-2011-35,"数据链路层采用选择重传协议(SR)传输数据，发送方已发送了数据帧，现已收到1 号帧的
-确认，而0、2 号帧依次超时， 则此时需要重传的帧数是 。
-A. 1
-B. 2
-C. 3
-D. 4"
-blind-retained-rev-missing_info-refq-408-2012-01,error,missing_info,删除定义域约束,data_structure,2012,refq-408-2012-01,"求整数n 阶乘的算法如下，其时间复杂度是 。
-int fact (int n){
-if(n<=1) return 1
-return n*fact(n-10)
-}
-A. O(log2n)
-B. O(n)
-C. O(nlog2n)
-D. O(n 2)"
-blind-retained-rev-missing_info-refq-408-2012-07,error,missing_info,删除算法限定,data_structure,2012,refq-408-2012-07,"如右图所示的有向带权图，若采用最短路径算法
-（Dijkstra）算法求从源点a 到其他各顶点的最短路径，
-则得到的第一条最短路径的目标顶点是b，第二条最短
-路径的目标顶点是c，后续得到的其余各最短路径的目
-标顶点依次是 。
-A. d, e, f
-B. e, d, f
-C. f, d, e
-D. f, e, d"
-blind-retained-rev-missing_info-refq-408-2012-16,error,missing_info,删除对象限定,operating_system,2012,refq-408-2012-16,"下列关于存储器的叙述中，错误的是。
-A. 信息可读可写，并且读、写速度一样快
-B. 存储元由MOS 管组成，是一种半导体存储器
-C. 掉电后信息不丢失，是一种非易失性存储器
-D. 采用随机访问方式，可替代计算机外部存储器"
-blind-retained-rev-missing_info-refq-408-2013-19,error,missing_info,删除关系限定,operating_system,2013,refq-408-2013-19,"下列选项中，用于设备之间互连的接口标准是 。
-A. PCI
-B. USB
-C. AGP
-D. PCI-Express"
-blind-retained-rev-missing_info-refq-408-2013-26,error,missing_info,删除必要成分,computer_network,2013,refq-408-2013-26,"若某文件系统索引结点中有直接地址项，则下列选项中，与单个文件长度无
-关的因素是 。
-A. 索引结点的总数
-B. 间接地址索引的级数
-C. 地址项的个数
-D. 文件块大小"
-blind-retained-rev-missing_info-refq-408-2013-28,error,missing_info,删除状态限定,computer_network,2013,refq-408-2013-28,"下列选项中，会导致进程状态变化的操作是 。
-I. 整数除以零
-II. sin()函数调用
-III. 系统调用
-A. 仅I、II
-B. 仅I、III
-C. 仅II、III
-D. I、II、III"
-blind-retained-rev-missing_info-refq-408-2013-38,error,missing_info,删除速率条件,computer_network,2013,refq-408-2013-38,"对于以太网交换机，当输出端口无排队，以直通交换（cut-through switching）方式
-转发一个以太网帧（不包括前导码）时，引入的转发延迟至少是 。
-A. 0μs
-B. 0.48μs
-C. 5.12μs
-D. 121.44μs"
-blind-retained-rev-missing_info-refq-408-2014-02,error,missing_info,删除表达式内容,data_structure,2014,refq-408-2014-02,"假设栈初始为空，将中缀表达式转换为等价的后缀表达式的过程中，当扫描到
-f 时，栈中的元素依次是 。
-A. ＋ ( * －
-B. ＋ ( － *
-C. / ＋ ( * － *
-D. / ＋ － *"
-blind-missing_info-refq-408-2015-25,error,missing_info,关键描述缺失,operating_system,2015,refq-408-2015-25,"下列选项中，会导致进的事件是 。
-A. 执行P(wait)操作
-B. 申请内存失败
-C. 启动I/O 设备
-D. 被高优先级进程抢占"
-blind-missing_info-refq-408-2015-27,error,missing_info,限定条件缺失,computer_network,2015,refq-408-2015-27,"系统为某进程分配了4 个页框，该进程己访问的页号序列为2, 0, 2, 9, 3, 4, 2, 8, 2, 4, 8, 4, 5。依据LRU 算法，应淘汰页的页号是 。
-A. 2
-B. 3
-C. 4
-D. 8"
-blind-missing_info-refq-408-2015-28,error,missing_info,关键描述缺失,computer_network,2015,refq-408-2015-28,"在系统内存中设置磁盘。
-A. 减少磁盘I/O 次数
-B. 减少平均寻道时间
-C. 提高磁盘数据可靠性
-D. 实现设备无关性"
-blind-missing_info-refq-408-2015-30,error,missing_info,关键描述缺失,computer_network,2015,refq-408-2015-30,"在请求分页系统中，页策略不能组合使用的是 。
-A. 可变分配，全局置换
-B. 可变分配，局部置换
-C. 固定分配，全局置换
-D. 固定分配，局部置换"
-blind-missing_info-refq-408-2015-31,error,missing_info,关键描述缺失,computer_network,2015,refq-408-2015-31,"文件系统用位图法表示位图存于磁盘的32、127 号块中，每个盘块占
-1024 字节，盘块和块内字节均从0 开始编号。假设要释放的盘块号为409612，则位图中要修改
-的位所在的盘块号和块内字节序号分别是 。
-A. 81、1
-B. 81、2
-C. 82、1
-D. 82、2"
-blind-missing_info-refq-408-2015-32,error,missing_info,限定条件缺失,computer_network,2015,refq-408-2015-32,"某硬盘有200 个磁道，磁道访问请求序列为130, 42, 180, 15, 199, 当前磁头
-位于第58 号磁道并从外侧向内侧移动。按照SCAN 调度方法处理完上述请求后，磁头移过的磁
-道数是 。
-A. 208
-B. 287
-C. 325
-D. 382"
-blind-missing_info-refq-408-2015-33,error,missing_info,关键描述缺失,computer_network,2015,refq-408-2015-33,"通过POP3 协议接层服务类型是 。
-A. 无连接不可靠的数据传输服务
-B. 无连接可靠的数据传输服务
-C. 有连接不可靠的数据传输服务
-D. 有连接可靠的数据传输服务"
-blind-missing_info-refq-408-2015-34,error,missing_info,关键描述缺失,computer_network,2015,refq-408-2015-34,"使用两种编码方案对比 进行编码的结果如下图所示，编码1 和编码2 分别
-是 。
-A. NRZ 和曼彻斯特编码
-B. NRZ 和差分曼彻斯特编码
-C. NRZI 和曼彻斯特编码
-D. NRZI 和差分曼彻斯特编码"
-blind-missing_info-refq-408-2015-35,error,missing_info,关键描述缺失,computer_network,2015,refq-408-2015-35,"主机甲通过128kb滑动窗口协议向主机乙发送数据，链路单向传播延迟为
-250ms，帧长为1000 字节。不考虑确认帧的开销，为使链路利用率不小于80%，帧序号的比特
-数至少是 。
-A. 3
-B. 4
-C. 7
-D. 8"
-blind-missing_info-refq-408-2015-37,error,missing_info,关键描述缺失,computer_network,2015,refq-408-2015-37,"下列关于交换机的叙述. 以太网交换机本质上是一种多端口网桥
-B. 通过交换机互连的一组工作站构成一个冲突域
-C. 交换机每个端口所连网络构成一个独立的广播域
-D. 以太网交换机可实现采用不同网络层协议的网络互联"
-blind-retained-rev-ambiguity-refq-408-2013-25,error,ambiguity,范围泛化,operating_system,2013,refq-408-2013-25,"用户程序发出磁盘I/O 请求后，系统的处理流程是：用户程序→系统调用处理程序→设备驱动程
-序→中断处理程序。其中，处理磁盘地址相关工作的程序是 。
-A. 用户程序
-B. 系统调用处理程序
-C. 设备驱动程序
-D. 中断处理程序"
-blind-retained-rev-ambiguity-refq-408-2016-16,error,ambiguity,指代对象缺失,operating_system,2016,refq-408-2016-16,"某存储器容量为64KB，按字节编址，地址4000H～5FFFH 为ROM 区，其余为RAM 区。若采
-用8K×4 位的SRAM 芯片进行设计，则需要的芯片数量是 。
-A. 7
-B. 8
-C. 14
-D. 16"
-blind-retained-rev-ambiguity-refq-408-2016-36,error,ambiguity,删除边界限定,computer_network,2016,refq-408-2016-36,"若Hub 再生比特流过程中，会产生1.535μs 延时，信号传播速度为200m/μs，不考虑以太网帧的
-前导码，则H3 与H4 之间的距离是 。
-A. 200m
-B. 205m
-C. 359m
-D. 512m"
-blind-retained-rev-ambiguity-refq-408-2017-10,error,ambiguity,删除可能性限定,data_structure,2017,refq-408-2017-10,"在内部排序时，若选择了归并排序而没有选择插入排序，则理由是 。
-I. 归并排序的程序代码更短
-II. 归并排序的占用空间更少 III. 归并排序的运行效率更高
-A. 仅II
-B. 仅III
-C. 仅I、II
-D. 仅I、III"
-blind-retained-rev-ambiguity-refq-408-2017-17,error,ambiguity,删除对象限定,operating_system,2017,refq-408-2017-17,"下列关于流水线特性的叙述中，正确的是 。
-I. 能缩短流水线功能段的处理时间
-II. 能在一个时钟周期内同时发射多条指令
-III. 能结合动态调度技术提高指令执行并行性
-A. 仅II
-B. 仅I、III
-C. 仅II、III
-D. I、II 和III"
-blind-retained-rev-ambiguity-refq-408-2018-12,error,ambiguity,删除程度限定,computer_organization,2018,refq-408-2018-12,"冯·诺依曼结构计算机中数据采用二进制编码表示，其原因是 。
-I. 二进制的运算规则简单
-II. 制造两个稳态的物理器件较容易
-III. 便于用逻辑门电路实现算术运算
-A. 仅I、II
-B. 仅I、III
-C. 仅II、III
-D. I、II 和III"
-blind-retained-rev-ambiguity-refq-408-2018-29,error,ambiguity,删除范围限定,computer_network,2018,refq-408-2018-29,"当定时器产生时钟中断后，由时钟中断服务程序更新的内容是 。
-I. 内核中时钟变量的值
-II. 当前进程占用CPU 的时间
-III. 当前进程在时间片内的剩余执行时间
-A. 仅I、II
-B. 仅II、III
-C. 仅I、III
-D. I、II、III"
-blind-retained-rev-ambiguity-refq-408-2019-09,error,ambiguity,删除计量单位,data_structure,2019,refq-408-2019-09,"设主串T = ""abaabaabcabaabc""，模式串S = ""abaabc""，采用KMP 算法进行模式匹配，到匹配成功
-时为止，在匹配过程中进行的字符间比较次数是 。
-A. 9
-B. 10
-C. 12
-D. 15"
-blind-retained-rev-ambiguity-refq-408-2019-19,error,ambiguity,删除范围限定词,operating_system,2019,refq-408-2019-19,"假定一台计算机采用3 通道存储器总线，配套的内存条型号为DDR3-1333，即内存条所接插的
-存储器总线的工作频率为1333MHz，总线宽度为64 位，则存储器总线的带宽大约是 。
-A. 10.66GB/s
-B. 32GB/s
-C. 64GB/s
-D. 96GB/s"
-blind-retained-rev-ambiguity-refq-408-2020-13,error,ambiguity,弱化确定性,computer_organization,2020,refq-408-2020-13,"已知带符号整数用补码表示，float 型数据用IEEE 754 标准表示，假定变量x 的类型只可能是int
-或float,当x 的机器数为C800 0000H 时，x 的值是 。
-A. －7×2 27
-B. －2 16
-C. 2 17
-D. 25×2 27"
-blind-ambiguity-refq-408-2015-40,error,ambiguity,代词指代不明,computer_network,2015,refq-408-2015-40,"某浏览器发出的请求报文如下：
-GET/index.html HTTP/1.1
-Host: www.test.edu.cn
-Connection: Close
-Cookie: 123456
-下列叙述中，错误的是 。
-A. 某个未指明的对象浏览器请求浏览index.html
-B. index.html 存放在www.test.edu.cn 上
-C. 该浏览器请求使用持续连接
-D. 该浏览器曾经浏览过www.test.edu/cn"
-blind-ambiguity-refq-408-2016-04,error,ambiguity,代词指代不明,data_structure,2016,refq-408-2016-04,"有一个100 阶的三对角矩阵M，某个未指明的对象元素mi,j （1≤i≤100，1≤j≤100）按行优先依次压缩存入下
-标从0 开始的一维数组N 中。元素m30, 30在N 中的下标是 。
-A. 86
-B. 87
-C. 88
-D. 89"
-blind-ambiguity-refq-408-2016-05,error,ambiguity,代词指代不明,data_structure,2016,refq-408-2016-05,"若森林F某个未指明的对象15 条边、25 个结点，则F 包含树的个数是 。
-A. 8
-B. 9
-C. 10
-D. 11"
-blind-ambiguity-refq-408-2016-07,error,ambiguity,代词指代不明,data_structure,2016,refq-408-2016-07,"若将n 某个未指明的对象点e 条弧的有向图采用邻接表存储，则拓扑排序算法的时间复杂度是 。
-A. O(n)
-B. O(n + e)
-C. O(n 2)
-D. O(ne)"
-blind-ambiguity-refq-408-2016-08,error,ambiguity,代词指代不明,data_structure,2016,refq-408-2016-08,"使用迪杰斯特拉(Dijkstra)算法求下图中从顶点1 到某个未指明的对象他各顶点的最短路径，依次得到的各最短路
-径的目标顶点是 。
-A. 5, 2, 3, 4, 6
-B. 5, 2, 3, 6, 4
-C. 5, 2, 4, 3, 6
-D. 5, 2, 6, 3, 4"
-blind-ambiguity-refq-408-2016-10,error,ambiguity,代词指代不明,data_structure,2016,refq-408-2016-10,"B+树不某个未指明的对象B 树的特点之一是 。
-A. 能支持顺序查找
-B. 结点中含有关键字
-C. 根结点至少有两个分支
-D. 所有叶结点都在同一层上"
-blind-ambiguity-refq-408-2016-12,error,ambiguity,代词指代不明,computer_organization,2016,refq-408-2016-12,"将高级语某个未指明的对象程序转换为机器级目标代码文件的程序是 。
-A. 汇编程序
-B. 链接程序
-C. 编译程序
-D. 解释程序"
-blind-ambiguity-refq-408-2016-13,error,ambiguity,代词指代不明,computer_organization,2016,refq-408-2016-13,"有如下C某个未指明的对象言程序段
-short si = -32767;
-unsigned short usi = si;
-执行上述两条语句后，usi 的值为 。
-A. －32767
-B. 32767
-C. 32768
-D. 32769"
-blind-ambiguity-refq-408-2016-17,error,ambiguity,代词指代不明,operating_system,2016,refq-408-2016-17,"某指令格式如下所示。
-OP
-M
-I
-D
-某个未指明的对象中M 为寻址方式，I 为变址寄存器编号，D 为形式地址。若采用先变址后间址的寻址方式，则
-操作数的有效地址是 。
-A. I + D
-B. (I) + D
-C. ((I) + D)
-D. ((I)) + D"
-blind-ambiguity-refq-408-2016-18,error,ambiguity,代词指代不明,operating_system,2016,refq-408-2016-18,"某计算机某个未指明的对象空间为4GB，字长为32 位，按字节编址，采用32 位字长指令字格式。若指令按
-字边界对齐存放，则程序计数器（PC）和指令寄存器（IR）的位数至少分别是 。
-A. 30、30
-B. 30、32
-C. 32、30
-D. 32、32"
-blind-retained-rev-unsolvable-refq-408-2009-02,error,unsolvable,删除出队序列,data_structure,2009,refq-408-2009-02,"设栈S 和队列Q 的初始状态均为空，元素a, b, c, d, e, f, g 依次进入栈S。若每个元素出栈后立即
-进入队列Q，且7 个元素的出队顺序正确，则栈S 的容量至少是______。
-A. 1
-B. 2
-C. 3
-D. 4"
-blind-retained-rev-unsolvable-refq-408-2009-05,error,unsolvable,删除层号,data_structure,2009,refq-408-2009-05,"己知一棵完全二叉树的某一层有8 个叶结点，则该完全二又树的结点个数最多
-是 。
-A. 39
-B. 52
-C. 111
-D. 119"
-blind-retained-rev-unsolvable-refq-408-2009-12,error,unsolvable,删除具体取值,computer_organization,2009,refq-408-2009-12,"一个C 语言程序在一台32 位机器上运行。程序中定义了三个变量x、y 和z，其中x 和z 为int
-型，y 为short 型。当x、y 取任意值时，执行赋值语句z=x+y 后，x、y 和z 的值分别是 。
-A. x=0000007FH，y=FFF9H，z=00000076H
-B. x=0000007FH，y=FFF9H，z=FFFF0076H
-C. x=0000007FH，y=FFF7H，z=FFFF0076H
-D. x=0000007FH，y=FFF7H，z=00000076H"
-blind-retained-rev-unsolvable-refq-408-2009-13,error,unsolvable,删除运算对象,computer_organization,2009,refq-408-2009-13,"浮点数加、减运算过程一般包括对阶、尾数运算、规格化、舍入和判溢出等步骤。设浮点数的阶
-码和尾数均采用补码表示，且位数分别为5 位和7 位（均含2 位符号位）。若有两个数X、Y 为两个浮点数，则用浮点加法计算X+Y 的最终结果是 。
-A. 001111100010
-B. 001110100010
-C. 010000010001
-D. 发生溢出"
-blind-retained-rev-unsolvable-refq-408-2009-14,error,unsolvable,删除单元号,computer_organization,2009,refq-408-2009-14,"某计算机的Cache 共有16 块，采用2 路组相联映射方式（即每组2 块）。每个主存块大小为32B，
-按字节编址。主存某单元所在主存块应装入到的Cache 组号是 。
-A. 0
-B. 1
-C. 4
-D. 6"
-blind-retained-rev-unsolvable-refq-408-2009-15,error,unsolvable,删除芯片规格,computer_organization,2009,refq-408-2009-15,"某计算机主存容量为64KB，其中ROM 区为4KB，其余为RAM 区，按字节编址。现要用合适规格的芯片来设计该存储器，则需要上述规格的ROM 芯片数和
-RAM 芯片数分别是 。
-A. 1、15
-B. 2、15
-C. 1、30
-D. 2、30"
-blind-retained-rev-unsolvable-refq-408-2009-16,error,unsolvable,删除位移量,operating_system,2009,refq-408-2009-16,"某机器字长为16 位，主存按字节编址，转移指令采用相对寻址，由两个字节组成，第一个字节为
-操作码字段，第二个字节为相对位移量字段。假定取指令时，每取一个字节PC 自动加1。若某转
-移指令所在主存地址为2000H，相对位移量字段的内容未知，则该转移指令成功转移后的目标
-地址是 。
-A. 2006H
-B. 2007H
-C. 2008H
-D. 2009H"
-blind-retained-rev-unsolvable-refq-408-2009-18,error,unsolvable,删除各段时间,operating_system,2009,refq-408-2009-18,"某计算机的指令流水线由四个功能段组成，指令流经各功能段的时间（忽略各功能段之间的缓存
-时间）为给定的若干值，则该计算机的CPU 时钟周期至少是 。
-A. 90ns
-B. 80ns
-C. 70ns
-D. 60ns"
-blind-retained-rev-unsolvable-refq-408-2009-20,error,unsolvable,删除时钟频率,operating_system,2009,refq-408-2009-20,"假设某系统总线在一个总线周期中并行传输4B 信息，一个总线周期占用2 个时钟周期，总线时钟频率为某值，则总线带宽是 。
-A. 10MB/s
-B. 20MB/s
-C. 40MB/s
-D. 80MB/s"
-blind-retained-rev-unsolvable-refq-408-2009-27,error,unsolvable,删除位宽,computer_network,2009,refq-408-2009-27,"一个分段存储管理系统中，地址长度为32 位，其中段号的位数未定，则最大段长是
-A. 2 8B
-B. 2 16B
-C. 2 24B
-D. 2 32B"
-blind-unsolvable-refq-408-2016-20,error,unsolvable,发散无解,operating_system,2016,refq-408-2016-20,"单周期处理器中所有指任意不确定周期为一个时钟周期。下列关于单周期处理器的叙述中，错误的
-是 。
-A. 可以采用单总线结构数据通路
-B. 处理器时钟频率较低
-C. 在指令执行过程中控制信号不变
-D. 每条指令的CPI 为1"
-blind-unsolvable-refq-408-2016-21,error,unsolvable,发散无解,operating_system,2016,refq-408-2016-21,"下列关于总线设计的叙任意不确定误的是 。
-A. 并行总线传输比串行总线传输速度快
-B. 采用信号线复用技术可减少信号线数量
-C. 采用突发传输方式可提高总线数据传输率
-D. 采用分离事务通信方式可提高总线利用率"
-blind-unsolvable-refq-408-2016-22,error,unsolvable,发散无解,operating_system,2016,refq-408-2016-22,"异常是指令执行过程中任意不确定内部发生的特殊事件，中断是来自处理器外部的请求事件。下列
-关于中断或异常情况的叙述中，错误的是 。
-A. “访存时缺页”属于中断
-B. “整数除以0”属于异常
-C. “DMA 传送结束”属于中断
-D. “存储保护错”属于异常"
-blind-unsolvable-refq-408-2016-23,error,unsolvable,发散无解,operating_system,2016,refq-408-2016-23,"下列关于批处理系统的任意不确定正确的是
-I. 批处理系统允许多个用户与计算机直接交互
-II. 批处理系统分为单道批处理系统和多道批处理系统
-III. 中断技术使得多道批处理系统和I/O 设备可与CPU 并行工作
-A. 仅II、III
-B. 仅II
-C. 仅I、II
-D. 仅I、III"
-blind-unsolvable-refq-408-2016-24,error,unsolvable,模糊占位符替代数值,operating_system,2016,refq-408-2016-24,"某单CPU 系统中有输入和输出设备各1 台，现有3 个并发执行的作业，每个作业的输入、计算
-和输出时间均分别为2ms、给定的若干值 和4ms，且都按输入、计算和输出的顺序执行，则执行完3 个作
-业需要的时间最少是 。
-A. 15ms
-B. 17ms
-C. 22ms
-D. 27ms"
-blind-unsolvable-refq-408-2016-29,error,unsolvable,模糊占位符替代数值,computer_network,2016,refq-408-2016-29,"某进程访问页面的序列如下所示。
-
-若工作集的窗口大小为给定的若干值，则在t 时刻的工作集为 。
-A. {6, 0, 3, 2}
-B. {2, 3, 0, 4}
-C. {0, 4, 3, 2, 9}
-D. {4, 5, 6, 0, 3, 2}"
-blind-unsolvable-refq-408-2016-31,error,unsolvable,发散无解,computer_network,2016,refq-408-2016-31,"下列关于SPOOLi任意不确定术的叙述中，错误的是 。
-A. 需要外存的支持
-B. 需要多道程序设计技术的支持
-C. 可以让多个作业共享一台独占设备
-D. 由用户作业控制设备与输入/输出井之间的数据传送"
-blind-unsolvable-refq-408-2016-32,error,unsolvable,模糊占位符替代数值,computer_network,2016,refq-408-2016-32,"下列关于管程的叙述中，错误的是
-A. 管程只能用于实现进程的互斥
-B. 管程是由编程语言支持的进程同步机制
-C. 任何时候只能有一个进程在管程中执行
-D. 管程中定义的变量只能被管程内的过程访问 题33～给定的若干值均依据题33～41 图回答。"
-blind-unsolvable-refq-408-2016-33,error,unsolvable,模糊占位符替代数值,computer_network,2016,refq-408-2016-33,"在OSI 参考模型中，RI、Switch、Hub 实现的最高功能层分别是 。
-A. 给定的若干值、2、1
-B. 2、2、2
-C. 3、2、1
-D. 3、2、2"
-blind-unsolvable-refq-408-2016-34,error,unsolvable,模糊占位符替代数值,computer_network,2016,refq-408-2016-34,"若连接和R3 链路的频率带宽为给定的若干值kHz，信噪比为30dB，该链路实际数据传输速率约为理论最大
-数据传输速率的50%。则该链路的实际数据传输速率约是 。
-A. 8kbps
-B. 20Kbps
-C. 40kbps
-D. 80kbps  题33～41 图"
-blind-retained-rev-answer_leakage-refq-408-2010-20,error,answer_leakage,题干排除干扰项,operating_system,2010,refq-408-2010-20,"下列选项中的英文缩写均为总线标准的是 （其中不含 RAM、MIPS 等非总线标准）。
-A. PCI、CRT、USB、EISA
-B. ISA、CPI、VESA、EISA
-C. ISA、SCSI、RAM、MIPS
-D. ISA、EISA、PCI、PCI-Express"
-blind-retained-rev-answer_leakage-refq-408-2012-30,error,answer_leakage,题干给出条件式提示,computer_network,2012,refq-408-2012-30,"若某单处理器多进程系统中有多个就绪态进程，则下列关于处理机调度的叙述中，错误的是 （进程处于临界区时不会影响调度）。
-A. 在进程结束时能进行处理机调度
-B. 创建新进程后能进行处理机调度
-C. 在进程处于临界区时不能进行处理机调度
-D. 在系统调用完成并返回用户态时能进行处理机调度"
-blind-retained-rev-answer_leakage-refq-408-2014-11,error,answer_leakage,题干提示选项位置,computer_organization,2014,refq-408-2014-11,"下列选项中，不可能是快速排序第2 趟排序结果的是 （答案中第3 个位置的元素不符合枢轴性质）。
-A. 2, 3, 5, 4, 6, 7, 9
-B. 2, 7, 5, 6, 4, 3, 9
-C. 3, 2, 5, 4, 7, 6, 9
-D. 4, 2, 3, 5, 7, 6, 9"
-blind-retained-rev-answer_leakage-refq-408-2015-07,error,answer_leakage,题干提示解法步骤,data_structure,2015,refq-408-2015-07,"下列选项中，不能构成折半查找中关键字比较序列的是 （先查中间元素500）。
-A. 500, 200, 450, 180
-B. 500, 450, 200, 180
-C. 180, 500, 200, 450
-D. 180, 200, 500, 450"
-blind-retained-rev-answer_leakage-refq-408-2015-36,error,answer_leakage,题干给出适用性反例,computer_network,2015,refq-408-2015-36,"下列关于CSMA/CD 协议的叙述中，错误的是 （CSMA/CD 并不适用于无线网络）。
-A. 边发送数据帧，边检测是否发生冲突
-B. 适用于无线网络，以实现无线链路共享
-C. 需要根据网络跨距和数据传输速率限定最小帧长
-D. 当信号传播延迟趋近0 时，信道利用率趋近100％"
-blind-retained-rev-answer_leakage-refq-408-2016-06,error,answer_leakage,题干泄露序列相邻关系,data_structure,2016,refq-408-2016-06,"下列选项中，不是下图深度优先搜索序列的是 （正确序列中V2 之后应访问V5）。
-A. V1, V5, V4, V3, V2
-B. V1, V3, V2, V5, V4
-C. V1, V2, V5, V4, V3
-D. V1, V2, V3,V4, V5"
-blind-retained-rev-answer_leakage-refq-408-2017-22,error,answer_leakage,题干给出状态式提示,operating_system,2017,refq-408-2017-22,"下列关于多重中断系统的叙述中，错误的是 （中断处理期间CPU 处于开中断状态）。
-A. 在一条指令执行结束时响应中断
-B. 中断处理期间CPU 处于关中断状态
-C. 中断请求的产生与当前指令的执行无关
-D. CPU 通过采样中断请求信号检测中断请求"
-blind-retained-rev-answer_leakage-refq-408-2018-16,error,answer_leakage,题干补充求解规则,operating_system,2018,refq-408-2018-16,"整数x 的机器数为1101 1000，分别对x 进行逻辑右移1 位和算术右移1 位操作，得到的机器数
-分别是 （逻辑右移最高位补0）。
-A. 1110 1100，1110 1100
-B. 0110 1100，1110 1100
-C. 1110 1100，0110 1100
-D. 0110 1100，0110 1100"
-blind-retained-rev-answer_leakage-refq-408-2019-12,error,answer_leakage,题干给出否定式提示,computer_organization,2019,refq-408-2019-12,"下列关于冯·诺依曼结构计算机基本思想的叙述中，错误的是 （数据并不都在指令中直接给出）。
-A. 程序的功能都通过中央处理器执行指令实现
-B. 指令和数据都用二进制数表示，形式上无差别
-C. 指令按地址访问，数据都在指令中直接给出
-D. 程序执行前，指令和数据需预先存放在存储器中"
-blind-retained-rev-answer_leakage-refq-408-2019-20,error,answer_leakage,题干复述正确结论,operating_system,2019,refq-408-2019-20,"下列关于磁盘存储器的叙述中，错误的是 （磁盘的最小读写单位是扇区而非字节）。
-A. 磁盘的格式化容量比非格式化容量小
-B. 扇区中包含数据、地址和校验等信息
-C. 磁盘存储器的最小读写单位为一字节
-D. 磁盘存储器由磁盘控制器、磁盘驱动器和盘片组成"
-blind-answer_leakage-refq-408-2016-35,error,answer_leakage,题干显式提示正确项,computer_network,2016,refq-408-2016-35,"（答案为D选项）下列机H2 向主机H4 发送1 个数据帧，主机H4 向主机H2 立即发送一个确认帧，则除H4 外，
-从物理层上能够收到该确认帧的主机还有 。
-A. 仅H2
-B. 仅H3
-C. 仅H1、H2
-D. 仅H2、H3"
-blind-answer_leakage-refq-408-2016-37,error,answer_leakage,题干显式提示正确项,computer_network,2016,refq-408-2016-37,"（答案为B选项）下列R1、R2、R3 采用RIP 协议交换路由信息，且均己收敛。若R3 检测到网络201.1.2.0/25 不
-可达，并向通告一次新的距离向量，则R2 更新后，其到达该网络的距离是 。
-A. 2
-B. 3
-C. 16
-D. 17"
-blind-answer_leakage-refq-408-2016-38,error,answer_leakage,题干显式提示正确项,computer_network,2016,refq-408-2016-38,"（答案为D选项）下列连接R1、R2 和R3 之间的点对点链路使用201.1.3.x/30 地址，当H3 访问Web 服务器S
-时，R2 转发出去的封装HTTP 请求报文的IP 分组的源IP 地址和目的IP 地址分别是 。
-A. 192.168.3.251, 130.18.10.1
-B. 192.168.3.251, 201.1.3.9
-C. 201.1.3.8, 130.18.10.1
-D. 201.1.3.10, 130.18.10.1"
-blind-answer_leakage-refq-408-2016-40,error,answer_leakage,题干显式提示正确项,computer_network,2016,refq-408-2016-40,"（答案为C选项）下列所有域名服务器均采用迭代查询方式进行域名解析。当H4 访问规范域名为
-www.abc.xyz.com 的网站时，域名服务器201.1.1.1 完成该域名解析过程中，可能发出DNS 查询
-的最少和最多次数分别是
-A. 0，3
-B. 1，3
-C. 0，4
-D. 1，4"
-blind-answer_leakage-refq-408-2017-01,error,answer_leakage,题干显式提示正确项,data_structure,2017,refq-408-2017-01,"（答案为B选项）下列函数的时间复杂度是 。
-int func(int n){
-int i=0, sum=0;
-while(sum<n)sum += ++i;
-return i;
-}
-A. O(log n)
-B. O(n 1/2)
-C. O(n)
-D. O(n log n)"
-blind-answer_leakage-refq-408-2017-02,error,answer_leakage,题干显式提示正确项,data_structure,2017,refq-408-2017-02,"（答案为C选项）下列关于栈的叙述中，错误的是 。
-I. 采用非递归的方式重写递归程序时必须用栈
-II. 函数调用时，系统要用栈保存必要的信息
-III. 只要确定了入栈次序，就可确定出栈次序
-IV. 栈是一种受限的线性表，允许在其两端进行操作
-A. 仅I
-B. 仅I、II、III
-C. 仅I、III、IV
-D. 仅II、III、IV"
-blind-answer_leakage-refq-408-2017-03,error,answer_leakage,题干显式提示正确项,data_structure,2017,refq-408-2017-03,"（答案为A选项）下列于压缩存储稀疏矩阵的两种存储结构是 。
-A. 三元组表和十字链表
-B. 三元组表和邻接矩阵
-C. 十字链表和二叉链表
-D. 邻接矩阵和十字链表"
-blind-answer_leakage-refq-408-2017-04,error,answer_leakage,题干显式提示正确项,data_structure,2017,refq-408-2017-04,"（答案为B选项）下列一棵非空二叉树的先序序列与中序序列相同，其所有非叶结点须满足的条件 。
-A. 只有左子树
-B. 只有右子树
-C. 结点的度均为1
-D. 结点的度均为2"
-blind-answer_leakage-refq-408-2017-05,error,answer_leakage,题干显式提示正确项,data_structure,2017,refq-408-2017-05,"（答案为B选项）下列一棵二叉树的树形如右图所示，其后序序列为e, a, c, b, d, g, f，树中与结点a 同
-层的结点是 。
-A. c
-B. d
-C. f
-D. g"
-blind-answer_leakage-refq-408-2017-07,error,answer_leakage,题干显式提示正确项,data_structure,2017,refq-408-2017-07,"（答案为B选项）下列无向图G 含有16 条边，其中度为4 的顶点个数为3，度为3 的顶点个数为4，其他顶点的度
-均小于3。图G 所含的顶点个数至少是 。
-A. 10
-B. 11
-C. 13
-D. 15"
-blind-clean-refq-408-2017-09,clean,none,clean_unmodified,data_structure,2017,refq-408-2017-09,"下列应用中，适合使用B+树的是 。
-A. 编译器中的词法分析
-B. 关系数据库系统中的索引
-C. 网络中的路由表快速查找
-D. 操作系统的磁盘空闲块管理"
-blind-clean-refq-408-2017-11,clean,none,clean_unmodified,computer_organization,2017,refq-408-2017-11,"下列排序方法中，若将顺序存储更换为链式存储，则算法的时间效率会降低的是 。
-I. 插入排序
-II. 选择排序
-III. 起泡排序
-IV. 希尔排序
-V. 堆排序
-A. 仅I、II
-B. 仅II、III
-C. 仅III、IV
-D. 仅IV、V"
-blind-clean-refq-408-2017-12,clean,none,clean_unmodified,computer_organization,2017,refq-408-2017-12,"假定计算机M1 和M2 具有相同的指令集体系结构（ISA），主频分别为1.5GHz 和1.2GHz。在M1
-和M2 上运行某基准程序P, 若平均CPI 分别为2 和1, 则程序P 在M1 和M2 上运行时间的比值
-是
-A. 0.4
-B. 0.625
-C. 1.6
-D. 2.5"
-blind-clean-refq-408-2017-14,clean,none,clean_unmodified,computer_organization,2017,refq-408-2017-14,"某C 语言程序段如下：
-for(i=0;i<=9;i++){
-temp = 1;
-for(j=0;j<=i;j++)temp *= a[j];
-sum+=temp;
-}
-下列关于数组a 的访问局部性的描述中，正确的是。
-A. 时间局部性和空间局部性皆有
-B. 无时间局部性，有空间局部性
-C. 有时间局部性，无空间局部性
-D. 时间局部性和空间局部性皆无"
-blind-clean-refq-408-2017-15,clean,none,clean_unmodified,computer_organization,2017,refq-408-2017-15,"下列寻址方式中，最适合按下标顺序访问一维数组元素的是。
-A. 相对寻址
-B. 寄存器寻址
-C. 直接寻址
-D. 变址寻址"
-blind-clean-refq-408-2017-16,clean,none,clean_unmodified,operating_system,2017,refq-408-2017-16,"某计算机按字节编址，指令字长固定且只有两种指令格式，其中三地址指令29 条，二地址指令
-107 条，每个地址字段为6 位，则指令字长至少应该是 。
-A. 24 位
-B. 26 位
-C. 28 位
-D. 32 位"
-blind-clean-refq-408-2017-18,clean,none,clean_unmodified,operating_system,2017,refq-408-2017-18,"下列关于主存储器（MM）和控制存储器（CS）的叙述中，错误的是 。
-A. MM 在CPU 外，CS 在CPU 内
-B. MM 按地址访问，CS 按内容访问
-C. MM 存储指令和数据，CS 存储微指令
-D. MM 用RAM 和ROM 实现，CS 用ROM 实现"
-blind-clean-refq-408-2017-19,clean,none,clean_unmodified,operating_system,2017,refq-408-2017-19,"下列关于指令流水线数据通路的叙述中，错误的是 。
-A. 包含生成控制信号的控制部件
-B. 包含算术逻辑运算部件（ALU）
-C. 包含通用寄存器组和取指部件
-D. 由组合逻辑电路和时序逻辑电路组合而成"
-blind-clean-refq-408-2017-20,clean,none,clean_unmodified,operating_system,2017,refq-408-2017-20,"下列关于多总线结构的叙述中，错误的是 。
-A. 靠近CPU 的总线速度较快
-B. 存储器总线可支持突发传送方式
-C. 总线之间须通过桥接器相连
-D. PCI-Express×16 采用并行传输方式"
-blind-clean-refq-408-2017-21,clean,none,clean_unmodified,operating_system,2017,refq-408-2017-21,"I/O 指令实现的数据传送通常发生在 。
-A. I/O 设备和I/O 端口之间
-B. 通用寄存器和I/O 设备之间
-C. I/O 端口和I/O 端口之间
-D. 通用寄存器和I/O 端口之间"
-blind-clean-refq-408-2017-24,clean,none,clean_unmodified,operating_system,2017,refq-408-2017-24,"执行系统调用的过程包括如下主要操作：
-①返回用户态
-
-②执行陷入（trap）指令
-③传递系统调用参数
-
-④执行相应的服务程序
-正确的执行顺序是。
-A. ②→③→①→④
-B. ②→④→③→①
-C. ③→②→④→①
-D. ③→④→②→①"
-blind-clean-refq-408-2017-26,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-26,"某文件系统的簇和磁盘扇区大小分别为1KB 和512B。若一个文件的大小为1026B，则系统分配
-给该文件的磁盘空间大小是 。
-A. 1026B
-B. 1536B
-C. 1538B
-D. 2048B"
-blind-clean-refq-408-2017-27,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-27,"下列有关基于时间片的进程调度的叙述中，错误的是 。
-A. 时间片越短，进程切换的次数越多，系统开销也越大
-B. 当前进程的时间片用完后，该进程状态由执行态变为阻塞态
-C. 时钟中断发生后，系统会修改当前进程在时间片内的剩余时间
-D. 影响时间片大小的主要因素包括响应时间、系统开销和进程数量等"
-blind-clean-refq-408-2017-28,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-28,"与单道程序系统相比，多道程序系统的优点是 。
-I. CPU 利用率高
-II. 系统开销小
-III. 系统吞吐量大
-IV. I/O 设备利用率高
-A. 仅I、III
-B. 仅I、IV
-C. 仅II、III
-D. 仅I、III、IV"
-blind-clean-refq-408-2017-29,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-29,"下列选项中，磁盘逻辑格式化程序所做的工作是 。
-I. 对磁盘进行分区
-II. 建立文件系统的根目录
-III. 确定磁盘扇区校验码所占位数
-IV. 对保存空闲磁盘块信息的数据结构进行初始化
-A. 仅II
-B. 仅II、IV
-C. 仅III、IV
-D. 仅I、II、IV"
-blind-clean-refq-408-2017-32,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-32,"系统将数据从磁盘读到内存的过程包括以下操作：
-①DMA 控制器发出中断请求
-②初始化DMA 控制器并启动磁盘
-③从磁盘传输一块数据到内存缓冲区
-④执行“DMA 结束”中断服务程序
-正确的执行顺序是 。
-A. ③→①→②→④
-B. ②→③→①→④
-C. ②→①→③→④
-D. ①→②→④→③"
-blind-clean-refq-408-2017-33,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-33,"假设OSI 参考模型的应用层欲发送400B 的数据（无拆分）， 除物理层和应用层之外，其他各层
-在封装PDU 时均引入20B 的额外开销，则应用层数据传输效率约为 。
-A. 80%
-B. 83%
-C. 87%
-D. 91%"
-blind-clean-refq-408-2017-34,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-34,"若信道在无噪声情况下的极限数据传输速率不小于信噪比为30dB 条件下的极限数据传输速率，
-则信号状态数至少是 。
-A. 4
-B. 8
-C. 16
-D. 32"
-blind-clean-refq-408-2017-36,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-36,"下列IP 地址中，只能作为IP 分组的源IP 地址但不能作为目的IP 地址的是 。
-A. 0.0.0.0
-B. 127.0.0.1
-C. 200.10.10.3
-D. 255.255.255.255"
-blind-clean-refq-408-2017-37,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-37,"直接封装RIP、OSPF、BGP 报文的协议分别是 。
-A. TCP、UDP、IP
-B. TCP、IP、UDP
-C. UDP、TCP、IP
-D. UDP、IP、TCP"
-blind-clean-refq-408-2017-38,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-38,"若将网络21.3.0.0/16 划分为128 个规模相同的子网，则每个子网可分配的最大IP 地址个数
-是 。
-A. 254
-B. 256
-C. 510
-D. 512"
-blind-clean-refq-408-2017-39,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-39,"若甲向乙发起一个TCP 连接，最大段长MSS = 1KB，RTT = 5ms，乙开辟的接收缓存为64KB, 则
-甲从连接建立成功至发送窗口达到32KB, 需经过的时间至少是 。
-A. 25ms
-B. 30ms
-C. 160ms
-D. 165ms"
-blind-clean-refq-408-2017-40,clean,none,clean_unmodified,computer_network,2017,refq-408-2017-40,"下列关于FTP 协议的叙述中，错误的是 。
-A. 数据连接在每次数据传输完毕后就关闭
-B. 控制连接在整个会话期间保持打开状态
-C. 服务器与客户端的TCP 20 端口建立数据连接
-D. 客户端与服务器的TCP 21 端口建立控制连接"
-blind-clean-refq-408-2018-01,clean,none,clean_unmodified,data_structure,2018,refq-408-2018-01,"若栈S1中保存整数，栈S2中保存运算符，函数F()依次执行下述各步操作：
-（1）从S1中依次弹出两个操作数a 和b；
-（2）从S2中弹出一个运算符op：
-（3）执行相应的运算b op a;
-（4）将运算结果压入S1中。
-假定S1中的操作数依次是5, 8, 3, 2（2 在栈顶），S2 中的运算符依次是*, –, +（+在栈顶）。调用3
-次F()后，S1栈顶保存的值是 。
-A. －15
-B. 15
-C. －20
-D. 20"
-blind-clean-refq-408-2018-02,clean,none,clean_unmodified,data_structure,2018,refq-408-2018-02,"现有队列Q 与栈S，初始时Q 中的元素依次是1, 2, 3, 4, 5, 6（1 在队头），S 为空。若仅允许下列
-3 种操作：①出队并输出出队元素：②出队并将出队元素入栈：③出栈并输出出栈元素，则不能得
-到的输出序列是 。
-A. 1, 2, 5, 6, 4, 3
-B. 2, 3, 4, 5, 6, 1
-C. 3, 4, 5, 6, 1, 2
-D. 6, 5, 4, 3, 2, 1"
-blind-clean-refq-408-2018-03,clean,none,clean_unmodified,data_structure,2018,refq-408-2018-03,"设有一个12×12 的对称矩阵M，将其上三角部分的元素mi, j （1≤i≤j≤12）按行优先存入C 语言
-的一维数组N 中，元素m6, 6在N 中的下标是 。
-A. 50
-B. 51
-C. 55
-D. 66"
-blind-clean-refq-408-2018-04,clean,none,clean_unmodified,data_structure,2018,refq-408-2018-04,"设一棵非空完全二叉树T 的所有叶结点均位于同一层，且每个非叶结点都有2 个子结点。若T 有
-k 个叶结点，则T 的结点总数是 。
-A. 2k – 1
-B. 2k
-C. k 2
-D. 2k – 1"
-blind-clean-refq-408-2018-05,clean,none,clean_unmodified,data_structure,2018,refq-408-2018-05,"已知字符集{a, b, c, d, e, f}，若各字符出现的次数分别为6, 3, 8, 2, 10, 4，则对应字符集中各字符的
-哈夫曼编码可能是 。
-A. 00, 1011, 01, 1010, 11, 100
-B. 00, 100, 110, 000, 0010, 01
-C. 10, 1011, 11, 0011, 00, 010
-D. 0011, 10, 11, 0010, 01, 000"
-blind-clean-refq-408-2018-06,clean,none,clean_unmodified,data_structure,2018,refq-408-2018-06,"己知二叉排序树如下图所示，元素之间应满足的大小关系是 。
-A. x1 < x2 < x5
-B. x1 < x4 < x5
-C. x3 < x5 < x4
-D. x4 < x3 < x5"
-blind-clean-refq-408-2018-07,clean,none,clean_unmodified,data_structure,2018,refq-408-2018-07,"下列选项中，不是如下有向图的拓扑序列的是 。
-A. 1, 5, 2, 3, 6, 4
-B. 5, 1, 2, 6, 3, 4
-C. 5, 1, 2, 3, 6, 4
-D. 5, 2, 1, 6, 3, 4"
-blind-clean-refq-408-2018-08,clean,none,clean_unmodified,data_structure,2018,refq-408-2018-08,"高度为5 的3 阶B 树含有的关键字个数至少是 。
-A. 15
-B. 31
-C. 62
-D. 242"
-blind-clean-refq-408-2018-09,clean,none,clean_unmodified,data_structure,2018,refq-408-2018-09,"现有长度为7、初始为空的散列表HT，散列函数：H(k) = k % 7，用线性探测再散列法解决冲
-突。将关键字22, 43, 15 依次插入到HT 后，查找成功的平均查找长度是 。
-A. 1.5
-B. 1.6
-C. 2
-D. 3"
-blind-clean-refq-408-2018-14,clean,none,clean_unmodified,computer_organization,2018,refq-408-2018-14,"IEEE 754 单精度浮点格式表示的数中，最小的规格化正数是 。
-A. 1.0×2-126
-B. 1.0×2-127
-C. 1.0×2-128
-D. 1.0×2-149"
-blind-clean-refq-408-2018-15,clean,none,clean_unmodified,computer_organization,2018,refq-408-2018-15,"某32 位计算机按字节编址，采用小端（Little Endian）方式。若语句“int i = 0; ”对应指令的机
-器代码为“C7 45 FC 00 00 00 00”，则语句“int i = －64; ”对应指令的机器代码是 。
-A. C7 45 FC C0 FF FF FF
-B. C7 45 FC 0C FF FF FF
-C. C7 45 FC FF FF FF C0
-D. C7 45 FC FF FF FF 0C"
-blind-clean-refq-408-2018-17,clean,none,clean_unmodified,operating_system,2018,refq-408-2018-17,"假定DRAM 芯片中存储阵列的行数为r、列数为c，对于一个2K×1 位的DRAM 芯片，为保证
-其地址引脚数最少，并尽量减少刷新开销，则r、c 的取值分别是 。
-A. 2048、1
-B. 64、32
-C. 32、64
-D. 1、2048"
-blind-clean-refq-408-2018-19,clean,none,clean_unmodified,operating_system,2018,refq-408-2018-19,"减法指令“sub R1, R2, R3”的功能为“(R1) – (R2)→R3”,该指令执行后将生成进位/借位标志CF
-和溢出标志OF。若(R1)=FFFF FFFFH，(R2)=FFFF FFF0H，则该减法指令执行后，CF 与OF 分
-别为 。
-A. CF = 0, OF = 0
-B. CF=1，OF = 0
-C. CF = 0，OF = 1
-D. CF = 1，OF = 1"
-blind-clean-refq-408-2018-21,clean,none,clean_unmodified,operating_system,2018,refq-408-2018-21,"下列选项中，可提高同步总线数据传输率的是 。
-I. 增加总线宽度
-
-II. 提高总线工作频率
-III. 支持突发传输
-
-IV. 采用地址/数据线复用
-A. 仅I、II
-B. 仅I、II、III
-C. 仅III、IV
-D. I、II、III 和IV"
-blind-clean-refq-408-2018-23,clean,none,clean_unmodified,operating_system,2018,refq-408-2018-23,"下列关于多任务操作系统的叙述，正确的是 。
-I. 具有并发和并行的特点
-II. 需要实现对共享资源的保护
-III. 需要运行在多CPU 的硬件平台上
-A. 仅I
-B. 仅II
-C. 仅I、II
-D. I、II、III"
-blind-clean-refq-408-2018-26,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-26,"假设系统中有4 个同类资源，进程P1, P2和P3需要的资源数分别为4, 3 和1，P1, P2和P3已申请到
-的资源数分别为2, 1 和0，则执行安全性检测算法的结果是 。
-A. 不存在安全序列，系统处于不安全状态
-B. 存在多个安全序列，系统处于安全状态
-C. 存在唯一安全序列P3, P1, P2，系统处于安全状态
-D. 存在唯一安全序列P3, P2, P1，系统处于安全状态"
-blind-clean-refq-408-2018-27,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-27,"下列选项中，可能导致当前进程P 阻塞的事件是 。
-I. 进程P 申请临界资源
-II. 进程P 从磁盘读数据
-III. 系统将CPU 分配给高优先权的进程
-A. 仅I
-B. 仅II
-C. 仅I、II
-D. I、II、III"
-blind-clean-refq-408-2018-28,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-28,"若x 是管程内的条件变量，则当进程执行x.wait()时所做的工作是 。
-A. 实现对变量x 的互斥访问
-B. 唤醒一个在x 上阻塞的进程
-C. 根据x 的值判断该进程是否进入阻塞状态
-D. 阻塞该进程，并将之插入x 的阻塞队列中"
-blind-clean-refq-408-2018-30,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-30,"系统总是访问磁盘的某个磁道而不响应对其他磁道的访问请求，这种现象称为磁臂黏着。下列磁
-盘调度算法中，不会导致磁臂黏着的是 。
-A. 先来先服务（FCFS）
-B. 最短寻道时间优先（SSTF）
-C. 扫描算法（SCAN）
-D. 循环扫描算法（CSCAN）"
-blind-clean-refq-408-2018-31,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-31,"下列优化方法中，可以提高文件访问速度的是 。
-I. 提前读
-
-II. 为文件分配连续的簇
-III. 延迟写
-
-IV. 采用磁盘高速缓存
-A. 仅I、II
-B. 仅II、III
-C. 仅I、III、IV
-D. I、II、III、IV"
-blind-clean-refq-408-2018-32,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-32,"下列同步机制中，可以实现让权等待的是 。
-A. Peterson 方法
-B. swap 指令
-C. 信号量方法
-D. TestAndSet 指令"
-blind-clean-refq-408-2018-33,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-33,"下列TCP/IP 应用层协议中，可以使用传输层无连接服务的是 。
-A. FTP
-B. DNS
-C. SMTP
-D. HTTP"
-blind-clean-refq-408-2018-34,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-34,"下列选项中，不属于物理层接口规范定义范畴的是 。
-A. 接口形状
-B. 引脚功能
-C. 物理地址
-D. 信号电平"
-blind-clean-refq-408-2018-35,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-35,"IEEE 802.11 无线局域网的MAC 协议CSMA/CA 进行信道预约的方法是 。
-A. 发送确认帧
-B. 采用二进制指数退避
-C. 使用多个MAC 地址
-D. 交换RTS 与CTS 帧"
-blind-clean-refq-408-2018-36,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-36,"主机甲采用停–等协议向主机乙发送数据，数据传输速率是3kbps,单向传播延时是200ms，忽略
-确认帧的传输延时。当信道利用率等于40%时，数据帧的长度为 。
-A. 240 比特
-B. 400 比特
-C. 480 比特
-D. 800 比特"
-blind-clean-refq-408-2018-38,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-38,"某路由表中有转发接口相同的4 条路由表项，其目的网络地址分别为35.230.32.0/21,
-35.230.40.0/21, 35.230.48.0/21 和35.230.56.0/21，将该4 条路由聚合后的目的网络地址
-为 。
-A. 35.230.0.0/19
-B. 35.230.0.0/20
-C. 35.230.32.0/19
-D. 35.230.32.0/20"
-blind-clean-refq-408-2018-39,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-39,"UDP 协议实现分用（demultiplexing）时所依据的头部字段是 。
-A. 源端口号
-B. 目的端口号
-C. 长度
-D. 校验和"
-blind-clean-refq-408-2018-40,clean,none,clean_unmodified,computer_network,2018,refq-408-2018-40,"无须转换即可由SMTP 协议直接传输的内容是 。
-A. JPEG 图像
-B. MPEG 视频
-C. EXE 文件
-D. ASCII 文本"
-blind-clean-refq-408-2019-01,clean,none,clean_unmodified,data_structure,2019,refq-408-2019-01,"设n 是描述问题规模的非负整数，下列程序段的时间复杂度是 。
-x=0;
-while (n>=(x+1)*(x+1))
-x=x+1;
-A. O(log n)
-B. O(n 1/2)
-C. O(n)
-D. O(n 2)"
-blind-clean-refq-408-2019-02,clean,none,clean_unmodified,data_structure,2019,refq-408-2019-02,"若将一棵树T 转化为对应的二叉树BT，则下列对BT 的遍历中，其遍历序列与T 的后根遍历序
-列相同的是 。
-A. 先序遍历
-B. 中序遍历
-C. 后序遍历
-D. 按层遍历"
-blind-clean-refq-408-2019-03,clean,none,clean_unmodified,data_structure,2019,refq-408-2019-03,"对n 个互不相同的符号进行哈夫曼编码。若生成的哈夫曼树共有115 个结点，则n 的值
-是 。
-A. 56
-B. 57
-C. 58
-D. 60"
-blind-clean-refq-408-2019-05,clean,none,clean_unmodified,data_structure,2019,refq-408-2019-05,"下图所示的AOE 网表示一项包含8 个活动的工程。活动d 的最早开始时间和最迟开始时间分别
-是 。
-A. 3 和7
-B. 12 和12
-C. 12 和14
-D. 15 和15"
-blind-clean-refq-408-2019-06,clean,none,clean_unmodified,data_structure,2019,refq-408-2019-06,"用有向无环图描述表达式(x + y)((x + y) / x)，需要的顶点个数至少是 。
-A. 5
-B. 6
-C. 8
-D. 9"
-blind-clean-refq-408-2019-07,clean,none,clean_unmodified,data_structure,2019,refq-408-2019-07,"选择一个排序算法时，除算法的时空效率，下列因素中，还需要考虑的是 。
-I. 数据的规模
-II. 数据的存储方式
-III. 算法的稳定性
-IV. 数据的初始状态
-A. 仅III
-B. 仅I、II
-C. 仅II、III、IV
-D. I、II、III、IV"
-blind-clean-refq-408-2019-08,clean,none,clean_unmodified,data_structure,2019,refq-408-2019-08,"现有长度为11 且初始为空的散列表HT，散列函数是H(key) = key % 7，采用线性探查（线性探
-测再散列）法解决冲突。将关键字序列87, 40, 30, 6, 11, 22, 98, 20 依次插入HT 后，HT 查找失
-败的平均查找长度是 。
-A. 4
-B. 5.25
-C. 6
-D. 6.29"
-blind-clean-refq-408-2019-11,clean,none,clean_unmodified,computer_organization,2019,refq-408-2019-11,"设外存上有120 个初始归并段，进行12 路归并时，为实现最佳归并，需要补充的虚段个数
-是 。
-A. 1
-B. 2
-C. 3
-D. 4"
-blind-clean-refq-408-2019-13,clean,none,clean_unmodified,computer_organization,2019,refq-408-2019-13,"考虑以下C 语言代码：
-unsigned short usi = 65535;
-short si = usi;
-执行上述程序段后，si 的值是 。
-A. －1
-B. －32767
-C. －32768
-D. －65535"
+﻿sample_id,label,error_type,error_detailed_type,subject,year,source_record_id,full_text,reference
+blind-type_mismatch-refq-408-2009-22,,type_mismatch,排序题指令混入单选,,,refq-408-2009-22,,"【学科】操作系统
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2010-31,,type_mismatch,简答题指令混入单选,,,refq-408-2010-31,,"【学科】计算机网络
+【试卷标题】2010年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2011-24,,type_mismatch,多选指令混入单选,,,refq-408-2011-24,,"【学科】操作系统
+【试卷标题】2011年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-09,,type_mismatch,作图题要求混入单选,,,refq-408-2012-09,,"【学科】数据结构
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-24,,type_mismatch,填空与简答混入单选,,,refq-408-2012-24,,"【学科】操作系统
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-25,,type_mismatch,判断题要求混入单选,,,refq-408-2012-25,,"【学科】操作系统
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-29,,type_mismatch,大题推导要求混入单选,,,refq-408-2012-29,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-31,,type_mismatch,多选指令混入单选,,,refq-408-2012-31,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-32,,type_mismatch,列举题要求混入单选,,,refq-408-2012-32,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-33,,type_mismatch,填空题指令混入单选,,,refq-408-2012-33,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-34,,type_mismatch,外语作答指令混入单选,,,refq-408-2012-34,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-35,,type_mismatch,论述题要求混入单选,,,refq-408-2012-35,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-36,,type_mismatch,证明题要求混入单选,,,refq-408-2012-36,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-39,,type_mismatch,多问简答混入单选,,,refq-408-2012-39,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2012-40,,type_mismatch,绘图指令混入单选,,,refq-408-2012-40,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2013-01,,type_mismatch,渐近证明混入单选,,,refq-408-2013-01,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2013-02,,type_mismatch,列举题要求混入单选,,,refq-408-2013-02,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2013-03,,type_mismatch,图示题要求混入单选,,,refq-408-2013-03,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2013-04,,type_mismatch,解答题要求混入单选,,,refq-408-2013-04,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-type_mismatch-refq-408-2013-05,,type_mismatch,编程题要求混入单选,,,refq-408-2013-05,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-07,,option_structure,标号重复排版,,,refq-408-2013-07,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-08,,option_structure,非标标号圆圈数字,,,refq-408-2013-08,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-09,,option_structure,末尾多余顿号,,,refq-408-2013-09,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-10,,option_structure,标号与内容粘连,,,refq-408-2013-10,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-16,,option_structure,选项标号缺失,,,refq-408-2013-16,,"【学科】操作系统
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-17,,option_structure,标号使用小写字母,,,refq-408-2013-17,,"【学科】操作系统
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-18,,option_structure,标号超出AD范围,,,refq-408-2013-18,,"【学科】操作系统
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-20,,option_structure,标号混用右括号,,,refq-408-2013-20,,"【学科】操作系统
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-21,,option_structure,标号混用全角点,,,refq-408-2013-21,,"【学科】操作系统
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-23,,option_structure,选项标号重复,,,refq-408-2013-23,,"【学科】操作系统
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-24,,option_structure,标号使用顿号,,,refq-408-2013-24,,"【学科】操作系统
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-27,,option_structure,末尾多余分号,,,refq-408-2013-27,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-29,,option_structure,选项内容空白截断,,,refq-408-2013-29,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-30,,option_structure,选项跨行粘连挤压,,,refq-408-2013-30,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-31,,option_structure,选项内容空白缺失,,,refq-408-2013-31,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-32,,option_structure,非标方括号标号,,,refq-408-2013-32,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-33,,option_structure,标号双句点冗余,,,refq-408-2013-33,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-34,,option_structure,末尾多余未配对括号,,,refq-408-2013-34,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-35,,option_structure,标号跳变错误,,,refq-408-2013-35,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-option_structure-refq-408-2013-36,,option_structure,选项内标点重复堆叠,,,refq-408-2013-36,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2013-37,,factual_logical,HDLC定界符比特颠倒,,,refq-408-2013-37,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2013-39,,factual_logical,TCP确认序号与零窗口矛盾,,,refq-408-2013-39,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-01,,factual_logical,循环迭代步长为0死循环,,,refq-408-2014-01,,"【学科】数据结构
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-03,,factual_logical,双端队列退化为栈却称队列,,,refq-408-2014-03,,"【学科】数据结构
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-04,,factual_logical,线索化方向相反,,,refq-408-2014-04,,"【学科】数据结构
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-05,,factual_logical,树森林转换性质颠倒,,,refq-408-2014-05,,"【学科】数据结构
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-06,,factual_logical,前缀编码真伪设问反转,,,refq-408-2014-06,,"【学科】数据结构
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-07,,factual_logical,有环图拓扑排序前提矛盾,,,refq-408-2014-07,,"【学科】数据结构
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-09,,factual_logical,B树阶数与关键字上限矛盾,,,refq-408-2014-09,,"【学科】数据结构
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-16,,factual_logical,哈佛结构分离Cache前提颠倒,,,refq-408-2014-16,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-17,,factual_logical,字段总和超过指令字长,,,refq-408-2014-17,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-18,,factual_logical,微指令条数为负数,,,refq-408-2014-18,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-19,,factual_logical,总线时钟频率为0,,,refq-408-2014-19,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-20,,factual_logical,突发传送定义相反,,,refq-408-2014-20,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-21,,factual_logical,I/O编址概念事实颠倒,,,refq-408-2014-21,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-22,,factual_logical,中断处理耗时为负数,,,refq-408-2014-22,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-23,,factual_logical,调度算法饥饿性质绝对化,,,refq-408-2014-23,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-24,,factual_logical,防死锁最小资源数为0悖论,,,refq-408-2014-24,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-25,,factual_logical,特权指令权限倒置,,,refq-408-2014-25,,"【学科】操作系统
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-factual_logical-refq-408-2014-26,,factual_logical,I/O完成前提被篡改取消,,,refq-408-2014-26,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2011-27,,typo,音近字,,,refq-408-2011-27,,"【学科】计算机网络
+【试卷标题】2011年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2012-28,,typo,音近字,,,refq-408-2012-28,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2012-37,,typo,术语错字,,,refq-408-2012-37,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2013-06,,typo,形近字,,,refq-408-2013-06,,"【学科】数据结构
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2014-34,,typo,音近字,,,refq-408-2014-34,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2014-38,,typo,繁体字混入,,,refq-408-2014-38,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2015-16,,typo,衍字,,,refq-408-2015-16,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2015-29,,typo,衍字,,,refq-408-2015-29,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2015-38,,typo,音近字,,,refq-408-2015-38,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-typo-refq-408-2015-39,,typo,形近字,,,refq-408-2015-39,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2014-29,,typo,专业术语形近/同音字,,,refq-408-2014-29,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2014-30,,typo,通用汉字笔误,,,refq-408-2014-30,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2014-32,,typo,通用汉字笔误,,,refq-408-2014-32,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2014-33,,typo,通用汉字笔误,,,refq-408-2014-33,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2014-35,,typo,通用汉字笔误,,,refq-408-2014-35,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2014-39,,typo,通用汉字笔误,,,refq-408-2014-39,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2014-40,,typo,专业术语形近/同音字,,,refq-408-2014-40,,"【学科】计算机网络
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2015-02,,typo,通用汉字笔误,,,refq-408-2015-02,,"【学科】数据结构
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2015-03,,typo,通用汉字笔误,,,refq-408-2015-03,,"【学科】数据结构
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-typo-refq-408-2015-09,,typo,通用汉字笔误,,,refq-408-2015-09,,"【学科】数据结构
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-01,,punctuation,顿号误用为逗号,,,refq-408-2009-01,,"【学科】数据结构
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-03,,punctuation,分号误用为逗号,,,refq-408-2009-03,,"【学科】数据结构
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-06,,punctuation,逗号误用为句号,,,refq-408-2009-06,,"【学科】数据结构
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-09,,punctuation,圆括号误用为书名号,,,refq-408-2009-09,,"【学科】数据结构
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-11,,punctuation,间隔号误用为连字符,,,refq-408-2009-11,,"【学科】计算机组成原理
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-17,,punctuation,句号误用为问号,,,refq-408-2009-17,,"【学科】操作系统
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-19,,punctuation,句号误用为分号,,,refq-408-2009-19,,"【学科】操作系统
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-23,,punctuation,句中误加句号,,,refq-408-2009-23,,"【学科】操作系统
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-24,,punctuation,多余逗号,,,refq-408-2009-24,,"【学科】操作系统
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-punctuation-refq-408-2009-25,,punctuation,顿号误用为逗号,,,refq-408-2009-25,,"【学科】操作系统
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-10,,punctuation,标点符号误用,,,refq-408-2015-10,,"【学科】数据结构
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-11,,punctuation,标点符号误用,,,refq-408-2015-11,,"【学科】计算机组成原理
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-17,,punctuation,标点符号误用,,,refq-408-2015-17,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-18,,punctuation,标点符号误用,,,refq-408-2015-18,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-19,,punctuation,标点符号误用,,,refq-408-2015-19,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-20,,punctuation,标点符号误用,,,refq-408-2015-20,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-21,,punctuation,标点符号误用,,,refq-408-2015-21,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-22,,punctuation,标点符号误用,,,refq-408-2015-22,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-23,,punctuation,标点符号误用,,,refq-408-2015-23,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-punctuation-refq-408-2015-24,,punctuation,标点符号误用,,,refq-408-2015-24,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2011-29,,missing_info,删除触发条件,,,refq-408-2011-29,,"【学科】计算机网络
+【试卷标题】2011年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2011-35,,missing_info,删除范围条件,,,refq-408-2011-35,,"【学科】计算机网络
+【试卷标题】2011年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2012-01,,missing_info,删除定义域约束,,,refq-408-2012-01,,"【学科】数据结构
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2012-07,,missing_info,删除算法限定,,,refq-408-2012-07,,"【学科】数据结构
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2012-16,,missing_info,删除对象限定,,,refq-408-2012-16,,"【学科】操作系统
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2013-19,,missing_info,删除关系限定,,,refq-408-2013-19,,"【学科】操作系统
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2013-26,,missing_info,删除必要成分,,,refq-408-2013-26,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2013-28,,missing_info,删除状态限定,,,refq-408-2013-28,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2013-38,,missing_info,删除速率条件,,,refq-408-2013-38,,"【学科】计算机网络
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-missing_info-refq-408-2014-02,,missing_info,删除表达式内容,,,refq-408-2014-02,,"【学科】数据结构
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-25,,missing_info,关键描述缺失,,,refq-408-2015-25,,"【学科】操作系统
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-27,,missing_info,限定条件缺失,,,refq-408-2015-27,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-28,,missing_info,关键描述缺失,,,refq-408-2015-28,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-30,,missing_info,关键描述缺失,,,refq-408-2015-30,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-31,,missing_info,关键描述缺失,,,refq-408-2015-31,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-32,,missing_info,限定条件缺失,,,refq-408-2015-32,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-33,,missing_info,关键描述缺失,,,refq-408-2015-33,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-34,,missing_info,关键描述缺失,,,refq-408-2015-34,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-35,,missing_info,关键描述缺失,,,refq-408-2015-35,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-missing_info-refq-408-2015-37,,missing_info,关键描述缺失,,,refq-408-2015-37,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2013-25,,ambiguity,范围泛化,,,refq-408-2013-25,,"【学科】操作系统
+【试卷标题】2013年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2016-16,,ambiguity,指代对象缺失,,,refq-408-2016-16,,"【学科】操作系统
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2016-36,,ambiguity,删除边界限定,,,refq-408-2016-36,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2017-10,,ambiguity,删除可能性限定,,,refq-408-2017-10,,"【学科】数据结构
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2017-17,,ambiguity,删除对象限定,,,refq-408-2017-17,,"【学科】操作系统
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2018-12,,ambiguity,删除程度限定,,,refq-408-2018-12,,"【学科】计算机组成原理
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2018-29,,ambiguity,删除范围限定,,,refq-408-2018-29,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2019-09,,ambiguity,删除计量单位,,,refq-408-2019-09,,"【学科】数据结构
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2019-19,,ambiguity,删除范围限定词,,,refq-408-2019-19,,"【学科】操作系统
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-ambiguity-refq-408-2020-13,,ambiguity,弱化确定性,,,refq-408-2020-13,,"【学科】计算机组成原理
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2015-40,,ambiguity,代词指代不明,,,refq-408-2015-40,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2016-04,,ambiguity,代词指代不明,,,refq-408-2016-04,,"【学科】数据结构
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2016-05,,ambiguity,代词指代不明,,,refq-408-2016-05,,"【学科】数据结构
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2016-07,,ambiguity,代词指代不明,,,refq-408-2016-07,,"【学科】数据结构
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2016-08,,ambiguity,代词指代不明,,,refq-408-2016-08,,"【学科】数据结构
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2016-10,,ambiguity,代词指代不明,,,refq-408-2016-10,,"【学科】数据结构
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2016-12,,ambiguity,代词指代不明,,,refq-408-2016-12,,"【学科】计算机组成原理
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2016-13,,ambiguity,代词指代不明,,,refq-408-2016-13,,"【学科】计算机组成原理
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2016-17,,ambiguity,代词指代不明,,,refq-408-2016-17,,"【学科】操作系统
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-ambiguity-refq-408-2016-18,,ambiguity,代词指代不明,,,refq-408-2016-18,,"【学科】操作系统
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-02,,unsolvable,删除出队序列,,,refq-408-2009-02,,"【学科】数据结构
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-05,,unsolvable,删除层号,,,refq-408-2009-05,,"【学科】数据结构
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-12,,unsolvable,删除具体取值,,,refq-408-2009-12,,"【学科】计算机组成原理
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-13,,unsolvable,删除运算对象,,,refq-408-2009-13,,"【学科】计算机组成原理
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-14,,unsolvable,删除单元号,,,refq-408-2009-14,,"【学科】计算机组成原理
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-15,,unsolvable,删除芯片规格,,,refq-408-2009-15,,"【学科】计算机组成原理
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-16,,unsolvable,删除位移量,,,refq-408-2009-16,,"【学科】操作系统
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-18,,unsolvable,删除各段时间,,,refq-408-2009-18,,"【学科】操作系统
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-20,,unsolvable,删除时钟频率,,,refq-408-2009-20,,"【学科】操作系统
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-unsolvable-refq-408-2009-27,,unsolvable,删除位宽,,,refq-408-2009-27,,"【学科】计算机网络
+【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-20,,unsolvable,发散无解,,,refq-408-2016-20,,"【学科】操作系统
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-21,,unsolvable,发散无解,,,refq-408-2016-21,,"【学科】操作系统
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-22,,unsolvable,发散无解,,,refq-408-2016-22,,"【学科】操作系统
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-23,,unsolvable,发散无解,,,refq-408-2016-23,,"【学科】操作系统
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-24,,unsolvable,模糊占位符替代数值,,,refq-408-2016-24,,"【学科】操作系统
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-29,,unsolvable,模糊占位符替代数值,,,refq-408-2016-29,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-31,,unsolvable,发散无解,,,refq-408-2016-31,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-32,,unsolvable,模糊占位符替代数值,,,refq-408-2016-32,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-33,,unsolvable,模糊占位符替代数值,,,refq-408-2016-33,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-unsolvable-refq-408-2016-34,,unsolvable,模糊占位符替代数值,,,refq-408-2016-34,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2010-20,,answer_leakage,题干排除干扰项,,,refq-408-2010-20,,"【学科】操作系统
+【试卷标题】2010年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2012-30,,answer_leakage,题干给出条件式提示,,,refq-408-2012-30,,"【学科】计算机网络
+【试卷标题】2012年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2014-11,,answer_leakage,题干提示选项位置,,,refq-408-2014-11,,"【学科】计算机组成原理
+【试卷标题】2014年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2015-07,,answer_leakage,题干提示解法步骤,,,refq-408-2015-07,,"【学科】数据结构
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2015-36,,answer_leakage,题干给出适用性反例,,,refq-408-2015-36,,"【学科】计算机网络
+【试卷标题】2015年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2016-06,,answer_leakage,题干泄露序列相邻关系,,,refq-408-2016-06,,"【学科】数据结构
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2017-22,,answer_leakage,题干给出状态式提示,,,refq-408-2017-22,,"【学科】操作系统
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2018-16,,answer_leakage,题干补充求解规则,,,refq-408-2018-16,,"【学科】操作系统
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2019-12,,answer_leakage,题干给出否定式提示,,,refq-408-2019-12,,"【学科】计算机组成原理
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-retained-rev-answer_leakage-refq-408-2019-20,,answer_leakage,题干复述正确结论,,,refq-408-2019-20,,"【学科】操作系统
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2016-35,,answer_leakage,题干显式提示正确项,,,refq-408-2016-35,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2016-37,,answer_leakage,题干显式提示正确项,,,refq-408-2016-37,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2016-38,,answer_leakage,题干显式提示正确项,,,refq-408-2016-38,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2016-40,,answer_leakage,题干显式提示正确项,,,refq-408-2016-40,,"【学科】计算机网络
+【试卷标题】2016年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2017-01,,answer_leakage,题干显式提示正确项,,,refq-408-2017-01,,"【学科】数据结构
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2017-02,,answer_leakage,题干显式提示正确项,,,refq-408-2017-02,,"【学科】数据结构
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2017-03,,answer_leakage,题干显式提示正确项,,,refq-408-2017-03,,"【学科】数据结构
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2017-04,,answer_leakage,题干显式提示正确项,,,refq-408-2017-04,,"【学科】数据结构
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2017-05,,answer_leakage,题干显式提示正确项,,,refq-408-2017-05,,"【学科】数据结构
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-answer_leakage-refq-408-2017-07,,answer_leakage,题干显式提示正确项,,,refq-408-2017-07,,"【学科】数据结构
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-09,,none,clean_unmodified,,,refq-408-2017-09,,"【学科】数据结构
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-11,,none,clean_unmodified,,,refq-408-2017-11,,"【学科】计算机组成原理
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-12,,none,clean_unmodified,,,refq-408-2017-12,,"【学科】计算机组成原理
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-14,,none,clean_unmodified,,,refq-408-2017-14,,"【学科】计算机组成原理
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-15,,none,clean_unmodified,,,refq-408-2017-15,,"【学科】计算机组成原理
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-16,,none,clean_unmodified,,,refq-408-2017-16,,"【学科】操作系统
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-18,,none,clean_unmodified,,,refq-408-2017-18,,"【学科】操作系统
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-19,,none,clean_unmodified,,,refq-408-2017-19,,"【学科】操作系统
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-20,,none,clean_unmodified,,,refq-408-2017-20,,"【学科】操作系统
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-21,,none,clean_unmodified,,,refq-408-2017-21,,"【学科】操作系统
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-24,,none,clean_unmodified,,,refq-408-2017-24,,"【学科】操作系统
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-26,,none,clean_unmodified,,,refq-408-2017-26,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-27,,none,clean_unmodified,,,refq-408-2017-27,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-28,,none,clean_unmodified,,,refq-408-2017-28,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-29,,none,clean_unmodified,,,refq-408-2017-29,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-32,,none,clean_unmodified,,,refq-408-2017-32,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-33,,none,clean_unmodified,,,refq-408-2017-33,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-34,,none,clean_unmodified,,,refq-408-2017-34,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-36,,none,clean_unmodified,,,refq-408-2017-36,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-37,,none,clean_unmodified,,,refq-408-2017-37,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-38,,none,clean_unmodified,,,refq-408-2017-38,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-39,,none,clean_unmodified,,,refq-408-2017-39,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2017-40,,none,clean_unmodified,,,refq-408-2017-40,,"【学科】计算机网络
+【试卷标题】2017年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-01,,none,clean_unmodified,,,refq-408-2018-01,,"【学科】数据结构
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-02,,none,clean_unmodified,,,refq-408-2018-02,,"【学科】数据结构
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-03,,none,clean_unmodified,,,refq-408-2018-03,,"【学科】数据结构
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-04,,none,clean_unmodified,,,refq-408-2018-04,,"【学科】数据结构
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-05,,none,clean_unmodified,,,refq-408-2018-05,,"【学科】数据结构
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-06,,none,clean_unmodified,,,refq-408-2018-06,,"【学科】数据结构
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-07,,none,clean_unmodified,,,refq-408-2018-07,,"【学科】数据结构
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-08,,none,clean_unmodified,,,refq-408-2018-08,,"【学科】数据结构
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-09,,none,clean_unmodified,,,refq-408-2018-09,,"【学科】数据结构
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-14,,none,clean_unmodified,,,refq-408-2018-14,,"【学科】计算机组成原理
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-15,,none,clean_unmodified,,,refq-408-2018-15,,"【学科】计算机组成原理
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-17,,none,clean_unmodified,,,refq-408-2018-17,,"【学科】操作系统
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-19,,none,clean_unmodified,,,refq-408-2018-19,,"【学科】操作系统
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-21,,none,clean_unmodified,,,refq-408-2018-21,,"【学科】操作系统
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-23,,none,clean_unmodified,,,refq-408-2018-23,,"【学科】操作系统
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-26,,none,clean_unmodified,,,refq-408-2018-26,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-27,,none,clean_unmodified,,,refq-408-2018-27,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-28,,none,clean_unmodified,,,refq-408-2018-28,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-30,,none,clean_unmodified,,,refq-408-2018-30,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-31,,none,clean_unmodified,,,refq-408-2018-31,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-32,,none,clean_unmodified,,,refq-408-2018-32,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-33,,none,clean_unmodified,,,refq-408-2018-33,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-34,,none,clean_unmodified,,,refq-408-2018-34,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-35,,none,clean_unmodified,,,refq-408-2018-35,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-36,,none,clean_unmodified,,,refq-408-2018-36,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-38,,none,clean_unmodified,,,refq-408-2018-38,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-39,,none,clean_unmodified,,,refq-408-2018-39,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2018-40,,none,clean_unmodified,,,refq-408-2018-40,,"【学科】计算机网络
+【试卷标题】2018年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2019-01,,none,clean_unmodified,,,refq-408-2019-01,,"【学科】数据结构
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2019-02,,none,clean_unmodified,,,refq-408-2019-02,,"【学科】数据结构
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2019-03,,none,clean_unmodified,,,refq-408-2019-03,,"【学科】数据结构
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2019-05,,none,clean_unmodified,,,refq-408-2019-05,,"【学科】数据结构
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2019-06,,none,clean_unmodified,,,refq-408-2019-06,,"【学科】数据结构
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2019-07,,none,clean_unmodified,,,refq-408-2019-07,,"【学科】数据结构
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2019-08,,none,clean_unmodified,,,refq-408-2019-08,,"【学科】数据结构
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2019-11,,none,clean_unmodified,,,refq-408-2019-11,,"【学科】计算机组成原理
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+blind-clean-refq-408-2019-13,,none,clean_unmodified,,,refq-408-2019-13,,"【学科】计算机组成原理
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"

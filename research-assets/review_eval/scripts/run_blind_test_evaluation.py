@@ -93,11 +93,12 @@ async def call_direct_llm(
     model: str,
     system_prompt: str,
     full_text: str,
+    reference: str = "",
     timeout: float = 90.0,
 ) -> tuple[dict | None, float]:
     t0 = time.perf_counter()
     user_payload = "[INPUT_PAYLOAD]\n" + json.dumps(
-        {"reference": "", "detection_content": full_text}, ensure_ascii=False
+        {"reference": reference, "detection_content": full_text}, ensure_ascii=False
     )
     for attempt in range(2):
         try:
@@ -239,6 +240,7 @@ async def main() -> int:
 
                 # 3. LLM / Knowledge Base Evaluation
                 if not has_err:
+                    reference = row.get("reference", "")
                     try:
                         if cat == "factual_logical":
                             res = await run_agentic_review(
@@ -248,6 +250,7 @@ async def main() -> int:
                                 model=args.model,
                                 full_text=full_text,
                                 subject=subject,
+                                reference=reference,
                                 timeout=120.0,
                             )
                             has_err = res.has_error
@@ -259,7 +262,7 @@ async def main() -> int:
                             target_task = cat if not is_clean else "typo"
                             sys_prompt = prompts_cache.get(target_task, prompts_cache["typo"])
                             p_data, lat = await call_direct_llm(
-                                client, args.base_url, api_key, args.model, sys_prompt, full_text
+                                client, args.base_url, api_key, args.model, sys_prompt, full_text, reference=reference
                             )
                             latency_ms = lat
                             if p_data:

@@ -82,6 +82,7 @@ async def run_agentic_review(
     model: str,
     full_text: str,
     subject: str = "computer_network",
+    reference: str = "",
     system_prompt: str | None = None,
     max_rounds: int = 3,
     timeout: float = 90.0,
@@ -97,7 +98,11 @@ async def run_agentic_review(
             "role": "user",
             "content": "[INPUT_PAYLOAD]\n"
             + json.dumps(
-                {"detection_content": full_text, "subject": subject},
+                {
+                    "reference": reference,
+                    "detection_content": full_text,
+                    "subject": subject,
+                },
                 ensure_ascii=False,
             ),
         },
