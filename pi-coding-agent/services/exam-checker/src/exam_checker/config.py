@@ -54,6 +54,7 @@ class Settings:
     workflow_llm_max_concurrency: int
     revision_prompt_root: str
     metadata_prompt_root: str
+    knowledge_base_dir: str = ""
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -153,5 +154,9 @@ class Settings:
             metadata_prompt_root=os.getenv(
                 "EXAM_CHECKER_METADATA_PROMPT_ROOT",
                 str(default_prompt_root / "question-metadata-prompt"),
+            ).strip(),
+            knowledge_base_dir=os.getenv(
+                "EXAM_CHECKER_KB_DIR",
+                str(Path(r"D:\Code\hku\LLM\kb_review\books")),
             ).strip(),
         )

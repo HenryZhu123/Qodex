@@ -22,6 +22,7 @@ kb_ocr_review/
 kb_test/
 kb_smoke_*/
 .tess_dl/
+research-assets/review_eval/runs/
 
 # Secrets / local env
 .env

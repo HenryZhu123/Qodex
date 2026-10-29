@@ -26,6 +26,7 @@ from ..domain.models import (
     ReviewedQuestion,
     StoredQuestionBankEntry,
 )
+from ..integrations.knowledge_base import KnowledgeBaseRetriever
 from ..integrations.libreoffice import LibreOfficeConverter, LibreOfficeError
 from ..integrations.mineru_agent import (
     MAX_FILE_BYTES,
@@ -120,6 +121,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         timeout_seconds=resolved.jev_timeout_seconds,
         max_concurrency=resolved.jev_max_concurrency,
     )
+    knowledge_base = KnowledgeBaseRetriever(resolved.knowledge_base_dir)
     specialist_reviewer = OpenAICompatibleSpecialistReviewer(
         resolved.review_llm_base_url,
         resolved.review_llm_api_key,
@@ -128,6 +130,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         timeout_seconds=resolved.review_llm_timeout_seconds,
         max_concurrency=resolved.review_llm_max_concurrency,
         max_attempts=resolved.review_llm_max_attempts,
+        knowledge_base=knowledge_base,
     )
     review_service = QuestionReviewService(
         router=jev_client,

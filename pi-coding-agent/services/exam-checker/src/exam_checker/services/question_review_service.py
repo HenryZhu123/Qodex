@@ -118,6 +118,14 @@ class QuestionReviewService:
             ),
             default=0,
         )
+        kb_ms = max(
+            (
+                check.kb_latency_ms
+                for check in checks
+                if check.execution_status != "SKIPPED_BY_ROUTER"
+            ),
+            default=0,
+        )
         review = ReviewedQuestion(
             document_id=document_id,
             question_id=question_id,
@@ -138,6 +146,7 @@ class QuestionReviewService:
                 timing_ms=ReviewTiming(
                     routing=routing_ms,
                     specialist_checks=specialist_ms,
+                    knowledge_base=kb_ms,
                     total=total_ms,
                 ),
             ),
@@ -205,6 +214,8 @@ class QuestionReviewService:
                 result=result,
                 latency_ms=latency_ms,
                 attempts=attempts,
+                kb_queries=getattr(result, "kb_queries", []) or [],
+                kb_latency_ms=getattr(result, "kb_latency_ms", 0) or 0,
             )
         except Exception as exc:
             return ReviewCheck(

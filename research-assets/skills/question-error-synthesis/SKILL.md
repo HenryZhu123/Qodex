@@ -15,7 +15,7 @@ Read these before beginning a run:
 - [quality-gates.md](references/quality-gates.md): construction and audit standards learned from prior runs.
 - [schemas.md](references/schemas.md): manifests, source registry, and gold-answer schema.
 
-Read the relevant error-specific prompt under `C:\hyt-agent\提示词-微调版` and inspect comparable rows in the target training dataset before fixing field names or prompt composition. The target dataset's established system prompt, specialty prompt, JSON constraint, and column schema take precedence over legacy agent formats.
+Read the relevant error-specific prompt under `D:\Code\hku\LLM\hku_agent\research-assets\提示词-微调版` and inspect comparable rows in the target training dataset before fixing field names or prompt composition. The target dataset's established system prompt, specialty prompt, JSON constraint, and column schema take precedence over legacy agent formats.
 
 ## Non-negotiable workflow
 
