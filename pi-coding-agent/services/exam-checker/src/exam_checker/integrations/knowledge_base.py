@@ -47,7 +47,21 @@ class KnowledgeBaseRetriever:
 
     @staticmethod
     def _build_fts_query(text: str) -> str:
-        tokens = re.findall(r"[\u4e00-\u9fff]{2,}|[A-Za-z][A-Za-z0-9]{1,}", text)
+        tokens: list[str] = []
+        try:
+            import jieba
+
+            jieba.setLogLevel(60)
+            for tok in jieba.cut(text):
+                tok = tok.strip()
+                if len(tok) >= 2 and not tok.isspace():
+                    tokens.append(tok)
+        except Exception:
+            pass
+        tokens.extend(re.findall(r"[A-Za-z][A-Za-z0-9+#\-]{1,}", text))
+        if not tokens:
+            tokens.extend(re.findall(r"[\u4e00-\u9fff]{2,}", text))
+
         seen: set[str] = set()
         uniq: list[str] = []
         for t in tokens:
@@ -56,7 +70,7 @@ class KnowledgeBaseRetriever:
                 uniq.append(t)
         if not uniq:
             return ""
-        return " OR ".join(f'"{t}"' for t in uniq[:12])
+        return " OR ".join(f'"{t}"' for t in uniq[:16])
 
     def search(
         self,

@@ -272,7 +272,7 @@ async def main() -> int:
                                 full_text=full_text,
                                 subject=subject,
                                 reference=reference,
-                                timeout=60.0,
+                                timeout=180.0,
                             )
                             has_err = res.has_error
                             detected_errors = res.errors

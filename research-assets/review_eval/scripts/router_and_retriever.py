@@ -91,8 +91,43 @@ def parse_json_from_text(text: str) -> dict[str, Any] | None:
     return None
 
 
+_JIEBA: object | None = None
+
+
+def _jieba_module():
+    """Lazily import jieba; the FTS index was built on jieba tokens.
+
+    The ``chunks_fts.content_tokens`` column stores space-separated jieba
+    tokens, so a raw compound query such as "突发传输" becomes a single FTS
+    token and matches nothing. Queries must be segmented the same way.
+    """
+    global _JIEBA
+    if _JIEBA is None:
+        try:
+            import jieba
+
+            jieba.setLogLevel(60)
+            _JIEBA = jieba
+        except Exception:
+            _JIEBA = False
+    return _JIEBA or None
+
+
 def build_fts_query(text: str) -> str:
-    tokens = re.findall(r"[\u4e00-\u9fff]{2,}|[A-Za-z][A-Za-z0-9]{1,}", text)
+    tokens: list[str] = []
+    jb = _jieba_module()
+    if jb is not None:
+        # jieba emits the same segmentation used to build the index.
+        for tok in jb.cut(text):
+            tok = tok.strip()
+            if len(tok) >= 2 and not tok.isspace():
+                tokens.append(tok)
+    # ASCII / technical identifiers survive tokenisation untouched.
+    tokens.extend(re.findall(r"[A-Za-z][A-Za-z0-9+#\-]{1,}", text))
+    # Fallback: if segmentation produced nothing usable, use raw CJK runs.
+    if not tokens:
+        tokens.extend(re.findall(r"[\u4e00-\u9fff]{2,}", text))
+
     seen: set[str] = set()
     uniq: list[str] = []
     for t in tokens:
@@ -101,7 +136,7 @@ def build_fts_query(text: str) -> str:
             uniq.append(t)
     if not uniq:
         return ""
-    return " OR ".join(f'"{t}"' for t in uniq[:12])
+    return " OR ".join(f'"{t}"' for t in uniq[:16])
 
 
 def targeted_retrieve(

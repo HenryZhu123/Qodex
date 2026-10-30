@@ -85,7 +85,7 @@ async def run_agentic_review(
     reference: str = "",
     system_prompt: str | None = None,
     max_rounds: int = 3,
-    timeout: float = 90.0,
+    timeout: float = 180.0,
 ) -> ReviewResult:
     """Execute multi-turn agentic review with autonomous tool retrieval."""
     if system_prompt is None:
