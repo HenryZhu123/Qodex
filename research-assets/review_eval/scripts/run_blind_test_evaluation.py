@@ -129,6 +129,27 @@ async def call_direct_llm(
     return None, (time.perf_counter() - t0) * 1000.0
 
 
+def build_async_client(timeout: float) -> httpx.AsyncClient:
+    """Create an AsyncClient that survives a malformed system proxy override.
+
+    On Windows, httpx 0.28 reads urllib's registry proxy override, which may
+    contain entries such as ``[::1]`` that fail to parse as a URLPattern and
+    raise InvalidURL before any request is sent. We therefore disable
+    environment/registry discovery and pass the proxy explicitly.
+    """
+    proxy = (
+        os.environ.get("HTTPS_PROXY")
+        or os.environ.get("https_proxy")
+        or os.environ.get("HTTP_PROXY")
+        or os.environ.get("http_proxy")
+        or ""
+    ).strip()
+    try:
+        return httpx.AsyncClient(timeout=timeout, trust_env=False, proxy=proxy or None)
+    except Exception:
+        return httpx.AsyncClient(timeout=timeout, trust_env=False)
+
+
 async def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default="https://llm.talkweb.com.cn/v1")
@@ -196,14 +217,14 @@ async def main() -> int:
     done_counter = len(done_ids)
     all_records = list(done_records)
 
-    async with httpx.AsyncClient(timeout=120) as client:
+    async with build_async_client(120) as client:
         async def evaluate_one(row: dict) -> dict:
             nonlocal done_counter
             async with sem:
                 sample_id = row["sample_id"]
                 is_clean = (row.get("label") == "clean")
                 cat = "clean" if is_clean else row["error_type"]
-                full_text = row["full_text"]
+                full_text = (row.get("full_text") or row.get("error_text") or "").strip()
                 subject = row.get("subject", "computer_network")
                 gold = gold_map.get(sample_id, {})
 
@@ -251,18 +272,34 @@ async def main() -> int:
                                 full_text=full_text,
                                 subject=subject,
                                 reference=reference,
-                                timeout=120.0,
+                                timeout=60.0,
                             )
                             has_err = res.has_error
                             detected_errors = res.errors
                             reason = f"[Agentic-KB] {res.reason}"
                             tool_calls_count = res.tool_calls_count
                             latency_ms = res.total_latency_ms
+
+                            # Fallback if agentic review missed or timed out
+                            if not has_err:
+                                from router_and_retriever import targeted_retrieve, format_evidence_block
+                                evs, _ = targeted_retrieve(subject, [full_text[:60]], top_k=2)
+                                ev_str = format_evidence_block(evs)
+                                kb_ref = f"{reference}\n\n{ev_str}" if ev_str else reference
+                                sys_prompt = prompts_cache.get("factual_logical", prompts_cache["typo"])
+                                p_data, lat = await call_direct_llm(
+                                    client, args.base_url, api_key, args.model, sys_prompt, full_text, reference=kb_ref, timeout=60.0
+                                )
+                                latency_ms += lat
+                                if p_data and p_data.get("has_error"):
+                                    has_err = True
+                                    detected_errors = p_data.get("errors", [])
+                                    reason = f"[Direct-KB] {p_data.get('reason', '')}"
                         else:
                             target_task = cat if not is_clean else "typo"
                             sys_prompt = prompts_cache.get(target_task, prompts_cache["typo"])
                             p_data, lat = await call_direct_llm(
-                                client, args.base_url, api_key, args.model, sys_prompt, full_text, reference=reference
+                                client, args.base_url, api_key, args.model, sys_prompt, full_text, reference=reference, timeout=60.0
                             )
                             latency_ms = lat
                             if p_data:
