@@ -99,16 +99,15 @@ async def test_direct_checks_start_while_jev_routes_and_only_run_selected_tasks(
         "typo_check",
         "punctuation_check",
         "mismatch_check",
-        "missing_check",
+        "solvability_check",
         "ambiguity_check",
-        "unsolvability_check",
         "logic_check",
     }
     assert result.review.status == "PASS"
     assert result.review.routing["options_check"].decision == "SKIP"
     assert result.review.routing["mismatch_check"].decision == "RUN"
     assert result.review.routing["answer_leak_check"].decision == "SKIP"
-    assert len(result.review.checks) == 9
+    assert len(result.review.checks) == 8
 
 
 class FailingRouter:
@@ -139,9 +138,8 @@ async def test_jev_failure_fails_open_to_every_specialist() -> None:
         "punctuation_check",
         "options_check",
         "mismatch_check",
-        "missing_check",
+        "solvability_check",
         "ambiguity_check",
-        "unsolvability_check",
         "answer_leak_check",
         "logic_check",
     }

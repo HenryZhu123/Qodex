@@ -42,18 +42,18 @@ EXPECTED_ERROR_TYPES: dict[ReviewTaskId, str] = {
     "punctuation_check": "标点符号错误",
     "options_check": "选项错误",
     "mismatch_check": "题目与题型不一致",
-    "missing_check": "信息缺失",
+    "solvability_check": "可解性错误",
     "ambiguity_check": "语义不清",
-    "unsolvability_check": "题目无解",
     "answer_leak_check": "答案泄露",
     "logic_check": "事实/逻辑错误",
 }
 
 DEFAULT_KB_ENABLED_TASKS: frozenset[ReviewTaskId] = frozenset({"logic_check"})
 
-AGENTIC_LOGIC_PROMPT_PATH = Path(
-    r"D:\Code\hku\LLM\hku_agent\research-assets\review_eval\prompts\agentic_logic_check\task.txt"
-)
+# Valid domain terms that a character-level reviewer has repeatedly tried to
+# "complete" into a different phrase. These are exact protections, not a
+# general typo allowlist.
+TYPO_PROTECTED_TERMS: frozenset[str] = frozenset({"界地址保护"})
 
 KB_TOOLS_SCHEMA = [
     {
@@ -101,6 +101,9 @@ class OpenAICompatibleSpecialistReviewer:
         client: httpx.AsyncClient | None = None,
         knowledge_base: KnowledgeBaseRetriever | None = None,
         kb_enabled_tasks: frozenset[ReviewTaskId] = DEFAULT_KB_ENABLED_TASKS,
+        reasoning_effort: str = "",
+        max_tokens: int = 2048,
+        agentic_logic_prompt_path: str | Path = "",
     ) -> None:
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
@@ -113,6 +116,23 @@ class OpenAICompatibleSpecialistReviewer:
         self._client = client or httpx.AsyncClient(timeout=timeout_seconds)
         self.knowledge_base = knowledge_base
         self.kb_enabled_tasks = kb_enabled_tasks
+        self.reasoning_effort = reasoning_effort.strip()
+        self.max_tokens = max(256, max_tokens)
+        self.agentic_logic_prompt_path = (
+            Path(agentic_logic_prompt_path).expanduser()
+            if agentic_logic_prompt_path
+            else None
+        )
+
+    def _reasoning_params(self) -> dict[str, Any]:
+        """Extra body fields that control reasoning output.
+
+        Reasoning models on some gateways ignore ``enable_thinking`` and spend
+        the ``max_tokens`` budget on reasoning_content, which truncates the JSON
+        answer. ``reasoning_effort="none"`` turns that off. Empty by default so
+        models that do not support the field keep the previous request shape.
+        """
+        return {"reasoning_effort": self.reasoning_effort} if self.reasoning_effort else {}
 
     async def close(self) -> None:
         if self._owns_client:
@@ -161,8 +181,15 @@ class OpenAICompatibleSpecialistReviewer:
             and self.knowledge_base is not None
             and self.knowledge_base.is_available()
         )
-        if use_kb and task_id == "logic_check" and AGENTIC_LOGIC_PROMPT_PATH.exists():
-            system_prompt = AGENTIC_LOGIC_PROMPT_PATH.read_text(encoding="utf-8").strip()
+        if (
+            use_kb
+            and task_id == "logic_check"
+            and self.agentic_logic_prompt_path is not None
+            and self.agentic_logic_prompt_path.is_file()
+        ):
+            system_prompt = self.agentic_logic_prompt_path.read_text(
+                encoding="utf-8"
+            ).strip()
         else:
             system_prompt = self.prompts.system_prompt(task_id)
         last_error: SpecialistReviewError | None = None
@@ -189,6 +216,7 @@ class OpenAICompatibleSpecialistReviewer:
                                 "response_format": {"type": "json_object"},
                                 "enable_thinking": False,
                                 "chat_template_kwargs": {"enable_thinking": False},
+                                **self._reasoning_params(),
                             },
                         )
                         result = self._parse_content(content)
@@ -196,6 +224,7 @@ class OpenAICompatibleSpecialistReviewer:
                 latency_ms = round((time.perf_counter() - started) * 1000)
                 return result, latency_ms, attempt
             except (
+                TimeoutError,
                 httpx.HTTPError,
                 StreamingChatHTTPError,
                 StreamingChatProtocolError,
@@ -216,7 +245,7 @@ class OpenAICompatibleSpecialistReviewer:
                 else:
                     error_code = (
                         "UPSTREAM_TIMEOUT"
-                        if isinstance(exc, httpx.TimeoutException)
+                        if isinstance(exc, (TimeoutError, httpx.TimeoutException))
                         else "UPSTREAM_NETWORK_ERROR"
                     )
                     last_error = SpecialistReviewError(
@@ -257,18 +286,24 @@ class OpenAICompatibleSpecialistReviewer:
             tools = KB_TOOLS_SCHEMA if round_idx < (max_rounds - 1) else None
             choice = "auto" if round_idx < (max_rounds - 1) else "none"
 
+            request_body: dict[str, Any] = {
+                "model": self.model,
+                "messages": messages,
+                "tools": tools,
+                "tool_choice": choice,
+                "temperature": 0,
+                "seed": 42,
+                "enable_thinking": False,
+                "chat_template_kwargs": {"enable_thinking": False},
+                "max_tokens": self.max_tokens,
+                **self._reasoning_params(),
+            }
+            if choice == "none":
+                request_body["response_format"] = {"type": "json_object"}
             resp = await self._client.post(
                 f"{self.base_url}/chat/completions",
                 headers={"Authorization": f"Bearer {self.api_key}"},
-                json={
-                    "model": self.model,
-                    "messages": messages,
-                    "tools": tools,
-                    "tool_choice": choice,
-                    "temperature": 0,
-                    "seed": 42,
-                    "enable_thinking": False,
-                },
+                json=request_body,
             )
             if resp.status_code != 200:
                 raise self._http_error(resp.status_code, resp.text)
@@ -279,7 +314,23 @@ class OpenAICompatibleSpecialistReviewer:
             tcs = choice_msg.get("tool_calls")
             if not tcs:
                 content = choice_msg.get("content") or ""
-                result = self._parse_content(content)
+                finish_reason = resp.json()["choices"][0].get("finish_reason")
+                try:
+                    if finish_reason == "length":
+                        raise SpecialistReviewError(
+                            "Specialist response was truncated by the output limit",
+                            error_code="JSON_TRUNCATED",
+                            retryable=True,
+                        )
+                    result = self._parse_content(content)
+                except SpecialistReviewError as exc:
+                    if exc.error_code not in {
+                        "JSON_PREFIX_NOISE",
+                        "JSON_TRUNCATED",
+                        "JSON_SCHEMA_INVALID",
+                    }:
+                        raise
+                    result = await self._regenerate_compact_json(messages)
                 result.kb_queries = tool_queries
                 result.kb_latency_ms = round(total_retrieval_latency)
                 self._validate_result(task_id, result, payload)
@@ -313,6 +364,47 @@ class OpenAICompatibleSpecialistReviewer:
             retryable=True,
         )
 
+    async def _regenerate_compact_json(
+        self, messages: list[dict[str, Any]]
+    ) -> SpecialistReviewResult:
+        repair_messages = [
+            *messages,
+            {
+                "role": "user",
+                "content": (
+                    "上一条回答的格式无效或被截断。保留已经完成的判断，只重新输出"
+                    "一个完整、紧凑的 JSON 对象。不要输出 Markdown、解释、推理过程或 think 字段；"
+                    "reason 不超过60字，每条 description 和 suggestion 各不超过两句话。"
+                ),
+            },
+        ]
+        resp = await self._client.post(
+            f"{self.base_url}/chat/completions",
+            headers={"Authorization": f"Bearer {self.api_key}"},
+            json={
+                "model": self.model,
+                "messages": repair_messages,
+                "tool_choice": "none",
+                "temperature": 0,
+                "seed": 42,
+                "enable_thinking": False,
+                "chat_template_kwargs": {"enable_thinking": False},
+                "max_tokens": self.max_tokens,
+                "response_format": {"type": "json_object"},
+                **self._reasoning_params(),
+            },
+        )
+        if resp.status_code != 200:
+            raise self._http_error(resp.status_code, resp.text)
+        choice = resp.json()["choices"][0]
+        if choice.get("finish_reason") == "length":
+            raise SpecialistReviewError(
+                "Compact JSON regeneration was truncated by the output limit",
+                error_code="JSON_TRUNCATED",
+                retryable=True,
+            )
+        return self._parse_content(choice.get("message", {}).get("content") or "")
+
     @staticmethod
     def _http_error(status_code: int, response_text: str) -> SpecialistReviewError:
         if status_code in {401, 403}:
@@ -345,9 +437,37 @@ class OpenAICompatibleSpecialistReviewer:
         try:
             return SpecialistReviewResult.model_validate_json(stripped)
         except ValidationError as exc:
+            decoder = json.JSONDecoder()
+            for start in (index for index, char in enumerate(stripped) if char == "{"):
+                try:
+                    value, _ = decoder.raw_decode(stripped[start:])
+                except json.JSONDecodeError:
+                    continue
+                if not isinstance(value, dict):
+                    continue
+                try:
+                    return SpecialistReviewResult.model_validate(value)
+                except ValidationError:
+                    continue
+
+            lowered_error = str(exc).lower()
+            truncated = "{" in stripped and any(
+                marker in lowered_error
+                for marker in (
+                    "eof while parsing",
+                    "unterminated string",
+                    "expected value at line",
+                )
+            )
+            if truncated:
+                error_code = "JSON_TRUNCATED"
+            elif "{" in stripped:
+                error_code = "JSON_SCHEMA_INVALID"
+            else:
+                error_code = "JSON_PREFIX_NOISE"
             raise SpecialistReviewError(
                 f"Specialist response violates the result schema: {exc}",
-                error_code="INVALID_MODEL_RESPONSE",
+                error_code=error_code,
                 retryable=True,
             ) from exc
 
@@ -357,6 +477,7 @@ class OpenAICompatibleSpecialistReviewer:
         result: SpecialistReviewResult,
         payload: CheckerPayload,
     ) -> None:
+        retained_errors = []
         for error in result.errors:
             if error.error_type != EXPECTED_ERROR_TYPES[task_id]:
                 raise SpecialistReviewError(
@@ -364,9 +485,55 @@ class OpenAICompatibleSpecialistReviewer:
                     error_code="INVALID_MODEL_RESPONSE",
                     retryable=True,
                 )
-            if not error.original_text or error.original_text not in payload.detection_content:
-                raise SpecialistReviewError(
-                    "Specialist original_text is missing from detection_content",
-                    error_code="INVALID_MODEL_RESPONSE",
-                    retryable=True,
+            if task_id == "typo_check" and any(
+                protected in error.original_text for protected in TYPO_PROTECTED_TERMS
+            ):
+                continue
+            if not error.original_text:
+                continue
+            if error.original_text not in payload.detection_content:
+                matched = OpenAICompatibleSpecialistReviewer._match_ignoring_whitespace(
+                    payload.detection_content, error.original_text
                 )
+                if matched is None:
+                    # A finding that cannot quote the input is not safe to expose. Treat it
+                    # as an unsupported candidate rather than making the whole question
+                    # unresolved.
+                    continue
+                error.original_text = matched
+            retained_errors.append(error)
+
+        if len(retained_errors) != len(result.errors):
+            result.errors = retained_errors
+            result.total_errors = len(retained_errors)
+            result.has_error = bool(retained_errors)
+
+    @staticmethod
+    def _match_ignoring_whitespace(haystack: str, needle: str) -> str | None:
+        def normalize_with_offsets(text: str) -> tuple[str, list[int]]:
+            normalized: list[str] = []
+            offsets: list[int] = []
+            in_whitespace = False
+            for index, char in enumerate(text):
+                if char.isspace():
+                    if not in_whitespace:
+                        normalized.append(" ")
+                        offsets.append(index)
+                    in_whitespace = True
+                else:
+                    normalized.append(char)
+                    offsets.append(index)
+                    in_whitespace = False
+            return "".join(normalized), offsets
+
+        normalized_haystack, offsets = normalize_with_offsets(haystack)
+        normalized_needle = re.sub(r"\s+", " ", needle).strip()
+        if not normalized_needle:
+            return None
+        start = normalized_haystack.find(normalized_needle)
+        if start < 0 or start >= len(offsets):
+            return None
+        end_index = start + len(normalized_needle) - 1
+        if end_index >= len(offsets):
+            return None
+        return haystack[offsets[start] : offsets[end_index] + 1]

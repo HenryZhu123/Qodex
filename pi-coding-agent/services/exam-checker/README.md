@@ -13,7 +13,7 @@ Pipeline:
 5. Normalize the result into one `ExamDocument`.
 6. Build a per-question checker payload.
 7. Run Jev-gated and direct specialist checks concurrently.
-8. Aggregate all nine error types into one question review result.
+8. Aggregate all eight error types into one question review result.
 9. Create an immutable question version and persist each full review in PostgreSQL.
 10. For passed questions, generate difficulty and knowledge points and store the complete question JSON in the question bank.
 
@@ -31,6 +31,19 @@ isolated PostgreSQL 17 + pgvector database with one command:
 ```bash
 ./start-exam-checker-db.sh
 ```
+
+For direct Python runs (including the evaluation scripts), the service also
+loads `services/exam-checker/.env.local` and then `services/exam-checker/.env`.
+Existing process environment variables take precedence. Copy
+`.env.example` to `.env.local`; the local file is ignored by Git. An
+alternative file can be selected with `EXAM_CHECKER_ENV_FILE`.
+
+The specialist reviewer uses an OpenAI-compatible endpoint and calls
+`{EXAM_CHECKER_REVIEW_LLM_BASE_URL}/chat/completions`. The Jev router uses the
+OpenRouter Decisions protocol and calls
+`EXAM_CHECKER_JEV_ENDPOINT` exactly when configured, otherwise it calls
+`{EXAM_CHECKER_JEV_BASE_URL}/decisions`. A relay that only supports OpenAI Chat
+Completions is not directly compatible.
 
 The database listens on host port `5433` by default, so it does not conflict
 with a PostgreSQL instance already using `5432`. The command is idempotent: it
@@ -112,7 +125,7 @@ The revision endpoint requires `base_version_id`. It accepts either a complete u
 question JSON, the latest review's `errors`, and the user instruction without converting the
 question to another schema. It returns the complete revised question plus one natural-language
 `changes` record; the service builds the four-field `change_log`, creates a new version, and
-runs all nine checks again. A stale
+runs all eight checks again. A stale
 `base_version_id` returns HTTP 409 instead of overwriting a newer edit.
 
 The MinerU Agent API accepts files up to 10 MB and PDFs up to 20 pages. It is IP-rate-limited and returns only Markdown.
@@ -124,7 +137,7 @@ The review phase is question-oriented, not error-type-oriented:
 1. Read one normalized question by `question_id` and build its checker payload.
 2. Run Jev independently for `options_check`, `mismatch_check`, and `answer_leak_check`.
 3. Skip a gated specialist only when `p_skip` reaches its locked threshold. Low-confidence or failed routing fails open to the specialist LLM.
-4. Start all six direct specialist checks without waiting for Jev.
+4. Start all five direct specialist checks without waiting for Jev.
 5. Retry retryable specialist failures up to `EXAM_CHECKER_REVIEW_LLM_MAX_ATTEMPTS` attempts (three by default).
 6. Aggregate every specialist result for the question into one JSON object and return it as the question result.
 7. Review multiple questions concurrently. The global maximum concurrency is configuration-driven and will be fixed only after load testing.

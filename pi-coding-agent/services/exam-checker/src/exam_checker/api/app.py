@@ -118,6 +118,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         resolved.jev_api_key,
         resolved.jev_model,
         jev_prompts,
+        endpoint_url=resolved.jev_endpoint,
         timeout_seconds=resolved.jev_timeout_seconds,
         max_concurrency=resolved.jev_max_concurrency,
     )
@@ -131,6 +132,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         max_concurrency=resolved.review_llm_max_concurrency,
         max_attempts=resolved.review_llm_max_attempts,
         knowledge_base=knowledge_base,
+        reasoning_effort=resolved.review_reasoning_effort,
+        max_tokens=resolved.review_max_tokens,
+        agentic_logic_prompt_path=resolved.agentic_logic_prompt_path,
     )
     review_service = QuestionReviewService(
         router=jev_client,
