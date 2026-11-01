@@ -26,3 +26,9 @@ research-assets/review_eval/runs/
 
 # Secrets / local env
 .env
+.env.local
+.env.*.local
+
+# SQLite runtime sidecars
+*.db-wal
+*.db-shm
