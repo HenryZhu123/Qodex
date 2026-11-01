@@ -1,23 +1,204 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Deterministic guard for blatant protocol and physical contradictions.
+"""Deterministic guard for protocol, physical, and numeric contradictions.
 
 Catches:
 1. Protocol window violations: '停止-等待协议' paired with send window > 1 (e.g. 1000).
 2. Congestion window zero violation: TCP initial cwnd / window set to 0 bytes / 0B.
 3. Concurrency semantic conflicts: claiming both processes increment, but providing decrement instructions.
 4. Peterson/mutex semantic conflicts: claiming '不加同步' while providing Peterson mutual exclusion logic.
+5. Cross-field numeric invariants such as address width/capacity, CPI, and
+   modulation order.  These checks complement retrieval: no textbook passage
+   is needed to prove an arithmetic contradiction already present in the stem.
 """
 
 from __future__ import annotations
 
 import re
+from math import log2
+
 from ..domain.models import ReviewError, SpecialistReviewResult
+
+
+def _result(
+    *,
+    reason: str,
+    position: str,
+    original_text: str,
+    correction: str,
+    description: str,
+    suggestion: str,
+) -> SpecialistReviewResult:
+    return SpecialistReviewResult(
+        reason=reason,
+        has_error=True,
+        total_errors=1,
+        errors=[
+            ReviewError(
+                error_type="事实/逻辑错误",
+                position=position,
+                original_text=original_text,
+                anchor_text=original_text,
+                correction=correction,
+                description=description,
+                suggestion=suggestion,
+                severity="严重",
+            )
+        ],
+    )
+
+
+def _numeric_invariant_guard(full_text: str) -> SpecialistReviewResult | None:
+    # An n-bit byte address space cannot contain an explicitly larger cache or
+    # block. This catches cross-field contradictions without relying on memory.
+    address = re.search(r"主存地址为\s*(\d+)\s*位", full_text)
+    cache = re.search(
+        r"Cache\s*数据区大小为\s*(\d+(?:\.\d+)?)\s*(KB|MB|B)",
+        full_text,
+        re.IGNORECASE,
+    )
+    block = re.search(
+        r"主存块大小为\s*(\d+(?:\.\d+)?)\s*(KB|MB|B)",
+        full_text,
+        re.IGNORECASE,
+    )
+    if address and (cache or block):
+        address_bits = int(address.group(1))
+        addressable_bytes = 2**address_bits
+
+        def to_bytes(match: re.Match[str]) -> float:
+            scale = {"B": 1, "KB": 1024, "MB": 1024 * 1024}[match.group(2).upper()]
+            return float(match.group(1)) * scale
+
+        largest = max(
+            to_bytes(match) for match in (cache, block) if match is not None
+        )
+        if largest > addressable_bytes:
+            span = address.group(0)
+            minimum_bits = max(1, int(log2(largest - 1)) + 1)
+            return _result(
+                reason="主存地址位宽与题面容量互相矛盾",
+                position="题干地址参数",
+                original_text=span,
+                correction=f"主存地址为至少{minimum_bits}位",
+                description=(
+                    f"{address_bits}位按字节编址最多覆盖{addressable_bytes}B，"
+                    f"小于题面给出的{largest:g}B存储结构"
+                ),
+                suggestion=f"将地址位宽修正为至少{minimum_bits}位，或同步缩小容量参数",
+            )
+
+    cpi = re.search(r"平均\s*CPI\s*为\s*(\d+(?:\.\d+)?)", full_text, re.IGNORECASE)
+    cycles = re.search(r"每条指令平均需要\s*(\d+(?:\.\d+)?)\s*个时钟周期", full_text)
+    if cpi and cycles:
+        cpi_value = float(cpi.group(1))
+        cycle_value = float(cycles.group(1))
+        if abs(cpi_value - cycle_value) > 1e-9:
+            span = full_text[cpi.start():cycles.end()]
+            return _result(
+                reason="CPI与每条指令平均时钟周期数定义冲突",
+                position="题干性能参数",
+                original_text=span,
+                correction=f"平均CPI为{cycle_value:g}",
+                description="CPI按定义就是每条指令平均消耗的时钟周期数，两者必须相等",
+                suggestion="统一CPI与每条指令平均时钟周期数",
+            )
+
+    modulation = re.search(
+        r"采用\s*(\d+)\s*个幅值的\s*(?:ASK|QAM|PSK)\s*调制[^。；，]{0,30}?每个符号携带\s*(\d+)\s*个比特",
+        full_text,
+        re.IGNORECASE,
+    )
+    if modulation:
+        order = int(modulation.group(1))
+        claimed_bits = int(modulation.group(2))
+        if order > 0 and order & (order - 1) == 0:
+            expected_bits = int(log2(order))
+            if claimed_bits != expected_bits:
+                span = modulation.group(0)
+                return _result(
+                    reason="调制阶数与每符号比特数矛盾",
+                    position="题干调制参数",
+                    original_text=span,
+                    correction=f"每个符号携带{expected_bits}个比特",
+                    description=f"{order}种可区分状态每个符号只能编码log2({order})={expected_bits}比特",
+                    suggestion=f"将每符号比特数改为{expected_bits}，或调整调制阶数",
+                )
+
+    heap = re.search(
+        r"关键字序列\s*([\d\s,，、-]+?)\s*是\s*(小根堆|最小堆|大根堆|最大堆)",
+        full_text,
+    )
+    if heap:
+        values = [int(value) for value in re.findall(r"-?\d+", heap.group(1))]
+        heap_kind = heap.group(2)
+        is_min = heap_kind in {"小根堆", "最小堆"}
+        violation: tuple[int, int] | None = None
+        for child_index in range(1, len(values)):
+            parent = values[(child_index - 1) // 2]
+            child = values[child_index]
+            if (is_min and parent > child) or (not is_min and parent < child):
+                violation = parent, child
+                break
+        if violation is not None:
+            parent, child = violation
+            opposite = "大根堆" if is_min else "小根堆"
+            span = heap.group(0)
+            relation = "不大于" if is_min else "不小于"
+            return _result(
+                reason=f"给定序列不满足{heap_kind}的父子顺序不变量",
+                position="题干堆定义",
+                original_text=span,
+                correction=span.rsplit(heap_kind, 1)[0] + opposite,
+                description=f"{heap_kind}要求父结点{relation}子结点，但出现父结点{parent}与子结点{child}",
+                suggestion=f"修正关键字序列，或将堆类型改为{opposite}",
+            )
+
+    return None
+
+
+def _protocol_invariant_guard(full_text: str) -> SpecialistReviewResult | None:
+    syn_free = re.search(r"SYN\s*段不占用序列号", full_text, re.IGNORECASE)
+    if syn_free:
+        span = syn_free.group(0)
+        return _result(
+            reason="TCP SYN段序列号规则被反转",
+            position="题干TCP握手条件",
+            original_text=span,
+            correction="SYN段占用一个序列号",
+            description="TCP中SYN标志段会消耗一个序列号",
+            suggestion="将不占用序列号修正为占用一个序列号",
+        )
+
+    timeout_unchanged = re.search(
+        r"(?:超时|计时器发生了超时)[^。；]{0,40}(?:拥塞窗口|cwnd)[^。；]{0,30}(?:慢开始门限|ssthresh)[^。；]{0,30}(?:均|都)?保持不变",
+        full_text,
+        re.IGNORECASE,
+    )
+    if timeout_unchanged:
+        span = timeout_unchanged.group(0)
+        return _result(
+            reason="TCP超时后的拥塞控制状态不可能保持不变",
+            position="题干拥塞控制条件",
+            original_text=span,
+            correction="超时后重设拥塞窗口，并按算法更新慢开始门限",
+            description="TCP发生重传超时会触发拥塞控制，cwnd与ssthresh不能同时保持不变",
+            suggestion="按题目采用的TCP拥塞控制版本修正超时后的cwnd和ssthresh",
+        )
+    return None
 
 
 def check_factual_guards(full_text: str) -> SpecialistReviewResult | None:
     if not full_text:
         return None
+
+    numeric = _numeric_invariant_guard(full_text)
+    if numeric is not None:
+        return numeric
+
+    protocol = _protocol_invariant_guard(full_text)
+    if protocol is not None:
+        return protocol
 
     # 1. Stop-and-Wait protocol window > 1
     if "停止-等待" in full_text:
