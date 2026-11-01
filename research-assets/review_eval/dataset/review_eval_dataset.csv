@@ -1,4 +1,4 @@
-﻿sample_id,label,error_type,error_detailed_type,subject,subject_cn,year,source_record_id,question_text,options,full_text,reference
+sample_id,label,error_type,error_detailed_type,subject,subject_cn,year,source_record_id,question_text,options,full_text,reference
 clean-001,clean,none,,data_structure,数据结构,2009,refq-408-2009-07,"下列关于无向连通图特性的叙述中，正确的是 。
 I. 所有顶点的度之和为偶数
 II. 边数大于顶点个数减1
@@ -28,12 +28,12 @@ D. 95％","【学科】操作系统
 【试卷标题】2009年全国硕士研究生入学统一考试计算机学科专业基础综合
 【题型或其它信息】单项选择题"
 clean-003,clean,none,,operating_system,操作系统,2010,refq-408-2010-26,下列选项中，降低进程优先级的合理时机是 。,"A. 进程的时间片用完
-B. 进程刚完成I/O，进入就绪列队
-C. 进程长期处于就绪列队中
+B. 进程刚完成I/O，进入就绪队列
+C. 进程长期处于就绪队列中
 D. 进程从就绪状态转为运行状态","下列选项中，降低进程优先级的合理时机是 。
 A. 进程的时间片用完
-B. 进程刚完成I/O，进入就绪列队
-C. 进程长期处于就绪列队中
+B. 进程刚完成I/O，进入就绪队列
+C. 进程长期处于就绪队列中
 D. 进程从就绪状态转为运行状态","【学科】计算机网络
 【试卷标题】2010年全国硕士研究生入学统一考试计算机学科专业基础综合
 【题型或其它信息】单项选择题"

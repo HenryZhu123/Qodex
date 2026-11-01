@@ -159,7 +159,8 @@ VERIFY_SYSTEM = """# 角色
   (a) 教材陈述与命题**字面相反**；
   (b) 教材陈述了某规则，而命题**违反**该规则（含方向颠倒、顺序颠倒、参数越界、前提被换）；
   (c) 教材给出的定义/性质使命题的**推断必然为假**。
-- conflict=false 仅限：教材原文确实没有涉及该主题，无法据此判断。
+- conflict=false 且 supported=true：教材规则明确支持命题。
+- conflict=false 且 supported=false：教材没有覆盖该主题，或证据不足，不能据此判定题目正确。
 
 # 严禁
 - 严禁使用你自己的参数记忆去否定教材原文；以给出的教材片段为准。
@@ -170,6 +171,7 @@ VERIFY_SYSTEM = """# 角色
 {
   "textbook_rule": "从教材原文提炼的规则（无相关内容则写空字符串）",
   "conflict": true/false,
+  "supported": true/false,
   "confidence": "high|medium|low",
   "reason": "一句话说明冲突点，无冲突则写「教材未涉及该主题」",
   "original_text": "题目中与教材冲突的连续原文片段（无冲突则空字符串）",
@@ -181,6 +183,7 @@ VERIFY_SYSTEM = """# 角色
 @dataclass
 class PipelineResult:
     has_error: bool
+    status: str = "CLEAN"
     errors: list[dict[str, Any]] = field(default_factory=list)
     reason: str = ""
     stage: str = ""
@@ -189,6 +192,7 @@ class PipelineResult:
     verified_claims: int = 0
     llm_calls: int = 0
     error_msg: str = ""
+    failures: list[dict[str, Any]] = field(default_factory=list)
 
 
 async def _call_json(
@@ -199,7 +203,7 @@ async def _call_json(
     system_prompt: str,
     payload: dict[str, Any],
     timeout: float,
-) -> tuple[dict | None, float]:
+) -> tuple[dict, float]:
     t0 = time.perf_counter()
     user = "[INPUT_PAYLOAD]\n" + json.dumps(payload, ensure_ascii=False)
     try:
@@ -221,10 +225,25 @@ async def _call_json(
         )
         lat = (time.perf_counter() - t0) * 1000.0
         if resp.status_code != 200:
-            return None, lat
-        return parse_json_from_text(resp.json()["choices"][0]["message"]["content"]), lat
+            return {
+                "_failure": {
+                    "kind": "http_error",
+                    "status_code": resp.status_code,
+                    "response_excerpt": resp.text[:500],
+                }
+            }, lat
+        parsed = parse_json_from_text(resp.json()["choices"][0]["message"]["content"])
+        if parsed is None:
+            return {"_failure": {"kind": "invalid_json"}}, lat
+        return parsed, lat
     except Exception as exc:  # noqa: BLE001
-        return {"_exception": f"{type(exc).__name__}: {exc}"}, (
+        return {
+            "_failure": {
+                "kind": "exception",
+                "exception_type": type(exc).__name__,
+                "message": str(exc)[:500],
+            }
+        }, (
             time.perf_counter() - t0
         ) * 1000.0
 
@@ -255,6 +274,7 @@ async def run_factual_pipeline_v2(
         }
         return PipelineResult(
             has_error=True,
+            status="DETECTED",
             errors=[err],
             reason=f"[V2-Rule] {hit['description']}",
             stage="concept_inversion",
@@ -273,51 +293,57 @@ async def run_factual_pipeline_v2(
         timeout,
     )
     calls += 1
-    if extracted is None:
+    if "_failure" in extracted:
         return PipelineResult(
             has_error=False,
+            status="UNRESOLVED",
             reason="[V2] claim extraction failed",
             stage="extract_failed",
             latency_ms=(time.perf_counter() - t0) * 1000.0,
             llm_calls=calls,
-        )
-    if "_exception" in extracted:
-        return PipelineResult(
-            has_error=False,
-            reason=f"[V2] extract exception: {extracted['_exception']}",
-            stage="extract_exception",
-            latency_ms=(time.perf_counter() - t0) * 1000.0,
-            llm_calls=calls,
+            error_msg=json.dumps(extracted["_failure"], ensure_ascii=False),
+            failures=[{"stage": "claim_extraction", **extracted["_failure"]}],
         )
 
     raw_claims = extracted.get("claims") or []
-    claims: list[str] = []
-    queries: list[str] = []
-    subj_hint = subject
+    claim_specs: list[tuple[str, str, str]] = []
     for c in raw_claims[:MAX_CLAIMS]:
         if not isinstance(c, dict):
             continue
         claim = (c.get("claim") or "").strip()
         if not claim:
             continue
-        claims.append(claim)
-        queries.append((c.get("search_query") or claim).strip())
-        subj_hint = (c.get("subject") or subject).strip() or subject
+        query = (c.get("search_query") or claim).strip()
+        claim_subject = (c.get("subject") or subject).strip() or subject
+        claim_specs.append((claim, query, claim_subject))
+
+    claims = [claim for claim, _, _ in claim_specs]
 
     if not claims:
         return PipelineResult(
             has_error=False,
-            reason="[V2] no falsifiable claim extracted (likely pure calculation)",
+            status="UNRESOLVED",
+            reason="[V2] no falsifiable claim extracted; factual cleanliness is unproven",
             stage="no_claim",
             latency_ms=(time.perf_counter() - t0) * 1000.0,
             llm_calls=calls,
+            failures=[{"stage": "claim_extraction", "kind": "no_claim"}],
         )
 
     # Stage 3: stateless verification, one call per claim, evidence pre-injected
     verified = 0
-    for claim, query in zip(claims, queries):
-        evs, _ = targeted_retrieve(subj_hint, [query], top_k=2)
+    supported = 0
+    failures: list[dict[str, Any]] = []
+    for claim, query, claim_subject in claim_specs:
+        evs, _ = targeted_retrieve(claim_subject, [query], top_k=2)
         if not evs:
+            failures.append({
+                "stage": "retrieval",
+                "kind": "no_evidence",
+                "claim": claim,
+                "subject": claim_subject,
+                "query": query,
+            })
             continue
         ev_text = format_evidence_block(evs)
         verdict, _ = await _call_json(
@@ -334,10 +360,23 @@ async def run_factual_pipeline_v2(
             timeout,
         )
         calls += 1
-        if not verdict or "_exception" in verdict:
+        if "_failure" in verdict:
+            failures.append({
+                "stage": "verification",
+                "claim": claim,
+                **verdict["_failure"],
+            })
             continue
         verified += 1
         if not verdict.get("conflict"):
+            if verdict.get("supported"):
+                supported += 1
+            else:
+                failures.append({
+                    "stage": "verification",
+                    "kind": "insufficient_evidence",
+                    "claim": claim,
+                })
             continue
         if (verdict.get("confidence") or "").lower() == "low":
             continue
@@ -356,6 +395,7 @@ async def run_factual_pipeline_v2(
         }
         return PipelineResult(
             has_error=True,
+            status="DETECTED",
             errors=[err],
             reason=f"[V2-KB] {verdict.get('reason', '')}",
             stage="claim_verification",
@@ -365,9 +405,26 @@ async def run_factual_pipeline_v2(
             llm_calls=calls,
         )
 
+    if failures or supported < len(claims):
+        return PipelineResult(
+            has_error=False,
+            status="UNRESOLVED",
+            reason=(
+                f"[V2] evidence insufficient: {supported}/{len(claims)} claims supported, "
+                f"{len(failures)} unresolved stages"
+            ),
+            stage="insufficient_evidence",
+            latency_ms=(time.perf_counter() - t0) * 1000.0,
+            claims=claims,
+            verified_claims=verified,
+            llm_calls=calls,
+            failures=failures,
+        )
+
     return PipelineResult(
         has_error=False,
-        reason=f"[V2] {verified}/{len(claims)} claims verified against textbook, no conflict",
+        status="CLEAN",
+        reason=f"[V2] {supported}/{len(claims)} claims explicitly supported by textbook",
         stage="verified_clean",
         latency_ms=(time.perf_counter() - t0) * 1000.0,
         claims=claims,

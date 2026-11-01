@@ -32,7 +32,14 @@ Code may enforce quotas and identify repetition. It may not be the author of a s
 - **Quotation misuse/missing**: verify whether quotation marks are already justified by direct speech, titles, terms, irony, special emphasis, or other legitimate usage. Vary the targeted word and context.
 - **Ellipsis**: use only unambiguous functions and valid six-dot/two-character Chinese ellipsis rules applicable to the prompt. Avoid a proposed repair that leaves or creates duplicate sentence-ending punctuation.
 - **Missing punctuation**: a missing sentence-final mark counts only when the complete question convention requires it; do not dismiss it as a publishing preference if the approved standard treats it as an error.
-- **Information missing**: remove a condition that is necessary and uniquely recoverable, while leaving a grammatical question. Do not simply truncate a sentence.
+- **Unified solvability family**: use top-level `solvability_failure` for every mutation that prevents a unique, valid, scorable answer. Assign exactly one subtype:
+  - `missing_required_condition`: a necessary condition is absent; record two complete, compatible witness worlds with different answers.
+  - `underspecified_task`: the question, requested property, or answer object is not identified.
+  - `no_valid_answer`: no option or requested object is valid under the stated conditions.
+  - `multiple_valid_answers`: the task requires one answer but at least two are valid.
+  - `contradictory_conditions`: stated conditions cannot all hold simultaneously.
+  - `indeterminate_answer`: non-uniqueness is proven but no more specific subtype applies.
+- A deletion that leaves the same unique answer is not a solvability error. A truncated question belongs to `underspecified_task`, not `missing_required_condition`. Missing-condition witnesses must be recorded in structured fields, not asserted only in prose.
 - **Option structure**: preserve option semantics and correct answer; change only the approved structural carrier.
 
 Add analogous boundary rules for every new error type during phase 1.

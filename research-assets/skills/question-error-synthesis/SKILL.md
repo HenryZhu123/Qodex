@@ -25,6 +25,10 @@ Read the relevant error-specific prompt under `D:\Code\hku\LLM\hku_agent\researc
 4. An earlier approval of the overall task is not approval of later phases.
 5. Never mutate the original dataset. Work in a new, clearly versioned output directory and retain a backup or immutable source reference.
 
+## Solvability taxonomy
+
+Use `solvability_failure` (`可解性错误`) as the single top-level type for defects that prevent a unique, valid, scorable answer. Do not create parallel top-level `missing_info` and `unsolvable` labels. Select exactly one subtype from `references/quality-gates.md` and store it in `solvability_subtype`; legacy labels may be retained only as provenance fields.
+
 ## Division of responsibility
 
 - Phase 1: Codex plans types, proportions, sources, and diversity constraints. No mutation and no API call.

@@ -1,0 +1,43 @@
+{
+  "dataset": "blind_v2",
+  "source_directory": "D:\\Code\\hku\\LLM\\hku_agent\\research-assets\\review_eval\\blind_test_v2\\dataset",
+  "source_rows": 197,
+  "adjudicated_rows": 185,
+  "strict_rows": 169,
+  "removed_by_human": 12,
+  "excluded_from_strict": 16,
+  "strict_policy": "human_adjudication_plus_leakage_strength",
+  "manual_decision_counts": {
+    "keep": 19,
+    "remove": 12,
+    "diagnostic_only": 5
+  },
+  "inferred_keep_count": 6,
+  "legacy_type_counts": {
+    "factual_logical": 6,
+    "type_mismatch": 12,
+    "option_structure": 18,
+    "typo": 23,
+    "punctuation": 18,
+    "missing_info": 17,
+    "ambiguity": 13,
+    "unsolvable": 6,
+    "answer_leakage": 24,
+    "none": 60
+  },
+  "new_type_counts": {
+    "factual_logical": 6,
+    "type_mismatch": 12,
+    "option_structure": 18,
+    "typo": 23,
+    "punctuation": 18,
+    "solvability_failure": 14,
+    "ambiguity": 13,
+    "answer_leakage": 21,
+    "none": 60
+  },
+  "solvability_subtype_counts": {
+    "underspecified_task": 9,
+    "missing_required_condition": 5
+  }
+}

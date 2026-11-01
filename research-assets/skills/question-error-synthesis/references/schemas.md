@@ -38,6 +38,7 @@ Normalization for fingerprinting: Unicode NFKC, normalize line endings, trim eac
   "error_text": "mutated complete question",
   "error_type": "top-level type",
   "error_detailed_type": "specific subtype",
+  "solvability_subtype": "required when error_type is solvability_failure",
   "original_text": "minimal erroneous span",
   "correction": "minimal correct span",
   "anchor_text": "unique continuous erroneous context",
@@ -46,6 +47,8 @@ Normalization for fingerprinting: Unicode NFKC, normalize line endings, trim eac
   "phase2_status": "accepted|rejected"
 }
 ```
+
+For the unified solvability family, `error_type` must be `solvability_failure` and `solvability_subtype` must be one of `missing_required_condition`, `underspecified_task`, `no_valid_answer`, `multiple_valid_answers`, `contradictory_conditions`, or `indeterminate_answer`. During a migration, preserve the old values as `legacy_error_type` and `legacy_error_detailed_type`; do not use those legacy fields as training labels.
 
 ## Candidate/final standard answer
 
@@ -59,6 +62,7 @@ For datasets using today's micro-tuning schema, each erroneous question's answer
   "errors": [
     {
       "error_type": "approved fixed top-level error type",
+      "error_subtype": "required solvability subtype when applicable",
       "position": "specific location in this question",
       "original_text": "minimal erroneous text actually present",
       "anchor_text": "unique continuous excerpt actually present",
