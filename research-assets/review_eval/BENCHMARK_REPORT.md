@@ -89,6 +89,8 @@ Full System vs. w/o P0 Rules vs. w/o P1 Closure vs. w/o P2 KB & Guards vs. Raw L
 ### 1. Dev Set 与 Blind Test Set 逐项指标对比表
 
 > **口径说明**：盲测集数字为**修复元数据契约后**的最终结果（`【学科】/【试卷标题】/【题型或其它信息】` 三段式 `reference` 全量回填，见 §4.2）。Dev Set 数字为修复前测量，两者口径不对称的问题已记录在 §4.3 待办中。
+>
+> **因此本表两列不能直接相减**：Dev 列偏低主要来自空 `reference`（模型以"未提供题型基准"为由放行），Blind 列还叠加了类别配比差异——Dev 的 220 道错题中 `typo` 占 27.3%、`factual_logical` 占 9.1%，而 Blind 的 180 道错题中两者各占 11.1%。要做严格对比，必须在同一 `reference` 契约下重跑 Dev Set；在此之前本表只用于观察**单类方向**，不用于计算整体差值。
 
 | 错误类别 (Category) | Dev Set 召回率 (320题) | **Blind Test 召回率 (240题)** | **表现与泛化分析** |
 | :--- | :---: | :---: | :--- |
