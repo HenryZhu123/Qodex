@@ -1,0 +1,177 @@
+{
+  "evaluation_protocol_version": "1.0.0",
+  "dataset": "review_eval_dataset_v2.csv",
+  "judge_model": [
+    "gpu-qwen3.8-27b"
+  ],
+  "questions_total": 318,
+  "questions_scored": 311,
+  "excluded": [
+    {
+      "sample_id": "rev-type_mismatch-refq-408-2012-10",
+      "status": "skipped_timeout",
+      "error": null
+    },
+    {
+      "sample_id": "rev-answer_leakage-refq-408-2010-20",
+      "status": "llm_call_failed",
+      "error": "parse_fail"
+    },
+    {
+      "sample_id": "rev-ambiguity-refq-408-2025-14",
+      "status": "llm_call_failed",
+      "error": "parse_fail"
+    },
+    {
+      "sample_id": "rev-missing_info-refq-408-2014-28",
+      "status": "llm_call_failed",
+      "error": "parse_fail"
+    },
+    {
+      "sample_id": "rev-typo-refq-408-2015-29",
+      "status": "llm_call_failed",
+      "error": "parse_fail"
+    },
+    {
+      "sample_id": "rev-type_mismatch-refq-408-2026-14",
+      "status": "llm_call_failed",
+      "error": "parse_fail"
+    },
+    {
+      "sample_id": "rev-typo-refq-408-2016-19",
+      "status": "llm_call_failed",
+      "error": "parse_fail"
+    }
+  ],
+  "overall": {
+    "TP": 163,
+    "FP": 49,
+    "TN": 85,
+    "FN": 53,
+    "precision": 0.768868,
+    "recall": 0.75463,
+    "f1": 0.761682,
+    "f2": 0.757435,
+    "accuracy": 0.708571,
+    "fpr": 0.365672
+  },
+  "by_type": {
+    "ambiguity": {
+      "TP": 7,
+      "FP": 2,
+      "TN": 0,
+      "FN": 10,
+      "precision": 0.777778,
+      "recall": 0.411765,
+      "f1": 0.538462,
+      "f2": 0.454545,
+      "accuracy": 0.368421,
+      "fpr": 1.0,
+      "samples": 17
+    },
+    "answer_leakage": {
+      "TP": 17,
+      "FP": 1,
+      "TN": 0,
+      "FN": 2,
+      "precision": 0.944444,
+      "recall": 0.894737,
+      "f1": 0.918919,
+      "f2": 0.904255,
+      "accuracy": 0.85,
+      "fpr": 1.0,
+      "samples": 19
+    },
+    "clean": {
+      "TP": 0,
+      "FP": 6,
+      "TN": 85,
+      "FN": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "f2": 0.0,
+      "accuracy": 0.934066,
+      "fpr": 0.065934,
+      "samples": 91
+    },
+    "factual_logical": {
+      "TP": 14,
+      "FP": 3,
+      "TN": 0,
+      "FN": 6,
+      "precision": 0.823529,
+      "recall": 0.7,
+      "f1": 0.756757,
+      "f2": 0.721649,
+      "accuracy": 0.608696,
+      "fpr": 1.0,
+      "samples": 20
+    },
+    "option_structure": {
+      "TP": 16,
+      "FP": 5,
+      "TN": 0,
+      "FN": 3,
+      "precision": 0.761905,
+      "recall": 0.842105,
+      "f1": 0.8,
+      "f2": 0.824742,
+      "accuracy": 0.666667,
+      "fpr": 1.0,
+      "samples": 20
+    },
+    "punctuation": {
+      "TP": 11,
+      "FP": 3,
+      "TN": 0,
+      "FN": 8,
+      "precision": 0.785714,
+      "recall": 0.578947,
+      "f1": 0.666667,
+      "f2": 0.611111,
+      "accuracy": 0.5,
+      "fpr": 1.0,
+      "samples": 20
+    },
+    "solvability_failure": {
+      "TP": 33,
+      "FP": 8,
+      "TN": 0,
+      "FN": 10,
+      "precision": 0.804878,
+      "recall": 0.767442,
+      "f1": 0.785714,
+      "f2": 0.774648,
+      "accuracy": 0.647059,
+      "fpr": 1.0,
+      "samples": 43
+    },
+    "type_mismatch": {
+      "TP": 16,
+      "FP": 3,
+      "TN": 0,
+      "FN": 2,
+      "precision": 0.842105,
+      "recall": 0.888889,
+      "f1": 0.864865,
+      "f2": 0.879121,
+      "accuracy": 0.761905,
+      "fpr": 1.0,
+      "samples": 18
+    },
+    "typo": {
+      "TP": 49,
+      "FP": 18,
+      "TN": 0,
+      "FN": 12,
+      "precision": 0.731343,
+      "recall": 0.803279,
+      "f1": 0.765625,
+      "f2": 0.787781,
+      "accuracy": 0.620253,
+      "fpr": 1.0,
+      "samples": 63
+    }
+  }
+}
