@@ -1,0 +1,133 @@
+{
+  "reviewed": "40 factual_logical items in Dev A + Dev B",
+  "method": "manual reading of the question stem; the model's own subject choice was used as a cross-check",
+  "unaudited": "the remaining items keep their original mechanical labels",
+  "changes": [
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset_v2.csv",
+      "sample_id": "rev-factual_logical-refq-408-2009-29",
+      "old_subject": "计算机网络",
+      "new_subject": "操作系统",
+      "reason": "SCAN 磁盘调度属操作系统"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset_v2.csv",
+      "sample_id": "rev-factual_logical-refq-408-2017-31",
+      "old_subject": "计算机网络",
+      "new_subject": "操作系统",
+      "reason": "软链接与 inode 共享属操作系统"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset_v2.csv",
+      "sample_id": "rev-factual_logical-refq-408-2020-19",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "QPI 总线属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset_v2.csv",
+      "sample_id": "rev-factual_logical-refq-408-2024-20",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "总线突发传送属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset_v2.csv",
+      "sample_id": "rev-factual_logical-refq-408-2025-20",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "总线频率与宽度属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset_v2.csv",
+      "sample_id": "rev-factual_logical-refq-408-2026-20",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "数据通路与 CPI 属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset.csv",
+      "sample_id": "rev-factual_logical-refq-408-2009-29",
+      "old_subject": "计算机网络",
+      "new_subject": "操作系统",
+      "reason": "SCAN 磁盘调度属操作系统"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset.csv",
+      "sample_id": "rev-factual_logical-refq-408-2017-31",
+      "old_subject": "计算机网络",
+      "new_subject": "操作系统",
+      "reason": "软链接与 inode 共享属操作系统"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset.csv",
+      "sample_id": "rev-factual_logical-refq-408-2020-19",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "QPI 总线属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset.csv",
+      "sample_id": "rev-factual_logical-refq-408-2024-20",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "总线突发传送属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset.csv",
+      "sample_id": "rev-factual_logical-refq-408-2025-20",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "总线频率与宽度属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_a\\strict\\review_eval_dataset.csv",
+      "sample_id": "rev-factual_logical-refq-408-2026-20",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "数据通路与 CPI 属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_b\\strict\\blind_test_dataset.csv",
+      "sample_id": "blind-factual_logical-refq-408-2014-16",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "统一 Cache 属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_b\\strict\\blind_test_dataset.csv",
+      "sample_id": "blind-factual_logical-refq-408-2014-17",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "指令字与寻址属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_b\\strict\\blind_test_dataset.csv",
+      "sample_id": "blind-factual_logical-refq-408-2014-18",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "微程序控制器属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_b\\strict\\blind_test_dataset.csv",
+      "sample_id": "blind-factual_logical-refq-408-2014-19",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "总线时钟与传输率属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_b\\strict\\blind_test_dataset.csv",
+      "sample_id": "blind-factual_logical-refq-408-2014-20",
+      "old_subject": "操作系统",
+      "new_subject": "计算机组成原理",
+      "reason": "总线事务突发传送属计组"
+    },
+    {
+      "file": "research-assets\\review_eval\\taxonomy_v2\\dev_b\\strict\\blind_test_dataset.csv",
+      "sample_id": "blind-factual_logical-refq-408-2014-26",
+      "old_subject": "计算机网络",
+      "new_subject": "操作系统",
+      "reason": "进程状态与时间片属操作系统"
+    }
+  ]
+}
