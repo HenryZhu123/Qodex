@@ -16,6 +16,8 @@ SUBJECT_MAP = {
     "computer_network": "计算机网络",
 }
 
+AUTO_SUBJECT = "auto"
+
 SUBJECT_ALIASES = {
     "数据结构": "data_structure",
     "计组": "computer_organization",
@@ -162,39 +164,49 @@ class KnowledgeBaseRetriever:
         if self.mode == "off":
             return [], (time.perf_counter() - t0) * 1000.0
         normalized_sub = SUBJECT_ALIASES.get(subject, subject)
-        target_dbs = self._subject_dbs(normalized_sub)
-        if not target_dbs:
-            target_dbs = [
-                db
-                for sub in SUBJECT_MAP
-                for db in self._subject_dbs(sub)
-            ]
+        auto = normalized_sub == AUTO_SUBJECT
+        if not auto and not self._subject_dbs(normalized_sub):
+            auto = True
 
         match_str = self._build_fts_query(query)
         if not match_str:
             return [], (time.perf_counter() - t0) * 1000.0
 
-        relations = {} if self.mode == "single" else self._relations(normalized_sub)
-        label_by_db = {
-            Path(path).name: name
-            for name, path in (relations.get("sources") or {}).items()
-        }
         items: list[KBEvidenceItem] = []
-        for db in target_dbs:
-            items.extend(
-                self._query_db(db, match_str, top_k * 2, label_by_db.get(db.name, ""))
-            )
-        items.sort(key=lambda x: x.score)
+        if auto:
+            # Cross-library routing. The four indexes share one tokenizer and one
+            # BM25 implementation, so raw scores stay comparable; rank fusion
+            # (RRF) was tested and mixes one chunk per book into the top-3, which
+            # pushed correct hits out. Plain score merge keeps the best chunk.
+            for sub in SUBJECT_MAP:
+                for db in self._subject_dbs(sub):
+                    items.extend(
+                        self._query_db(
+                            db, match_str, top_k * 2, self._source_label(sub, db.name)
+                        )
+                    )
+            items.sort(key=lambda x: x.score)
+        else:
+            for db in self._subject_dbs(normalized_sub):
+                items.extend(
+                    self._query_db(
+                        db, match_str, top_k * 2, self._source_label(normalized_sub, db.name)
+                    )
+                )
+            items.sort(key=lambda x: x.score)
 
         # A conflict group must be returned whole: retrieval may not silently
         # keep only the best-ranked side.
-        groups: dict[str, list[dict]] = relations.get("conflicts", {})
         selected = items[:top_k]
         seen_ids = {item.chunk_id for item in selected}
         expanded: list[KBEvidenceItem] = []
         for item in selected:
             expanded.append(item)
-            group = groups.get(item.conflict_group) if item.conflict_group else None
+            if not item.conflict_group or self.mode == "single":
+                continue
+            group = self._relations(item.subject).get("conflicts", {}).get(
+                item.conflict_group
+            )
             if not group:
                 continue
             for member in group:
@@ -203,7 +215,7 @@ class KnowledgeBaseRetriever:
                 seen_ids.add(member["chunk_id"])
                 expanded.append(
                     KBEvidenceItem(
-                        subject=normalized_sub,
+                        subject=item.subject,
                         chunk_id=member["chunk_id"],
                         heading_path="",
                         page_start=member.get("page"),
@@ -216,6 +228,12 @@ class KnowledgeBaseRetriever:
                 )
         latency_ms = (time.perf_counter() - t0) * 1000.0
         return expanded, latency_ms
+
+    def _source_label(self, subject: str, db_name: str) -> str:
+        if self.mode == "single":
+            return ""
+        sources = self._relations(subject).get("sources") or {}
+        return {Path(p).name: n for n, p in sources.items()}.get(db_name, "")
 
     def format_evidence(
         self, evidence: list[KBEvidenceItem], *, max_chars: int = 500

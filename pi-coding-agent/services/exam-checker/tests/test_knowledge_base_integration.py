@@ -53,6 +53,22 @@ def test_knowledge_base_retriever_search_and_format() -> None:
     assert "【计算机网络｜" in fmt
 
 
+def test_knowledge_base_auto_subject_routes_across_books() -> None:
+    kb = KnowledgeBaseRetriever(DEFAULT_KB_ROOT)
+    assert kb.is_available() is True
+
+    # A term that only the computer-organization book defines: routing on "auto"
+    # must reach it without the caller naming the subject.
+    evs, _ = kb.search("auto", "中断隐指令 保存断点 关中断", top_k=2)
+    assert len(evs) > 0
+    assert evs[0].subject == "computer_organization"
+
+    # A network-only term must still resolve to the network book.
+    evs, _ = kb.search("auto", "802.11 帧 地址1 接收站 地址2 发送站", top_k=2)
+    assert len(evs) > 0
+    assert evs[0].subject == "computer_network"
+
+
 @pytest.mark.asyncio
 async def test_specialist_reviewer_agentic_tool_call_flow() -> None:
     kb = KnowledgeBaseRetriever(DEFAULT_KB_ROOT)

@@ -75,8 +75,18 @@ KB_TOOLS_SCHEMA = [
                             "operating_system",
                             "computer_organization",
                             "data_structure",
+                            "auto",
                         ],
-                        "description": "所属学科",
+                        "description": (
+                            "考点所属学科，按考点所在课程判断。"
+                            "computer_organization：指令系统、寻址方式、数据通路、流水线、"
+                            "Cache 与主存、总线、I/O 接口、中断与 DMA 的硬件机制；"
+                            "operating_system：进程与线程、调度、同步互斥、死锁、内存管理、"
+                            "文件系统、磁盘调度；"
+                            "data_structure：线性表、树、图、查找、排序、算法复杂度；"
+                            "computer_network：协议分层、TCP/IP、路由、链路层、无线网络。"
+                            "跨两门或无法判定时填 auto，由系统跨库检索。"
+                        ),
                     },
                 },
                 "required": ["query", "subject"],

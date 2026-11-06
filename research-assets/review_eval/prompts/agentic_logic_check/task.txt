@@ -22,7 +22,7 @@
 # 工具调用规范
 你拥有工具 `search_kb`：
 - `query`：精准的检索词（如："TCP 初始拥塞窗口 cwnd 初始值 MSS"）
-- `subject`：'computer_network' | 'operating_system' | 'computer_organization' | 'data_structure'
+- `subject`：考点所属学科，按工具描述中的课程范围自行判断；跨两门或无法判定时填 `auto`
 当收到工具返回的教材证据后，请完成最终决策。
 
 # 最终输出 JSON 规范
