@@ -24,6 +24,8 @@ kb_smoke_*/
 .tess_dl/
 research-assets/review_eval/runs/
 research-assets/review_eval/**/runs/
+# Local smoke runs: kept on disk for debugging, never committed
+research-assets/review_eval/**/smoke*/
 
 # Secrets / local env
 .env
