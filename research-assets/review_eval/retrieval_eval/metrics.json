@@ -1,0 +1,74 @@
+{
+  "model": "bm25 (sqlite fts5, jieba)",
+  "top_k_production": 2,
+  "positives": {
+    "n": 80,
+    "recall@1": 0.7375,
+    "recall@2": 0.8625,
+    "recall@3": 0.875,
+    "misses": [
+      "os-01",
+      "os-07",
+      "os-08",
+      "co-08",
+      "ds-02",
+      "ds-03",
+      "ds-16",
+      "cn-05",
+      "cn-06",
+      "cn-13",
+      "cn-17"
+    ]
+  },
+  "negatives": {
+    "n": 20,
+    "returned_any": 19,
+    "false_positive_rate@2": 1.0,
+    "note": "bm25 always returns top-k for any query, so a query with no answer still gets evidence"
+  },
+  "per_subject": {
+    "operating_system": {
+      "n": 20,
+      "recall@1": 0.65,
+      "recall@2": 0.85,
+      "recall@3": 0.85,
+      "misses": [
+        "os-01",
+        "os-07",
+        "os-08"
+      ]
+    },
+    "computer_organization": {
+      "n": 20,
+      "recall@1": 0.9,
+      "recall@2": 0.95,
+      "recall@3": 0.95,
+      "misses": [
+        "co-08"
+      ]
+    },
+    "data_structure": {
+      "n": 20,
+      "recall@1": 0.75,
+      "recall@2": 0.85,
+      "recall@3": 0.9,
+      "misses": [
+        "ds-02",
+        "ds-03",
+        "ds-16"
+      ]
+    },
+    "computer_network": {
+      "n": 20,
+      "recall@1": 0.65,
+      "recall@2": 0.8,
+      "recall@3": 0.8,
+      "misses": [
+        "cn-05",
+        "cn-06",
+        "cn-13",
+        "cn-17"
+      ]
+    }
+  }
+}

@@ -1,0 +1,100 @@
+{"qid": "os-01", "query": "Bernstein 伯恩斯坦 并发 条件 读集 写集 R(P) W(Q) 冲突", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-02", "query": "CPU 用户态 内核态 特权指令 非特权指令 可执行指令", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-03", "query": "I/O 子系统层次 用户级I/O软件 设备无关软件 设备驱动程序 中断处理程序", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-04", "query": "I/O软件层次 用户层软件 设备独立性软件 设备驱动程序 中断处理程序", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-05", "query": "I/O软件层次结构 四种层次 自顶向下", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-06", "query": "TLB 组相联映射 标记 Tag 组号 页号划分 有效位 页表项 装入位", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-07", "query": "中断隐指令 关中断 保存断点 引出中断服务程序 保存通用寄存器", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-08", "query": "中断隐指令完成的操作 保存断点 关中断", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-09", "query": "中断驱动 I/O 外设准备数据 中断处理程序 时间 开销 字符设备", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-10", "query": "分区分配 内存保护 界地址寄存器 上下界保护", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-11", "query": "加快虚实地址转换 TLB容量 页表常驻内存 交换区", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-12", "query": "文件控制块 FCB 包含 访问控制信息", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-13", "query": "死锁 定义 资源分配图 环路 进程 等待 资源 至少 进程数", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-14", "query": "添加新类型的设备 注册 中断服务例程 操作系统 选择题", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-15", "query": "用户态切换到内核态 中断 异常 系统调用 陷阱", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-16", "query": "磁盘I/O请求处理流程 用户程序 系统调用 设备驱动程序 中断处理程序", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-17", "query": "磁盘调度 SCAN 算法 例题 磁头当前位于105道", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-18", "query": "符号链接 软链接 硬链接 引用计数值 inode 删除文件", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-19", "query": "系统调用执行过程 保存断点 保存通用寄存器 执行系统调用服务例程 CPU模式改为内核态 由谁完成", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "os-20", "query": "设备独立性 逻辑设备名 物理设备 映射 更换设备无需修改应用程序", "subject": "operating_system", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-01", "query": "\"[x]补=A3H\" \"[y]补=75H\" 补码加减运算器 结果 标志", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-02", "query": "EPROM ROM 随机存取 只读存储器 存取方式", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-03", "query": "I/O总线 数据线 传输 命令字 状态字 中断类型号", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-04", "query": "IEEE 754 单精度 float 有效位数 24位 int 转换 精度丢失 双精度 double 52位", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-05", "query": "PCI 总线 USB 通用串行总线 设备互连 接口标准 定义", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-06", "query": "QPI总线 全双工 串行总线 每个方向 20位 数据带宽", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-07", "query": "RISC 特点 硬连线控制器 Load/Store 流水线 寄存器传递参数", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-08", "query": "double buffer single buffer processing time disk block buffer to user CPU analysis formula", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-09", "query": "double 类型 8 字节 存储 连续存储单元 字节编址 地址分配", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-10", "query": "五段基本流水线 取指 译码 执行 访存 写回 无转发 数据冒险", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-11", "query": "单周期CPU 多周期CPU 流水线CPU CPI 异常 中断 开销", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-12", "query": "字段直接编码法 互斥类 微命令 需要增加 不发出任何微命令 状态 位数 log2(n+1)", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-13", "query": "寄存器间接寻址 操作数在存储器中 地址在寄存器 指令执行 通用寄存器 ALU 存储器 指令译码器", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-14", "query": "常见总线标准 系统总线 设备总线 ISA PCI 标准", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-15", "query": "总线宽度 时钟频率 传输一个数据或地址 一个时钟周期 不支持突发传送 主存块大小 读取一个主存块需要时间", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-16", "query": "条件转移指令 无符号整数比较 大于 转移条件 CF ZF 标志寄存器", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-17", "query": "浮点数加减运算 对阶 尾数运算 规格化 舍入 判溢出 阶码 补码 双符号位", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-18", "query": "补码 定点数 乘法 双符号位 溢出 判断 n位补码表示范围", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-19", "query": "超标量流水线 特性 一个时钟周期同时发射多条指令 动态调度 提高指令执行并行性", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "co-20", "query": "阶码 5位 含2位符号位 补码 表示范围 -8到+7 浮点数 溢出判断", "subject": "computer_organization", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-01", "query": "2014 408 中缀表达式 a/b+(c*d-e*f)/g 转换为后缀表达式 扫描到 f 栈中元素", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-02", "query": "B树 定义 所有叶结点在同一层 关键字 有序 B+树 叶结点链表", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-03", "query": "m阶B树定义 叶结点 同一层 叶结点之间通过指针链接 B+树", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-04", "query": "克鲁斯卡尔 Kruskal 算法 按边权非递减次序 选择边 不产生回路", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-05", "query": "哈夫曼编码 构造 频次 编码长度 最长 字符个数 示例", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-06", "query": "基数排序 稳定性 快速排序 希尔排序 选择排序 稳定性", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-07", "query": "大根堆 插入新元素 调整 比较次数 向上调整", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-08", "query": "完全二叉树 叶结点 某一层 结点个数最多 第6层", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-09", "query": "希尔排序 增量序列 3 2 1 第一趟 第二趟 排序过程", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-10", "query": "快速排序 一趟 划分 枢轴 第一个元素 最终位置", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-11", "query": "拓扑排序 拓扑序列个数 由AOV网唯一确定 求解依赖给定图", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-12", "query": "拓扑排序 有向无环图 AOV网 定义 拓扑序列", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-13", "query": "排序过程中 对尚未确定最终位置的所有元素进行一遍处理 称为一趟", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-14", "query": "数据结构 图 路径 简单路径 定义 顶点不重复 环", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-15", "query": "无向图 7个顶点 保证连通 最少边数 16 完全图 K7 删除一个顶点", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-16", "query": "无向图 保证任何情况下连通 最少边数 n个顶点 C(n-1,2)+1", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-17", "query": "树的度为4 20个度为4的结点 10个度为3 1个度为2 10个度为1 叶结点个数", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-18", "query": "简单路径 回路 定义 顶点不重复 起点终点相同", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-19", "query": "递归求n的阶乘 算法 时间复杂度 O(n) 递归调用次数", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "ds-20", "query": "阶乘定义 n! = n*(n-1)! 递归终止条件 n<=1", "subject": "data_structure", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-01", "query": "802.11 帧 地址1 接收站 地址2 发送站 地址3 目的站 源站", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-02", "query": "CIDR 路由聚合 最长前缀匹配 子网掩码 默认路由", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-03", "query": "CSMA/CA 确认机制 ACK 帧 MAC 协议", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-04", "query": "CSMA/CD 不适用于无线网络 802.11 CSMA/CA", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-05", "query": "FTP 控制连接 数据连接 TCP 端口21 命令传输", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-06", "query": "IEEE 802.11 数据帧 地址1 地址2 地址3 To DS From DS 含义", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-07", "query": "SMTP POP3 IMAP 用户代理 发送 读取邮件 区别", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-08", "query": "SYN=1 ACK=1 同步报文段 确认序号 对方初始序号加1", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-09", "query": "TCP 拥塞控制阈值 ssthresh 定义 慢开始门限 标准术语", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-10", "query": "TCP 连接建立 三次握手 SYN 段 消耗一个序号 确认号 seq+1", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-11", "query": "VLAN 划分 广播域 ARP 表 不同 VLAN 主机 不能直接 ARP", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-12", "query": "VLAN 广播域 隔离 交换机 同一VLAN 广播帧 转发 不同VLAN 不转发", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-13", "query": "“从H1发送开始到H2接收完为止” “需要的时间至少是” “80.16ms”", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-14", "query": "中继器 集线器 网桥 路由器 所属层次 广播域", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-15", "query": "交换机 收到帧后 记录源MAC地址与端口 转发帧 查询转发表", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-16", "query": "交换机 直通交换 接收到目的MAC地址 立即转发 延迟", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-17", "query": "以太网 100Mbps 帧 最小帧长 64B 发送时延 5.12μs", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-18", "query": "子网划分 借用主机位 子网数 2^n 可用主机数 2^n-2 网络地址 广播地址", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-19", "query": "子网掩码 255.255.255.192 255.255.255.224 前缀长度 C类地址 子网划分", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "cn-20", "query": "递归查询 本地域名服务器 发送的域名请求消息数 一条", "subject": "computer_network", "source": "dev_a_logic_check", "negative": false}
+{"qid": "neg-01", "query": "iOS jetsam 内存压缩与进程终止顺序", "subject": "operating_system", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-02", "query": "Kubernetes cgroup v2 的 cpu.max 配额换算", "subject": "operating_system", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-03", "query": "Linux io_uring 提交队列与完成队列的环形结构", "subject": "operating_system", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-04", "query": "macOS XNU 混合内核的 Mach 端口权限", "subject": "operating_system", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-05", "query": "Windows 内核 APC 注入的调度时机", "subject": "operating_system", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-06", "query": "RISC-V 向量扩展 vsetvl 指令编码", "subject": "computer_organization", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-07", "query": "Apple M 系列统一内存的缓存一致性协议", "subject": "computer_organization", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-08", "query": "PCIe 5.0 FLIT 编码与 CRC 重传", "subject": "computer_organization", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-09", "query": "ARM SVE 可伸缩向量长度寄存器", "subject": "computer_organization", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-10", "query": "HBM3 伪通道 bank group 时序参数", "subject": "computer_organization", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-11", "query": "跳表的无锁并发插入与 ABA 问题", "subject": "data_structure", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-12", "query": "Rust BTreeMap 的节点分裂阈值", "subject": "data_structure", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-13", "query": "持久化线段树的可持久化版本号回收", "subject": "data_structure", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-14", "query": "Merkle Patricia Trie 的路径压缩规则", "subject": "data_structure", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-15", "query": "布谷鸟过滤器的踢出循环上限", "subject": "data_structure", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-16", "query": "HTTP/3 QUIC 连接迁移的路径验证", "subject": "computer_network", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-17", "query": "eBPF XDP 在网卡驱动的挂载点", "subject": "computer_network", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-18", "query": "WireGuard 的 Noise 握手密钥轮换", "subject": "computer_network", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-19", "query": "SRv6 段路由的 End.DX2 行为", "subject": "computer_network", "source": "synthetic_out_of_scope", "negative": true}
+{"qid": "neg-20", "query": "TCP BBRv3 的带宽探测周期", "subject": "computer_network", "source": "synthetic_out_of_scope", "negative": true}
