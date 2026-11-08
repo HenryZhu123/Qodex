@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.1",
+  "request_id": "paging-demo",
+  "subject": "operating_systems",
+  "topic": "single_level_paging",
+  "question_type": "single_choice",
+  "seed": 42,
+  "constraints": {
+    "page_size": 256
+  },
+  "evidence": [
+    {
+      "id": "ostep-paging",
+      "source": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf",
+      "version": "OSTEP chapter 18, 2026-11-08 reference",
+      "anchor": "§18.1 A Simple Example",
+      "summary": "将虚拟地址拆为虚页号和页内偏移。用有效页表项查出物理页框号，保留页内偏移，组成物理地址。",
+      "rules": ["split_address", "map_virtual_page", "preserve_offset"]
+    }
+  ]
+}

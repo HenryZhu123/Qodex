@@ -32,3 +32,29 @@
 - 用本地证据样例走通单选题生成和自检。最小链路可以验证输入约束、题目与解答格式、材料出处，以及资料不足时的返回。运行这条链路无需启动 PostgreSQL。
 - 需要验证其他分支时，先阅读实际接口和测试。需要运行对方代码时，在独立 Git 工作树检出固定提交，并为联调使用独立的测试库。日常命题工作继续留在 `feat/question-generation`。
 - 正式联调先核对结构化新题能否送审、入库并回读，再接真实知识检索和组卷补题。现有接口和样例足够时可以独立推进。只有需要上游新增接口、统一共享字段或修改数据库结构时，才提交具体的最小协作事项。
+
+## 本地命题契约 v0.1
+
+首个题型为操作系统单级页表地址转换，按字节寻址，页大小为 2 的幂，题面所列映射均有效。生成器按页大小拆分虚页号和页内偏移，用页表查出物理页框号，保留页内偏移。[OSTEP 分页章节](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf)
+
+### 请求
+
+[示例请求](../question_generation/examples/paging.json)使用 UTF-8 JSON。
+
+| 字段 | v0.1 约定 |
+| --- | --- |
+| `schema_version`、`request_id` | 版本为字符串 `0.1`，请求 ID 为非空字符串 |
+| `subject`、`topic`、`question_type` | 分别为 `operating_systems`、`single_level_paging`、`single_choice`，每次生成一道题 |
+| `seed` | 0 至 4294967295 的整数，用于复现生成与选项顺序 |
+| `constraints` | 可省略。`page_size` 为 2 至 65536 字节之间的 2 的幂，默认 256。`offset` 可省略，显式给出时须为 0 至 `page_size - 1` 的整数 |
+| `evidence` | 材料数组。每条含唯一 `id`、来源 `source`、`version`、定位 `anchor`、材料摘要 `summary` 和标记数组 `rules`。材料合计须覆盖 `split_address`、`map_virtual_page` 和 `preserve_offset` |
+
+材料由调用方预先核验并标记。模块检查字段、出处元数据及规则覆盖，使用内置分页规则求解。材料摘要的语义和引用可访问性由提供方核验。
+
+### 输出与验收
+
+成功时返回 `GENERATED` 和一道题。学生题面包含题干和带稳定 ID 的四个选项。教师视图提供答案 ID、解法和逐项说明。题目包还记录生成器版本、种子、实际题设、出处、自检结果和 `PENDING` 审校状态。选项显示字母可按顺序分配，答案按 ID 关联。
+
+失败时返回 `INVALID_REQUEST`、`UNSUPPORTED_REQUEST`、`NEEDS_MATERIAL` 或 `SELF_CHECK_FAILED`，附原因及空题目列表。材料不足时列出缺失的规则。未知请求字段视为无效，避免忽略约束。
+
+手算对照使用 256 B 页、虚拟地址 `0x02B4` 和映射 `VPN 2 → PFN 5`。虚页号为 2，偏移为 `0xB4`，物理地址为 `0x05B4`。同一映射下，虚拟地址 `0x0200` 的正确结果为 `0x0500`，此时“丢弃偏移”会与正确答案重合，必须换一个干扰项。
