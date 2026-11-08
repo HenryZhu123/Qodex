@@ -1,5 +1,7 @@
 """Conceptual single-choice items about TCP byte-stream boundaries."""
 
+from re import fullmatch
+
 METADATA = {
     "subject": "computer_networks",
     "topic": "tcp_message_boundaries",
@@ -45,21 +47,46 @@ SCENARIOS = {
 
 
 def read_constraints(constraints):
-    if not isinstance(constraints, dict) or constraints.keys() - {"scenario"}:
-        raise ValueError("constraints 只支持 scenario。")
+    if not isinstance(constraints, dict) or constraints.keys() - {"scenario", "payloads"}:
+        raise ValueError("constraints 只支持 scenario 和 payloads。")
     scenario = constraints.get("scenario")
     if "scenario" in constraints and (not isinstance(scenario, str) or scenario not in SCENARIOS):
         raise ValueError("scenario 必须是 reads 或 framing。")
-    return {"scenario": scenario}
+    if "payloads" not in constraints:
+        return {"scenario": scenario}
+    payloads = constraints["payloads"]
+    if scenario == "framing" or not isinstance(payloads, list) or not 2 <= len(payloads) <= 4 or any(
+        not isinstance(text, str) or fullmatch(r"[A-Z]{1,6}", text) is None for text in payloads
+    ):
+        raise ValueError("payloads 适用于 reads 场景，须包含 2 至 4 段 ASCII 大写字母串，每段 1 至 6 个字母。")
+    return {"scenario": "reads", "payloads": payloads}
 
 
-def build(rng, scenario):
+def build(rng, scenario, payloads=None):
     if scenario is None:
         scenario = rng.choice(tuple(SCENARIOS))
-    stem, choices = SCENARIOS[scenario]
+    stem, templates = SCENARIOS[scenario]
+    choices = list(templates)
+    parameters = {"scenario": scenario}
+    if payloads is not None:
+        writes = "、".join(f"「{payload}」" for payload in payloads)
+        stream = "".join(payloads)
+        stem = (
+            f"在一条 TCP 连接上，发送应用依次完整写入 ASCII 数据 {writes}，中间没有其他数据。"
+            "接收端已读完这些字节。关于 TCP 提供的服务，下列哪项正确？"
+        )
+        choices[0] = (
+            ("ordered_stream", f"按读取顺序拼接得到「{stream}」，各次读取边界可以与写入边界不同。"),
+            "TCP 按序交付字节流。读取如何分段不会改变合并后的字节内容。",
+        )
+        choices[1] = (
+            ("one_read_per_write", f"接收应用必须恰好读取 {len(payloads)} 次，每次对应一次写入。"),
+            choices[1][1],
+        )
+        parameters["payloads"] = payloads
     supported = [value for value, _ in choices if value[0] in SUPPORTED_CLAIMS]
     expected = supported[0] if len(supported) == 1 else None
-    return stem, list(choices), expected, {"scenario": scenario}
+    return stem, choices, expected, parameters
 
 
 def format_choice(value):

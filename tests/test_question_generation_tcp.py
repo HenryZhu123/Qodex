@@ -73,3 +73,18 @@ class TCPGenerationTests(TestCase):
             result = generate_question(self.request)
         self.assertEqual(result["status"], "SELF_CHECK_FAILED")
         self.assertEqual(result["questions"], [])
+
+    def test_explicit_payloads_preserve_order_without_preserving_read_boundaries(self):
+        for payloads in (["PQ", "R"], ["N", "A", "BC", "D"]):
+            with self.subTest(payloads=payloads):
+                result = generate_question({**self.request, "constraints": {"payloads": payloads}})
+                question, = result["questions"]
+                self.assertEqual(question["generator"]["parameters"], {"scenario": "reads", "payloads": payloads})
+                answer_id = question["instructor_view"]["correct_option_id"]
+                answer, = [option["text"] for option in question["student_view"]["options"] if option["id"] == answer_id]
+                self.assertIn("「" + "".join(payloads) + "」", answer)
+                self.assertIn("读取边界可以与写入边界不同", answer)
+        for constraints in ({"payloads": ["N"]}, {"payloads": ["A", ""]},
+                            {"payloads": ["A", "乙"]}, {"scenario": "framing", "payloads": ["A", "B"]}):
+            result = generate_question({**self.request, "constraints": constraints})
+            self.assertEqual(result["status"], "INVALID_REQUEST")

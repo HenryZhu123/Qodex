@@ -110,6 +110,8 @@ IPv4 的 `prefix_length` 支持 16–30，默认 26。可选 `ipv4_address` 为�
 
 TCP 使用 `computer_networks` 和 `tcp_message_boundaries`。可选约束 `scenario` 为 `reads`（读写边界）或 `framing`（消息分帧），省略时由种子选择。材料须覆盖 `tcp_ordered_byte_stream` 和 `tcp_no_message_boundaries`。
 
+读写边界场景还可通过 JSON 指定 `payloads`，提供 2 至 4 段 ASCII 大写字母串，每段 1 至 6 个字母。指定后使用 `reads` 场景，题目同时考查按序拼接后的实际字节流与读写边界的区别。
+
 ### 输出与验收
 
 成功时返回 `GENERATED` 和一个含一道题的 `questions` 数组。面向学生的输出使用 `student_view`，含题干和带稳定 ID 的四个选项。教师视图提供答案 ID、解法和逐项说明。题目包还记录生成器版本、种子、实际题设、出处、自检结果和 `PENDING` 审校状态。选项显示字母可按顺序分配，答案按 ID 关联。
