@@ -100,7 +100,7 @@ def _evidence_refs(
     return refs
 
 
-def _read_request(payload: object, *, paging_comprehensive: bool = False) -> Request:
+def _read_request(payload: object, *, comprehensive_fields: dict[str, str] | None = None) -> Request:
     if not isinstance(payload, dict) or payload.keys() - REQUEST_FIELDS:
         raise RequestError("请求必须是 JSON 对象，且只包含已定义的字段。")
 
@@ -109,8 +109,8 @@ def _read_request(payload: object, *, paging_comprehensive: bool = False) -> Req
             raise RequestError(f"{field} 必须是非空字符串。")
 
     rule_topic = None
-    if paging_comprehensive:
-        metadata = {**SUPPORTED_FIELDS, "question_type": "comprehensive_application"}
+    if comprehensive_fields is not None:
+        metadata = comprehensive_fields
     else:
         rule_topic = RULE_TOPICS.get(payload["topic"])
         if rule_topic is None or rule_topic.METADATA["subject"] != payload["subject"]:
@@ -135,7 +135,7 @@ def _read_request(payload: object, *, paging_comprehensive: bool = False) -> Req
             raise RequestError(str(error)) from error
         refs = _evidence_refs(evidence, rule_topic.REQUIRED_RULES, rule_topic.MATERIAL_NAME)
         return Request(payload["request_id"], seed, metadata, constraints, refs)
-    if metadata is STACK_FIELDS:
+    if metadata["topic"] == STACK_FIELDS["topic"]:
         if not isinstance(constraints, dict) or constraints.keys() - {"element_count"}:
             raise RequestError("constraints 只支持 element_count。")
         count = constraints.get("element_count", 5)

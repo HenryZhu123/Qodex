@@ -159,7 +159,7 @@ python3 -m question_generation --batch question_generation/examples/batch.json
 
 ## 分页综合题与修订 v0.1
 
-使用 [分页综合题样例](../question_generation/examples/paging-comprehensive.json) 运行首个 L2 闭环。请求沿用分页的种子、约束和材料，`question_type` 使用 `comprehensive_application`。单选、批量单选及综合题分别通过命令行模式调用。Python 入口为 `question_generation.paging_comprehensive.generate_comprehensive` 和 `revise_comprehensive`。
+使用 [分页综合题样例](../question_generation/examples/paging-comprehensive.json) 运行首个 L2 闭环。请求沿用分页的种子、约束和材料，`question_type` 使用 `comprehensive_application`。单选、批量单选及综合题分别通过命令行模式调用。两类综合题共用 `question_generation.comprehensive.generate_comprehensive` 和 `revise_comprehensive`，也可直接调用对应题型模块。
 
 | 小问 ID | 分值 | 评分内容 | 等价解法 |
 | --- | --- | --- | --- |
@@ -203,3 +203,45 @@ python3 -m question_generation --revise "$qodex_demo/revise.json" > "$qodex_demo
 样例的虚页 11 和 12 在 v1 分别映射到页框 17 和 63。第三问的物理地址为 `0x11FF` 和 `0x3F00`，不连续。反馈把虚页 12 改映射到页框 18。v2 的后一物理地址为 `0x1200`，结论变为连续。题目、小问及评分点 ID、前两问和总分保持稳定，`revision` 记录反馈 ID、目标小问、源版本及映射变化。新版本重算通过后回到 `PENDING`。
 
 修订请求由调用方提供最新 `current_question` 快照和指向该题该版本的结构化反馈。当前动作只用于 `cross-page`，替换页框须为 0–63 的整数并与两个现有页框不同，每题最多两轮。把修订请求的 `current_question` 改为 v2，沿用目标版本 1 的反馈，得到 `STALE_FEEDBACK`。题目 ID 不匹配、动作不支持、达到上限或自检失败时，返回对应状态和空题目列表。命令行成功退出码为 0，失败为 1。快照的持久化和并发提交由后续接入层负责。
+
+## 栈轨迹与最小容量综合题
+
+使用 [栈综合题样例](../question_generation/examples/stack-comprehensive.json)。请求使用 `data_structures`、`stack_pop_sequence` 和 `comprehensive_application`，沿用栈单选的 4–6 个元素、种子和证据规则。
+
+| 小问 ID | 分值 | 评分内容 | 等价解法 |
+| --- | --- | --- | --- |
+| `operation-trace` | 4 | 入栈顺序 2 分，合法出栈并产生完整目标序列 2 分 | 写明每次操作，或给出能还原每一步操作的栈状态表 |
+| `minimum-capacity` | 4 | 容量 2 分、下界证明 1 分、合法轨迹给出的可达上界 1 分 | 容量下界可用任一达到峰值的出栈位置证明 |
+
+生成器模拟栈顶操作求得轨迹和峰值，自检穷举合法操作，并用目标出栈前缀复核容量下界。第 `k` 次出栈前，若前 `k` 个目标元素中的最大编号为 `m`，则至少已入栈 `m` 个元素，只出栈了 `k - 1` 个，容量至少为 `m - k + 1`。[Princeton 栈练习](https://algs4.cs.princeton.edu/13stacks/index.php)
+
+```bash
+qodex_stack=$(mktemp -d)
+python3 -m question_generation --comprehensive question_generation/examples/stack-comprehensive.json > "$qodex_stack/v1.json"
+python3 - "$qodex_stack" <<'PY'
+import json
+from pathlib import Path
+import sys
+
+directory = Path(sys.argv[1])
+question, = json.loads((directory / "v1.json").read_text(encoding="utf-8"))["questions"]
+request = {
+    "schema_version": "0.1",
+    "request_id": "stack-revision-demo",
+    "current_question": question,
+    "feedback": {
+        "feedback_id": "stack-feedback-1",
+        "question_id": question["question_id"],
+        "target_version": question["version"],
+        "part_id": "minimum-capacity",
+        "action": "replace_output_sequence",
+        "replacement_output": [1, 2, 3, 4, 5],
+        "comment": "增加最小容量为 1 的对照样例。",
+    },
+}
+(directory / "revise.json").write_text(json.dumps(request, ensure_ascii=False), encoding="utf-8")
+PY
+python3 -m question_generation --revise "$qodex_stack/revise.json" > "$qodex_stack/v2.json"
+```
+
+v1 目标序列为 `4、5、3、2、1`，最小容量为 4。更换目标序列后，v2 的最小容量为 1。由于两问共用目标序列，`revision.affected_parts` 列出两问，评分点及参考轨迹都重新核对。题目、小问及评分点 ID 和总分保持稳定，审校状态回到 `PENDING`。不可达序列、重复元素、未改变题设的反馈和错版反馈均返回对应失败状态。

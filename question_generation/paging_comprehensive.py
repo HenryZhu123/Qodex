@@ -2,21 +2,19 @@
 
 from __future__ import annotations
 
-import hashlib
-import json
 from random import Random
 
-from .generation import (
-    REQUIRED_RULES, SCHEMA_VERSION, SUPPORTED_FIELDS, RequestError, _evidence_refs,
-    _is_text, _read_request, failure_result,
+from .comprehensive import (
+    build_views, check_snapshot, check_views, checked_package, generated, read_generator, read_revision, request_id,
+    revised,
 )
+from .generation import REQUIRED_RULES, SUPPORTED_FIELDS, RequestError, _evidence_refs, _read_request, failure_result
 from .paging import PagingInstance, create_instance, recompute_translation, render_page_table, translate
 
 GENERATOR_VERSION = "paging-comprehensive-v1"
-MAX_REVISIONS = 2
-METADATA = {**SUPPORTED_FIELDS, "question_type": "comprehensive_application", "score": 10}
+FIELDS = {**SUPPORTED_FIELDS, "question_type": "comprehensive_application"}
+METADATA = {**FIELDS, "score": 10}
 CROSS_PAGE = "cross-page"
-FEEDBACK_FIELDS = {"feedback_id", "question_id", "target_version", "part_id", "action", "replacement_frame", "comment"}
 
 # (ID, student prompt, rubric rows, primary method, equivalent method)
 PARTS = (
@@ -66,32 +64,11 @@ def _build_views(instance: PagingInstance) -> tuple[dict, dict]:
         (frame, physical),
         (before, {"virtual_page": after_page, "offset": after_offset}, after_frame, after, after - before == 1),
     )
-    prompts = []
-    solutions = []
-    for (part_id, prompt, rubric, primary, (method_id, acceptance)), answers in zip(PARTS, values):
-        prompts.append({"id": part_id, "prompt": prompt, "score": sum(points for _, points, _ in rubric)})
-        solutions.append({
-            "part_id": part_id,
-            "solution": primary,
-            "scoring_points": [
-                {"id": point_id, "points": points, "criterion": criterion, "expected": answer}
-                for (point_id, points, criterion), answer in zip(rubric, answers)
-            ],
-            "equivalent_methods": [{"id": method_id, "acceptance": acceptance}],
-        })
-    return (
-        {
-            "stem": (
-                f"某系统按字节寻址，使用单级页表，页大小为 {instance.page_size} B。"
-                f"以下页表项均有效：{render_page_table(instance)}。给定虚拟地址 A = 0x{address:X}。"
-            ),
-            "parts": prompts,
-        },
-        {
-            "grading_policy": "各评分点以题设独立判分。十进制及注明进制的其他等值表示均可接受。",
-            "parts": solutions,
-        },
+    stem = (
+        f"某系统按字节寻址，使用单级页表，页大小为 {instance.page_size} B。"
+        f"以下页表项均有效：{render_page_table(instance)}。给定虚拟地址 A = 0x{address:X}。"
     )
+    return build_views(stem, "各评分点以题设独立判分。十进制及注明进制的其他等值表示均可接受。", PARTS, values)
 
 
 def _check(instance: PagingInstance, student: dict, instructor: dict) -> None:
@@ -105,75 +82,39 @@ def _check(instance: PagingInstance, student: dict, instructor: dict) -> None:
         (frame, physical),
         (before, {"virtual_page": after_page, "offset": after_offset}, after_frame, after, after_frame == before_frame + 1),
     )
-    if (
-        len(student["parts"]) != len(PARTS)
-        or len(instructor["parts"]) != len(PARTS)
-        or sum(part["score"] for part in student["parts"]) != METADATA["score"]
-    ):
-        raise RequestError("小问数或总分与契约不符。", "SELF_CHECK_FAILED")
-    for spec, prompt, solution, values in zip(PARTS, student["parts"], instructor["parts"], expected):
-        part_id, _, rubric, _, _ = spec
-        points = solution["scoring_points"]
-        if (
-            prompt["id"] != part_id
-            or solution["part_id"] != part_id
-            or [(point["id"], point["points"]) for point in points] != [(key, score) for key, score, _ in rubric]
-            or sum(point["points"] for point in points) != prompt["score"]
-            or not solution["equivalent_methods"]
-        ):
-            raise RequestError(f"小问 {part_id} 的评分结构无效。", "SELF_CHECK_FAILED")
-        if json.dumps([point["expected"] for point in points], sort_keys=True) != json.dumps(values, sort_keys=True):
-            raise RequestError(f"小问 {part_id} 的评分点与独立复算不一致。", "SELF_CHECK_FAILED")
+    check_views(PARTS, METADATA["score"], student, instructor, expected)
 
 
 def _checked_question(instance: PagingInstance, seed: int, evidence_refs: list[dict]) -> dict:
     student, instructor = _build_views(instance)
     _check(instance, student, instructor)
-    return {
-        "metadata": METADATA.copy(),
-        "student_view": student,
-        "instructor_view": instructor,
-        "evidence_refs": evidence_refs,
-        "generator": {
-            "version": GENERATOR_VERSION,
-            "seed": seed,
-            "parameters": {
-                "page_size": instance.page_size,
-                "virtual_address": instance.virtual_address,
-                "page_table": {str(page): frame for page, frame in instance.page_table.items()},
-            },
+    generator = {
+        "version": GENERATOR_VERSION,
+        "seed": seed,
+        "parameters": {
+            "page_size": instance.page_size,
+            "virtual_address": instance.virtual_address,
+            "page_table": {str(page): frame for page, frame in instance.page_table.items()},
         },
-        "self_check": {
-            "status": "PASSED",
-            "checks": ["part_and_rubric_scores", "independent_address_recomputation", "cross_page_contiguity"],
-        },
-        "review_status": "PENDING",
     }
-
-
-def _request_id(payload: object) -> str | None:
-    request_id = payload.get("request_id") if isinstance(payload, dict) else None
-    return request_id if _is_text(request_id) else None
-
-
-def _result(request_id: str, status: str, question: dict) -> dict:
-    return {"schema_version": SCHEMA_VERSION, "request_id": request_id, "status": status, "questions": [question]}
+    return checked_package(
+        METADATA, student, instructor, evidence_refs, generator,
+        ["part_and_rubric_scores", "independent_address_recomputation", "cross_page_contiguity"],
+    )
 
 
 def generate_comprehensive(payload: object) -> dict:
     """Generate a three-part paging problem."""
     try:
-        request = _read_request(payload, paging_comprehensive=True)
+        request = _read_request(payload, comprehensive_fields=FIELDS)
         base = create_instance(Random(request.seed), **request.constraints)
         page = base.virtual_address // base.page_size
         instance = PagingInstance(base.page_size, base.virtual_address,
                                   {key: base.page_table[key] for key in (page, page + 1)})
         question = _checked_question(instance, request.seed, request.evidence_refs)
     except RequestError as error:
-        return failure_result(error.status, str(error), _request_id(payload), missing_rules=error.missing_rules)
-    identity = json.dumps([request.request_id, question], sort_keys=True).encode("utf-8")
-    question.update(question_id=f"paging-comp-{hashlib.sha256(identity).hexdigest()[:24]}", version=1)
-    return _result(request.request_id, "GENERATED", question)
+        return failure_result(error.status, str(error), request_id(payload), missing_rules=error.missing_rules)
+    return generated(request.request_id, "paging-comp", question)
 
 
 def _valid_frame(value: object) -> bool:
@@ -182,13 +123,7 @@ def _valid_frame(value: object) -> bool:
 
 def _read_snapshot(question: dict) -> tuple[PagingInstance, int, list[dict]]:
     problem = RequestError("当前题目包与分页综合题的已自检快照不一致。")
-    generator = question.get("generator")
-    if not isinstance(generator, dict) or generator.get("version") != GENERATOR_VERSION:
-        raise problem
-    seed = generator.get("seed")
-    params = generator.get("parameters")
-    if type(seed) is not int or not 0 <= seed < 2**32 or not isinstance(params, dict):
-        raise problem
+    seed, params = read_generator(question, GENERATOR_VERSION, problem)
     size = params.get("page_size")
     address = params.get("virtual_address")
     table = params.get("page_table")
@@ -205,44 +140,15 @@ def _read_snapshot(question: dict) -> tuple[PagingInstance, int, list[dict]]:
     instance = PagingInstance(size, address, {int(key): table[key] for key in keys})
     refs = _evidence_refs(question.get("evidence_refs"), REQUIRED_RULES, "分页", require_summary=False)
     expected = _checked_question(instance, seed, refs)
-    # Review belongs to the current version and may have been supplied by a reviewer.
-    fields = expected.keys() - {"review_status"}
-    try:
-        snapshot = json.dumps({key: question.get(key) for key in fields}, sort_keys=True)
-    except (TypeError, ValueError) as error:
-        raise problem from error
-    if snapshot != json.dumps({key: expected[key] for key in fields}, sort_keys=True):
-        raise problem
+    check_snapshot(question, expected, problem)
     return instance, seed, refs
 
 
 def revise_comprehensive(payload: object) -> dict:
     """Apply one supported feedback action to the caller's current snapshot."""
-    request_id = _request_id(payload)
+    identifier = request_id(payload)
     try:
-        if (
-            request_id is None or payload.keys() != {"schema_version", "request_id", "current_question", "feedback"}
-            or payload["schema_version"] != SCHEMA_VERSION
-        ):
-            raise RequestError("修订请求须包含 schema_version、request_id、current_question 和 feedback。")
-        current = payload["current_question"]
-        feedback = payload["feedback"]
-        if not isinstance(current, dict) or not _is_text(current.get("question_id")):
-            raise RequestError("current_question 必须包含题目 ID 和当前版本。")
-        if not isinstance(feedback, dict) or feedback.keys() != FEEDBACK_FIELDS or not all(
-            _is_text(feedback[key]) for key in ("feedback_id", "question_id", "part_id", "action", "comment")
-        ):
-            raise RequestError("feedback 必须包含反馈 ID、题目 ID、目标版本、小问、动作、替换页框和说明。")
-        version = current.get("version")
-        target_version = feedback["target_version"]
-        if type(version) is not int or type(target_version) is not int or min(version, target_version) < 1:
-            raise RequestError("当前版本和目标版本必须是正整数。")
-        if current["question_id"] != feedback["question_id"]:
-            raise RequestError("反馈的题目 ID 与当前题目不一致。", "FEEDBACK_TARGET_MISMATCH")
-        if version != target_version:
-            raise RequestError(f"反馈针对 v{target_version}，当前题目为 v{version}。", "STALE_FEEDBACK")
-        if version > MAX_REVISIONS:
-            raise RequestError("此题已达到两轮修订上限。", "REVISION_LIMIT")
+        current, feedback = read_revision(payload, "replacement_frame", "替换页框")
         if feedback["part_id"] != CROSS_PAGE or feedback["action"] != "replace_next_frame":
             raise RequestError("当前支持对 cross-page 使用 replace_next_frame。", "UNSUPPORTED_FEEDBACK")
 
@@ -256,13 +162,5 @@ def revise_comprehensive(payload: object) -> dict:
                                  {**instance.page_table, page + 1: frame})
         question = _checked_question(updated, seed, refs)
     except RequestError as error:
-        return failure_result(error.status, str(error), request_id, missing_rules=error.missing_rules)
-    question.update(
-        question_id=current["question_id"], version=version + 1,
-        revision={
-            "from_version": version, "feedback_id": feedback["feedback_id"],
-            "part_id": CROSS_PAGE, "action": feedback["action"], "comment": feedback["comment"],
-            "old_frame": old_frame, "replacement_frame": frame,
-        },
-    )
-    return _result(request_id, "REVISED", question)
+        return failure_result(error.status, str(error), identifier, missing_rules=error.missing_rules)
+    return revised(identifier, question, current, feedback, {"old_frame": old_frame, "replacement_frame": frame})

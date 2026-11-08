@@ -6,8 +6,8 @@ from pathlib import Path
 import sys
 
 from .batch import generate_batch
+from .comprehensive import generate_comprehensive, revise_comprehensive
 from .generation import failure_result, generate_question
-from .paging_comprehensive import generate_comprehensive, revise_comprehensive
 
 
 def main() -> int:
@@ -15,9 +15,9 @@ def main() -> int:
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--batch", dest="run", action="store_const", const=generate_batch, help="按批量槽位请求出题")
     mode.add_argument("--comprehensive", dest="run", action="store_const", const=generate_comprehensive,
-                      help="生成分页综合题")
+                      help="生成综合题")
     mode.add_argument("--revise", dest="run", action="store_const", const=revise_comprehensive,
-                      help="按版本反馈修订分页综合题")
+                      help="按版本反馈修订综合题")
     parser.set_defaults(run=generate_question)
     parser.add_argument("request", type=Path, help="UTF-8 JSON 请求文件")
     args = parser.parse_args()

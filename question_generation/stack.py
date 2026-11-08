@@ -6,9 +6,10 @@ from itertools import combinations, permutations
 from random import Random
 
 Sequence = tuple[int, ...]
+Operation = tuple[str, int]
 
 
-def _blocking_triple(output: Sequence) -> Sequence:
+def blocking_triple(output: Sequence) -> Sequence:
     for first, second, third in combinations(output, 3):
         if second < third < first:
             return first, second, third
@@ -19,7 +20,7 @@ def build_choices(count: int, rng: Random) -> tuple[dict[str, Sequence], str]:
     possible = []
     impossible = []
     for output in permutations(range(1, count + 1)):
-        if _blocking_triple(output):
+        if blocking_triple(output):
             impossible.append(output)
         else:
             possible.append(output)
@@ -31,18 +32,18 @@ def build_choices(count: int, rng: Random) -> tuple[dict[str, Sequence], str]:
     return options, next(key for key, output in options.items() if output == answer)
 
 
-def _replay(count: int, output: Sequence) -> list[str] | None:
+def replay(count: int, output: Sequence) -> list[Operation] | None:
     stack = []
     steps = []
     next_input = 1
     for target in output:
         while (not stack or stack[-1] != target) and next_input <= count:
             stack.append(next_input)
-            steps.append(f"入栈 {next_input}")
+            steps.append(("push", next_input))
             next_input += 1
         if not stack or stack[-1] != target:
             return None
-        steps.append(f"出栈 {stack.pop()}")
+        steps.append(("pop", stack.pop()))
     return steps
 
 
@@ -53,14 +54,14 @@ def check_choices(count: int, choices: dict[str, Sequence], answer_id: str) -> s
     ):
         return "选项必须是由全部入栈元素构成的四个不同排列。"
 
-    reachable = [key for key, output in choices.items() if _replay(count, output) is not None]
+    reachable = [key for key, output in choices.items() if replay(count, output) is not None]
     if reachable != [answer_id]:
         return "独立模拟未得到唯一可行的出栈序列，或答案 ID 与该序列不一致。"
     return None
 
 
 def explain_choice(count: int, output: Sequence) -> str:
-    blocking = _blocking_triple(output)
+    blocking = blocking_triple(output)
     if blocking:
         first, second, third = blocking
         return (
@@ -68,9 +69,11 @@ def explain_choice(count: int, output: Sequence) -> str:
             f"按候选顺序轮到 {second} 时，尚未出栈的 {third} 位于它上方，"
             f"因此无法弹出 {second}。"
         )
-    steps = _replay(count, output)
+    steps = replay(count, output)
     assert steps is not None, "Expected a verified, reachable sequence"
-    return "一种可行的操作顺序是" + "、".join(steps) + "。"
+    return "一种可行的操作顺序是" + "、".join(
+        f"{'入栈' if action == 'push' else '出栈'} {value}" for action, value in steps
+    ) + "。"
 
 
 def render_stem(count: int) -> str:
