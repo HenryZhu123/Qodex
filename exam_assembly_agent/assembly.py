@@ -16,12 +16,13 @@ def find_duplicate_stems(questions):
             for ids in groups.values() if len(ids) > 1]
 
 
-def select_questions(request, candidates, max_nodes=50000, unique_stems=False):
+def select_questions(request, candidates, max_nodes=50000, unique_stems=False, forbidden_pairs=None):
     topics = request["topic_counts"].copy()
     levels = request["difficulty_counts"].copy()
     selected = []
     nodes = 0
     exhausted = False
+    forbidden_pairs = forbidden_pairs or set()
 
     def search(start):
         nonlocal nodes, exhausted
@@ -35,25 +36,33 @@ def select_questions(request, candidates, max_nodes=50000, unique_stems=False):
         if len(remaining) < request["question_count"] - len(selected):
             return None
         for field, quotas in (("topic", topics), ("difficulty", levels)):
-            available = Counter(q[field] for q in remaining)
+            available = (Counter(t for q in remaining for t in q.get("eligible_topics", [q["topic"]]))
+                         if field == "topic" else Counter(q[field] for q in remaining))
             if any(available[k] < count for k, count in quotas.items()):
                 return None
         for i in range(start, len(candidates)):
             q = candidates[i]
-            topic, level = q["topic"], q["difficulty"]
-            if topics[topic] <= 0 or levels[level] <= 0:
+            level = q["difficulty"]
+            if levels[level] <= 0:
                 continue
             if unique_stems and any(stem_key(q["stem"]) == stem_key(old["stem"]) for old in selected):
                 continue
-            topics[topic] -= 1
-            levels[level] -= 1
-            selected.append(q)
-            result = search(i + 1)
-            selected.pop()
-            topics[topic] += 1
-            levels[level] += 1
-            if result is not None:
-                return result
+            if any(frozenset((q["question_id"], old["question_id"])) in forbidden_pairs for old in selected):
+                continue
+            for topic in q.get("eligible_topics", [q["topic"]]):
+                if topics[topic] <= 0:
+                    continue
+                topics[topic] -= 1
+                levels[level] -= 1
+                selected.append({**q, "topic": topic})
+                result = search(i + 1)
+                selected.pop()
+                topics[topic] += 1
+                levels[level] += 1
+                if result is not None:
+                    return result
+                if exhausted:
+                    break
             if exhausted:
                 break
         return None

@@ -1,5 +1,13 @@
 # AI 智能组卷：逐步开发
 
+## 当前正式入口：Pi 内置扩展与 PostgreSQL
+
+真实题库组卷已接入 `pi-coding-agent/packages/coding-agent/src/extensions/exam-assembly/index.ts`，与审校、题库工具一起注册。Pi 调用本地组卷服务8092，由服务读取审校后端8091提供的 PostgreSQL 题库接口，不使用模拟题库回退。
+
+启动与接口见 [真实题库接入指南](../POSTGRES_INTEGRATION.zh-CN.md)、[接口约定](../ASSEMBLY_CONTRACT.zh-CN.md)、[本轮验收记录](../VALIDATION.zh-CN.md)。已用3道真实审校并入库的题目完成 Pi 调用、学生卷和答案卷导出。
+
+**以下内容记录原有离线模拟开发步骤。** `main.py`、旧 `pi-extension.ts` 和示例JSON保留用于显式离线演示；其模拟PASS不能用于正式验收。下文“尚未接入真实题库”等表述仅描述这些旧演示入口，不代表当前服务入口。
+
 ## 当前独立开发约定
 
 按用户确认，先使用已筛选题的模拟题库独立开发，最终再与审校模块整合。

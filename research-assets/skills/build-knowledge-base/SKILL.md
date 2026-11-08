@@ -17,6 +17,7 @@ Read these before starting a run:
 - [integrity-rules.md](references/integrity-rules.md): sampling method, metrics, verdict thresholds, and repair actions.
 - [chunking-policy.md](references/chunking-policy.md): mode decision matrix, target sizes, and anti-patterns.
 - [schemas.md](references/schemas.md): parsed document, chunk, SQLite, and report schemas.
+- [reference-question-bank.md](references/reference-question-bank.md): 408 reference-question ingestion (exam papers + answer keys).
 - [development-plan.md](references/development-plan.md): how to build, test, and extend the skill (for maintainers).
 
 ## Non-negotiable rules

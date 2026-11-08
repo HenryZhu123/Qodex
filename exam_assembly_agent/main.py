@@ -99,7 +99,7 @@ def inspect_candidates(request, questions):
         else:
             eligible.append(question)
 
-    topic_counts = Counter(q["topic"] for q in eligible)
+    topic_counts = Counter(t for q in eligible for t in q.get("eligible_topics", [q["topic"]]))
     difficulty_counts = Counter(q["difficulty"] for q in eligible)
     topic_deficits = {k: max(0, v - topic_counts[k]) for k, v in request["topic_counts"].items()}
     difficulty_deficits = {k: max(0, v - difficulty_counts[k]) for k, v in request["difficulty_counts"].items()}
