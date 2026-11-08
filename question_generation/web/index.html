@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>408 自主命题验证台</title>
+  <link rel="stylesheet" href="/ui.css">
+  <script src="/ui.js" defer></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">QODEX / 自主命题</p>
+      <h1>408 自主命题验证台</h1>
+      <p class="subtitle">本地原型已完成 S1–S3。当前可生成并自检一道操作系统单级页表地址转换题。</p>
+      <div class="tags" aria-label="当前开发阶段与范围">
+        <span>短期全链路已验收</span><span>单项选择 · 4 个选项</span><span>独立审校待接入</span>
+      </div>
+    </div>
+  </header>
+  <main class="wrap workspace">
+    <section class="panel controls" aria-labelledby="request-title">
+      <h2 id="request-title">配置请求</h2>
+      <p class="muted">用相同种子和设置重放同一道题，或选择一个预设检查边界。</p>
+      <form id="request-form">
+        <fieldset id="controls" disabled>
+          <legend class="sr-only">命题请求参数</legend>
+          <div class="fields">
+            <label>种子 <input name="seed" type="number" min="0" max="4294967295" step="1" required></label>
+            <label>页大小（字节） <input name="page_size" type="number" min="2" max="65536" step="1" required></label>
+            <label>页内偏移 <input name="offset" type="number" min="0" step="1" placeholder="留空由种子决定"></label>
+          </div>
+          <fieldset class="evidence">
+            <legend>材料覆盖</legend>
+            <p id="material-summary" class="muted"></p>
+            <label><input type="checkbox" name="rule" value="split_address"> 拆分虚页号与偏移</label>
+            <label><input type="checkbox" name="rule" value="map_virtual_page"> 查有效页表项</label>
+            <label><input type="checkbox" name="rule" value="preserve_offset"> 保留页内偏移</label>
+          </fieldset>
+          <button type="submit" class="primary">生成并自检</button>
+          <div class="presets" aria-label="验证预设">
+            <button type="button" data-preset="standard">标准样例</button>
+            <button type="button" data-preset="zero">零偏移</button>
+            <button type="button" data-preset="missing">缺少材料</button>
+            <button type="button" data-preset="invalid">非法页大小</button>
+          </div>
+        </fieldset>
+      </form>
+    </section>
+    <section class="panel result" aria-labelledby="result-title">
+      <div class="result-heading">
+        <h2 id="result-title">验证结果</h2>
+        <output id="status" form="request-form" class="status" aria-live="polite">载入样例中</output>
+      </div>
+      <p id="message" class="muted">选择预设或调整参数后生成。</p>
+      <div id="question" hidden>
+        <div class="section-label">学生题面</div>
+        <p id="stem" class="stem"></p>
+        <ol id="options" class="options" type="A"></ol>
+        <details id="teacher">
+          <summary>教师答案与逐项解析</summary>
+          <p id="solution"></p>
+          <ul id="explanations"></ul>
+        </details>
+        <details id="verification">
+          <summary>材料出处、自检与复现参数</summary>
+          <p id="checks"></p>
+          <ul id="references"></ul>
+          <pre id="parameters"></pre>
+        </details>
+      </div>
+      <details id="raw-details" hidden>
+        <summary>查看完整 JSON</summary>
+        <pre id="raw"></pre>
+      </details>
+    </section>
+    <footer class="scope">
+      本地材料与确定性规则驱动。Pi、真实知识库、独立审校、入库和组卷属于后续接入阶段。
+    </footer>
+  </main>
+</body>
+</html>

@@ -6,7 +6,7 @@ Qodex 面向计算机考研 408，围绕知识库、命题、单题审校和组�
 
 | 模块 | 当前入口 |
 | --- | --- |
-| 自主命题 | [模块说明、依赖分支与联调方式](question-generation.md)。本地入口可生成并自检一道单级页表地址转换题 |
+| 自主命题 | [模块说明与本地验证台](question-generation.md#浏览器验证台)。可生成并自检一道单级页表地址转换题 |
 | Pi 运行与工具集成 | [Pi 源码说明](../pi-coding-agent/README.md) |
 | 单题审校与题库 | [exam-checker 服务](../pi-coding-agent/services/exam-checker/README.md) |
 | 知识库、组卷 | 远程有独立开发分支。对接时核对目标分支的实际接口 |

@@ -10,7 +10,7 @@
 | 组卷 | 提供缺题槽位及分值约束，管理整卷蓝图和整卷验证 |
 | Pi | 组织工具调用，传递材料和反馈，协调重试与交付 |
 
-现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。当前分支提供单级页表地址转换题的本地入口。对接时以实际服务接口和经团队确认的契约为准。个人开发计划和调研过程放在 `.local/question-generation/`。
+现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。短期 S1–S3 已验收，当前分支提供单级页表地址转换题的命令行入口和浏览器验证台。对接时以实际服务接口和经团队确认的契约为准。个人开发计划和调研过程放在 `.local/question-generation/`。
 
 ## 工作区与依赖分支
 
@@ -47,6 +47,19 @@ python3 -m unittest discover -s tests
 ```
 
 第一条命令把 UTF-8 JSON 结果写到标准输出。成功退出码为 0，命题失败退出码为 1。重复使用同一个请求、生成器和 Python 版本可重放同一道题。修改示例中的 `seed` 可生成另一变体，给 `constraints` 加上 `"offset": 0` 可检查零偏移。Python 调用方也可以使用 `question_generation.generation.generate_question(payload)`。
+
+### 浏览器验证台
+
+在仓库根目录运行 `python3 -m question_generation.ui`，打开 [本地验证台](http://127.0.0.1:8765/)。验证台只在本机监听，可用 `--port` 更换端口。按 Ctrl+C 停止。
+
+| 预设 | 预期结果 |
+| --- | --- |
+| 标准样例 | 生成并自检一道题。教师答案、逐项解析和完整 JSON 可分别展开 |
+| 零偏移 | 仍有四个互异选项，和答案碰撞的干扰项被另一条错误规则替换 |
+| 缺少材料 | 返回 `NEEDS_MATERIAL`，显示缺失的规则，无题目 |
+| 非法页大小 | 以 300 B 发出请求，返回 `INVALID_REQUEST`，无题目 |
+
+也可调整种子、页大小、页内偏移与材料规则覆盖。验证台复用命令行入口的命题逻辑，题目保留待独立审校状态。Pi、真实知识库、独立审校、入库和组卷在后续接入阶段验收。
 
 ### 请求
 
