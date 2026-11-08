@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from random import Random
 from unicodedata import normalize
 
@@ -12,7 +13,17 @@ ATTEMPTS_PER_QUESTION = 8
 METADATA_FIELDS = ("subject", "topic", "question_type")
 BATCH_FIELDS = {"schema_version", "request_id", "seed", "question_count", "total_score", "slots"}
 SLOT_FIELDS = {"slot_id", "count", "score_per_question", *METADATA_FIELDS}
+REFERENCE_FIELDS = {"reference_id", "stem", "source", "license"}
 TERMINAL_STATUSES = {"INVALID_REQUEST", "UNSUPPORTED_REQUEST", "NEEDS_MATERIAL"}
+
+
+@dataclass
+class SlotSample:
+    candidates: dict[str, dict]
+    attempts: int
+    failure: dict | None
+    blocked_attempts: int
+    matched_references: dict[str, dict]
 
 
 def _is_text(value: object) -> bool:
@@ -20,7 +31,11 @@ def _is_text(value: object) -> bool:
 
 
 def _validate(payload: object) -> None:
-    if not isinstance(payload, dict) or payload.keys() != BATCH_FIELDS:
+    if (
+        not isinstance(payload, dict)
+        or not BATCH_FIELDS <= payload.keys()
+        or payload.keys() - BATCH_FIELDS - {"reference_questions"}
+    ):
         raise ValueError("批量请求必须包含 schema_version、request_id、seed、question_count、total_score 和 slots。")
     if payload["schema_version"] != SCHEMA_VERSION or not _is_text(payload["request_id"]):
         raise ValueError("schema_version 必须为 0.1，request_id 须为非空字符串。")
@@ -58,6 +73,31 @@ def _validate(payload: object) -> None:
         raise ValueError("各槽位分值之和必须等于 total_score。")
 
 
+def _stem_key(stem: str) -> str:
+    return " ".join(normalize("NFKC", stem).split())
+
+
+def _reference_index(references: object) -> dict[str, list[dict]]:
+    if not isinstance(references, list):
+        raise ValueError("reference_questions 必须是参考题数组。")
+    index = {}
+    seen = set()
+    for reference in references:
+        if (
+            not isinstance(reference, dict)
+            or reference.keys() != REFERENCE_FIELDS
+            or not all(_is_text(value) for value in reference.values())
+        ):
+            raise ValueError("每道参考题必须提供 reference_id、stem、source 和 license。")
+        reference_id = reference["reference_id"]
+        if reference_id in seen:
+            raise ValueError("reference_id 在同一批次内必须唯一。")
+        seen.add(reference_id)
+        ref = {key: reference[key] for key in ("reference_id", "source", "license")}
+        index.setdefault(_stem_key(reference["stem"]), []).append(ref)
+    return index
+
+
 def _matches(question: dict, slot: dict) -> bool:
     metadata = question["metadata"]
     if any(metadata.get(key) != slot[key] for key in METADATA_FIELDS):
@@ -66,10 +106,14 @@ def _matches(question: dict, slot: dict) -> bool:
     return type(score) is int and score == slot["score_per_question"]
 
 
-def _sample_slot(slot: dict, request_id: str, index: int, rng: Random) -> tuple[dict, int, dict | None]:
+def _sample_slot(
+    slot: dict, request_id: str, index: int, rng: Random, reference_index: dict[str, list[dict]]
+) -> SlotSample:
     base = {key: slot[key] for key in (*METADATA_FIELDS, "constraints", "evidence") if key in slot}
     candidates = {}
     last_failure = None
+    blocked_attempts = 0
+    matched_references = {}
     for attempt in range(1, ATTEMPTS_PER_QUESTION * slot["count"] + 1):
         result = generate_question({
             **base,
@@ -93,9 +137,14 @@ def _sample_slot(slot: dict, request_id: str, index: int, rng: Random) -> tuple[
         if question["self_check"]["status"] != "PASSED":
             last_failure = {"code": "SELF_CHECK_FAILED", "message": "候选题未通过自检。"}
             continue
-        key = " ".join(normalize("NFKC", question["student_view"]["stem"]).split())
+        key = _stem_key(question["student_view"]["stem"])
+        refs = reference_index.get(key)
+        if refs:
+            blocked_attempts += 1
+            matched_references.update((ref["reference_id"], ref) for ref in refs)
+            continue
         candidates.setdefault(key, question)
-    return candidates, attempt, last_failure
+    return SlotSample(candidates, attempt, last_failure, blocked_attempts, matched_references)
 
 
 def _allocate(slots: list[dict], pools: list[dict]) -> dict[str, int]:
@@ -125,6 +174,7 @@ def generate_batch(payload: object) -> dict:
     """Fill a batch of scored slots using self-checked single questions."""
     try:
         _validate(payload)
+        reference_index = _reference_index(payload.get("reference_questions", []))
     except ValueError as error:
         request_id = payload.get("request_id") if isinstance(payload, dict) else None
         return failure_result("INVALID_REQUEST", str(error), request_id if _is_text(request_id) else None)
@@ -132,11 +182,14 @@ def generate_batch(payload: object) -> dict:
     request_id = payload["request_id"]
     slots = payload["slots"]
     rng = Random(payload["seed"])
-    samples = [_sample_slot(slot, request_id, index, rng) for index, slot in enumerate(slots)]
-    owners = _allocate(slots, [candidates for candidates, _, _ in samples])
+    samples = [_sample_slot(slot, request_id, index, rng, reference_index) for index, slot in enumerate(slots)]
+    owners = _allocate(slots, [sample.candidates for sample in samples])
     questions = []
     deficits = []
-    for index, (slot, (candidates, attempts, failure)) in enumerate(zip(slots, samples)):
+    reference_matches = []
+    for index, (slot, sample) in enumerate(zip(slots, samples)):
+        candidates = sample.candidates
+        failure = sample.failure
         selected = [question for key, question in candidates.items() if owners.get(key) == index]
         score = slot["score_per_question"]
         questions.extend({
@@ -144,22 +197,34 @@ def generate_batch(payload: object) -> dict:
             "slot_id": slot["slot_id"],
             "metadata": {**question["metadata"], "score": score},
         } for question in selected)
+        if sample.blocked_attempts:
+            reference_matches.append({
+                "slot_id": slot["slot_id"],
+                "blocked_attempts": sample.blocked_attempts,
+                "references": list(sample.matched_references.values()),
+            })
         missing = slot["count"] - len(selected)
         if missing:
             reason = {
                 "code": "INSUFFICIENT_UNIQUE_CANDIDATES",
                 "message": "在本次尝试预算内，去重后可分配给该槽位的合格题不足。",
             }
-            if not candidates and failure is not None:
+            if sample.blocked_attempts:
+                reason = {
+                    "code": "REFERENCE_DUPLICATE",
+                    "message": "部分候选与参考题题干重复，剩余合格题未填满槽位。",
+                    "reference_ids": list(sample.matched_references),
+                }
+            elif not candidates and failure is not None:
                 reason = failure
-            elif failure is not None:
+            if failure is not None and reason is not failure:
                 reason["last_candidate_failure"] = failure
             deficits.append({
                 **{key: slot[key] for key in ("slot_id", *METADATA_FIELDS, "score_per_question")},
                 "requested_count": slot["count"],
                 "generated_count": len(selected),
                 "missing_count": missing,
-                "attempts": attempts,
+                "attempts": sample.attempts,
                 "unique_candidate_count": len(candidates),
                 "reason": reason,
             })
@@ -167,7 +232,7 @@ def generate_batch(payload: object) -> dict:
     status = "GENERATED"
     if deficits:
         status = "PARTIAL" if questions else "NO_QUESTIONS"
-    return {
+    result = {
         "schema_version": SCHEMA_VERSION,
         "request_id": request_id,
         "status": status,
@@ -178,3 +243,6 @@ def generate_batch(payload: object) -> dict:
         "questions": questions,
         "deficits": deficits,
     }
+    if "reference_questions" in payload:
+        result["reference_matches"] = reference_matches
+    return result

@@ -140,3 +140,9 @@ python3 -m question_generation --batch question_generation/examples/batch.json
 有效请求的结果包括请求和实际生成的题数与分值，以及 `deficits` 数组。每项缺口记录槽位、要求数量、实际数量、缺失数量、尝试次数、去重后的候选数和原因。缺材料时会列出缺失的规则。
 
 混合样例预期生成 5 题、11 分。复验部分成功时，将样例中栈槽位的 `evidence` 清空，把固定地址的 Cache 槽位 `count` 改为 2，并将总题量、总分改为 6 和 14。预期得到 4 题、9 分，栈因缺材料少 1 题，Cache 因相同题设去重少 1 题。示例和入口见 [批量请求](../question_generation/examples/batch.json)。
+
+### 参考题去重
+
+批量请求可选填 `reference_questions` 数组。每条须提供批内唯一的 `reference_id`、`stem`、`source` 和 `license`，均为非空字符串。调用方核验题干来源与许可。把 [本地参考题样例](../tests/fixtures/question_generation/references.json) 加入混合请求，可复验 Cache 题命中而其余 4 题保留。
+
+参考题与候选复用批内题干规范化规则，候选通过自检后、分配前过滤。提供参考题字段时，结果会在 `reference_matches` 按槽位记录拦截次数及命中的参考 ID、来源和许可，即使槽位最终填满也会记录。仍有缺口时，槽位原因使用 `REFERENCE_DUPLICATE` 并列出对应参考 ID。改写及只换数字的变体单独纳入近重复评测。

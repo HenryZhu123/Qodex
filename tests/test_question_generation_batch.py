@@ -13,6 +13,7 @@ from question_generation.generation import generate_question
 
 ROOT = Path(__file__).resolve().parents[1]
 EXAMPLE = ROOT / "question_generation" / "examples" / "batch.json"
+REFERENCES = ROOT / "tests" / "fixtures" / "question_generation" / "references.json"
 
 
 class BatchGenerationTests(TestCase):
@@ -157,3 +158,55 @@ class BatchGenerationTests(TestCase):
                 single.assert_not_called()
                 self.assertEqual(result["status"], "INVALID_REQUEST")
                 self.assertEqual(result["questions"], [])
+
+    def test_reference_hit_reports_deficit_and_preserves_other_slots_through_cli(self):
+        references = json.loads(REFERENCES.read_text(encoding="utf-8"))
+        self.request.update(seed=13899, request_id="reference-check", reference_questions=references)
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "references.json"
+            path.write_text(json.dumps(self.request), encoding="utf-8")
+            cli = self.run_cli(path)
+        self.assertEqual(cli.returncode, 1, cli.stderr)
+        result = json.loads(cli.stdout)
+        self.assertEqual((result["status"], result["generated_count"], result["generated_score"]),
+                         ("PARTIAL", 4, 8))
+        self.assertEqual([q["slot_id"] for q in result["questions"]], ["paging", "paging", "stack", "subnet"])
+        gap, = result["deficits"]
+        match, = result["reference_matches"]
+        self.assertEqual((gap["slot_id"], gap["missing_count"]), ("cache", 1))
+        self.assertEqual(gap["reason"]["code"], "REFERENCE_DUPLICATE")
+        self.assertEqual(gap["reason"]["reference_ids"], [references[0]["reference_id"]])
+        self.assertEqual(match["slot_id"], "cache")
+        self.assertEqual(match["blocked_attempts"], ATTEMPTS_PER_QUESTION)
+        self.assertEqual(match["references"], [
+            {key: references[0][key] for key in ("reference_id", "source", "license")},
+        ])
+
+    def test_different_question_from_same_topic_is_kept(self):
+        references = json.loads(REFERENCES.read_text(encoding="utf-8"))
+        result = generate_batch({**self.request, "reference_questions": references[1:]})
+        self.assertEqual(result["status"], "GENERATED")
+        self.assertEqual(result["generated_count"], 5)
+        self.assertEqual(result["reference_matches"], [])
+
+    def test_reference_hits_remain_visible_when_other_candidates_fill_slot(self):
+        original = generate_batch(self.request)
+        paging = original["questions"][0]
+        reference = {
+            "reference_id": "local-paging", "stem": paging["student_view"]["stem"],
+            "source": "Qodex 自编分页样例", "license": "CC0-1.0",
+        }
+        result = generate_batch({**self.request, "reference_questions": [reference]})
+        self.assertEqual(result["status"], "GENERATED")
+        self.assertEqual(result["deficits"], [])
+        self.assertNotIn(paging["question_id"], [q["question_id"] for q in result["questions"]])
+        self.assertEqual(result["reference_matches"][0]["references"][0]["reference_id"], "local-paging")
+
+    def test_malformed_reference_data_rejects_batch_before_sampling(self):
+        reference = json.loads(REFERENCES.read_text(encoding="utf-8"))[0]
+        for references in (None, [{}], [reference, reference], [{**reference, "license": ""}]):
+            with self.subTest(references=references):
+                with patch("question_generation.batch.generate_question") as single:
+                    result = generate_batch({**self.request, "reference_questions": references})
+                single.assert_not_called()
+                self.assertEqual(result["status"], "INVALID_REQUEST")
