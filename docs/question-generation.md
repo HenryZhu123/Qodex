@@ -156,3 +156,50 @@ python3 -m question_generation --batch question_generation/examples/batch.json
 批量请求可选填 `reference_questions` 数组。每条须提供批内唯一的 `reference_id`、`stem`、`source` 和 `license`，均为非空字符串。调用方核验题干来源与许可。把 [本地参考题样例](../tests/fixtures/question_generation/references.json) 加入混合请求，可复验 Cache 题命中而其余 4 题保留。
 
 参考题与候选复用批内题干规范化规则，候选通过自检后、分配前过滤。提供参考题字段时，结果会在 `reference_matches` 按槽位记录拦截次数及命中的参考 ID、来源和许可，即使槽位最终填满也会记录。仍有缺口时，槽位原因使用 `REFERENCE_DUPLICATE` 并列出对应参考 ID。改写及只换数字的变体单独纳入近重复评测。
+
+## 分页综合题与修订 v0.1
+
+使用 [分页综合题样例](../question_generation/examples/paging-comprehensive.json) 运行首个 L2 闭环。请求沿用分页的种子、约束和材料，`question_type` 使用 `comprehensive_application`。单选、批量单选及综合题分别通过命令行模式调用。Python 入口为 `question_generation.paging_comprehensive.generate_comprehensive` 和 `revise_comprehensive`。
+
+| 小问 ID | 分值 | 评分内容 | 等价解法 |
+| --- | --- | --- | --- |
+| `split-address` | 2 | 虚页号、页内偏移各 1 分 | 除法取商和余数，或按页大小切分地址位 |
+| `physical-address` | 3 | 页框号 1 分、物理地址 2 分 | 页框基址加偏移，或替换高位并保留低位 |
+| `cross-page` | 5 | 页尾物理地址、下一虚页号与偏移、下一页框、页首物理地址、连续性及依据，各 1 分 | 比较两物理地址之差，或证明相邻页框判据 |
+
+三问共用一张页表。学生视图包含公共题干、各问 ID、题面和分值。教师视图以同一小问 ID 关联解法、等价解法的接受条件，以及各评分点的稳定 ID、分值、判分要求和期望值。各点按题设独立判分，十进制及标明进制的等值表示均接受。生成器用算术求解，自检用位字段独立复算，跨页连续性额外用页框关系复核。三个小问和九个评分点合计 10 分。
+
+### 复验生成与修订
+
+```bash
+qodex_demo=$(mktemp -d)
+python3 -m question_generation --comprehensive question_generation/examples/paging-comprehensive.json > "$qodex_demo/v1.json"
+python3 - "$qodex_demo" <<'PY'
+import json
+from pathlib import Path
+import sys
+
+directory = Path(sys.argv[1])
+question, = json.loads((directory / "v1.json").read_text(encoding="utf-8"))["questions"]
+request = {
+    "schema_version": "0.1",
+    "request_id": "paging-revision-demo",
+    "current_question": question,
+    "feedback": {
+        "feedback_id": "demo-feedback-1",
+        "question_id": question["question_id"],
+        "target_version": question["version"],
+        "part_id": "cross-page",
+        "action": "replace_next_frame",
+        "replacement_frame": 18,
+        "comment": "将下一虚页映射到相邻页框，演示物理地址连续。",
+    },
+}
+(directory / "revise.json").write_text(json.dumps(request, ensure_ascii=False), encoding="utf-8")
+PY
+python3 -m question_generation --revise "$qodex_demo/revise.json" > "$qodex_demo/v2.json"
+```
+
+样例的虚页 11 和 12 在 v1 分别映射到页框 17 和 63。第三问的物理地址为 `0x11FF` 和 `0x3F00`，不连续。反馈把虚页 12 改映射到页框 18。v2 的后一物理地址为 `0x1200`，结论变为连续。题目、小问及评分点 ID、前两问和总分保持稳定，`revision` 记录反馈 ID、目标小问、源版本及映射变化。新版本重算通过后回到 `PENDING`。
+
+修订请求由调用方提供最新 `current_question` 快照和指向该题该版本的结构化反馈。当前动作只用于 `cross-page`，替换页框须为 0–63 的整数并与两个现有页框不同，每题最多两轮。把修订请求的 `current_question` 改为 v2，沿用目标版本 1 的反馈，得到 `STALE_FEEDBACK`。题目 ID 不匹配、动作不支持、达到上限或自检失败时，返回对应状态和空题目列表。命令行成功退出码为 0，失败为 1。快照的持久化和并发提交由后续接入层负责。

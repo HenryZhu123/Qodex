@@ -7,11 +7,18 @@ import sys
 
 from .batch import generate_batch
 from .generation import failure_result, generate_question
+from .paging_comprehensive import generate_comprehensive, revise_comprehensive
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="生成可自检的 408 单选题。")
-    parser.add_argument("--batch", action="store_true", help="按批量槽位请求出题")
+    parser = argparse.ArgumentParser(description="生成或修订可自检的 408 题目。")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--batch", dest="run", action="store_const", const=generate_batch, help="按批量槽位请求出题")
+    mode.add_argument("--comprehensive", dest="run", action="store_const", const=generate_comprehensive,
+                      help="生成分页综合题")
+    mode.add_argument("--revise", dest="run", action="store_const", const=revise_comprehensive,
+                      help="按版本反馈修订分页综合题")
+    parser.set_defaults(run=generate_question)
     parser.add_argument("request", type=Path, help="UTF-8 JSON 请求文件")
     args = parser.parse_args()
 
@@ -20,11 +27,11 @@ def main() -> int:
     except (OSError, ValueError) as error:
         result = failure_result("INVALID_REQUEST", f"无法读取 JSON 请求：{error}")
     else:
-        result = generate_batch(payload) if args.batch else generate_question(payload)
+        result = args.run(payload)
 
     output = json.dumps(result, ensure_ascii=False, indent=2)
     sys.stdout.buffer.write(output.encode("utf-8", errors="backslashreplace") + b"\n")
-    return 0 if result["status"] == "GENERATED" else 1
+    return 0 if result["status"] in {"GENERATED", "REVISED"} else 1
 
 
 if __name__ == "__main__":

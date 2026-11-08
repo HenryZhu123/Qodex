@@ -54,17 +54,21 @@ def _is_text(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
-def _evidence_refs(evidence: object, required_rules: set[str], topic_name: str) -> list[dict]:
+def _evidence_refs(
+    evidence: object, required_rules: set[str], topic_name: str, *, require_summary: bool = True
+) -> list[dict]:
     if not isinstance(evidence, list):
         raise RequestError("evidence 必须是材料数组。")
 
     refs = []
     seen_ids = set()
     covered_rules = set()
+    text_fields = EVIDENCE_TEXT_FIELDS if require_summary else EVIDENCE_TEXT_FIELDS[:-1]
     for item in evidence:
-        if not isinstance(item, dict) or item.keys() != {*EVIDENCE_TEXT_FIELDS, "rules"}:
-            raise RequestError("每条材料必须包含 id、source、version、anchor、summary 和 rules。")
-        if not all(_is_text(item[field]) for field in EVIDENCE_TEXT_FIELDS):
+        if not isinstance(item, dict) or item.keys() != {*text_fields, "rules"}:
+            expected = "id、source、version、anchor、summary" if require_summary else "id、source、version、anchor"
+            raise RequestError(f"每条材料必须包含 {expected} 和 rules。")
+        if not all(_is_text(item[field]) for field in text_fields):
             raise RequestError("材料的来源、定位、摘要等文本字段须为非空字符串。")
         rules = item["rules"]
         if not isinstance(rules, list) or not all(_is_text(rule) for rule in rules):
@@ -96,7 +100,7 @@ def _evidence_refs(evidence: object, required_rules: set[str], topic_name: str) 
     return refs
 
 
-def _read_request(payload: object) -> Request:
+def _read_request(payload: object, *, paging_comprehensive: bool = False) -> Request:
     if not isinstance(payload, dict) or payload.keys() - REQUEST_FIELDS:
         raise RequestError("请求必须是 JSON 对象，且只包含已定义的字段。")
 
@@ -104,12 +108,16 @@ def _read_request(payload: object) -> Request:
         if not _is_text(payload.get(field)):
             raise RequestError(f"{field} 必须是非空字符串。")
 
-    rule_topic = RULE_TOPICS.get(payload["topic"])
-    if rule_topic is None or rule_topic.METADATA["subject"] != payload["subject"]:
-        rule_topic = SUBJECT_DEFAULTS.get(payload["subject"])
-    metadata = STACK_FIELDS if payload["subject"] == STACK_FIELDS["subject"] else SUPPORTED_FIELDS
-    if rule_topic is not None:
-        metadata = rule_topic.METADATA
+    rule_topic = None
+    if paging_comprehensive:
+        metadata = {**SUPPORTED_FIELDS, "question_type": "comprehensive_application"}
+    else:
+        rule_topic = RULE_TOPICS.get(payload["topic"])
+        if rule_topic is None or rule_topic.METADATA["subject"] != payload["subject"]:
+            rule_topic = SUBJECT_DEFAULTS.get(payload["subject"])
+        metadata = STACK_FIELDS if payload["subject"] == STACK_FIELDS["subject"] else SUPPORTED_FIELDS
+        if rule_topic is not None:
+            metadata = rule_topic.METADATA
     for field, expected in {"schema_version": SCHEMA_VERSION, **metadata}.items():
         if payload[field] != expected:
             raise RequestError(f"{field} 当前仅支持 {expected}。", "UNSUPPORTED_REQUEST")

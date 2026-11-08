@@ -28,11 +28,24 @@ def create_instance(rng: Random, page_size: int, offset: int | None) -> PagingIn
     return PagingInstance(page_size, virtual_page * page_size + offset, page_table)
 
 
+def translate(instance: PagingInstance, address: int) -> tuple[int, int, int, int]:
+    page, offset = divmod(address, instance.page_size)
+    frame = instance.page_table[page]
+    return page, offset, frame, frame * instance.page_size + offset
+
+
+def recompute_translation(instance: PagingInstance, address: int) -> tuple[int, int, int, int]:
+    """Independently extract address fields and replace the page number."""
+    offset_bits = instance.page_size.bit_length() - 1
+    page = address >> offset_bits
+    offset = address & (instance.page_size - 1)
+    frame = instance.page_table[page]
+    return page, offset, frame, (frame << offset_bits) | offset
+
+
 def build_choices(instance: PagingInstance, rng: Random) -> tuple[dict[str, Choice], str]:
     size = instance.page_size
-    virtual_page, offset = divmod(instance.virtual_address, size)
-    frame = instance.page_table[virtual_page]
-    answer = frame * size + offset
+    virtual_page, offset, frame, answer = translate(instance, instance.virtual_address)
 
     correct = Choice(
         answer,
@@ -73,23 +86,22 @@ def check_choices(
     if len(choices) != 4 or len({choice.address for choice in choices.values()}) != 4:
         return "选项必须包含四个不同的物理地址值。"
 
-    # Recompute using the bit fields of the displayed address.
-    offset_bits = instance.page_size.bit_length() - 1
-    virtual_page = instance.virtual_address >> offset_bits
-    offset = instance.virtual_address & (instance.page_size - 1)
-    expected = (instance.page_table[virtual_page] << offset_bits) | offset
+    _, _, _, expected = recompute_translation(instance, instance.virtual_address)
     if answer_id not in choices or choices[answer_id].address != expected:
         return "答案 ID 与独立复算的物理地址不一致。"
     return None
 
 
-def render_stem(instance: PagingInstance) -> str:
-    entries = "，".join(
+def render_page_table(instance: PagingInstance) -> str:
+    return "，".join(
         f"虚页 {page} 对应物理页框 {frame}"
         for page, frame in instance.page_table.items()
     )
+
+
+def render_stem(instance: PagingInstance) -> str:
     return (
         f"某系统按字节寻址，使用单级页表，页大小为 {instance.page_size} B。"
-        f"以下页表项均有效：{entries}。"
+        f"以下页表项均有效：{render_page_table(instance)}。"
         f"虚拟地址 0x{instance.virtual_address:X} 对应的物理地址是什么？"
     )
