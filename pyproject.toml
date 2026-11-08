@@ -1,0 +1,15 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "qodex-exam-assembly-core"
+version = "0.2.0"
+requires-python = ">=3.11"
+description = "Qodex exam selection and document export"
+
+[tool.hatch.build.targets.wheel]
+packages = ["exam_assembly_agent"]
+
+[tool.hatch.build]
+exclude = ["**/outputs/**", "**/__pycache__/**"]

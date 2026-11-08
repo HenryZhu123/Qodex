@@ -25,3 +25,9 @@ kb_smoke_*/
 
 # Secrets / local env
 .env
+.env.*
+!.env.example
+
+# Local assembly exports and integration test evidence
+/outputs/
+/output/
