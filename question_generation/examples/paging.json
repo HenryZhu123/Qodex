@@ -12,8 +12,8 @@
     {
       "id": "ostep-paging",
       "source": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf",
-      "version": "OSTEP chapter 18, 2026-11-08 reference",
-      "anchor": "§18.1 A Simple Example",
+      "version": "OSTEP 1.10, chapter 18",
+      "anchor": "§18.1 A Simple Example And Overview",
       "summary": "将虚拟地址拆为虚页号和页内偏移。用有效页表项查出物理页框号，保留页内偏移，组成物理地址。",
       "rules": ["split_address", "map_virtual_page", "preserve_offset"]
     }

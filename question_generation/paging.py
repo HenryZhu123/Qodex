@@ -34,7 +34,12 @@ def build_choices(instance: PagingInstance, rng: Random) -> tuple[dict[str, Choi
     frame = instance.page_table[virtual_page]
     answer = frame * size + offset
 
-    correct = Choice(answer, "查有效页表项得到物理页框号，再加上原页内偏移。")
+    correct = Choice(
+        answer,
+        f"虚页号为 {virtual_page}，页内偏移为 0x{offset:X}。"
+        f"查有效页表项得物理页框号 {frame}，"
+        f"物理地址为 {frame} × {size} + 0x{offset:X} = 0x{answer:X}。",
+    )
     distractors = (
         Choice(instance.virtual_address, "跳过页表转换，把虚拟地址当成物理地址。"),
         Choice(frame * size, "查得正确的物理页框号，但丢弃了页内偏移。"),

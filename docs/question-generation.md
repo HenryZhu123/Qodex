@@ -10,7 +10,7 @@
 | 组卷 | 提供缺题槽位及分值约束，管理整卷蓝图和整卷验证 |
 | Pi | 组织工具调用，传递材料和反馈，协调重试与交付 |
 
-现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。当前基线尚无独立命题服务。对接时以实际服务接口和经团队确认的契约为准。模块文档随已实现能力更新，个人开发计划和调研过程放在 `.local/question-generation/`。
+现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。当前分支提供单级页表地址转换题的本地入口。对接时以实际服务接口和经团队确认的契约为准。个人开发计划和调研过程放在 `.local/question-generation/`。
 
 ## 工作区与依赖分支
 
@@ -37,6 +37,17 @@
 
 首个题型为操作系统单级页表地址转换，按字节寻址，页大小为 2 的幂，题面所列映射均有效。生成器按页大小拆分虚页号和页内偏移，用页表查出物理页框号，保留页内偏移。[OSTEP 分页章节](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf)
 
+### 本地运行
+
+从仓库根目录运行以下命令。需要 Python 3.9 或更新版本，依赖为 Python 标准库。
+
+```bash
+python3 -m question_generation question_generation/examples/paging.json
+python3 -m unittest discover -s tests
+```
+
+第一条命令把 UTF-8 JSON 结果写到标准输出。成功退出码为 0，命题失败退出码为 1。重复使用同一个请求、生成器和 Python 版本可重放同一道题。修改示例中的 `seed` 可生成另一变体，给 `constraints` 加上 `"offset": 0` 可检查零偏移。Python 调用方也可以使用 `question_generation.generation.generate_question(payload)`。
+
 ### 请求
 
 [示例请求](../question_generation/examples/paging.json)使用 UTF-8 JSON。
@@ -49,11 +60,11 @@
 | `constraints` | 可省略。`page_size` 为 2 至 65536 字节之间的 2 的幂，默认 256。`offset` 可省略，显式给出时须为 0 至 `page_size - 1` 的整数 |
 | `evidence` | 材料数组。每条含唯一 `id`、来源 `source`、`version`、定位 `anchor`、材料摘要 `summary` 和标记数组 `rules`。材料合计须覆盖 `split_address`、`map_virtual_page` 和 `preserve_offset` |
 
-材料由调用方预先核验并标记。模块检查字段、出处元数据及规则覆盖，使用内置分页规则求解。材料摘要的语义和引用可访问性由提供方核验。
+材料由调用方预先核验并标记。模块检查字段、出处元数据及规则覆盖，使用内置分页规则求解。材料摘要的语义和引用可访问性由提供方核验。省略材料或传入空数组会得到缺材料结果。
 
 ### 输出与验收
 
-成功时返回 `GENERATED` 和一道题。学生题面包含题干和带稳定 ID 的四个选项。教师视图提供答案 ID、解法和逐项说明。题目包还记录生成器版本、种子、实际题设、出处、自检结果和 `PENDING` 审校状态。选项显示字母可按顺序分配，答案按 ID 关联。
+成功时返回 `GENERATED` 和一个含一道题的 `questions` 数组。面向学生的输出使用 `student_view`，含题干和带稳定 ID 的四个选项。教师视图提供答案 ID、解法和逐项说明。题目包还记录生成器版本、种子、实际题设、出处、自检结果和 `PENDING` 审校状态。选项显示字母可按顺序分配，答案按 ID 关联。
 
 失败时返回 `INVALID_REQUEST`、`UNSUPPORTED_REQUEST`、`NEEDS_MATERIAL` 或 `SELF_CHECK_FAILED`，附原因及空题目列表。材料不足时列出缺失的规则。未知请求字段视为无效，避免忽略约束。
 
