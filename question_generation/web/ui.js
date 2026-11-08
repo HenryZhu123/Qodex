@@ -3,7 +3,7 @@
 const byId = (id) => document.getElementById(id);
 const form = byId("request-form");
 const controls = byId("controls");
-const ruleInputs = Array.from(form.querySelectorAll('[name="rule"]'));
+const ruleInputs = () => Array.from(form.querySelectorAll('[name="rule"]'));
 const field = (name) => form.elements.namedItem(name);
 const status = byId("status");
 const message = byId("message");
@@ -11,7 +11,10 @@ const ruleNames = {
   split_address: "拆分虚页号与偏移",
   map_virtual_page: "查有效页表项",
   preserve_offset: "保留页内偏移",
+  stack_push_top: "从栈顶入栈",
+  stack_pop_top: "从栈顶出栈",
 };
+const examples = {};
 let example;
 
 function setStatus(text, tone) {
@@ -37,11 +40,15 @@ function setItems(id, texts) {
 
 function applyPreset(preset) {
   field("seed").value = example.seed;
-  field("page_size").value = preset === "invalid" ? 300 : example.constraints.page_size;
-  field("offset").value = preset === "zero" ? 0 : "";
-  for (const input of ruleInputs) {
-    input.checked = example.evidence[0].rules.includes(input.value)
-      && !(preset === "missing" && input.value === "preserve_offset");
+  if (field("topic").value === "stack") {
+    field("element_count").value = {boundary: 4, invalid: 3}[preset] ?? example.constraints.element_count;
+  } else {
+    field("page_size").value = preset === "invalid" ? 300 : example.constraints.page_size;
+    field("offset").value = preset === "boundary" ? 0 : "";
+  }
+  const inputs = ruleInputs();
+  for (const [index, input] of inputs.entries()) {
+    input.checked = preset !== "missing" || index !== inputs.length - 1;
   }
 }
 
@@ -77,11 +84,16 @@ function showResult(result) {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const constraints = {page_size: field("page_size").valueAsNumber};
-  if (field("offset").value !== "") {
-    constraints.offset = field("offset").valueAsNumber;
+  let constraints;
+  if (field("topic").value === "stack") {
+    constraints = {element_count: field("element_count").valueAsNumber};
+  } else {
+    constraints = {page_size: field("page_size").valueAsNumber};
+    if (field("offset").value !== "") {
+      constraints.offset = field("offset").valueAsNumber;
+    }
   }
-  const rules = ruleInputs.filter((input) => input.checked).map((input) => input.value);
+  const rules = ruleInputs().filter((input) => input.checked).map((input) => input.value);
   const payload = {
     ...example,
     seed: field("seed").valueAsNumber,
@@ -116,18 +128,41 @@ for (const button of form.querySelectorAll("[data-preset]")) {
 }
 
 async function loadExample() {
+  const topic = field("topic").value;
+  controls.disabled = true;
+  resetResult();
+  setStatus("载入样例中", "idle");
   try {
-    const response = await fetch("/api/example");
-    if (!response.ok) throw new Error("Example unavailable");
-    example = await response.json();
+    if (!examples[topic]) {
+      const response = await fetch(topic === "stack" ? "/api/example/stack" : "/api/example");
+      if (!response.ok) throw new Error("Example unavailable");
+      examples[topic] = await response.json();
+    }
+    example = examples[topic];
+    const isStack = topic === "stack";
+    byId("paging-fields").hidden = byId("paging-fields").disabled = isStack;
+    byId("stack-fields").hidden = byId("stack-fields").disabled = !isStack;
+    form.querySelector('[data-preset="boundary"]').textContent = isStack ? "最少元素" : "零偏移";
+    form.querySelector('[data-preset="invalid"]').textContent = isStack ? "非法元素个数" : "非法页大小";
+    byId("material-rules").replaceChildren(...example.evidence[0].rules.map((rule) => {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.name = "rule";
+      input.value = rule;
+      label.append(input, ` ${ruleNames[rule]}`);
+      return label;
+    }));
     applyPreset("standard");
     byId("material-summary").textContent = `${example.evidence[0].version} · ${example.evidence[0].anchor}`;
     controls.disabled = false;
     setStatus("等待生成", "idle");
+    message.textContent = "选择预设或调整参数后生成。";
   } catch {
     setStatus("无法载入样例", "failure");
     message.textContent = "请确认本地验证台正在运行，然后刷新页面。";
   }
 }
 
+field("topic").addEventListener("change", loadExample);
 loadExample();

@@ -12,9 +12,9 @@
     <div class="wrap">
       <p class="eyebrow">QODEX / 自主命题</p>
       <h1>408 自主命题验证台</h1>
-      <p class="subtitle">本地原型已完成 S1–S3。当前可生成并自检一道操作系统单级页表地址转换题。</p>
+      <p class="subtitle">当前可生成并自检单级页表地址转换题和单栈出栈序列判定题。</p>
       <div class="tags" aria-label="当前开发阶段与范围">
-        <span>短期全链路已验收</span><span>单项选择 · 4 个选项</span><span>独立审校待接入</span>
+        <span>L1 单选题扩展</span><span>单项选择 · 4 个选项</span><span>独立审校待接入</span>
       </div>
     </div>
   </header>
@@ -26,21 +26,36 @@
         <fieldset id="controls" disabled>
           <legend class="sr-only">命题请求参数</legend>
           <div class="fields">
+            <label class="topic">题型
+              <select name="topic">
+                <option value="paging">单级页表地址转换</option>
+                <option value="stack">单栈出栈序列判定</option>
+              </select>
+            </label>
             <label>种子 <input name="seed" type="number" min="0" max="4294967295" step="1" required></label>
-            <label>页大小（字节） <input name="page_size" type="number" min="2" max="65536" step="1" required></label>
-            <label>页内偏移 <input name="offset" type="number" min="0" step="1" placeholder="留空由种子决定"></label>
           </div>
+          <fieldset id="paging-fields" class="topic-fields">
+            <legend class="sr-only">分页参数</legend>
+            <div class="fields">
+              <label>页大小（字节） <input name="page_size" type="number" min="2" max="65536" step="1" required></label>
+              <label>页内偏移 <input name="offset" type="number" min="0" step="1" placeholder="留空由种子决定"></label>
+            </div>
+          </fieldset>
+          <fieldset id="stack-fields" class="topic-fields" hidden disabled>
+            <legend class="sr-only">出栈序列参数</legend>
+            <div class="fields">
+              <label>元素个数（4–6） <input name="element_count" type="number" step="1" required></label>
+            </div>
+          </fieldset>
           <fieldset class="evidence">
             <legend>材料覆盖</legend>
             <p id="material-summary" class="muted"></p>
-            <label><input type="checkbox" name="rule" value="split_address"> 拆分虚页号与偏移</label>
-            <label><input type="checkbox" name="rule" value="map_virtual_page"> 查有效页表项</label>
-            <label><input type="checkbox" name="rule" value="preserve_offset"> 保留页内偏移</label>
+            <div id="material-rules"></div>
           </fieldset>
           <button type="submit" class="primary">生成并自检</button>
           <div class="presets" aria-label="验证预设">
             <button type="button" data-preset="standard">标准样例</button>
-            <button type="button" data-preset="zero">零偏移</button>
+            <button type="button" data-preset="boundary">零偏移</button>
             <button type="button" data-preset="missing">缺少材料</button>
             <button type="button" data-preset="invalid">非法页大小</button>
           </div>

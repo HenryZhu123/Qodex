@@ -9,7 +9,7 @@ from .generation import failure_result, generate_question
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="生成一道可自检的 408 分页单选题。")
+    parser = argparse.ArgumentParser(description="生成一道可自检的 408 单选题。")
     parser.add_argument("request", type=Path, help="UTF-8 JSON 请求文件")
     args = parser.parse_args()
 

@@ -8,7 +8,7 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; }
-button, input { font: inherit; }
+button, input, select { font: inherit; }
 .wrap { width: min(1100px, calc(100% - 36px)); margin-inline: auto; }
 .hero { padding: 28px 0 30px; color: #fff; background: #142941; }
 .eyebrow, .section-label { font-size: .79rem; font-weight: 750; letter-spacing: .08em; }
@@ -27,8 +27,9 @@ h2 { font-size: 1.18rem; margin: 0; }
 fieldset { border: 0; margin: 0; padding: 0; min-inline-size: 0; }
 .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
 .fields label { display: grid; gap: 3px; font-size: .9rem; font-weight: 650; }
-.fields label:last-child { grid-column: 1 / -1; }
-input[type="number"] { width: 100%; border: 1px solid #b5c7d8; border-radius: 7px; padding: 7px 9px; color: inherit; }
+.fields label:last-child, .fields .topic { grid-column: 1 / -1; }
+.topic-fields { margin-top: 11px; }
+input[type="number"], select { width: 100%; border: 1px solid #b5c7d8; border-radius: 7px; padding: 7px 9px; color: inherit; }
 input[type="checkbox"] { accent-color: #006d64; }
 .evidence { border: 1px solid #d8e2ec; border-radius: 9px; margin: 14px 0; padding: 7px 11px 10px; font-size: .88rem; }
 .evidence legend { font-weight: 650; padding-inline: 5px; }

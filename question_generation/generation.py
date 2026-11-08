@@ -7,6 +7,7 @@ import json
 from dataclasses import dataclass
 from random import Random
 
+from . import stack
 from .paging import build_choices, check_choices, create_instance, render_stem
 
 SCHEMA_VERSION = "0.1"
@@ -21,6 +22,12 @@ REQUEST_FIELDS = {
 }
 EVIDENCE_TEXT_FIELDS = ("id", "source", "version", "anchor", "summary")
 REQUIRED_RULES = {"split_address", "map_virtual_page", "preserve_offset"}
+STACK_FIELDS = {
+    "subject": "data_structures",
+    "topic": "stack_pop_sequence",
+    "question_type": "single_choice",
+}
+STACK_RULES = {"stack_push_top", "stack_pop_top"}
 
 
 class RequestError(ValueError):
@@ -33,11 +40,11 @@ class RequestError(ValueError):
 
 
 @dataclass(frozen=True)
-class PagingRequest:
+class Request:
     request_id: str
     seed: int
-    page_size: int
-    offset: int | None
+    metadata: dict[str, str]
+    constraints: dict
     evidence_refs: list[dict]
 
 
@@ -45,7 +52,7 @@ def _is_text(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
-def _evidence_refs(evidence: object) -> list[dict]:
+def _evidence_refs(evidence: object, required_rules: set[str], topic_name: str) -> list[dict]:
     if not isinstance(evidence, list):
         raise RequestError("evidence 必须是材料数组。")
 
@@ -66,7 +73,7 @@ def _evidence_refs(evidence: object) -> list[dict]:
             raise RequestError("材料 ID 必须唯一。")
         seen_ids.add(evidence_id)
 
-        used_rules = REQUIRED_RULES.intersection(rules)
+        used_rules = required_rules.intersection(rules)
         if used_rules:
             refs.append({
                 "id": evidence_id,
@@ -77,17 +84,17 @@ def _evidence_refs(evidence: object) -> list[dict]:
             })
             covered_rules.update(used_rules)
 
-    missing = REQUIRED_RULES - covered_rules
+    missing = required_rules - covered_rules
     if missing:
         raise RequestError(
-            "材料未覆盖命题所需的分页规则。",
+            f"材料未覆盖命题所需的{topic_name}规则。",
             "NEEDS_MATERIAL",
             missing_rules=tuple(sorted(missing)),
         )
     return refs
 
 
-def _read_request(payload: object) -> PagingRequest:
+def _read_request(payload: object) -> Request:
     if not isinstance(payload, dict) or payload.keys() - REQUEST_FIELDS:
         raise RequestError("请求必须是 JSON 对象，且只包含已定义的字段。")
 
@@ -95,7 +102,8 @@ def _read_request(payload: object) -> PagingRequest:
         if not _is_text(payload.get(field)):
             raise RequestError(f"{field} 必须是非空字符串。")
 
-    for field, expected in {"schema_version": SCHEMA_VERSION, **SUPPORTED_FIELDS}.items():
+    metadata = STACK_FIELDS if payload["subject"] == STACK_FIELDS["subject"] else SUPPORTED_FIELDS
+    for field, expected in {"schema_version": SCHEMA_VERSION, **metadata}.items():
         if payload[field] != expected:
             raise RequestError(f"{field} 当前仅支持 {expected}。", "UNSUPPORTED_REQUEST")
 
@@ -104,6 +112,16 @@ def _read_request(payload: object) -> PagingRequest:
         raise RequestError("seed 必须是 0 至 4294967295 的整数。")
 
     constraints = payload.get("constraints", {})
+    evidence = payload.get("evidence", [])
+    if metadata is STACK_FIELDS:
+        if not isinstance(constraints, dict) or constraints.keys() - {"element_count"}:
+            raise RequestError("constraints 只支持 element_count。")
+        count = constraints.get("element_count", 5)
+        if type(count) is not int or not 4 <= count <= 6:
+            raise RequestError("element_count 必须是 4 至 6 的整数。")
+        refs = _evidence_refs(evidence, STACK_RULES, "栈")
+        return Request(payload["request_id"], seed, metadata, {"element_count": count}, refs)
+
     if not isinstance(constraints, dict) or constraints.keys() - {"page_size", "offset"}:
         raise RequestError("constraints 只支持 page_size 和 offset。")
 
@@ -114,8 +132,8 @@ def _read_request(payload: object) -> PagingRequest:
     if "offset" in constraints and (type(offset) is not int or not 0 <= offset < page_size):
         raise RequestError("offset 必须是大于等于 0 且小于页大小的整数。")
 
-    refs = _evidence_refs(payload.get("evidence", []))
-    return PagingRequest(payload["request_id"], seed, page_size, offset, refs)
+    refs = _evidence_refs(evidence, REQUIRED_RULES, "分页")
+    return Request(payload["request_id"], seed, metadata, {"page_size": page_size, "offset": offset}, refs)
 
 
 def failure_result(
@@ -147,47 +165,65 @@ def generate_question(payload: object) -> dict:
         )
 
     rng = Random(request.seed)
-    instance = create_instance(rng, request.page_size, request.offset)
-    choices, answer_id = build_choices(instance, rng)
-    problem = check_choices(instance, choices, answer_id)
-    if problem is not None:
-        return failure_result("SELF_CHECK_FAILED", problem, request.request_id)
+    if request.metadata is STACK_FIELDS:
+        count = request.constraints["element_count"]
+        sequences, answer_id = stack.build_choices(count, rng)
+        problem = stack.check_choices(count, sequences, answer_id)
+        if problem is not None:
+            return failure_result("SELF_CHECK_FAILED", problem, request.request_id)
+        prefix = "stack"
+        generator_version = "stack-v1"
+        stem = stack.render_stem(count)
+        texts = {key: "、".join(map(str, output)) for key, output in sequences.items()}
+        explanations = {key: stack.explain_choice(count, output) for key, output in sequences.items()}
+        parameters = {"element_count": count, "input_sequence": list(range(1, count + 1))}
+        check = "independent_stack_replay"
+    else:
+        instance = create_instance(rng, **request.constraints)
+        choices, answer_id = build_choices(instance, rng)
+        problem = check_choices(instance, choices, answer_id)
+        if problem is not None:
+            return failure_result("SELF_CHECK_FAILED", problem, request.request_id)
+        prefix = "paging"
+        generator_version = GENERATOR_VERSION
+        stem = render_stem(instance)
+        texts = {key: f"0x{choice.address:X}" for key, choice in choices.items()}
+        explanations = {key: choice.explanation for key, choice in choices.items()}
+        parameters = {
+            "page_size": instance.page_size,
+            "virtual_address": instance.virtual_address,
+            "page_table": {str(page): frame for page, frame in instance.page_table.items()},
+        }
+        check = "independent_address_recomputation"
 
     question = {
         "version": 1,
-        "metadata": SUPPORTED_FIELDS.copy(),
+        "metadata": request.metadata.copy(),
         "student_view": {
-            "stem": render_stem(instance),
+            "stem": stem,
             "options": [
-                {"id": option_id, "text": f"0x{choice.address:X}"}
-                for option_id, choice in choices.items()
+                {"id": option_id, "text": option_text} for option_id, option_text in texts.items()
             ],
         },
         "instructor_view": {
             "correct_option_id": answer_id,
-            "explanation": choices[answer_id].explanation,
-            "option_explanations": {
-                option_id: choice.explanation for option_id, choice in choices.items()
-            },
+            "explanation": explanations[answer_id],
+            "option_explanations": explanations,
         },
         "evidence_refs": request.evidence_refs,
         "generator": {
-            "version": GENERATOR_VERSION,
+            "version": generator_version,
             "seed": request.seed,
-            "parameters": {
-                "page_size": instance.page_size,
-                "virtual_address": instance.virtual_address,
-                "page_table": {str(page): frame for page, frame in instance.page_table.items()},
-            },
+            "parameters": parameters,
         },
         "self_check": {
             "status": "PASSED",
-            "checks": ["distinct_options", "independent_address_recomputation"],
+            "checks": ["distinct_options", check],
         },
         "review_status": "PENDING",
     }
     identity = json.dumps([request.request_id, question], sort_keys=True).encode("utf-8")
-    question["question_id"] = f"paging-{hashlib.sha256(identity).hexdigest()[:24]}"
+    question["question_id"] = f"{prefix}-{hashlib.sha256(identity).hexdigest()[:24]}"
     return {
         "schema_version": SCHEMA_VERSION,
         "request_id": request.request_id,
