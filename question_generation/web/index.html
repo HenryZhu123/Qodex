@@ -12,7 +12,7 @@
     <div class="wrap">
       <p class="eyebrow">QODEX / 自主命题</p>
       <h1>408 自主命题验证台</h1>
-      <p class="subtitle">当前可生成并自检单级页表地址转换题和单栈出栈序列判定题。</p>
+      <p class="subtitle">当前支持单级页表、单栈出栈序列和直接映射 Cache 单选题。</p>
       <div class="tags" aria-label="当前开发阶段与范围">
         <span>L1 单选题扩展</span><span>单项选择 · 4 个选项</span><span>独立审校待接入</span>
       </div>
@@ -30,6 +30,7 @@
               <select name="topic">
                 <option value="paging">单级页表地址转换</option>
                 <option value="stack">单栈出栈序列判定</option>
+                <option value="cache">直接映射 Cache 地址拆分</option>
               </select>
             </label>
             <label>种子 <input name="seed" type="number" min="0" max="4294967295" step="1" required></label>
@@ -45,6 +46,14 @@
             <legend class="sr-only">出栈序列参数</legend>
             <div class="fields">
               <label>元素个数（4–6） <input name="element_count" type="number" step="1" required></label>
+            </div>
+          </fieldset>
+          <fieldset id="cache-fields" class="topic-fields" hidden disabled>
+            <legend class="sr-only">Cache 参数</legend>
+            <div class="fields">
+              <label>数据容量（字节） <input name="cache_size" type="number" step="1" required></label>
+              <label>块大小（字节） <input name="block_size" type="number" step="1" required></label>
+              <label>字节地址（十进制） <input name="address" type="number" min="0" max="65535" step="1" placeholder="留空由种子决定"></label>
             </div>
           </fieldset>
           <fieldset class="evidence">

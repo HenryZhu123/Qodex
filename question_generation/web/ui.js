@@ -13,9 +13,18 @@ const ruleNames = {
   preserve_offset: "保留页内偏移",
   stack_push_top: "从栈顶入栈",
   stack_pop_top: "从栈顶出栈",
+  cache_byte_offset: "拆分块内字节偏移",
+  cache_line_index: "定位 Cache 行",
+  cache_tag: "提取标记",
+};
+const topics = {
+  paging: {boundary: ["零偏移", {offset: 0}], invalid: ["非法页大小", {page_size: 300}]},
+  stack: {boundary: ["最少元素", {element_count: 4}], invalid: ["非法元素个数", {element_count: 3}]},
+  cache: {boundary: ["块边界", {address: 0x1230}], invalid: ["非法块大小", {block_size: 24}]},
 };
 const examples = {};
 let example;
+const topicInputs = () => byId(`${field("topic").value}-fields`).querySelectorAll("input");
 
 function setStatus(text, tone) {
   status.textContent = text;
@@ -40,11 +49,9 @@ function setItems(id, texts) {
 
 function applyPreset(preset) {
   field("seed").value = example.seed;
-  if (field("topic").value === "stack") {
-    field("element_count").value = {boundary: 4, invalid: 3}[preset] ?? example.constraints.element_count;
-  } else {
-    field("page_size").value = preset === "invalid" ? 300 : example.constraints.page_size;
-    field("offset").value = preset === "boundary" ? 0 : "";
+  const overrides = topics[field("topic").value][preset]?.[1];
+  for (const input of topicInputs()) {
+    input.value = overrides?.[input.name] ?? example.constraints[input.name] ?? "";
   }
   const inputs = ruleInputs();
   for (const [index, input] of inputs.entries()) {
@@ -84,13 +91,10 @@ function showResult(result) {
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  let constraints;
-  if (field("topic").value === "stack") {
-    constraints = {element_count: field("element_count").valueAsNumber};
-  } else {
-    constraints = {page_size: field("page_size").valueAsNumber};
-    if (field("offset").value !== "") {
-      constraints.offset = field("offset").valueAsNumber;
+  const constraints = {};
+  for (const input of topicInputs()) {
+    if (input.value !== "") {
+      constraints[input.name] = input.valueAsNumber;
     }
   }
   const rules = ruleInputs().filter((input) => input.checked).map((input) => input.value);
@@ -134,16 +138,18 @@ async function loadExample() {
   setStatus("载入样例中", "idle");
   try {
     if (!examples[topic]) {
-      const response = await fetch(topic === "stack" ? "/api/example/stack" : "/api/example");
+      const response = await fetch(topic === "paging" ? "/api/example" : `/api/example/${topic}`);
       if (!response.ok) throw new Error("Example unavailable");
       examples[topic] = await response.json();
     }
     example = examples[topic];
-    const isStack = topic === "stack";
-    byId("paging-fields").hidden = byId("paging-fields").disabled = isStack;
-    byId("stack-fields").hidden = byId("stack-fields").disabled = !isStack;
-    form.querySelector('[data-preset="boundary"]').textContent = isStack ? "最少元素" : "零偏移";
-    form.querySelector('[data-preset="invalid"]').textContent = isStack ? "非法元素个数" : "非法页大小";
+    for (const key of Object.keys(topics)) {
+      const fields = byId(`${key}-fields`);
+      fields.hidden = fields.disabled = key !== topic;
+    }
+    for (const preset of ["boundary", "invalid"]) {
+      form.querySelector(`[data-preset="${preset}"]`).textContent = topics[topic][preset][0];
+    }
     byId("material-rules").replaceChildren(...example.evidence[0].rules.map((rule) => {
       const label = document.createElement("label");
       const input = document.createElement("input");

@@ -7,7 +7,7 @@ import json
 from dataclasses import dataclass
 from random import Random
 
-from . import stack
+from . import cache, stack
 from .paging import build_choices, check_choices, create_instance, render_stem
 
 SCHEMA_VERSION = "0.1"
@@ -28,6 +28,7 @@ STACK_FIELDS = {
     "question_type": "single_choice",
 }
 STACK_RULES = {"stack_push_top", "stack_pop_top"}
+ADDRESS_TOPICS = {cache.METADATA["subject"]: cache}
 
 
 class RequestError(ValueError):
@@ -102,7 +103,10 @@ def _read_request(payload: object) -> Request:
         if not _is_text(payload.get(field)):
             raise RequestError(f"{field} 必须是非空字符串。")
 
+    address_topic = ADDRESS_TOPICS.get(payload["subject"])
     metadata = STACK_FIELDS if payload["subject"] == STACK_FIELDS["subject"] else SUPPORTED_FIELDS
+    if address_topic is not None:
+        metadata = address_topic.METADATA
     for field, expected in {"schema_version": SCHEMA_VERSION, **metadata}.items():
         if payload[field] != expected:
             raise RequestError(f"{field} 当前仅支持 {expected}。", "UNSUPPORTED_REQUEST")
@@ -113,6 +117,13 @@ def _read_request(payload: object) -> Request:
 
     constraints = payload.get("constraints", {})
     evidence = payload.get("evidence", [])
+    if address_topic is not None:
+        try:
+            constraints = address_topic.read_constraints(constraints)
+        except ValueError as error:
+            raise RequestError(str(error)) from error
+        refs = _evidence_refs(evidence, address_topic.REQUIRED_RULES, address_topic.MATERIAL_NAME)
+        return Request(payload["request_id"], seed, metadata, constraints, refs)
     if metadata is STACK_FIELDS:
         if not isinstance(constraints, dict) or constraints.keys() - {"element_count"}:
             raise RequestError("constraints 只支持 element_count。")
@@ -165,7 +176,21 @@ def generate_question(payload: object) -> dict:
         )
 
     rng = Random(request.seed)
-    if request.metadata is STACK_FIELDS:
+    address_topic = ADDRESS_TOPICS.get(request.metadata["subject"])
+    if address_topic is not None:
+        stem, candidates, expected, parameters = address_topic.build(rng, **request.constraints)
+        values = [value for value, explanation in candidates]
+        if len(values) != 4 or len(set(values)) != 4 or values[0] != expected:
+            return failure_result("SELF_CHECK_FAILED", "选项重复或答案与独立复算不一致。", request.request_id)
+        prefix = address_topic.PREFIX
+        generator_version = f"{prefix}-v1"
+        check = address_topic.CHECK
+        rng.shuffle(candidates)
+        options = {f"option-{index}": choice for index, choice in enumerate(candidates, 1)}
+        answer_id = next(key for key, (value, _) in options.items() if value == expected)
+        texts = {key: address_topic.format_choice(value) for key, (value, _) in options.items()}
+        explanations = {key: explanation for key, (_, explanation) in options.items()}
+    elif request.metadata is STACK_FIELDS:
         count = request.constraints["element_count"]
         sequences, answer_id = stack.build_choices(count, rng)
         problem = stack.check_choices(count, sequences, answer_id)

@@ -19,6 +19,7 @@ ASSETS = {
     "/ui.js": (PACKAGE / "web" / "ui.js", "text/javascript"),
     "/api/example": (PACKAGE / "examples" / "paging.json", "application/json"),
     "/api/example/stack": (PACKAGE / "examples" / "stack.json", "application/json"),
+    "/api/example/cache": (PACKAGE / "examples" / "cache.json", "application/json"),
 }
 
 
