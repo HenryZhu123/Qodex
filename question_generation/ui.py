@@ -21,6 +21,7 @@ ASSETS = {
     "/api/example/stack": (PACKAGE / "examples" / "stack.json", "application/json"),
     "/api/example/cache": (PACKAGE / "examples" / "cache.json", "application/json"),
     "/api/example/subnet": (PACKAGE / "examples" / "subnet.json", "application/json"),
+    "/api/example/tcp": (PACKAGE / "examples" / "tcp.json", "application/json"),
 }
 
 

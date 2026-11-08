@@ -12,7 +12,7 @@
     <div class="wrap">
       <p class="eyebrow">QODEX / 自主命题</p>
       <h1>408 自主命题验证台</h1>
-      <p class="subtitle">当前支持单级页表、单栈出栈序列、直接映射 Cache 和 IPv4 子网单选题。</p>
+      <p class="subtitle">支持四科的计算与规则题，以及 TCP 字节流概念单选题。</p>
       <div class="tags" aria-label="当前开发阶段与范围">
         <span>L1 单选题扩展</span><span>单项选择 · 4 个选项</span><span>独立审校待接入</span>
       </div>
@@ -32,6 +32,7 @@
                 <option value="stack">单栈出栈序列判定</option>
                 <option value="cache">直接映射 Cache 地址拆分</option>
                 <option value="subnet">IPv4 子网网络地址</option>
+                <option value="tcp">TCP 字节流与消息边界</option>
               </select>
             </label>
             <label>种子 <input name="seed" type="number" min="0" max="4294967295" step="1" required></label>
@@ -62,6 +63,16 @@
             <div class="fields">
               <label>前缀长度（16–30） <input name="prefix_length" type="number" step="1" required></label>
               <label>IPv4 地址 <input name="ipv4_address" type="text" inputmode="decimal" placeholder="留空由种子决定"></label>
+            </div>
+          </fieldset>
+          <fieldset id="tcp-fields" class="topic-fields" hidden disabled>
+            <legend class="sr-only">TCP 场景</legend>
+            <div class="fields">
+              <label>场景 <input name="scenario" type="text" list="tcp-scenarios" placeholder="留空由种子决定"></label>
+              <datalist id="tcp-scenarios">
+                <option value="reads">读写边界</option>
+                <option value="framing">消息分帧</option>
+              </datalist>
             </div>
           </fieldset>
           <fieldset class="evidence">

@@ -18,12 +18,15 @@ const ruleNames = {
   cache_tag: "提取标记",
   ipv4_cidr_prefix: "读取 CIDR 前缀长度",
   ipv4_subnet_alignment: "按子网地址块对齐",
+  tcp_ordered_byte_stream: "按序交付字节流",
+  tcp_no_message_boundaries: "应用自行界定消息边界",
 };
 const topics = {
   paging: {boundary: ["零偏移", {offset: 0}], invalid: ["非法页大小", {page_size: 300}]},
   stack: {boundary: ["最少元素", {element_count: 4}], invalid: ["非法元素个数", {element_count: 3}]},
   cache: {boundary: ["块边界", {address: 0x1230}], invalid: ["非法块大小", {block_size: 24}]},
   subnet: {boundary: ["子网起点", {ipv4_address: "10.23.45.64"}], invalid: ["超出前缀范围", {prefix_length: 31}]},
+  tcp: {boundary: ["消息分帧", {scenario: "framing"}], invalid: ["未知场景", {scenario: "unknown"}]},
 };
 const examples = {};
 let example;
@@ -84,7 +87,9 @@ function showResult(result) {
   setItems("explanations", student.options.map((option, index) =>
     `${"ABCD"[index]}. ${option.text} · ${instructor.option_explanations[option.id]}`
   ));
-  byId("checks").textContent = "四个不同选项 · 独立复算答案一致";
+  byId("checks").textContent = question.self_check.checks.includes("unique_supported_tcp_claim")
+    ? "四个不同选项 · 预核验规则下答案唯一"
+    : "四个不同选项 · 独立复算答案一致";
   setItems("references", question.evidence_refs.map((ref) =>
     `${ref.version} · ${ref.anchor} · ${ref.source}`
   ));
@@ -105,7 +110,7 @@ form.addEventListener("submit", async (event) => {
     ...example,
     seed: field("seed").valueAsNumber,
     constraints,
-    evidence: [{...example.evidence[0], rules}],
+    evidence: example.evidence.map((ref) => ({...ref, rules: ref.rules.filter((rule) => rules.includes(rule))})),
   };
   controls.disabled = true;
   resetResult();
@@ -153,7 +158,8 @@ async function loadExample() {
     for (const preset of ["boundary", "invalid"]) {
       form.querySelector(`[data-preset="${preset}"]`).textContent = topics[topic][preset][0];
     }
-    byId("material-rules").replaceChildren(...example.evidence[0].rules.map((rule) => {
+    const availableRules = [...new Set(example.evidence.flatMap((ref) => ref.rules))];
+    byId("material-rules").replaceChildren(...availableRules.map((rule) => {
       const label = document.createElement("label");
       const input = document.createElement("input");
       input.type = "checkbox";
@@ -163,7 +169,7 @@ async function loadExample() {
       return label;
     }));
     applyPreset("standard");
-    byId("material-summary").textContent = `${example.evidence[0].version} · ${example.evidence[0].anchor}`;
+    byId("material-summary").textContent = example.evidence.map((ref) => `${ref.version} · ${ref.anchor}`).join(" / ");
     controls.disabled = false;
     setStatus("等待生成", "idle");
     message.textContent = "选择预设或调整参数后生成。";

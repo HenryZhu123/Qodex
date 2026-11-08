@@ -41,6 +41,7 @@
 | 数据结构 | [单栈出栈序列判定](../question_generation/examples/stack.json) | 逐项模拟入栈与出栈，检查可达性和答案唯一性 |
 | 计算机组成原理 | [直接映射 Cache 地址拆分](../question_generation/examples/cache.json) | 用位切片独立复算标记、行号和块内偏移 |
 | 计算机网络 | [IPv4 子网网络地址](../question_generation/examples/subnet.json) | 用 Python 标准库独立复算网络地址 |
+| 计算机网络 | [TCP 字节流与消息边界](../question_generation/examples/tcp.json) | 检查预核验选项中只有一项符合证据规则 |
 
 分页题按字节寻址，页大小为 2 的幂，题面所列映射均有效。生成器拆分虚页号和页内偏移，用页表查出物理页框号，保留页内偏移。[OSTEP 分页章节](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf)
 
@@ -49,6 +50,8 @@
 Cache 题使用 16 位字节地址。题面给出数据容量及块大小，每行存一块。生成器先按块大小取商和余数，再将主存块号除以行数，得到标记和行号。自检从地址位字段独立提取这三个值。[MIT 6.004 缓存讲义](https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/pages/c14/c14s1/)
 
 IPv4 子网题给出地址和 CIDR 前缀长度。生成器将地址向下对齐到所属地址块的起点，使用标准库 `IPv4Network` 独立检查答案。[RFC 4632 §3.1](https://www.rfc-editor.org/rfc/rfc4632.html#section-3.1) · [Python ipaddress](https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Network)
+
+TCP 概念题考查按序字节流、应用读写边界和应用层分帧。选项和解析依据两个条款预先核验，模块检查答案的唯一性并保留证据定位。[RFC 9293 §2.2](https://www.rfc-editor.org/rfc/rfc9293.html#section-2.2) · [RFC 9293 §3.7](https://www.rfc-editor.org/rfc/rfc9293.html#section-3.7)
 
 ### 本地运行
 
@@ -59,6 +62,7 @@ python3 -m question_generation question_generation/examples/paging.json
 python3 -m question_generation question_generation/examples/stack.json
 python3 -m question_generation question_generation/examples/cache.json
 python3 -m question_generation question_generation/examples/subnet.json
+python3 -m question_generation question_generation/examples/tcp.json
 python3 -m unittest discover -s tests
 ```
 
@@ -75,11 +79,13 @@ python3 -m unittest discover -s tests
 | 出栈序列 · 最少元素 | 以 4 个元素生成四个互异选项，只有一个序列可达 |
 | Cache · 块边界 | 地址为 `0x1230`，块内偏移为 0，仍有四个互异选项 |
 | IPv4 · 子网起点 | 地址 `10.23.45.64/26` 的主机位已经为零，网络地址仍为 `10.23.45.64` |
+| TCP · 消息分帧 | 切换到应用层分帧场景，长度字段是唯一正确选项 |
 | 缺少材料 | 返回 `NEEDS_MATERIAL`，显示缺失的规则，无题目 |
 | 分页 · 非法页大小 | 以 300 B 发出请求，返回 `INVALID_REQUEST`，无题目 |
 | 出栈序列 · 非法元素个数 | 以 3 个元素发出请求，返回 `INVALID_REQUEST`，无题目 |
 | Cache · 非法块大小 | 以 24 B 发出请求，返回 `INVALID_REQUEST`，无题目 |
 | IPv4 · 超出前缀范围 | 以 `/31` 发出请求，返回 `INVALID_REQUEST`，无题目 |
+| TCP · 未知场景 | 返回 `INVALID_REQUEST`，无题目 |
 
 从题型下拉框切换样例，可调整种子、该题型的参数和材料规则覆盖。验证台复用命令行入口的命题逻辑，题目保留待独立审校状态。Pi、真实知识库、独立审校、入库和组卷在后续接入阶段验收。
 
@@ -101,6 +107,8 @@ python3 -m unittest discover -s tests
 Cache 的 `cache_size` 与 `block_size` 均为 2 的幂。数据容量支持 16–4096 B（默认 256 B），块大小支持 4–256 B（默认 16 B），且至少有两行。可选 `address` 为 0–65535 的整数，省略时由种子决定。材料须覆盖 `cache_byte_offset`、`cache_line_index`、`cache_tag`。
 
 IPv4 的 `prefix_length` 支持 16–30，默认 26。可选 `ipv4_address` 为标准点分十进制字符串，省略时从 `10.0.0.0/8` 以种子选取。材料须覆盖 `ipv4_cidr_prefix` 和 `ipv4_subnet_alignment`。[RFC 1918 §3](https://www.rfc-editor.org/rfc/rfc1918.html#section-3)
+
+TCP 使用 `computer_networks` 和 `tcp_message_boundaries`。可选约束 `scenario` 为 `reads`（读写边界）或 `framing`（消息分帧），省略时由种子选择。材料须覆盖 `tcp_ordered_byte_stream` 和 `tcp_no_message_boundaries`。
 
 ### 输出与验收
 

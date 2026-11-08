@@ -1,0 +1,29 @@
+{
+  "schema_version": "0.1",
+  "request_id": "tcp-demo",
+  "subject": "computer_networks",
+  "topic": "tcp_message_boundaries",
+  "question_type": "single_choice",
+  "seed": 42,
+  "constraints": {
+    "scenario": "reads"
+  },
+  "evidence": [
+    {
+      "id": "rfc9293-stream",
+      "source": "https://www.rfc-editor.org/rfc/rfc9293.html#section-2.2",
+      "version": "RFC 9293",
+      "anchor": "§2.2 Key TCP Concepts",
+      "summary": "TCP 为应用提供可靠、按序的字节流。",
+      "rules": ["tcp_ordered_byte_stream"]
+    },
+    {
+      "id": "rfc9293-segmentation",
+      "source": "https://www.rfc-editor.org/rfc/rfc9293.html#section-3.7",
+      "version": "RFC 9293",
+      "anchor": "§3.7 Segmentation",
+      "summary": "TCP 段的边界与应用读写缓冲区的边界没有对应保证。应用需要定义自己的消息边界。",
+      "rules": ["tcp_no_message_boundaries"]
+    }
+  ]
+}
