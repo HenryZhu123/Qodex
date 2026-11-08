@@ -7,7 +7,7 @@ import json
 from dataclasses import dataclass
 from random import Random
 
-from . import cache, stack
+from . import cache, stack, subnet
 from .paging import build_choices, check_choices, create_instance, render_stem
 
 SCHEMA_VERSION = "0.1"
@@ -28,7 +28,7 @@ STACK_FIELDS = {
     "question_type": "single_choice",
 }
 STACK_RULES = {"stack_push_top", "stack_pop_top"}
-ADDRESS_TOPICS = {cache.METADATA["subject"]: cache}
+ADDRESS_TOPICS = {module.METADATA["subject"]: module for module in (cache, subnet)}
 
 
 class RequestError(ValueError):

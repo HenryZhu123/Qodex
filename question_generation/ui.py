@@ -20,6 +20,7 @@ ASSETS = {
     "/api/example": (PACKAGE / "examples" / "paging.json", "application/json"),
     "/api/example/stack": (PACKAGE / "examples" / "stack.json", "application/json"),
     "/api/example/cache": (PACKAGE / "examples" / "cache.json", "application/json"),
+    "/api/example/subnet": (PACKAGE / "examples" / "subnet.json", "application/json"),
 }
 
 

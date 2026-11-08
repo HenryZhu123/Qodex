@@ -40,13 +40,15 @@
 | 操作系统 | [单级页表地址转换](../question_generation/examples/paging.json) | 用位运算独立复算物理地址 |
 | 数据结构 | [单栈出栈序列判定](../question_generation/examples/stack.json) | 逐项模拟入栈与出栈，检查可达性和答案唯一性 |
 | 计算机组成原理 | [直接映射 Cache 地址拆分](../question_generation/examples/cache.json) | 用位切片独立复算标记、行号和块内偏移 |
-| 计算机网络 | 待扩展 | — |
+| 计算机网络 | [IPv4 子网网络地址](../question_generation/examples/subnet.json) | 用 Python 标准库独立复算网络地址 |
 
 分页题按字节寻址，页大小为 2 的幂，题面所列映射均有效。生成器拆分虚页号和页内偏移，用页表查出物理页框号，保留页内偏移。[OSTEP 分页章节](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf)
 
 出栈题设定初始空栈且容量足够，元素按 1 至 n 的顺序各入栈一次。生成器按相对次序分类。如果候选序列依次出现 a、b、c，且 b < c < a，先弹出 a 就已让 c 入栈，随后 c 会挡住 b。自检用另一种方法逐项模拟四个选项，并要求唯一可达的序列与答案 ID 一致。[Princeton 栈练习](https://algs4.cs.princeton.edu/13stacks/index.php) · [Python 栈操作说明](https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks)
 
 Cache 题使用 16 位字节地址。题面给出数据容量及块大小，每行存一块。生成器先按块大小取商和余数，再将主存块号除以行数，得到标记和行号。自检从地址位字段独立提取这三个值。[MIT 6.004 缓存讲义](https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/pages/c14/c14s1/)
+
+IPv4 子网题给出地址和 CIDR 前缀长度。生成器将地址向下对齐到所属地址块的起点，使用标准库 `IPv4Network` 独立检查答案。[RFC 4632 §3.1](https://www.rfc-editor.org/rfc/rfc4632.html#section-3.1) · [Python ipaddress](https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Network)
 
 ### 本地运行
 
@@ -56,6 +58,7 @@ Cache 题使用 16 位字节地址。题面给出数据容量及块大小，每�
 python3 -m question_generation question_generation/examples/paging.json
 python3 -m question_generation question_generation/examples/stack.json
 python3 -m question_generation question_generation/examples/cache.json
+python3 -m question_generation question_generation/examples/subnet.json
 python3 -m unittest discover -s tests
 ```
 
@@ -71,10 +74,12 @@ python3 -m unittest discover -s tests
 | 分页 · 零偏移 | 仍有四个互异选项，和答案碰撞的干扰项被另一条错误规则替换 |
 | 出栈序列 · 最少元素 | 以 4 个元素生成四个互异选项，只有一个序列可达 |
 | Cache · 块边界 | 地址为 `0x1230`，块内偏移为 0，仍有四个互异选项 |
+| IPv4 · 子网起点 | 地址 `10.23.45.64/26` 的主机位已经为零，网络地址仍为 `10.23.45.64` |
 | 缺少材料 | 返回 `NEEDS_MATERIAL`，显示缺失的规则，无题目 |
 | 分页 · 非法页大小 | 以 300 B 发出请求，返回 `INVALID_REQUEST`，无题目 |
 | 出栈序列 · 非法元素个数 | 以 3 个元素发出请求，返回 `INVALID_REQUEST`，无题目 |
 | Cache · 非法块大小 | 以 24 B 发出请求，返回 `INVALID_REQUEST`，无题目 |
+| IPv4 · 超出前缀范围 | 以 `/31` 发出请求，返回 `INVALID_REQUEST`，无题目 |
 
 从题型下拉框切换样例，可调整种子、该题型的参数和材料规则覆盖。验证台复用命令行入口的命题逻辑，题目保留待独立审校状态。Pi、真实知识库、独立审校、入库和组卷在后续接入阶段验收。
 
@@ -85,7 +90,7 @@ python3 -m unittest discover -s tests
 | 字段 | v0.1 约定 |
 | --- | --- |
 | `schema_version`、`request_id` | 版本为字符串 `0.1`，请求 ID 为非空字符串 |
-| `subject`、`topic` | 分页使用 `operating_systems`、`single_level_paging`。出栈序列使用 `data_structures`、`stack_pop_sequence`。Cache 使用 `computer_organization`、`direct_mapped_cache` |
+| `subject`、`topic` | 分页使用 `operating_systems`、`single_level_paging`。出栈序列使用 `data_structures`、`stack_pop_sequence`。Cache 使用 `computer_organization`、`direct_mapped_cache`。IPv4 使用 `computer_networks`、`ipv4_subnet_network_address` |
 | `question_type` | `single_choice`，每次生成一道题 |
 | `seed` | 0 至 4294967295 的整数，用于复现生成与选项顺序 |
 | `constraints` | 可省略。分页的 `page_size` 为 2 至 65536 字节之间的 2 的幂，默认 256。`offset` 可省略，显式给出时须为 0 至 `page_size - 1` 的整数。出栈序列的 `element_count` 为 4 至 6 的整数，默认 5 |
@@ -94,6 +99,8 @@ python3 -m unittest discover -s tests
 材料由调用方预先核验并标记。模块检查字段、出处元数据及规则覆盖，使用内置规则求解。材料摘要的语义和引用可访问性由提供方核验。省略材料或传入空数组会得到缺材料结果。
 
 Cache 的 `cache_size` 与 `block_size` 均为 2 的幂。数据容量支持 16–4096 B（默认 256 B），块大小支持 4–256 B（默认 16 B），且至少有两行。可选 `address` 为 0–65535 的整数，省略时由种子决定。材料须覆盖 `cache_byte_offset`、`cache_line_index`、`cache_tag`。
+
+IPv4 的 `prefix_length` 支持 16–30，默认 26。可选 `ipv4_address` 为标准点分十进制字符串，省略时从 `10.0.0.0/8` 以种子选取。材料须覆盖 `ipv4_cidr_prefix` 和 `ipv4_subnet_alignment`。[RFC 1918 §3](https://www.rfc-editor.org/rfc/rfc1918.html#section-3)
 
 ### 输出与验收
 
@@ -106,3 +113,5 @@ Cache 的 `cache_size` 与 `block_size` 均为 2 的幂。数据容量支持 16�
 出栈序列样例以 1 至 5 入栈。先压入 1 至 4，再弹出 4，随后压入并弹出 5，依次弹出剩余元素，得到 `4、5、3、2、1`。例如 `4、1、2、3、5` 无法出现，因为弹出 4 后，1 仍在 2 的下方。
 
 Cache 样例中 256 B 数据容量与 16 B 块大小给出 16 行。地址 `0x1234` 的主存块号为 `0x123`，块内偏移为 4。块号除以 16，商为 18，余数为 3，因此十进制答案为 `18、3、4`。
+
+IPv4 样例 `10.23.45.77/26` 有 6 位主机位，最后一个八位组按 64 个地址为一块。77 落在 64–127，因此网络地址为 `10.23.45.64`。

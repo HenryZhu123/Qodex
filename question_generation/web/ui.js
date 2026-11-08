@@ -16,11 +16,14 @@ const ruleNames = {
   cache_byte_offset: "拆分块内字节偏移",
   cache_line_index: "定位 Cache 行",
   cache_tag: "提取标记",
+  ipv4_cidr_prefix: "读取 CIDR 前缀长度",
+  ipv4_subnet_alignment: "按子网地址块对齐",
 };
 const topics = {
   paging: {boundary: ["零偏移", {offset: 0}], invalid: ["非法页大小", {page_size: 300}]},
   stack: {boundary: ["最少元素", {element_count: 4}], invalid: ["非法元素个数", {element_count: 3}]},
   cache: {boundary: ["块边界", {address: 0x1230}], invalid: ["非法块大小", {block_size: 24}]},
+  subnet: {boundary: ["子网起点", {ipv4_address: "10.23.45.64"}], invalid: ["超出前缀范围", {prefix_length: 31}]},
 };
 const examples = {};
 let example;
@@ -94,7 +97,7 @@ form.addEventListener("submit", async (event) => {
   const constraints = {};
   for (const input of topicInputs()) {
     if (input.value !== "") {
-      constraints[input.name] = input.valueAsNumber;
+      constraints[input.name] = input.type === "number" ? input.valueAsNumber : input.value;
     }
   }
   const rules = ruleInputs().filter((input) => input.checked).map((input) => input.value);

@@ -1,0 +1,22 @@
+{
+  "schema_version": "0.1",
+  "request_id": "subnet-demo",
+  "subject": "computer_networks",
+  "topic": "ipv4_subnet_network_address",
+  "question_type": "single_choice",
+  "seed": 42,
+  "constraints": {
+    "prefix_length": 26,
+    "ipv4_address": "10.23.45.77"
+  },
+  "evidence": [
+    {
+      "id": "rfc4632-cidr",
+      "source": "https://www.rfc-editor.org/rfc/rfc4632.html#section-3.1",
+      "version": "RFC 4632",
+      "anchor": "§3.1 Basic Concept and Prefix Notation",
+      "summary": "CIDR 前缀长度决定 IPv4 地址的高位网络部分。地址块按块大小对齐，网络地址将其余主机位清零。",
+      "rules": ["ipv4_cidr_prefix", "ipv4_subnet_alignment"]
+    }
+  ]
+}
