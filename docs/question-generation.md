@@ -115,3 +115,28 @@ IPv4 的 `prefix_length` 支持 16–30，默认 26。可选 `ipv4_address` 为�
 Cache 样例中 256 B 数据容量与 16 B 块大小给出 16 行。地址 `0x1234` 的主存块号为 `0x123`，块内偏移为 4。块号除以 16，商为 18，余数为 3，因此十进制答案为 `18、3、4`。
 
 IPv4 样例 `10.23.45.77/26` 有 6 位主机位，最后一个八位组按 64 个地址为一块。77 落在 64–127，因此网络地址为 `10.23.45.64`。
+
+## 本地批量命题契约 v0.1
+
+从仓库根目录运行四科混合样例。Python 调用方可直接使用 `question_generation.batch.generate_batch(payload)`。
+
+```bash
+python3 -m question_generation --batch question_generation/examples/batch.json
+```
+
+请求使用原有的 `schema_version`、`request_id` 和 `seed`，另提供 `question_count`（1–100）、`total_score`（正整数）和非空 `slots` 数组。每个槽位包含批内唯一的 `slot_id`、正整数 `count` 和 `score_per_question`，以及单题契约的 `subject`、`topic`、`question_type`、可选 `constraints` 与 `evidence`。各槽位题数之和必须等于总题量，题数乘单题分值的合计必须等于总分。
+
+批量调用逐题复用单题生成与自检，核对科目、考点、题型及分值，再在结果题目包上记录 `slot_id` 和 `metadata.score`。同一批中，按 Unicode NFKC 和空白折叠后的题干去重。相同题设只保留一次，换种子、题目 ID、选项内容或顺序、分值都不会形成新题。单题请求及其题目包沿用上节契约。
+
+每个槽位最多尝试 `8 × count` 次。分配在本次候选池中尽量填满槽位，同一道题只能归一个槽位。遇到候选重叠时，可替换先前分配的题来填后续槽位。缺口只反映本次候选池及尝试预算。
+
+| 状态 | 结果 | 命令行退出码 |
+| --- | --- | --- |
+| `GENERATED` | 所有槽位均已填满 | 0 |
+| `PARTIAL` | 返回已生成的合格题，并列出每个未填满槽位的缺口 | 1 |
+| `NO_QUESTIONS` | 没有合格题，仍返回槽位缺口 | 1 |
+| `INVALID_REQUEST` | 批量请求结构无效或题数、总分与配额冲突 | 1 |
+
+有效请求的结果包括请求和实际生成的题数与分值，以及 `deficits` 数组。每项缺口记录槽位、要求数量、实际数量、缺失数量、尝试次数、去重后的候选数和原因。缺材料时会列出缺失的规则。
+
+混合样例预期生成 5 题、11 分。复验部分成功时，将样例中栈槽位的 `evidence` 清空，把固定地址的 Cache 槽位 `count` 改为 2，并将总题量、总分改为 6 和 14。预期得到 4 题、9 分，栈因缺材料少 1 题，Cache 因相同题设去重少 1 题。示例和入口见 [批量请求](../question_generation/examples/batch.json)。
