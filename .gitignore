@@ -14,7 +14,7 @@ __pycache__/
 # Local virtualenvs
 .venv/
 venv/
-node_modules/
+node_modules
 
 # Local run outputs (knowledge-base builds, OCR review sheets, scratch dirs)
 kb_refq_out/
