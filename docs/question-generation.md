@@ -10,20 +10,34 @@
 | 组卷 | 提供缺题槽位及分值约束，管理整卷蓝图和整卷验证 |
 | Pi | 组织工具调用，传递材料和反馈，协调重试与交付 |
 
-现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。短期 S1–S3 已验收，L1 的单选题通过同一命令行入口和浏览器验证台生成。对接时以实际服务接口和经团队确认的契约为准。个人开发计划和调研过程放在 `.local/question-generation/`。
+现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。模块已覆盖四科五类单选、两类综合题、批量、补题和版本修订。命令行与浏览器验证台用于本地复验，Pi 通过命题服务把合格题交付待审表。当前模块验收以待审表回读为止。
+
+## 接手开发
+
+先读仓库 [AGENTS.md](../AGENTS.md) 和本页。当前工作区的最新提交、范围、复验记录与下一步见 `.local/question-generation/handoff.md`，开发计划见同目录的 `plan.md`。这些本地记录随工作区保存。
+
+| 需要修改 | 代码入口 |
+| --- | --- |
+| 单题请求、题型和自检 | [generation.py](../question_generation/generation.py)，题型实现在同目录 |
+| 批量约束、题干去重和组卷补题 | [batch.py](../question_generation/batch.py)、[replenishment.py](../question_generation/replenishment.py) |
+| 综合题、评分点和版本修订 | [comprehensive.py](../question_generation/comprehensive.py) |
+| 已核验知识库证据、HTTP 和待审表 | [knowledge.py](../question_generation/knowledge.py)、[service.py](../question_generation/service.py)、[待审表迁移](../question_generation/sql/001_pending_questions.sql) |
+| Pi 工具 | [内置命题扩展](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts) |
+
+从仓库根目录运行 `python3 -m unittest discover -s tests` 验证生成模块。修改 Pi 时按 [Pi 开发纪律](../pi-coding-agent/AGENTS.md) 运行全仓检查和命题扩展测试。升级前先从新鲜的 `origin/main` 核对本地待合入提交，再用隔离 PostgreSQL 复验五种 Pi 操作及待审题包回读。更新知识库快照时重新核对证据清单及指纹。
 
 ## 工作区与依赖分支
 
 从仓库根目录运行 `git status --short --branch` 可以确认当前分支。本地命题代码在 `feat/question-generation` 开发。`git fetch origin` 更新本地对远程分支的记录，当前分支和工作文件保持原样。`main` 是团队集成基线，`origin/main` 是最近一次获取的远程主分支记录。
 
-以下是 2026-11-08 核对的代码快照。开始联调前重新获取远程记录并核对接口。
+2026-11-09 核对远程 `main` 为 `5ce46b8`，包含下表列出的分支提交。开始新一轮开发前重新获取远程记录并核对接口。
 
 | 分支和版本 | 已有能力 | 对命题的影响 |
 | --- | --- | --- |
-| `origin/main` · `4b1aabe` | [PostgreSQL 和数据库迁移](../pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md)、审校和正式题库接口，以及 SQLite 参考题资产 | 生成草稿可以接收本地材料。通过独立审校后，由审校服务写入正式题库 |
-| `origin/exam-checker` · `db50295` | 该版本已包含在 `main` 的历史中。当前[单题审校入口](../pi-coding-agent/services/exam-checker/src/exam_checker/api/app.py#L302)需要已有文档 ID 和题目 ID | 结构化新题如何直接送审，是接通正式入库前需要核实的接口 |
-| `origin/Knowledge-base` · `3a993a2` | 未合入 `main` 的[教材检索实现](https://github.com/HenryZhu123/hku_agent/blob/3a993a2/pi-coding-agent/services/exam-checker/src/exam_checker/integrations/knowledge_base.py#L156)，目前接在审校内部 | 命题先接收结构化的证据材料。接入真实检索时，核实如何按考点取材并保留出处 |
-| `origin/exam-assembly` · `c891810` | 未合入 `main` 的[组卷补题契约](https://github.com/HenryZhu123/Qodex/blob/c891810/ASSEMBLY_CONTRACT.zh-CN.md#L30)，组卷已能通过审校服务查正式题库，并返回结构化缺题请求 | 命题可接收联合缺题计划并登记待审题。审校通过、正式入库后由组卷重新运行 |
+| 命题 · `649cdb4` | 主分支包含基础命题、Pi 内置工具和待审表 | 后续命题增量见本地分支和交接记录 |
+| 审校 · `db50295` | [PostgreSQL 迁移、审校和正式题库接口](../pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md) | 题目由命题侧交付待审表，独立审校及正式入库由审校模块处理 |
+| 知识库 · `3a993a2` | [审校侧教材检索实现](https://github.com/HenryZhu123/Qodex/blob/3a993a2/pi-coding-agent/services/exam-checker/src/exam_checker/integrations/knowledge_base.py) | 命题侧用自己的已核验证据清单只读取材 |
+| 组卷 · `c891810` | [组卷补题契约](https://github.com/HenryZhu123/Qodex/blob/c891810/ASSEMBLY_CONTRACT.zh-CN.md#L30)定义联合缺题计划 | 命题可接收联合缺题计划并登记待审题 |
 
 [SQLite 参考题](../research-assets/skills/build-knowledge-base/references/reference-question-bank.md)可作为考法示例，当前记录尚未附审校状态。PostgreSQL 的 `question_bank` 用于保存通过审校的题目及其来源版本。命题模块通过服务接口交接题目，自检和独立审校分别记录。
 
@@ -37,7 +51,7 @@
 
 当前交接先使用命题侧待审表。以下审校 API 核对保留作后续接入参考。
 
-2026-11-09 核对了远程 `main`（`4b1aabe`）、`exam-checker`（`db50295`）、`Knowledge-base`（`3a993a2`）和 `exam-assembly`（`c891810`）。隔离联调使用 `main` 的审校实现、PostgreSQL 17 和仓库 Alembic 迁移至 `20261017_01`。题目由命题模块实际生成，测试通过审校模块现有仓储预置题目。审校和元数据模型使用确定性测试替身，版本回执、题库写入和回读使用实际服务和数据库。
+历史隔离联调使用当时的 `main`（`4b1aabe`）、PostgreSQL 17 和仓库 Alembic 迁移至 `20261017_01`。题目由命题模块实际生成，测试通过审校模块现有仓储预置题目。审校和元数据模型使用确定性测试替身，版本回执、题库写入和回读使用实际服务和数据库。
 
 | 检查 | 观察结果 |
 | --- | --- |
@@ -287,6 +301,19 @@ python3 -m question_generation --batch question_generation/examples/batch.json
 | 字符三元组 Jaccard，开发集 F1 最佳阈值 1.00 | — | 0/4 | — | 0/4 |
 
 两种字面分数在这两组样例中都给不同题比同义改写更高的分。开发集零误报的阈值在留出集也漏掉了全部改写。数字模板可用于观察同模板变体，数字变化可能改变题意或答案。当前批量去重继续按规范化题干匹配，样本用于诊断本轮方法，覆盖率需在更大的独立题对集上另行评估。
+
+第二轮先冻结四科 44 对自编留出题，再用独立 20 对开发题实现离线原型。原型从完整题干抽取题设与所求量，并复算答案。只在题设、所求量和答案都一致时提示改写，同答案的数值变体仍单独归类。支持分页页号与偏移、栈可达性与容量、直接映射 Cache 字段、IPv4 网络与广播地址。遇到未知表述或条件时返回无法判断。
+
+| 留出类别 | 正确分类 | 仅按数字模板命中 |
+| --- | --- | --- |
+| 规范化相同 | 4/4 | 0/4 |
+| 同义改写 | 8/12 | 0/12 |
+| 换数字且答案相同 | 8/8 | 4/8 |
+| 换数字且答案改变 | 8/8 | 8/8 |
+| 所求量不同 | 8/8 | 0/8 |
+| 无法判断 | 4/4 | 2/4 |
+
+原型对 28 对非重复或无法判断样例均未提示重复，漏掉的 4 对改写各来自一科的未覆盖表述。数字模板即使命中也只说明形式相同。样例是自编题对，结果用于比较方法。结论是题意判定仅适合做候选提示，Pi 和批量去重沿用现有精确匹配。
 
 ## 分页综合题与修订 v0.1
 

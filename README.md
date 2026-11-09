@@ -1,6 +1,6 @@
 # Qodex
 
-本仓库集成 Qodex/Pi Agent、exam-checker 服务与项目研究资料。
+本仓库集成 Qodex/Pi Agent、自主命题、exam-checker 服务与项目研究资料。开发入口见 [项目开发文档](docs/README.md)，自主命题的运行、验收和接手说明见 [模块文档](docs/question-generation.md)。
 
 ## 目录结构
 
@@ -13,11 +13,11 @@
 │   ├── start-exam-checker-db.sh  # 启动 PostgreSQL 并执行迁移
 │   ├── start-exam-checker.sh     # 启动 exam-checker API
 │   └── pi-test.sh                # 从源码启动 Pi
+├── question_generation/          # 408 自主命题服务、样例和待审表迁移
 └── research-assets/              # Prompt、数据集、评测结果、脚本和设计文档
 ```
 
-`research-assets/` 保存原 `main` 分支的完整研究资料；可运行实现位于
-`pi-coding-agent/`，两者互不混放。
+`research-assets/` 保存原 `main` 分支的研究资料。可运行实现位于 `pi-coding-agent/` 和 `question_generation/`。
 
 ## 启动数据库
 
