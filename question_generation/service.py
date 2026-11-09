@@ -18,10 +18,12 @@ from .batch import generate_batch
 from .comprehensive import generate_comprehensive, revise_comprehensive
 from .generation import failure_result, generate_question
 from .knowledge import KnowledgeEvidence, with_knowledge
+from .replenishment import generate_replenishment
 
 OPERATIONS = {
     "single": generate_question,
     "batch": generate_batch,
+    "replenishment": generate_replenishment,
     "comprehensive": generate_comprehensive,
     "revise": revise_comprehensive,
 }
@@ -58,14 +60,16 @@ def _generate(operation: str, payload: dict, knowledge: KnowledgeEvidence | None
     if knowledge is None or operation == "revise":
         return OPERATIONS[operation](payload)
     find_evidence = cache(knowledge.find)
-    if operation == "batch":
-        return generate_batch(payload, single_generator=lambda item: with_knowledge(generate_question, item, find_evidence))
+    if operation in {"batch", "replenishment"}:
+        return OPERATIONS[operation](
+            payload, single_generator=lambda item: with_knowledge(generate_question, item, find_evidence),
+        )
     return with_knowledge(OPERATIONS[operation], payload, find_evidence)
 
 
 @app.post("/v1/question-generation/{operation}")
 async def submit(
-    operation: Literal["single", "batch", "comprehensive", "revise"],
+    operation: Literal["single", "batch", "replenishment", "comprehensive", "revise"],
     request: Request,
     payload: dict = Body(),
 ):

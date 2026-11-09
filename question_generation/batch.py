@@ -172,7 +172,10 @@ def _allocate(slots: list[dict], pools: list[dict]) -> dict[str, int]:
     return owners
 
 
-def generate_batch(payload: object, *, single_generator: Callable[[object], dict] | None = None) -> dict:
+def generate_batch(
+    payload: object, *, single_generator: Callable[[object], dict] | None = None,
+    reserved_stems: tuple[str, ...] = (),
+) -> dict:
     """Fill a batch of scored slots using self-checked single questions."""
     try:
         _validate(payload)
@@ -182,6 +185,11 @@ def generate_batch(payload: object, *, single_generator: Callable[[object], dict
         return failure_result("INVALID_REQUEST", str(error), request_id if _is_text(request_id) else None)
 
     request_id = payload["request_id"]
+    for index, stem in enumerate(reserved_stems, 1):
+        reference_index.setdefault(_stem_key(stem), []).append({
+            "reference_id": f"reserved-stem-{index}",
+            "source": request_id,
+        })
     slots = payload["slots"]
     rng = Random(payload["seed"])
     generator = single_generator if single_generator is not None else generate_question
@@ -247,6 +255,6 @@ def generate_batch(payload: object, *, single_generator: Callable[[object], dict
         "questions": questions,
         "deficits": deficits,
     }
-    if "reference_questions" in payload:
+    if "reference_questions" in payload or reserved_stems:
         result["reference_matches"] = reference_matches
     return result

@@ -23,7 +23,7 @@
 | `origin/main` · `4b1aabe` | [PostgreSQL 和数据库迁移](../pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md)、审校和正式题库接口，以及 SQLite 参考题资产 | 生成草稿可以接收本地材料。通过独立审校后，由审校服务写入正式题库 |
 | `origin/exam-checker` · `db50295` | 该版本已包含在 `main` 的历史中。当前[单题审校入口](../pi-coding-agent/services/exam-checker/src/exam_checker/api/app.py#L302)需要已有文档 ID 和题目 ID | 结构化新题如何直接送审，是接通正式入库前需要核实的接口 |
 | `origin/Knowledge-base` · `3a993a2` | 未合入 `main` 的[教材检索实现](https://github.com/HenryZhu123/hku_agent/blob/3a993a2/pi-coding-agent/services/exam-checker/src/exam_checker/integrations/knowledge_base.py#L156)，目前接在审校内部 | 命题先接收结构化的证据材料。接入真实检索时，核实如何按考点取材并保留出处 |
-| `origin/exam-assembly` · `c891810` | 未合入 `main` 的[组卷补题契约](https://github.com/HenryZhu123/hku_agent/blob/c891810/ASSEMBLY_CONTRACT.zh-CN.md#L30)，组卷已能通过审校服务查正式题库，并返回结构化缺题请求 | 可以用缺题请求样例验证命题输入，正式补题仍需经过审校、入库和重新组卷 |
+| `origin/exam-assembly` · `c891810` | 未合入 `main` 的[组卷补题契约](https://github.com/HenryZhu123/Qodex/blob/c891810/ASSEMBLY_CONTRACT.zh-CN.md#L30)，组卷已能通过审校服务查正式题库，并返回结构化缺题请求 | 命题可接收联合缺题计划并登记待审题。审校通过、正式入库后由组卷重新运行 |
 
 [SQLite 参考题](../research-assets/skills/build-knowledge-base/references/reference-question-bank.md)可作为考法示例，当前记录尚未附审校状态。PostgreSQL 的 `question_bank` 用于保存通过审校的题目及其来源版本。命题模块通过服务接口交接题目，自检和独立审校分别记录。
 
@@ -31,7 +31,7 @@
 
 - 用本地证据样例走通单选题生成和自检。最小链路可以验证输入约束、题目与解答格式、材料出处，以及资料不足时的返回。运行这条链路无需启动 PostgreSQL。
 - 需要验证其他分支时，先阅读实际接口和测试。需要运行对方代码时，在独立 Git 工作树检出固定提交，并为联调使用独立的测试库。日常命题工作继续留在 `feat/question-generation`。
-- 正式联调先核对结构化新题能否送审、入库并回读，再接真实知识检索和组卷补题。现有接口和样例足够时可以独立推进。只有需要上游新增接口、统一共享字段或修改数据库结构时，才提交具体的最小协作事项。
+- 使用可追溯的显式材料可独立验证组卷补题到待审表。团队知识库取材及审校通过后的正式入库和重新组卷使用联调环境单独验收。
 
 ### L3 送审基线与待确认契约
 
@@ -113,6 +113,34 @@ LIMIT 100;
 清单由取材方核验来源、使用许可和规则覆盖。服务核对文档和片段指纹，跳过缺定位、有冲突标记或指纹不匹配的片段。有效证据的题目包保留来源、版次、文档与片段指纹、章节页码及片段 ID。规则不足时返回 `NEEDS_MATERIAL` 和缺失规则。配置的索引无法读取且没有可用证据时，返回 `KNOWLEDGE_BASE_UNAVAILABLE`。批量在对应槽位记录缺口并保留其他合格题。
 
 分页链路已用 OSTEP 1.10 第 18 章 §18.1 的本地隔离索引验证，从 Pi 发起到 PostgreSQL 待审表回读均带同一证据定位。[OSTEP 官方分页章节](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf)
+
+### 组卷联合缺口到待审
+
+向 `POST /v1/question-generation/replenishment` 提交组卷的 `replenishment_request.json`，外层提供整数 `seed` 和 `slot_profiles`。适配器使用 v1.0 联合计划的 `deficits`，按原顺序分配 `assembly-1`、`assembly-2` 等槽位 ID。保留原科目、考点、题型、难度、分值和题量，按槽位填充并过滤 `avoid_stems` 中的规范化题干。单独的考点或难度缺口统计只用于组卷诊断。
+
+`slot_profiles` 由调用方为每个可命题槽位指定命题模块的 `topic`，可提供原有 `constraints` 和 `evidence`。配置了知识库时，省略材料的槽位也可按考点取材。未配置映射、题型不支持或材料不足的槽位会在结果中保留缺口。下面用组卷演示生成的「困难栈题」缺口和已有栈材料构造请求。
+
+```bash
+python3 - /path/to/replenishment_request.json <<'PY' | \
+  curl -fsS http://127.0.0.1:8093/v1/question-generation/replenishment \
+    -H 'Content-Type: application/json' --data-binary @-
+import json
+from pathlib import Path
+import sys
+
+plan = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+sample = json.loads(Path("question_generation/examples/stack.json").read_text(encoding="utf-8"))
+print(json.dumps({
+    "replenishment_request": plan,
+    "seed": 42,
+    "slot_profiles": {
+        "assembly-1": {key: sample[key] for key in ("topic", "constraints", "evidence")}
+    },
+}, ensure_ascii=False))
+PY
+```
+
+结果的 `assembly_request_id` 对应组卷请求。入队题包和剩余缺口的 `assembly_slot` 都可追溯到原槽位。待审题包上的 `difficulty_status: REVIEW_REQUIRED` 表示难度仍需审校确认。若保留题干命中，`reserved-stem-1` 等编号对应 `avoid_stems` 的位置。原样重试复用待审记录。当前补题适配通过 HTTP 调用。组卷应在审校通过并正式入库后重新运行。
 
 ## 本地命题契约 v0.1
 
