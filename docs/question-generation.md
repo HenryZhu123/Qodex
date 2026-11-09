@@ -35,6 +35,8 @@
 
 ### L3 送审基线与待确认契约
 
+当前交接先使用命题侧待审表。以下审校 API 核对保留作后续接入参考。
+
 2026-11-09 核对了远程 `main`（`4b1aabe`）、`exam-checker`（`db50295`）、`Knowledge-base`（`3a993a2`）和 `exam-assembly`（`c891810`）。隔离联调使用 `main` 的审校实现、PostgreSQL 17 和仓库 Alembic 迁移至 `20261017_01`。题目由命题模块实际生成，测试通过审校模块现有仓储预置题目。审校和元数据模型使用确定性测试替身，版本回执、题库写入和回读使用实际服务和数据库。
 
 | 检查 | 观察结果 |
@@ -54,7 +56,43 @@
 2. **审校绑定版本。** 送审显式指定版本 UUID，回执带同一 UUID 和审校 ID。答案与评分点作为教师材料，仅提供给需要核对解法的任务。题面审查和答案泄露检查仍使用学生视图。
 3. **入库绑定同一份内容。** 在写入边界核对当前版本、对应 PASS 审校和不可变快照。上述 v1 PASS、v2 待审的反例须被拒绝。相同版本重试应复用题库记录，回读能够核对来源版本。
 
-下一次联调先验收这三项，再把真实按考点取材和 Pi 工具串进同一链路。
+后续若接入该审校 API，先验收这三项。
+
+### Pi 调用与待审表交接
+
+Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和原有 JSON `request`，支持 `single`、`batch`、`comprehensive`、`revise`。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。
+
+从仓库根目录，用 Python 3.11 或更新版本安装服务依赖。数据库管理员先在约定的 PostgreSQL 数据库执行 [建表脚本](../question_generation/sql/001_pending_questions.sql)，再授权已创建的服务账号和审校只读账号。下面以 `qg_writer` 和 `qg_reviewer` 为示例角色。
+
+```bash
+python3 -m pip install -r question_generation/service-requirements.txt
+psql "$QODEX_SCHEMA_ADMIN_DSN" -v ON_ERROR_STOP=1 -f question_generation/sql/001_pending_questions.sql
+```
+
+```sql
+GRANT USAGE ON SCHEMA question_generation TO qg_writer, qg_reviewer;
+GRANT EXECUTE ON FUNCTION question_generation.enqueue_question(jsonb, text, jsonb) TO qg_writer;
+GRANT SELECT ON question_generation.current_pending_questions TO qg_reviewer;
+```
+
+在服务环境配置 `QUESTION_GENERATION_DATABASE_URL` 为写入账号的 PostgreSQL 连接字符串，再启动服务。Pi 只需服务 URL。
+
+```bash
+python3 -m uvicorn question_generation.service:app --host 127.0.0.1 --port 8093
+curl -fsS http://127.0.0.1:8093/v1/question-generation/single \
+  -H 'Content-Type: application/json' --data-binary @question_generation/examples/paging.json
+```
+
+服务只入队自检通过的题目包。返回 `queue_receipts` 表示已确认写入，`QUEUED` 是首次入队，`ALREADY_QUEUED` 是相同版本的重试。批量部分成功时保存其中实际合格的题。版本冲突返回 `QUEUE_VERSION_CONFLICT`，数据库不可用返回 `QUEUE_UNAVAILABLE`。同一次调用的写入在一个事务内。修订须传入与待审表一致的原始包，可使用前次调用返回的题目。旧版仍可追溯，当前取题视图只显示最新版本。原有命令行和验证台可继续用于本地预览。
+
+审校同学使用以下查询取题，按 `question_id` 和 `version` 识别审校对象，`question_json` 内含学生题面、教师答案、评分点和证据来源。记录结果前重新按同一身份和版本核对视图，避免把旧版结论关联到新版。审校及通过后的落库由审校模块负责。
+
+```sql
+SELECT question_id, version, request_id, question_json, queued_at
+FROM question_generation.current_pending_questions
+ORDER BY queued_at, question_id
+LIMIT 100;
+```
 
 ## 本地命题契约 v0.1
 
