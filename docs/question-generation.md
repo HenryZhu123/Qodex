@@ -165,7 +165,7 @@ Pi 返回完整的命题结果。结果的 `assembly_request_id` 对应组卷请
 
 出栈题设定初始空栈且容量足够，元素按 1 至 n 的顺序各入栈一次。生成器按相对次序分类。如果候选序列依次出现 a、b、c，且 b < c < a，先弹出 a 就已让 c 入栈，随后 c 会挡住 b。自检用另一种方法逐项模拟四个选项，并要求唯一可达的序列与答案 ID 一致。[Princeton 栈练习](https://algs4.cs.princeton.edu/13stacks/index.php) · [Python 栈操作说明](https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks)
 
-Cache 题使用 16 位字节地址。题面给出数据容量及块大小，每行存一块。生成器先按块大小取商和余数，再将主存块号除以行数，得到标记和行号。自检从地址位字段独立提取这三个值。[MIT 6.004 缓存讲义](https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/pages/c14/c14s1/)
+Cache 题使用 16 位字节地址。题面给出数据容量及块大小，每行存一块。生成器先按块大小取商和余数，再将主存块号除以行数，得到标记和行号。自检从地址位字段独立提取这三个值。自 `cache-v2` 起，三个错项分别改动标记、行号和块内偏移。每个错项的解析写出对应的误算。以 256 B Cache、16 B 块和地址 `0x0000` 为例，错项分别用从 1 起算的标记、当成行号的行掩码和当前字节之后的块内字节数。[MIT 6.004 缓存讲义](https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/pages/c14/c14s1/)
 
 IPv4 子网题给出地址和 CIDR 前缀长度。生成器将地址向下对齐到所属地址块的起点，使用标准库 `IPv4Network` 独立检查答案。[RFC 4632 §3.1](https://www.rfc-editor.org/rfc/rfc4632.html#section-3.1) · [Python ipaddress](https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Network)
 

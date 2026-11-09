@@ -195,7 +195,7 @@ def generate_question(payload: object) -> dict:
         if len(values) != 4 or len(option_texts) != 4 or values[0] != expected:
             return failure_result("SELF_CHECK_FAILED", "选项重复或答案与校验结果不一致。", request.request_id)
         prefix = rule_topic.PREFIX
-        generator_version = f"{prefix}-v1"
+        generator_version = "cache-v2" if rule_topic is cache else f"{prefix}-v1"
         check = rule_topic.CHECK
         rng.shuffle(candidates)
         options = {f"option-{index}": choice for index, choice in enumerate(candidates, 1)}
