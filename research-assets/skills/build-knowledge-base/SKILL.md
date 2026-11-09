@@ -120,9 +120,7 @@ Fix: `store.is_stub()` treats a chunk under 120 chars without `。；！？` as 
 
 Fix: `store.strip_leading_heading()` removes the leading line when it equals the last heading segment, and the FTS tokens come from the body only. Stored `content` keeps the heading for context.
 
-Verified by rebuilding all indexes from the parsed artefacts: bad heading segments 902 → 0, chunk count 2,698 → 2,352, indexed 2,338 (114 fragments kept but not indexed), and 76 of 80 labelled queries still return the same top passage.
-
-Known remainder: 15 chunks still contain a literal ` > ` inside their body text, produced by the parser rather than the chunker.
+Verified by rebuilding all indexes from the parsed artefacts: bad heading segments 902 → 0, chunk count 2,698 → 2,538, of which 2,391 are indexed (147 fragments kept but not indexed). The retrieval set was then re-labelled from scratch because chunk ids moved: recall@1 72.5%, recall@2 86.25% (unchanged), recall@3 86.25%.
 
 ### Phase 5 — ingest and verify
 
