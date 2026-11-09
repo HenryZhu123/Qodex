@@ -255,6 +255,9 @@ def detect_heading_level(text: str) -> int | None:
     if not s or len(s) > 120:
         return None
     if s.startswith("#"):
+        # "#include <stdio.h>" is code, not a markdown heading.
+        if not _looks_like_title(s):
+            return None
         level = 0
         while level < len(s) and s[level] == "#":
             level += 1

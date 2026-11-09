@@ -31,6 +31,18 @@ Read these before starting a run:
 6. **Ingestion is idempotent.** Re-running must replace the same `doc_id`/`chunk_id`, not duplicate them.
 7. **Never drop or silently merge content from a second source.** When a new source covers a subject that already has content, decide every overlapping chunk pair as `equivalent` / `exclusive` / `conflict` / `complementary` per [knowledge-relations.md](references/knowledge-relations.md). Conflicts are judged first, kept on both sides, and shared via `conflict_group_id`; retrieval must return all sides. A whole-book hash match is only a fast path — it still records the new source in `source_versions`.
 
+## Tests
+
+L1 unit tests cover the three defect classes that shipped in the 2026.11 build; run them after touching `chunker.py`, `store.py`, `registry.py` or `utils.py`:
+
+```bash
+python -m pytest tests/ -q -p no:cacheprovider
+```
+
+41 cases: heading shape gate (titles accepted, body lines / binary rows / code rejected), fragment filter, heading stripping, tokenizer stability, hash semantics. `-p no:cacheprovider` avoids a sandbox warning about the cache directory.
+
+When a test fails, decide which side is wrong before editing either: `test_heading_gate.py` encodes cases lifted from the real corpus, while `test_tokenizer.py` documents deliberate choices such as punctuation-insensitive hashing for OCR drift.
+
 ## Workflow
 
 The default `run` command stops after **plan** so the integrity report and chunk plan can be reviewed before ingestion.
