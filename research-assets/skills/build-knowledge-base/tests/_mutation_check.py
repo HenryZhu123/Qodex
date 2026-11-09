@@ -85,6 +85,20 @@ MUTATIONS = [
         '    max_chars = plan["max_chars"] * 10',
         "tests/test_chunk_packing.py",
     ),
+    (
+        "e2e catches fragments reaching the index",
+        SCRIPTS / "store.py",
+        "            if is_stub(body):\n                # Page numbers, figure captions and bare labels rank high because\n                # BM25 rewards short documents. Keep the row, leave it out of the\n                # index so it can never be returned as evidence.\n                skipped += 1\n                continue",
+        "            if False:\n                skipped += 1\n                continue",
+        "tests/test_pipeline_e2e.py",
+    ),
+    (
+        "chunking is no longer deterministic",
+        SCRIPTS / "chunker.py",
+        '        "content_hash": sha256_text(content),',
+        '        "content_hash": sha256_text(content + str(__import__("random").random())),',
+        "tests/test_pipeline_e2e.py",
+    ),
 ]
 
 
