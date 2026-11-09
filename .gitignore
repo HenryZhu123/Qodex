@@ -33,6 +33,7 @@ research-assets/review_eval/**/smoke*/
 .env.*.local
 .env.*
 !.env.example
+!.env.*.example
 
 # SQLite runtime sidecars
 *.db-wal
@@ -41,3 +42,7 @@ research-assets/review_eval/**/smoke*/
 # Local assembly exports and integration test evidence
 /outputs/
 /output/
+
+# Private workspace plans, repair notes and scratch files
+/.local/
+/mini-agent-demo/

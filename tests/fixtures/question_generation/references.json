@@ -1,0 +1,14 @@
+[
+  {
+    "reference_id": "cache-address-breakdown-1234",
+    "stem": "  某系统按字节寻址，地址宽度为 16 位。直接映射 Cache 的数据容量为 256   B，每块 16 B，每行存放一块，行号和块内字节偏移均从 0 开始。地址 ０ｘ１２３４ 的标记、行号、块内字节偏移分别是多少？各选项均为十进制。  ",
+    "source": "Qodex 自编测试题，源自 question_generation/examples/cache.json",
+    "license": "CC0-1.0"
+  },
+  {
+    "reference_id": "cache-address-line-collision",
+    "stem": "直接映射 Cache 有 16 行。主存块号 3 和 19 是否映射到同一行？",
+    "source": "Qodex 自编测试题，用于检验同考点不同题意",
+    "license": "CC0-1.0"
+  }
+]

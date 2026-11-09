@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1",
+  "request_id": "stack-comprehensive-demo",
+  "subject": "data_structures",
+  "topic": "stack_pop_sequence",
+  "question_type": "comprehensive_application",
+  "seed": 42,
+  "constraints": {
+    "element_count": 5
+  },
+  "evidence": [
+    {
+      "id": "python-tutorial-stack",
+      "source": "https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks",
+      "version": "Python 3 Tutorial",
+      "anchor": "§5.1.1 Using Lists as Stacks",
+      "summary": "栈遵循后进先出。入栈把元素放到栈顶，出栈只能移除当前的栈顶元素。",
+      "rules": [
+        "stack_push_top",
+        "stack_pop_top"
+      ]
+    }
+  ]
+}
