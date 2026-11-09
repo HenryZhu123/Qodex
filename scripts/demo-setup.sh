@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PI_DIR="$ROOT_DIR/pi-coding-agent"
 CHECKER_DIR="$PI_DIR/services/exam-checker"
+WEB_DIR="$PI_DIR/apps/qodex-web"
 
 if command -v python3.11 >/dev/null 2>&1; then
 	PYTHON_BIN="${QODEX_BOOTSTRAP_PYTHON:-python3.11}"
@@ -29,6 +30,12 @@ fi
 	cd "$PI_DIR"
 	npm ci --ignore-scripts
 	npm run hydrate:model-data:release
+	npm run build:offline
+)
+
+(
+	cd "$WEB_DIR"
+	npm ci --ignore-scripts --workspaces=false --no-audit
 )
 
 if [[ ! -f "$PI_DIR/.env" ]]; then

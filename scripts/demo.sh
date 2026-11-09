@@ -4,6 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PI_DIR="$ROOT_DIR/pi-coding-agent"
 CHECKER_DIR="$PI_DIR/services/exam-checker"
+WEB_DIR="$PI_DIR/apps/qodex-web"
 COMPOSE_FILE="$CHECKER_DIR/compose.yaml"
 ENV_FILE="$PI_DIR/.env"
 LOG_DIR="$ROOT_DIR/.local/demo"
@@ -18,6 +19,10 @@ log() {
 
 service_ready() {
 	curl --silent --show-error --fail --max-time 2 "$1/health" >/dev/null 2>&1
+}
+
+web_ready() {
+	curl --silent --show-error --fail --max-time 2 "$1" >/dev/null 2>&1
 }
 
 show_status() {
@@ -35,6 +40,12 @@ show_status() {
 			failed=1
 		fi
 	done
+	if web_ready "http://127.0.0.1:3000"; then
+		printf '%-22s ready    %s\n' "qodex-web" "http://127.0.0.1:3000"
+	else
+		printf '%-22s stopped  %s\n' "qodex-web" "http://127.0.0.1:3000"
+		failed=1
+	fi
 	return "$failed"
 }
 
@@ -89,6 +100,9 @@ load_environment() {
 	export EXAM_CHECKER_SERVICE_URL="${EXAM_CHECKER_SERVICE_URL:-http://127.0.0.1:8091}"
 	export EXAM_ASSEMBLY_SERVICE_URL="${EXAM_ASSEMBLY_SERVICE_URL:-http://127.0.0.1:8092}"
 	export QUESTION_GENERATION_SERVICE_URL="${QUESTION_GENERATION_SERVICE_URL:-http://127.0.0.1:8093}"
+	export PI_PROVIDER="${PI_PROVIDER:-${QODEX_PI_PROVIDER:-deepseek}}"
+	export PI_MODEL_ID="${PI_MODEL_ID:-${QODEX_PI_MODEL:-deepseek-flash}}"
+	export PI_WORKSPACE_PATH="${PI_WORKSPACE_PATH:-$ROOT_DIR}"
 }
 
 preflight() {
@@ -100,6 +114,7 @@ preflight() {
 	[[ -x "$ROOT_PYTHON" ]] || { echo "Missing $ROOT_PYTHON; run npm run demo:setup" >&2; exit 1; }
 	[[ -x "$CHECKER_PYTHON" ]] || { echo "Missing $CHECKER_PYTHON; run npm run demo:setup" >&2; exit 1; }
 	[[ -d "$PI_DIR/node_modules" ]] || { echo "Missing Pi node_modules; run npm run demo:setup" >&2; exit 1; }
+	[[ -d "$WEB_DIR/node_modules" ]] || { echo "Missing Qodex Web node_modules; run npm run demo:setup" >&2; exit 1; }
 	load_environment
 	"$ROOT_PYTHON" -c 'import asyncpg, uvicorn, exam_assembly_agent, question_generation'
 	PYTHONPATH="$CHECKER_DIR/src" "$CHECKER_PYTHON" -c 'import exam_checker'
@@ -161,6 +176,18 @@ start_generation() {
 	STARTED_PIDS="$STARTED_PIDS $!"
 }
 
+start_web() {
+	if web_ready "http://127.0.0.1:3000"; then
+		log "Reusing Qodex Web already running on 3000"
+		return
+	fi
+	(
+		cd "$WEB_DIR"
+		exec npm run dev
+	) >"$LOG_DIR/qodex-web.log" 2>&1 &
+	STARTED_PIDS="$STARTED_PIDS $!"
+}
+
 wait_for_service() {
 	local name="$1"
 	local url="$2"
@@ -175,6 +202,20 @@ wait_for_service() {
 	done
 	echo "$name did not become healthy; recent log output:" >&2
 	tail -n 80 "$logfile" >&2 || true
+	exit 1
+}
+
+wait_for_web() {
+	local attempt
+	for attempt in $(seq 1 180); do
+		if web_ready "http://127.0.0.1:3000"; then
+			log "Qodex Web is ready at http://127.0.0.1:3000"
+			return
+		fi
+		sleep 1
+	done
+	echo "Qodex Web did not become ready; recent log output:" >&2
+	tail -n 80 "$LOG_DIR/qodex-web.log" >&2 || true
 	exit 1
 }
 
@@ -219,10 +260,18 @@ if [[ "$MODE" == "services" ]]; then
 	exit 0
 fi
 
-log "All services are healthy; starting Pi"
-(
-	cd "$PI_DIR"
-	exec ./pi-test.sh \
-		--provider "${QODEX_PI_PROVIDER:-deepseek}" \
-		--model "${QODEX_PI_MODEL:-deepseek-flash}"
-)
+if [[ "$MODE" == "cli" ]]; then
+	log "All services are healthy; starting Pi CLI"
+	(
+		cd "$PI_DIR"
+		exec ./pi-test.sh \
+			--provider "$PI_PROVIDER" \
+			--model "$PI_MODEL_ID"
+	)
+	exit 0
+fi
+
+start_web
+wait_for_web
+log "Complete demo is running at http://127.0.0.1:3000; press Ctrl+C to stop it"
+wait

@@ -24,7 +24,7 @@ npm run demo:setup
 
 随后编辑 `pi-coding-agent/.env`，填写模型和 MinerU 配置。真实 API Key 不得提交到 Git。
 
-默认演示配置使用 DeepSeek 官方端点和 `deepseek-flash`。同一份 `.env` 中的 `DEEPSEEK_API_KEY` 供 Pi 使用，`EXAM_CHECKER_*` 模型配置供审校、专项检查、修订和元数据标注使用；question-generation 与 exam-assembly 本身不直接调用模型。
+默认演示配置使用 DeepSeek 官方端点和 `deepseek-flash`。统一脚本会把该选择传给终端版 Pi 和 Assistant UI，并把 Agent 工作目录设为仓库根目录。同一份 `.env` 中的 `DEEPSEEK_API_KEY` 供 Pi 使用，`EXAM_CHECKER_*` 模型配置供审校、专项检查、修订和元数据标注使用；question-generation 与 exam-assembly 本身不直接调用模型。
 
 以后每次演示只需在仓库根目录运行：
 
@@ -32,14 +32,15 @@ npm run demo:setup
 npm run demo
 ```
 
-该命令会依次启动 PostgreSQL、执行 Alembic 迁移、创建命题待审表、并行启动 8091/8092/8093 三个服务，等待健康检查全部通过后进入 Pi。退出 Pi 或按 `Ctrl+C` 会关闭本次命令启动的三个 Python 服务；PostgreSQL 容器和数据卷会保留，便于下次快速启动。
+该命令会依次启动 PostgreSQL、执行 Alembic 迁移、创建命题待审表、并行启动 8091/8092/8093 三个服务，再启动内嵌完整 Pi Agent 的 Assistant UI。浏览器访问 `http://127.0.0.1:3000` 即可演示。按 `Ctrl+C` 会关闭本次命令启动的网页和 Python 服务；PostgreSQL 容器和数据卷会保留，便于下次快速启动。
 
 辅助命令：
 
 ```bash
 npm run demo:db        # 只准备 PostgreSQL、迁移和待审表
 npm run demo:services  # 启动三个服务但不进入 Pi
-npm run demo:status    # 查看三个服务的健康状态
+npm run demo:status    # 查看三个后端和网页的健康状态
+npm run demo:cli       # 使用终端版 Pi，而不是 Assistant UI
 ```
 
 ## 目录结构

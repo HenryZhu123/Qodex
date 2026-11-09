@@ -24,7 +24,7 @@ while the terminal development launcher can execute source files directly.
 
 The server binds to `127.0.0.1`. Open <http://127.0.0.1:3000>.
 
-Pi uses the model and credentials configured in `~/.pi/agent`. To use another configuration directory or a scratch workspace:
+Pi uses `PI_PROVIDER` and `PI_MODEL_ID` when they are set; otherwise it falls back to the model configured in `~/.pi/agent`. The unified root demo exports `deepseek` / `deepseek-flash` and the repository root workspace. To use another configuration directory or a scratch workspace:
 
 ```bash
 PI_CODING_AGENT_DIR=/absolute/path/to/pi/agent \
