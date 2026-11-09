@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from random import Random
 from unicodedata import normalize
@@ -14,7 +15,7 @@ METADATA_FIELDS = ("subject", "topic", "question_type")
 BATCH_FIELDS = {"schema_version", "request_id", "seed", "question_count", "total_score", "slots"}
 SLOT_FIELDS = {"slot_id", "count", "score_per_question", *METADATA_FIELDS}
 REFERENCE_FIELDS = {"reference_id", "stem", "source", "license"}
-TERMINAL_STATUSES = {"INVALID_REQUEST", "UNSUPPORTED_REQUEST", "NEEDS_MATERIAL"}
+TERMINAL_STATUSES = {"INVALID_REQUEST", "UNSUPPORTED_REQUEST", "NEEDS_MATERIAL", "KNOWLEDGE_BASE_UNAVAILABLE"}
 
 
 @dataclass
@@ -107,7 +108,8 @@ def _matches(question: dict, slot: dict) -> bool:
 
 
 def _sample_slot(
-    slot: dict, request_id: str, index: int, rng: Random, reference_index: dict[str, list[dict]]
+    slot: dict, request_id: str, index: int, rng: Random, reference_index: dict[str, list[dict]],
+    single_generator: Callable[[object], dict],
 ) -> SlotSample:
     base = {key: slot[key] for key in (*METADATA_FIELDS, "constraints", "evidence") if key in slot}
     candidates = {}
@@ -115,7 +117,7 @@ def _sample_slot(
     blocked_attempts = 0
     matched_references = {}
     for attempt in range(1, ATTEMPTS_PER_QUESTION * slot["count"] + 1):
-        result = generate_question({
+        result = single_generator({
             **base,
             "schema_version": SCHEMA_VERSION,
             "request_id": f"{request_id}/batch/{index}/{attempt}",
@@ -170,7 +172,7 @@ def _allocate(slots: list[dict], pools: list[dict]) -> dict[str, int]:
     return owners
 
 
-def generate_batch(payload: object) -> dict:
+def generate_batch(payload: object, *, single_generator: Callable[[object], dict] | None = None) -> dict:
     """Fill a batch of scored slots using self-checked single questions."""
     try:
         _validate(payload)
@@ -182,7 +184,9 @@ def generate_batch(payload: object) -> dict:
     request_id = payload["request_id"]
     slots = payload["slots"]
     rng = Random(payload["seed"])
-    samples = [_sample_slot(slot, request_id, index, rng, reference_index) for index, slot in enumerate(slots)]
+    generator = single_generator if single_generator is not None else generate_question
+    samples = [_sample_slot(slot, request_id, index, rng, reference_index, generator)
+               for index, slot in enumerate(slots)]
     owners = _allocate(slots, [sample.candidates for sample in samples])
     questions = []
     deficits = []
