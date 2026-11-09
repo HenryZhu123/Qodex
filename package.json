@@ -1,0 +1,11 @@
+{
+	"name": "qodex-demo",
+	"private": true,
+	"scripts": {
+		"demo": "bash scripts/demo.sh",
+		"demo:setup": "bash scripts/demo-setup.sh",
+		"demo:db": "bash scripts/demo.sh db",
+		"demo:services": "bash scripts/demo.sh services",
+		"demo:status": "bash scripts/demo.sh status"
+	}
+}

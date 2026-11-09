@@ -21,6 +21,12 @@ Qodex main 已合并四个业务模块：
 
 | 名称 | 作用 |
 | --- | --- |
+| `npm run demo:setup` | 首次创建 Python 环境、安装 Pi 依赖并生成本地环境模板 |
+| `npm run demo` | 准备数据库、启动三个服务、健康检查后进入 Pi |
+| `npm run demo:db` | 只准备 PostgreSQL、Alembic 迁移和命题待审表 |
+| `npm run demo:services` | 只启动三个 Python 服务，不进入 Pi |
+| `npm run demo:status` | 检查 8091、8092、8093 健康状态 |
+| `scripts/demo.sh` | NPM 演示命令的 Bash 编排实现 |
 | `pi-coding-agent/start-exam-checker-db.sh` | 启动 PostgreSQL 并运行 exam-checker 迁移 |
 | `pi-coding-agent/start-exam-checker.sh` | 启动 exam-checker，默认端口 8091 |
 | `scripts/start-question-generation.sh` | 启动命题服务，默认端口 8093 |

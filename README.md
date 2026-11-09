@@ -14,6 +14,32 @@ Qodex 是面向计算机考研 408 的 AI 试题工作流，当前仓库已经�
 
 当前边界：命题服务已经能把自检通过的题目写入 PostgreSQL 待审队列，但 exam-checker 还没有自动消费该队列。现阶段仍需增加“待审题登记 → 绑定题目版本 → 审校 → PASS 入正式题库”的接入层，才能形成全自动闭环。
 
+## 一键演示
+
+首次在本机准备环境：
+
+```bash
+npm run demo:setup
+```
+
+随后编辑 `pi-coding-agent/.env`，填写模型和 MinerU 配置。真实 API Key 不得提交到 Git。
+
+以后每次演示只需在仓库根目录运行：
+
+```bash
+npm run demo
+```
+
+该命令会依次启动 PostgreSQL、执行 Alembic 迁移、创建命题待审表、并行启动 8091/8092/8093 三个服务，等待健康检查全部通过后进入 Pi。退出 Pi 或按 `Ctrl+C` 会关闭本次命令启动的三个 Python 服务；PostgreSQL 容器和数据卷会保留，便于下次快速启动。
+
+辅助命令：
+
+```bash
+npm run demo:db        # 只准备 PostgreSQL、迁移和待审表
+npm run demo:services  # 启动三个服务但不进入 Pi
+npm run demo:status    # 查看三个服务的健康状态
+```
+
 ## 目录结构
 
 ```text
@@ -62,7 +88,7 @@ pi-coding-agent/services/exam-checker/.venv/bin/pip install -e 'pi-coding-agent/
 cp pi-coding-agent/services/exam-checker/.env.example pi-coding-agent/.env
 ```
 
-编辑 `pi-coding-agent/.env`，填写模型和 MinerU 配置。真实 API Key 不得提交到 Git。
+以上步骤已经由 `npm run demo:setup` 封装；本节保留底层命令，便于排错和手工安装。
 
 ## 2. 启动 PostgreSQL
 
@@ -94,7 +120,7 @@ docker compose -f pi-coding-agent/services/exam-checker/compose.yaml \
 
 ## 3. 启动服务
 
-建议按以下顺序分别在不同终端启动。
+日常演示使用 `npm run demo`。以下命令用于单独启动或调试服务。
 
 ### exam-checker：8091
 
