@@ -6,7 +6,7 @@ Qodex 面向计算机考研 408，围绕知识库、命题、单题审校和组�
 
 | 模块 | 当前入口 |
 | --- | --- |
-| 自主命题 | [模块说明与开发交接](question-generation.md#接手开发)。覆盖四科单选、综合题、补题和修订，通过 Pi 写入待审表 |
+| 自主命题 | [模块说明与开发交接](question-generation.md#接手开发)、[材料驱动创作与实测结果](question-authoring.md)。覆盖四科单选、综合题、补题和修订，通过 Pi 写入待审表 |
 | Pi 运行与工具集成 | [Pi 源码说明](../pi-coding-agent/README.md) |
 | 单题审校与题库 | [exam-checker 服务](../pi-coding-agent/services/exam-checker/README.md) |
 | 知识库、组卷 | 已有集成版本。对接时核对 [依赖版本与接口](question-generation.md#工作区与依赖分支) |

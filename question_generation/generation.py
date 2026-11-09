@@ -65,11 +65,15 @@ def _evidence_refs(
     covered_rules = set()
     text_fields = EVIDENCE_TEXT_FIELDS if require_summary else EVIDENCE_TEXT_FIELDS[:-1]
     for item in evidence:
-        if not isinstance(item, dict) or item.keys() != {*text_fields, "rules"}:
+        required = {*text_fields, "rules"}
+        allowed = required | ({"excerpt"} if require_summary else set())
+        if not isinstance(item, dict) or not required <= item.keys() or item.keys() - allowed:
             expected = "id、source、version、anchor、summary" if require_summary else "id、source、version、anchor"
             raise RequestError(f"每条材料必须包含 {expected} 和 rules。")
         if not all(_is_text(item[field]) for field in text_fields):
             raise RequestError("材料的来源、定位、摘要等文本字段须为非空字符串。")
+        if "excerpt" in item and (not _is_text(item["excerpt"]) or len(item["excerpt"]) > 12000):
+            raise RequestError("材料 excerpt 须为不超过 12000 字的非空原文。")
         rules = item["rules"]
         if not isinstance(rules, list) or not all(_is_text(rule) for rule in rules):
             raise RequestError("材料 rules 必须是规则标记的字符串数组。")
@@ -175,6 +179,10 @@ def failure_result(
 
 def generate_question(payload: object) -> dict:
     """Generate one self-checked question using pre-labelled evidence."""
+    if isinstance(payload, dict) and isinstance(payload.get("constraints"), dict) and "authoring" in payload["constraints"]:
+        from .authoring import generate_authored
+        return generate_authored(payload)
+
     try:
         request = _read_request(payload)
     except RequestError as error:

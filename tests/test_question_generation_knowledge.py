@@ -63,6 +63,8 @@ class KnowledgeTests(TestCase):
                                          f" · chunk sha256:{self.entry['content_sha256']}")
         self.assertEqual(ref["anchor"], "Paging · p. 3–4 · chunk section-1")
         self.assertEqual(provider.find("computer_networks", "single_level_paging"), [])
+        self.assertEqual(provider.find("operating_systems", "single_level_paging")[0]["excerpt"], self.text)
+        self.assertNotIn("excerpt", ref)
 
     def test_partial_rule_coverage_returns_exact_missing_rules(self):
         provider = self.provider(rules=["split_address", "map_virtual_page"])

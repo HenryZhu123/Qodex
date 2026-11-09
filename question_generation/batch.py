@@ -15,7 +15,7 @@ METADATA_FIELDS = ("subject", "topic", "question_type")
 BATCH_FIELDS = {"schema_version", "request_id", "seed", "question_count", "total_score", "slots"}
 SLOT_FIELDS = {"slot_id", "count", "score_per_question", *METADATA_FIELDS}
 REFERENCE_FIELDS = {"reference_id", "stem", "source", "license"}
-TERMINAL_STATUSES = {"INVALID_REQUEST", "UNSUPPORTED_REQUEST", "NEEDS_MATERIAL", "KNOWLEDGE_BASE_UNAVAILABLE"}
+TERMINAL_STATUSES = {"INVALID_REQUEST", "UNSUPPORTED_REQUEST", "NEEDS_MATERIAL", "KNOWLEDGE_BASE_UNAVAILABLE", "MODEL_UNAVAILABLE", "AUTHORING_CACHE_UNAVAILABLE", "SELF_CHECK_FAILED"}
 
 
 @dataclass
@@ -68,6 +68,10 @@ def _validate(payload: object) -> None:
         seen.add(slot["slot_id"])
         if any(type(slot[key]) is not int or slot[key] < 1 for key in ("count", "score_per_question")):
             raise ValueError("槽位题量和每题分值必须是正整数。")
+    authored_count = sum(slot["count"] for slot in slots
+                         if isinstance(slot.get("constraints"), dict) and "authoring" in slot["constraints"])
+    if authored_count > 2:
+        raise ValueError("单批最多包含 2 道模型创作题；请拆分请求以控制调用预算。")
     if sum(slot["count"] for slot in slots) != count:
         raise ValueError("各槽位题量之和必须等于 question_count。")
     if sum(slot["count"] * slot["score_per_question"] for slot in slots) != score:
@@ -116,7 +120,11 @@ def _sample_slot(
     last_failure = None
     blocked_attempts = 0
     matched_references = {}
-    for attempt in range(1, ATTEMPTS_PER_QUESTION * slot["count"] + 1):
+    # Model candidates already undergo bounded internal selection. Do not turn
+    # the rule-generator search budget into 8*n paid authoring runs.
+    authored = isinstance(slot.get("constraints"), dict) and "authoring" in slot["constraints"]
+    attempts = slot["count"] if authored else ATTEMPTS_PER_QUESTION * slot["count"]
+    for attempt in range(1, attempts + 1):
         result = single_generator({
             **base,
             "schema_version": SCHEMA_VERSION,
@@ -128,7 +136,7 @@ def _sample_slot(
             last_failure = {"code": status, "message": result["message"]}
             if "missing_rules" in result:
                 last_failure["missing_rules"] = result["missing_rules"]
-            if status in TERMINAL_STATUSES:
+            if status in TERMINAL_STATUSES and (status != "SELF_CHECK_FAILED" or authored):
                 break
             continue
         questions = result["questions"]

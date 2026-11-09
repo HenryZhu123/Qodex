@@ -74,7 +74,7 @@ async def submit(
     payload: dict = Body(),
 ):
     result = await asyncio.to_thread(_generate, operation, payload, request.app.state.knowledge)
-    if result["status"] == "KNOWLEDGE_BASE_UNAVAILABLE":
+    if result["status"] in {"KNOWLEDGE_BASE_UNAVAILABLE", "MODEL_UNAVAILABLE", "AUTHORING_CACHE_UNAVAILABLE"}:
         return JSONResponse(result, status_code=503)
     questions = result["questions"]
     if not questions:

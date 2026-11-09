@@ -158,6 +158,7 @@ class KnowledgeEvidence:
             "version": f"{entry['edition']} · source sha256:{source_hash} · chunk sha256:{content_hash}",
             "anchor": " · ".join(location),
             "summary": entry["summary"],
+            **({"excerpt": content} if len(content) <= 12000 else {}),
             "rules": entry["rules"],
         }
 
