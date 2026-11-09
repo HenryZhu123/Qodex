@@ -18,6 +18,7 @@ SCRIPTS = ROOT / "hku_agent" / "research-assets" / "skills" / "build-knowledge-b
 
 TARGETS = [
     ("data_structure", "kb.sqlite"),
+    ("computer_organization", "kb.sqlite"),
     ("operating_system", "kb.sqlite"),
     ("computer_network", "kb.sqlite"),
     # The 8th edition is an incremental index built by build_phase6_index.py from

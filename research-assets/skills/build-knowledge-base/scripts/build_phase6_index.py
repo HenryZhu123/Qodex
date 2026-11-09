@@ -19,6 +19,7 @@ Outputs:
 from __future__ import annotations
 
 import hashlib
+import re
 import json
 import sqlite3
 import sys
@@ -36,6 +37,12 @@ from textclean import repair_ocr  # noqa: E402
 from utils import tokenize_for_fts  # noqa: E402
 
 MAX_CHARS = 1200
+
+HEADING_LINE = re.compile(r"(?m)^#{1,4}\s+(.+?)\s*$")
+# Only section-shaped headings count. A cover page carries "# <book title>",
+# which is not a section and must not defeat the front-matter gate.
+SECTION_HEADING = re.compile(r"(?m)^#{1,4}\s+((?:第\s*\d+\s*章|\d+(?:\.\d+)*)\s*\S.*)$")
+FRONT_MATTER = re.compile(r"原书第\s*8\s*版|ISBN|防伪标签|版权所有|图书在版编目|出版发行")
 
 
 def _split_for_budget(text: str, max_chars: int) -> list[str]:
@@ -123,12 +130,31 @@ def main() -> None:
     total_chars = 0
     skipped = 0
     split_count = 0
+    front_matter = 0
+    current_heading = ""
     for position, cid in enumerate(sorted(indexed), start=1):
         row = delta[cid]
         chunk = chunks.get(cid)
         if chunk is None:
             continue
         text = repair_ocr(chunk["text"])["text"]
+
+        # MinerU keeps the document's markdown headings inside the blocks. Track
+        # the most recent one so chunks inherit a real heading path instead of an
+        # empty string.
+        heading_match = SECTION_HEADING.search(text)
+        if heading_match:
+            current_heading = heading_match.group(1).strip()
+        # Chunks before the first chapter still deserve an anchor; fall back to
+        # any markdown heading they carry, then to a generic preface label.
+        any_heading = HEADING_LINE.search(text)
+
+        # Cover, imprint and copyright pages carry no knowledge but pollute
+        # retrieval. Drop them until the first real heading appears.
+        if not current_heading and FRONT_MATTER.search(text):
+            front_matter += 1
+            continue
+
         # MinerU returns whole blocks; some exceed 5,000 characters, which blows
         # the review budget. Split them so every chunk fits MAX_CHARS.
         pieces = _split_for_budget(text, MAX_CHARS)
@@ -155,7 +181,8 @@ def main() -> None:
                     content_sha256(part),
                     len(part),
                     "markdown_block",
-                    "",
+                    current_heading
+                    or (any_heading.group(1).strip() if any_heading else "第8版 前言"),
                     chunk.get("page"),
                     chunk.get("page"),
                     json.dumps({**metadata, "part": part_index}, ensure_ascii=False),
