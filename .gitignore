@@ -31,7 +31,13 @@ research-assets/review_eval/**/smoke*/
 .env
 .env.local
 .env.*.local
+.env.*
+!.env.example
 
 # SQLite runtime sidecars
 *.db-wal
 *.db-shm
+
+# Local assembly exports and integration test evidence
+/outputs/
+/output/

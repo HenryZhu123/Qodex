@@ -1,0 +1,12 @@
+{
+  "request_id": "DEMO_001",
+  "status": "NEEDS_QUESTIONS",
+  "is_example": true,
+  "message": "仅有一道开发样例题，无法完成组卷。以下是候选池缺口，各维度不能相加作为总缺题数。",
+  "eligible_candidate_count": 1,
+  "minimum_additional_questions": 9,
+  "topic_deficits": {"线性表": 2, "栈": 1, "队列": 2, "树": 2, "图": 2},
+  "difficulty_deficits": {"easy": 2, "medium": 5, "hard": 2},
+  "next_action": "REQUEST_GENERATION_AND_REVIEW",
+  "note": "这是预期接口样例，尚非程序运行结果。正式补题要求还需要联合求解知识点和难度配额。"
+}
