@@ -16,6 +16,7 @@ Read these before starting a run:
 - [workflow.md](references/workflow.md): phases, gates, artifacts, and commands.
 - [integrity-rules.md](references/integrity-rules.md): sampling method, metrics, verdict thresholds, and repair actions.
 - [chunking-policy.md](references/chunking-policy.md): mode decision matrix, target sizes, and anti-patterns.
+- [knowledge-relations.md](references/knowledge-relations.md): when a second source covers the same subject, how chunks are merged, kept, related, or flagged as conflicts.
 - [schemas.md](references/schemas.md): parsed document, chunk, SQLite, and report schemas.
 - [reference-question-bank.md](references/reference-question-bank.md): 408 reference-question ingestion (exam papers + answer keys).
 - [development-plan.md](references/development-plan.md): how to build, test, and extend the skill (for maintainers).
@@ -28,6 +29,7 @@ Read these before starting a run:
 4. **Chunking is sample-driven and explicit.** Write a `chunk_plan.json` with mode, target size, overlap, and rationale before producing chunks. Use the 10% sample for integrity and a cheap full-document line scan for structure (headings/questions/code); do not silently switch to fixed-size chunking.
 5. **Every chunk keeps provenance.** Preserve `doc_id`, `source_path`, heading path, and page range. No anchor, no evidence.
 6. **Ingestion is idempotent.** Re-running must replace the same `doc_id`/`chunk_id`, not duplicate them.
+7. **Never drop or silently merge content from a second source.** When a new source covers a subject that already has content, decide every overlapping chunk pair as `equivalent` / `exclusive` / `conflict` / `complementary` per [knowledge-relations.md](references/knowledge-relations.md). Conflicts are judged first, kept on both sides, and shared via `conflict_group_id`; retrieval must return all sides. A whole-book hash match is only a fast path — it still records the new source in `source_versions`.
 
 ## Workflow
 
@@ -123,6 +125,25 @@ python scripts/kb_pipeline.py run --input <file-or-dir> --out <run-dir> --stop-a
 
 Use this only after the integrity report and plan have been reviewed, or when the user explicitly accepts automatic decisions.
 
+### Phase 6 — multi-source alignment (required when the subject already has content)
+
+Only applies when the target subject is not empty. Skip it for the first book of a subject.
+
+1. Generate candidate pairs deterministically: same subject, high term-fingerprint overlap or
+   high character-trigram containment. Cast wide; this stage may over-produce.
+2. Judge every candidate pair into exactly one of `equivalent` / `exclusive` / `conflict` /
+   `complementary`, **conflicts first**. Record the reason.
+3. Every `conflict` goes to human review before it is written. A missed conflict is the worst
+   failure mode: the model will blend two incompatible answers into one.
+4. Write relation metadata per [knowledge-relations.md](references/knowledge-relations.md):
+   `canonical_id`, `source`, `source_versions`, `relation`, plus `conflict_group_id` /
+   `conflict_stance` for conflicts and `related_to` for complementary pairs.
+5. Emit the delta as its own file (`delta/<doc_id>.jsonl`) plus a report of counts per relation.
+   Do not merge into the existing `kb.sqlite` without an explicit decision; the delta file keeps
+   the merge reversible.
+6. Retrieval must return every member of a `conflict_group_id` together and label each side by
+   source. Never let similarity ranking silently pick one side.
+
 ## Stop and report
 
 Stop immediately and report to the user when:
@@ -144,4 +165,6 @@ A run is complete only when:
 3. every non-failed document has an explicit chunk plan;
 4. `chunks.jsonl` and `kb.sqlite` exist and `documents`/`chunks` counts match;
 5. `verification_report.md` shows at least one successful retrieval probe;
-6. `run_state.json` shows `phase=done`.
+6. `run_state.json` shows `phase=done`;
+7. for a subject that already had content, every overlapping candidate pair carries a relation
+   label, every conflict is human-reviewed, and the delta report lists counts per relation.

@@ -21,11 +21,13 @@ class OpenRouterJevClient:
         model: str,
         prompts: JevPromptRepository,
         *,
+        endpoint_url: str = "",
         timeout_seconds: float = 30,
         max_concurrency: int = 8,
         client: httpx.AsyncClient | None = None,
     ) -> None:
         self.base_url = base_url.rstrip("/")
+        self.endpoint_url = endpoint_url.strip().rstrip("/")
         self.api_key = api_key
         self.model = model
         self.prompts = prompts
@@ -40,17 +42,17 @@ class OpenRouterJevClient:
     async def predict(
         self, task_id: ReviewTaskId, payload: CheckerPayload
     ) -> JevPrediction:
-        if not self.base_url or not self.api_key or not self.model:
+        if (not self.endpoint_url and not self.base_url) or not self.api_key or not self.model:
             raise JevRouterError(
-                "EXAM_CHECKER_JEV_BASE_URL, EXAM_CHECKER_JEV_API_KEY and "
-                "EXAM_CHECKER_JEV_MODEL are required"
+                "EXAM_CHECKER_JEV_ENDPOINT or EXAM_CHECKER_JEV_BASE_URL, plus "
+                "EXAM_CHECKER_JEV_API_KEY and EXAM_CHECKER_JEV_MODEL, are required"
             )
         prompt = self.prompts.get(task_id)
         started = time.perf_counter()
         try:
             async with self._semaphore:
                 response = await self._client.post(
-                    f"{self.base_url}/decisions",
+                    self.endpoint_url or f"{self.base_url}/decisions",
                     headers={"Authorization": f"Bearer {self.api_key}"},
                     json={
                         "model": self.model,

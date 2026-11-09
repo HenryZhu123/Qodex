@@ -1,0 +1,8 @@
+{
+  "excluded_from_strict": {
+    "rev-ambiguity-refq-408-2017-10": "Deleting '可能的' leaves a uniquely answerable question; the removed token cannot be inferred from the mutated text.",
+    "rev-ambiguity-refq-408-2018-12": "Deleting '主要' does not create two valid interpretations or multiple answers; the removed token cannot be inferred from the mutated text."
+  },
+  "strict_sample_count": 318,
+  "non_strict_sample_count": 320
+}

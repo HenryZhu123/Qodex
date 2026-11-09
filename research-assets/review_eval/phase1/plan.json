@@ -1,0 +1,97 @@
+{
+  "run_id": "review-eval-p1",
+  "created_at": "2026-10-23T13:23:51+08:00",
+  "scope": "题目审校测试集：从 408 参考题构造带标准答案的错题",
+  "source_dataset": "D:\\Code\\hku\\LLM\\kb_refq_out\\reference_questions.jsonl",
+  "source_pool": {
+    "total_records": 720,
+    "usable_records": 691,
+    "usable_rule": "options_complete=true AND answer_available=true AND len(stem)>=20"
+  },
+  "rounding": "每类固定 60 条，9 类共 540 条，无小数，计数直接累加",
+  "total_samples": 540,
+  "per_type_counts": {
+    "typo": 60,
+    "punctuation": 60,
+    "option_structure": 60,
+    "missing_info": 60,
+    "type_mismatch": 60,
+    "answer_leakage": 60,
+    "ambiguity": 60,
+    "unsolvable": 60,
+    "factual_logical": 60
+  },
+  "per_type_ratio": {
+    "typo": 0.1111,
+    "punctuation": 0.1111,
+    "option_structure": 0.1111,
+    "missing_info": 0.1111,
+    "type_mismatch": 0.1111,
+    "answer_leakage": 0.1111,
+    "ambiguity": 0.1111,
+    "unsolvable": 0.1111,
+    "factual_logical": 0.1111
+  },
+  "eligibility": {
+    "typo": "题干或选项中的实词改为形近/音近字",
+    "punctuation": "句末或并列成分的标点替换/缺失",
+    "option_structure": "只改选项载体（编号、数量、重复、缺失），保留语义与答案",
+    "missing_info": "删除一个必要且可唯一恢复的条件",
+    "type_mismatch": "让作答指令与题型不符（如单选写成多选/填空式）",
+    "answer_leakage": "在题干或某选项中直接泄露正确选项内容",
+    "ambiguity": "引入指代不明或范围模糊的表述",
+    "unsolvable": "删除一个无法从题干恢复的关键条件，使题目无唯一解",
+    "factual_logical": "改一个事实/数值/关系，使结论与学科事实冲突"
+  },
+  "diversity_constraints": {
+    "one_clean_source_per_sample": true,
+    "source_not_reused_across_types": true,
+    "max_share_per_subject": 0.55,
+    "max_share_per_year": 0.15,
+    "mutation_signature_cap_per_type": "单一 mutation_signature 不超过该类型 25%",
+    "excluded": [
+      "已含明显错误的源题",
+      "纯图片题（options_complete=false）",
+      "题干少于 20 字的题"
+    ]
+  },
+  "split_leakage_rule": "同一源题及其变体只出现在一个 split；本阶段不划分 train/val/test",
+  "subject_distribution": {
+    "computer_network": 211,
+    "data_structure": 131,
+    "computer_organization": 66,
+    "operating_system": 132
+  },
+  "year_distribution": {
+    "2009": 28,
+    "2010": 31,
+    "2011": 33,
+    "2012": 29,
+    "2013": 33,
+    "2014": 28,
+    "2015": 32,
+    "2016": 30,
+    "2017": 28,
+    "2018": 29,
+    "2019": 29,
+    "2020": 29,
+    "2021": 29,
+    "2022": 34,
+    "2023": 25,
+    "2024": 30,
+    "2025": 29,
+    "2026": 34
+  },
+  "ambiguity_risks": [
+    "选项结构错误容易与'信息缺失'混淆：只允许改选项载体（编号/数量/重复），不改语义",
+    "答案泄露与'事实错误'可能重叠：泄露只允许把正确选项内容原样搬到题干或干扰项",
+    "无解与信息缺失的边界：无解删除的条件不可从题干推回，信息缺失删除的条件可唯一恢复"
+  ],
+  "planned_files": [
+    "phase1/plan.md",
+    "phase1/plan.json",
+    "phase1/source_selection.jsonl",
+    "phase1/run_state.json"
+  ],
+  "next_phase_needs_approval": true
+}

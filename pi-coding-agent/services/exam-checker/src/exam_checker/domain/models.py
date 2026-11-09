@@ -198,9 +198,8 @@ ReviewTaskId = Literal[
     "punctuation_check",
     "options_check",
     "mismatch_check",
-    "missing_check",
+    "solvability_check",
     "ambiguity_check",
-    "unsolvability_check",
     "answer_leak_check",
     "logic_check",
 ]
@@ -236,6 +235,8 @@ class SpecialistReviewResult(StrictModel):
     has_error: bool
     total_errors: int = Field(ge=0)
     errors: list[ReviewError] = Field(default_factory=list)
+    kb_queries: list[str] = Field(default_factory=list)
+    kb_latency_ms: int = Field(default=0, ge=0)
 
     @model_validator(mode="after")
     def validate_error_count(self) -> "SpecialistReviewResult":
@@ -279,6 +280,8 @@ class ReviewCheck(StrictModel):
     error_code: str | None = None
     retryable: bool | None = None
     error: str | None = None
+    kb_queries: list[str] = Field(default_factory=list)
+    kb_latency_ms: int = Field(default=0, ge=0)
 
 
 class ReviewSummary(StrictModel):
@@ -291,6 +294,7 @@ class ReviewSummary(StrictModel):
 class ReviewTiming(StrictModel):
     routing: int = Field(ge=0)
     specialist_checks: int = Field(ge=0)
+    knowledge_base: int = Field(default=0, ge=0)
     total: int = Field(ge=0)
 
 

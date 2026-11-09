@@ -1,0 +1,14 @@
+{
+  "run_id": "blind_test_v1",
+  "current_phase": "phase2",
+  "phase1_status": "COMPLETED",
+  "phase1_completed_at": "2026-10-29T03:27:54.909282+00:00",
+  "phase2_status": "COMPLETED",
+  "phase2_completed_at": "2026-10-29T03:40:00.000000+00:00",
+  "phase3_status": "PENDING_APPROVAL",
+  "total_planned": 240,
+  "error_planned": 180,
+  "clean_planned": 60,
+  "restoration_failures": 0,
+  "anchor_failures": 0
+}

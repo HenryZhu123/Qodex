@@ -1,8 +1,53 @@
 from __future__ import annotations
 
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
+
+
+_ENV_NAME = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+
+def _load_env_file(path: Path) -> bool:
+    """Load a small dotenv-compatible file without overriding process env."""
+    if not path.is_file():
+        return False
+    for line_number, raw_line in enumerate(
+        path.read_text(encoding="utf-8-sig").splitlines(), start=1
+    ):
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.startswith("export "):
+            line = line[7:].lstrip()
+        if "=" not in line:
+            raise ValueError(f"Invalid env entry at {path}:{line_number}")
+        name, value = line.split("=", 1)
+        name = name.strip()
+        value = value.strip()
+        if not _ENV_NAME.fullmatch(name):
+            raise ValueError(f"Invalid env name at {path}:{line_number}: {name!r}")
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+            value = value[1:-1]
+        os.environ.setdefault(name, value)
+    return True
+
+
+def _load_local_environment(service_root: Path) -> list[Path]:
+    """Load an explicit file or the service-local .env.local/.env pair."""
+    explicit = os.getenv("EXAM_CHECKER_ENV_FILE", "").strip()
+    candidates = (
+        [Path(explicit).expanduser()]
+        if explicit
+        else [service_root / ".env.local", service_root / ".env"]
+    )
+    loaded: list[Path] = []
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if _load_env_file(resolved):
+            loaded.append(resolved)
+    return loaded
 
 
 def _positive_float(name: str, default: float) -> float:
@@ -40,8 +85,12 @@ class Settings:
     review_llm_timeout_seconds: float
     review_llm_max_concurrency: int
     review_llm_max_attempts: int
+    review_reasoning_effort: str
+    review_max_tokens: int
+    agentic_logic_prompt_path: str
     review_prompt_root: str
     jev_base_url: str
+    jev_endpoint: str
     jev_api_key: str
     jev_model: str
     jev_timeout_seconds: float
@@ -54,10 +103,12 @@ class Settings:
     workflow_llm_max_concurrency: int
     revision_prompt_root: str
     metadata_prompt_root: str
+    knowledge_base_dir: str = ""
 
     @classmethod
     def from_env(cls) -> "Settings":
         service_root = Path(__file__).resolve().parents[2]
+        _load_local_environment(service_root)
         packaged_prompt_root = Path(__file__).resolve().parent / "assets" / "prompts"
         default_prompt_root = (
             packaged_prompt_root
@@ -107,6 +158,13 @@ class Settings:
             review_llm_max_attempts=_positive_int(
                 "EXAM_CHECKER_REVIEW_LLM_MAX_ATTEMPTS", 3
             ),
+            review_reasoning_effort=os.getenv(
+                "EXAM_CHECKER_REVIEW_REASONING_EFFORT", ""
+            ).strip(),
+            review_max_tokens=_positive_int("EXAM_CHECKER_REVIEW_MAX_TOKENS", 2048),
+            agentic_logic_prompt_path=os.getenv(
+                "EXAM_CHECKER_AGENTIC_LOGIC_PROMPT_PATH", ""
+            ).strip(),
             review_prompt_root=os.getenv(
                 "EXAM_CHECKER_REVIEW_PROMPT_ROOT",
                 str(default_prompt_root / "reviewer-prompt" / "qwen38_27b"),
@@ -119,9 +177,11 @@ class Settings:
                 .strip()
                 .rstrip("/")
             ),
-            jev_api_key=os.getenv(
-                "EXAM_CHECKER_JEV_API_KEY", os.getenv("OPENROUTER_API_KEY", "")
-            ).strip(),
+            jev_endpoint=os.getenv("EXAM_CHECKER_JEV_ENDPOINT", "").strip().rstrip("/"),
+            jev_api_key=(
+                os.getenv("EXAM_CHECKER_JEV_API_KEY", "").strip()
+                or os.getenv("OPENROUTER_API_KEY", "").strip()
+            ),
             jev_model=os.getenv("EXAM_CHECKER_JEV_MODEL", "typesafe/jev-1.13").strip(),
             jev_timeout_seconds=_positive_float("EXAM_CHECKER_JEV_TIMEOUT_SECONDS", 30),
             jev_max_concurrency=_positive_int("EXAM_CHECKER_JEV_MAX_CONCURRENCY", 8),
@@ -153,5 +213,9 @@ class Settings:
             metadata_prompt_root=os.getenv(
                 "EXAM_CHECKER_METADATA_PROMPT_ROOT",
                 str(default_prompt_root / "question-metadata-prompt"),
+            ).strip(),
+            knowledge_base_dir=os.getenv(
+                "EXAM_CHECKER_KB_DIR",
+                str(Path(r"D:\Code\hku\LLM\kb_review\books")),
             ).strip(),
         )
