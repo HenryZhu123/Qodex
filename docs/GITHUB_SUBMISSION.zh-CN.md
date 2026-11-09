@@ -19,7 +19,7 @@ git status --short
 下面每行是一条完整命令，分别执行；不要改成git add .或git add -A。
 
 ```powershell
-git add -- .gitignore pyproject.toml run-assembly-service.ps1 run-local-exam-checker.ps1 ASSEMBLY_CONTRACT.zh-CN.md POSTGRES_INTEGRATION.zh-CN.md SIMILARITY_REVIEW.zh-CN.md VALIDATION.zh-CN.md MODEL_CATALOG.zh-CN.md GITHUB_SUBMISSION.zh-CN.md
+git add -- .gitignore pyproject.toml run-assembly-service.ps1 run-local-exam-checker.ps1 docs/ASSEMBLY_CONTRACT.zh-CN.md docs/POSTGRES_INTEGRATION.zh-CN.md docs/SIMILARITY_REVIEW.zh-CN.md docs/VALIDATION.zh-CN.md docs/MODEL_CATALOG.zh-CN.md docs/GITHUB_SUBMISSION.zh-CN.md
 git add --sparse -- exam_assembly_agent/
 git add -- pi-coding-agent/package.json pi-coding-agent/scripts/release-model-additions.json pi-coding-agent/scripts/restore-release-model-data.mjs pi-coding-agent/scripts/restore-release-model-data.test.mjs pi-coding-agent/packages/ai/test/release-deepseek-model.test.ts
 git add -- pi-coding-agent/packages/coding-agent/src/extensions/index.ts pi-coding-agent/packages/coding-agent/src/extensions/exam-assembly/ pi-coding-agent/packages/coding-agent/test/exam-assembly-extension.test.ts

@@ -11,6 +11,18 @@ Qodex 面向计算机考研 408，围绕知识库、命题、单题审校和组�
 | 单题审校与题库 | [exam-checker 服务](../pi-coding-agent/services/exam-checker/README.md) |
 | 知识库、组卷 | 远程有独立开发分支。对接时核对目标分支的实际接口 |
 
+## 设计、接口与验收
+
+- [AI 审校 Agent 实现方案](AI审校Agent实现方案.md)
+- [自主命题模块](question-generation.md)
+- [组卷接口契约](ASSEMBLY_CONTRACT.zh-CN.md)
+- [PostgreSQL 与服务接入](POSTGRES_INTEGRATION.zh-CN.md)
+- [相似题复核](SIMILARITY_REVIEW.zh-CN.md)
+- [模型目录说明](MODEL_CATALOG.zh-CN.md)
+- [验收记录](VALIDATION.zh-CN.md)
+- [GitHub 提交说明](GITHUB_SUBMISSION.zh-CN.md)
+- [课程项目指南](COMP7608B_LLM_Project_Guideline.pdf)
+
 本地开发从同步后的 `main` 建任务分支。自主命题分支为 `feat/question-generation`。开发、调研、验收与提交规则见 [AGENTS.md](../AGENTS.md)。
 
 ## 本地开发环境
