@@ -24,6 +24,8 @@ npm run demo:setup
 
 随后编辑 `pi-coding-agent/.env`，填写模型和 MinerU 配置。真实 API Key 不得提交到 Git。
 
+默认演示配置使用 DeepSeek 官方端点和 `deepseek-flash`。同一份 `.env` 中的 `DEEPSEEK_API_KEY` 供 Pi 使用，`EXAM_CHECKER_*` 模型配置供审校、专项检查、修订和元数据标注使用；question-generation 与 exam-assembly 本身不直接调用模型。
+
 以后每次演示只需在仓库根目录运行：
 
 ```bash

@@ -76,6 +76,10 @@ load_environment() {
 		echo "EXAM_CHECKER_JEV_API_KEY is missing in $ENV_FILE" >&2
 		exit 1
 	fi
+	if [[ -z "${DEEPSEEK_API_KEY:-}" ]]; then
+		echo "DEEPSEEK_API_KEY is missing in $ENV_FILE" >&2
+		exit 1
+	fi
 
 	local db_user="${EXAM_CHECKER_POSTGRES_USER:-qodex}"
 	local db_password="${EXAM_CHECKER_POSTGRES_PASSWORD:-qodex-local}"
@@ -218,5 +222,7 @@ fi
 log "All services are healthy; starting Pi"
 (
 	cd "$PI_DIR"
-	exec ./pi-test.sh
+	exec ./pi-test.sh \
+		--provider "${QODEX_PI_PROVIDER:-deepseek}" \
+		--model "${QODEX_PI_MODEL:-deepseek-flash}"
 )
