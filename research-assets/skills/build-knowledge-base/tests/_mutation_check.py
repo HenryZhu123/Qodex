@@ -99,6 +99,20 @@ MUTATIONS = [
         '        "content_hash": sha256_text(content + str(__import__("random").random())),',
         "tests/test_pipeline_e2e.py",
     ),
+    (
+        "inventory drops the unsupported list",
+        SCRIPTS / "kb_pipeline.py",
+        "            unsupported.append({\"path\": str(p), \"suffix\": suffix, \"size_bytes\": p.stat().st_size})",
+        "            pass",
+        "tests/test_ingest_stages.py",
+    ),
+    (
+        "pdf parsing yields no page units",
+        SCRIPTS / "parsers.py",
+        "    doc = fitz.open(str(path))",
+        "    doc = fitz.open(str(path))\n    return ParsedDocument(doc_id=\"x\", source_path=str(path), text=\"\", units=[], unit_type=\"page\")",
+        "tests/test_ingest_stages.py",
+    ),
 ]
 
 
