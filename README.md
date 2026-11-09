@@ -182,6 +182,17 @@ npm run hydrate:model-data:release
 - `question_bank`：`get_question`、`search_questions`
 - `exam_assembly`：提交组卷请求并返回试卷或缺题结果
 
+## 启动 Assistant UI 前端
+
+前端直接使用本仓库的完整 Pi SDK，因此会加载审校、题库、组卷和自主命题工具。日常演示由根目录的 `npm run demo` 统一启动；单独调试前端时运行：
+
+```bash
+cd pi-coding-agent/apps/qodex-web
+npm run dev
+```
+
+浏览器打开 `http://127.0.0.1:3000`。本地服务地址和工作目录可在 `apps/qodex-web/.env.local` 中覆盖，配置示例见该目录的 `.env.example`。
+
 ## 常用检查
 
 ```bash
