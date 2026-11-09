@@ -3,16 +3,16 @@
 面向考研 408 审校 Agent 的本地教材知识库。纯 SQLite，无外部服务、无网络依赖、无 API Key。
 解开压缩包即可用。
 
-**版本**：`2026.11`
+**版本**：`2026.11.1`
 **构建日期**：2026-11-09
-**规模**：5 个分块索引、2,698 个 chunk、约 206 万字符
+**规模**：5 个分块索引、2,538 个 chunk（其中 2,391 条进入检索索引）、约 207 万字符
 
 ---
 
 ## 一、包里有什么
 
 ```
-qodex-kb-sqlite-2026.11/
+qodex-kb-sqlite-2026.11.1/
 ├── README.md                    本文件
 ├── MANIFEST.json                文件清单、sha256、条数（可用于校验完整性）
 ├── registry.sqlite              去重注册表（可选，见 §5）
@@ -20,11 +20,11 @@ qodex-kb-sqlite-2026.11/
     ├── data_structure/
     │   └── kb.sqlite            严蔚敏《数据结构（C 语言版）》第 2 版，411 块
     ├── computer_organization/
-    │   └── kb.sqlite            谭志虎《计算机组成原理》，625 块
+    │   └── kb.sqlite            谭志虎《计算机组成原理》，554 块
     ├── operating_system/
-    │   └── kb.sqlite            汤小丹《计算机操作系统（慕课版）》，601 块
+    │   └── kb.sqlite            汤小丹《计算机操作系统（慕课版）》，591 块
     └── computer_network/
-        ├── kb.sqlite            Kurose《计算机网络：自顶向下方法》第 7 版，875 块
+        ├── kb.sqlite            Kurose《计算机网络：自顶向下方法》第 7 版，796 块
         ├── kb_8th.sqlite        同书第 8 版，186 块（只含第 7 版没有的段落）
         └── relations.json       两版之间的对应关系（25 个冲突组、507 条等价别名）
 ```
@@ -134,7 +134,7 @@ for chunk_id, heading, page, text, score in rows:
 | 表 | 内容 |
 | --- | --- |
 | `documents` | 已入库的 4 本书（哈希、标题、版次、作者指纹） |
-| `chunk_registry` | 2,508 条 chunk 指纹 |
+| `chunk_registry` | 2,508 条 chunk 指纹（对应重建前的切分，见 §5 说明） |
 
 只做检索的话不需要它，可以删掉。
 
@@ -162,6 +162,6 @@ for chunk_id, heading, page, text, score in rows:
 # 与 MANIFEST.json 中的 sha256 对比
 sha256sum books/*/kb.sqlite books/computer_network/kb_8th.sqlite
 
-# chunk 总数应为 2698
+# chunk 总数应为 2538
 sqlite3 books/*/kb.sqlite 'select count(*) from chunks'
 ```

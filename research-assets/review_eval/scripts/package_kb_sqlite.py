@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(r"D:\Code\hku\LLM")
 KB = ROOT / "kb_review"
-NAME = "qodex-kb-sqlite-2026.11"
+NAME = "qodex-kb-sqlite-2026.11.1"
 DIST = ROOT / "dist"
 STAGE = DIST / NAME
 
@@ -90,7 +90,7 @@ def main() -> int:
 
     manifest = {
         "name": NAME,
-        "version": "2026.11",
+        "version": "2026.11.1",
         "built_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "total_chunks": total_chunks,
         "total_chars": total_chars,
