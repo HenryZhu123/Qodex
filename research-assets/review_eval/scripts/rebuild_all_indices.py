@@ -20,7 +20,9 @@ TARGETS = [
     ("data_structure", "kb.sqlite"),
     ("operating_system", "kb.sqlite"),
     ("computer_network", "kb.sqlite"),
-    ("computer_network", "kb_8th.sqlite"),
+    # The 8th edition is an incremental index built by build_phase6_index.py from
+    # the Phase 6 delta, not by this pipeline. Rebuilding it here would overwrite
+    # it with a second copy of the 7th edition.
 ]
 
 

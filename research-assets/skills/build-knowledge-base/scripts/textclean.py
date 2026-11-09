@@ -159,6 +159,82 @@ def clean_text(text: str) -> str:
     return normalize_newlines(text)
 
 
+# ----------------------------- OCR repairs -----------------------------
+#
+# Only shape-unique substitutions belong here. "千" appears 519 times in the
+# corpus but is a wrong character only in a few collocations, so a blanket
+# replacement would corrupt 数千个 / 以千计. Every rule below is a fixed
+# collocation or a character that never occurs legitimately in prose.
+
+COLLOCATION_FIXES: list[tuple[str, str]] = [
+    (r"对千", "对于"),
+    (r"由千", "由于"),
+    (r"关千", "关于"),
+    (r"至千", "至于"),
+    (r"鉴千", "鉴于"),
+    (r"千是", "于是"),
+    (r"千此", "于此"),
+    (r"千其", "于其"),
+    (r"巳经", "已经"),
+    (r"巳有", "已有"),
+    (r"巳是", "已是"),
+    (r"而巳", "而已"),
+    (r"阙值", "阈值"),
+    (r"阔值", "阈值"),
+    (r"橾", "操"),
+]
+
+# Characters that are pure noise in a Chinese textbook body.
+NOISE_CHARS = re.compile(r"[｀｢｣]")
+HTML_COMMENT = re.compile(r"<!--.*?-->", re.S)
+HTML_ENTITY = re.compile(r"&(lt|gt|amp|nbsp|quot|#\d{1,4});")
+ENTITY_MAP = {"lt": "<", "gt": ">", "amp": "&", "nbsp": " ", "quot": '"'}
+BULLET_RUN = re.compile(r"[•·]{2,}")
+
+
+def _unescape_entity(match: re.Match[str]) -> str:
+    key = match.group(1)
+    if key.startswith("#"):
+        try:
+            return chr(int(key[1:]))
+        except ValueError:
+            return match.group(0)
+    return ENTITY_MAP.get(key, match.group(0))
+
+
+def repair_ocr(text: str) -> dict:
+    """Apply the safe repairs and report what changed.
+
+    Returns {"text": repaired, "counts": {rule: n}}. The caller decides whether to
+    keep the repaired text; this function never touches the database.
+    """
+    counts: dict[str, int] = {}
+    out = text or ""
+
+    for pattern, replacement in COLLOCATION_FIXES:
+        out, n = re.subn(pattern, replacement, out)
+        if n:
+            counts[f"{pattern}→{replacement}"] = n
+
+    out, n = NOISE_CHARS.subn("", out)
+    if n:
+        counts["noise_chars"] = n
+
+    out, n = HTML_COMMENT.subn("", out)
+    if n:
+        counts["html_comment"] = n
+
+    out, n = HTML_ENTITY.subn(_unescape_entity, out)
+    if n:
+        counts["html_entity"] = n
+
+    out, n = BULLET_RUN.subn("", out)
+    if n:
+        counts["bullet_run"] = n
+
+    return {"text": out, "counts": counts}
+
+
 def stats(units: list[dict]) -> dict:
     lines = [ln for unit in units for ln in split_lines(unit["text"])]
     nonempty = [ln for ln in lines if ln.strip()]

@@ -32,7 +32,42 @@ sys.path.insert(0, str(SCRIPTS))
 from kb_registry import content_sha256  # noqa: E402
 from phase6_align import chunk_eighth  # noqa: E402
 from store import is_stub  # noqa: E402
+from textclean import repair_ocr  # noqa: E402
 from utils import tokenize_for_fts  # noqa: E402
+
+MAX_CHARS = 1200
+
+
+def _split_for_budget(text: str, max_chars: int) -> list[str]:
+    """Split a MinerU block so no chunk exceeds the review budget.
+
+    Blocks arrive whole; a few in the 8th edition pass 5,000 characters, which no
+    review prompt can use. Split on blank lines first, then on line breaks, then
+    by characters, so the result keeps paragraph structure where possible.
+    """
+    if len(text) <= max_chars:
+        return [text]
+    for separator in ("\n\n", "\n"):
+        parts = text.split(separator)
+        if len(parts) > 1:
+            pieces: list[str] = []
+            buffer = ""
+            for part in parts:
+                candidate = f"{buffer}{separator}{part}" if buffer else part
+                if len(candidate) <= max_chars:
+                    buffer = candidate
+                    continue
+                if buffer:
+                    pieces.append(buffer)
+                buffer = part
+                while len(buffer) > max_chars:
+                    pieces.append(buffer[:max_chars])
+                    buffer = buffer[max_chars:]
+            if buffer:
+                pieces.append(buffer)
+            if all(len(piece) <= max_chars for piece in pieces):
+                return [piece for piece in pieces if piece.strip()]
+    return [text[i:i + max_chars] for i in range(0, len(text), max_chars)]
 
 SUBJECT_DIR = Path(r"D:\Code\hku\LLM\kb_review\books\computer_network")
 DELTA = SUBJECT_DIR.parent / "computer_network_8th" / "delta" / "kurose8th.jsonl"
@@ -87,12 +122,18 @@ def main() -> None:
     indexed = [cid for cid, row in delta.items() if row.get("relation") in INDEXED]
     total_chars = 0
     skipped = 0
+    split_count = 0
     for position, cid in enumerate(sorted(indexed), start=1):
         row = delta[cid]
         chunk = chunks.get(cid)
         if chunk is None:
             continue
-        text = chunk["text"]
+        text = repair_ocr(chunk["text"])["text"]
+        # MinerU returns whole blocks; some exceed 5,000 characters, which blows
+        # the review budget. Split them so every chunk fits MAX_CHARS.
+        pieces = _split_for_budget(text, MAX_CHARS)
+        if len(pieces) > 1:
+            split_count += 1
         total_chars += len(text)
         metadata = {
             "relation": row["relation"],
@@ -102,31 +143,33 @@ def main() -> None:
             "conflict_group_id": row.get("conflict_group_id"),
             "related_to": row.get("related_to", []),
         }
-        conn.execute(
-            "INSERT INTO chunks VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-            (
-                cid,
-                "kurose8th",
-                position,
-                text,
-                content_sha256(text),
-                len(text),
-                "markdown_block",
-                "",
-                chunk.get("page"),
-                chunk.get("page"),
-                json.dumps(metadata, ensure_ascii=False),
-            ),
-        )
-        if is_stub(text):
-            # A caption or a page number would rank high in BM25 precisely
-            # because it is short; keep the row, leave it out of the index.
-            skipped += 1
-        else:
+        for part_index, part in enumerate(pieces, start=1):
+            part_id = cid if len(pieces) == 1 else f"{cid}#{part_index}"
             conn.execute(
-                "INSERT INTO chunks_fts (content_tokens, heading_path, doc_id, chunk_id) VALUES (?,?,?,?)",
-                (tokenize_for_fts(text), "", "kurose8th", cid),
+                "INSERT INTO chunks VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                (
+                    part_id,
+                    "kurose8th",
+                    position,
+                    part,
+                    content_sha256(part),
+                    len(part),
+                    "markdown_block",
+                    "",
+                    chunk.get("page"),
+                    chunk.get("page"),
+                    json.dumps({**metadata, "part": part_index}, ensure_ascii=False),
+                ),
             )
+            if is_stub(part):
+                # A caption or a page number would rank high in BM25 precisely
+                # because it is short; keep the row, leave it out of the index.
+                skipped += 1
+            else:
+                conn.execute(
+                    "INSERT INTO chunks_fts (content_tokens, heading_path, doc_id, chunk_id) VALUES (?,?,?,?)",
+                    (tokenize_for_fts(part), "", "kurose8th", part_id),
+                )
 
     conn.execute(
         "INSERT INTO documents VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",

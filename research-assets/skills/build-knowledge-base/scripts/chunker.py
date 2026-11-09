@@ -6,6 +6,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from textclean import repair_ocr
 from utils import (
     HEADING_RE,
     QUESTION_START_RE,
@@ -335,6 +336,18 @@ def _split_large_paragraph(para: dict[str, Any], max_chars: int) -> list[dict[st
     sentences = split_sentences(text)
     if not sentences:
         sentences = [text[i:i + max_chars] for i in range(0, len(text), max_chars)]
+    # A "sentence" can be a whole table row or code line, far longer than
+    # max_chars. Split those by characters, otherwise the packing step below can
+    # never bring the chunk under the limit.
+    bounded: list[str] = []
+    for sent in sentences:
+        if len(sent) <= max_chars:
+            bounded.append(sent)
+        else:
+            bounded.extend(
+                sent[i:i + max_chars] for i in range(0, len(sent), max_chars)
+            )
+    sentences = bounded
     out: list[dict[str, Any]] = []
     buf: list[str] = []
     size = 0
@@ -379,6 +392,9 @@ def _pack_paragraphs(
             current = []
             cur_len = 0
             return
+        # Shape-unique OCR repairs (千→于 in fixed collocations, stray backticks,
+        # HTML leftovers). Applied before hashing so the hash matches the stored text.
+        content = repair_ocr(content)["text"]
         pages = [p.get("page_start") for p in current if p.get("page_start") is not None]
         pages_end = [p.get("page_end") for p in current if p.get("page_end") is not None]
         chunks.append({
@@ -401,6 +417,11 @@ def _pack_paragraphs(
         plen = len(para["text"])
         if current and cur_len + plen + 2 > max_chars:
             emit()
+            # emit() keeps the last paragraph for overlap, which may already fill
+            # the budget; dropping it is better than producing an oversized chunk.
+            if current and cur_len + plen + 2 > max_chars:
+                current = []
+                cur_len = 0
         current.append(para)
         cur_len += plen + 2
         if force_group:

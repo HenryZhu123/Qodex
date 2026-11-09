@@ -37,7 +37,7 @@ GOLDEN_CHUNKS = {
     ("computer_organization", "kb.sqlite"): 554,
     ("operating_system", "kb.sqlite"): 591,
     ("computer_network", "kb.sqlite"): 796,
-    ("computer_network", "kb_8th.sqlite"): 186,
+    ("computer_network", "kb_8th.sqlite"): 207,
 }
 
 BODY_PUNCT = re.compile(r"[。，；！？]")
