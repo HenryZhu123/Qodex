@@ -24,6 +24,9 @@ def power(value, low, high):
 def solve(kind, inputs):
     if not isinstance(inputs, dict):
         raise ValueError("数值见证 inputs 必须是对象。")
+    if kind == "finite_domain":
+        from .finite_verification import solve_finite
+        return solve_finite(inputs)
     if kind == "paging" and inputs.keys() == {"page_size", "address", "page_table"}:
         size = power(inputs["page_size"], 2, 65536)
         address = integer(inputs["address"], 0, 2**32 - 1)

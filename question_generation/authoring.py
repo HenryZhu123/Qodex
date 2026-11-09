@@ -83,13 +83,19 @@ def read_authoring(payload):
     if not isinstance(constraints, dict):
         raise RequestError("constraints 必须为对象。")
     settings = constraints.get("authoring")
-    if (not isinstance(settings, dict) or settings.keys() - {"objective", "focus"}
+    if (not isinstance(settings, dict) or settings.keys() - {"objective", "focus", "syllabus_areas", "material_query"}
             or not isinstance(settings.get("objective"), str) or settings["objective"] not in OBJECTIVES):
         raise RequestError("authoring 须指定 objective: analyze、diagnose、transfer 或 design，可附 focus。")
     if "focus" in settings and not _text(settings["focus"], 500):
         raise RequestError("focus 须为不超过 500 字的非空文本。")
+    if "material_query" in settings and ("syllabus_areas" not in settings or not _text(settings["material_query"], 500)):
+        raise RequestError("material_query仅用于通用创作，须为不超过500字的非空检索词。")
     base = {**payload, "constraints": {k: v for k, v in constraints.items() if k != "authoring"}}
-    request = _read_request(base)
+    if "syllabus_areas" in settings:
+        from .general_contract import read_request
+        request = read_request(base, settings)
+    else:
+        request = _read_request(base)
     # A frozen real-model trial exposed actor/observer information ambiguity in
     # this mode, and a targeted audit still accepted it. Keep it unavailable
     # rather than presenting additional prompting as verified mitigation.
@@ -172,6 +178,9 @@ def _quality(review):
 
 def _run(payload, client):
     request, settings, base = read_authoring(payload)
+    if "syllabus_areas" in settings:
+        from .general_authoring import run
+        return run(base, client, request, settings)
     prompt_data = {"topic": request.metadata, "objective": settings, "constraints": base["constraints"],
                    "evidence": base["evidence"], "seed": request.seed}
     authored = client.complete(AUTHOR_PROMPT, prompt_data)
@@ -260,13 +269,17 @@ def _run(payload, client):
 def generate_authored(payload, *, client=None, cache_path=None):
     identifier = payload.get("request_id")
     try:
-        read_authoring(payload)  # missing evidence must precede API configuration
+        _, settings, _ = read_authoring(payload)  # missing evidence must precede API configuration
+        version = VERSION
+        if "syllabus_areas" in settings:
+            from .general_authoring import VERSION as general_version
+            version = general_version
         model = client if client is not None else JsonModel.from_env()
         if cache_path is None:
             cache_path = os.environ.get("QUESTION_GENERATION_AUTHORING_CACHE", ".local/question-generation/authoring-cache.sqlite")
         path = Path(cache_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        digest = hashlib.sha256(json.dumps([VERSION, model.base_url, model.model, payload],
+        digest = hashlib.sha256(json.dumps([version, model.base_url, model.model, payload],
                                           sort_keys=True, ensure_ascii=False).encode()).hexdigest()
         # Hold the transaction during authoring: concurrent identical calls
         # cannot create conflicting content or duplicate paid work. Serializes

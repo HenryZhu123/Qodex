@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from http.client import HTTPException
 import os
 import time
 from urllib.error import HTTPError, URLError
@@ -81,7 +82,7 @@ class JsonModel:
                 raise ValueError()
         except HTTPError as error:
             raise ModelError(f"模型服务返回 HTTP {error.code}，本次未生成题目。") from None
-        except (URLError, TimeoutError, OSError):
+        except (URLError, TimeoutError, OSError, HTTPException):
             raise ModelError("模型服务连接失败或超时，本次未生成题目。") from None
         except (ValueError, KeyError, IndexError, TypeError):
             raise ModelError("模型返回无效或空 JSON，本次未生成题目。") from None

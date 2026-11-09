@@ -142,6 +142,13 @@ def revised(identifier: str, question: dict, current: dict, feedback: dict, chan
 def generate_comprehensive(payload: object) -> dict:
     from . import paging_comprehensive, stack_comprehensive
 
+    if isinstance(payload, dict) and isinstance(payload.get("constraints"), dict) and "authoring" in payload["constraints"]:
+        if payload.get("question_type") != "comprehensive":
+            from .generation import failure_result
+            return failure_result("INVALID_REQUEST", "comprehensive入口要求综合题型。", request_id(payload))
+        from .authoring import generate_authored
+        return generate_authored(payload)
+
     if isinstance(payload, dict) and payload.get("topic") == stack_comprehensive.METADATA["topic"]:
         return stack_comprehensive.generate_comprehensive(payload)
     return paging_comprehensive.generate_comprehensive(payload)
@@ -151,6 +158,11 @@ def revise_comprehensive(payload: object) -> dict:
     from . import paging_comprehensive, stack_comprehensive
 
     current = payload.get("current_question") if isinstance(payload, dict) else None
+    generator = current.get("generator") if isinstance(current, dict) else None
+    generator_version = generator.get("version") if isinstance(generator, dict) else None
+    if isinstance(generator_version, str) and generator_version.startswith("general-authoring-"):
+        from .generation import failure_result
+        return failure_result("UNSUPPORTED_REQUEST", "通用创作题暂不支持版本修订；请通过审校反馈形成新的命题请求。", request_id(payload))
     metadata = current.get("metadata") if isinstance(current, dict) else None
     if isinstance(metadata, dict) and metadata.get("topic") == stack_comprehensive.METADATA["topic"]:
         return stack_comprehensive.revise_comprehensive(payload)

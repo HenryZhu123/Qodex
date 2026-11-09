@@ -62,9 +62,10 @@ def _generate(operation: str, payload: dict, knowledge: KnowledgeEvidence | None
     find_evidence = cache(knowledge.find)
     if operation in {"batch", "replenishment"}:
         return OPERATIONS[operation](
-            payload, single_generator=lambda item: with_knowledge(generate_question, item, find_evidence),
+            payload, single_generator=lambda item: with_knowledge(
+                generate_question, item, find_evidence, discover_evidence=knowledge.discover),
         )
-    return with_knowledge(OPERATIONS[operation], payload, find_evidence)
+    return with_knowledge(OPERATIONS[operation], payload, find_evidence, discover_evidence=knowledge.discover)
 
 
 @app.post("/v1/question-generation/{operation}")

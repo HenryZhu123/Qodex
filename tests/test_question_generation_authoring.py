@@ -225,6 +225,22 @@ class TransportTests(TestCase):
                     with self.assertRaises(ModelError):
                         model.complete('json', {})
 
+    def test_interrupted_chunked_response_fails_without_retry_or_partial_output(self):
+        from http.client import IncompleteRead
+        from io import BytesIO
+        from question_generation.model_client import JsonModel
+        class BrokenResponse(BytesIO):
+            def read1(self, size):
+                raise IncompleteRead(b'partial private response')
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BrokenResponse()
+            with self.assertRaises(ModelError) as error:
+                model.complete('json', {})
+            self.assertNotIn('private', str(error.exception))
+            self.assertEqual(opener.return_value.open.call_count, 1)
+            self.assertEqual(model.usage, [])
+
     def test_transport_bounds_tokens_and_ignores_provider_reasoning_text(self):
         from io import BytesIO
         from question_generation.model_client import JsonModel

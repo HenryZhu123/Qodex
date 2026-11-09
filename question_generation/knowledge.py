@@ -70,6 +70,10 @@ class KnowledgeEvidence:
             seen.add(identity)
             self.entries.setdefault(topic, []).append(entry)
 
+    def discover(self, payload: dict) -> list[dict]:
+        from .material_discovery import discover
+        return discover(self, payload)
+
     def find(self, subject: str, topic: str) -> list[dict]:
         entries = self.entries.get((subject, topic))
         if not entries:
@@ -163,14 +167,18 @@ class KnowledgeEvidence:
         }
 
 
-def with_knowledge(generate, payload, find_evidence) -> dict:
+def with_knowledge(generate, payload, find_evidence, *, discover_evidence=None) -> dict:
     result = generate(payload)
     # Validation runs before lookup. Explicit evidence, including an empty
     # list, always keeps its original contract.
     if result["status"] != "NEEDS_MATERIAL" or "evidence" in payload:
         return result
     try:
-        evidence = find_evidence(payload["subject"], payload["topic"])
+        settings = payload.get("constraints", {}).get("authoring", {})
+        if discover_evidence is not None and "material_query" in settings:
+            evidence = discover_evidence(payload)
+        else:
+            evidence = find_evidence(payload["subject"], payload["topic"])
     except KnowledgeUnavailable:
         return failure_result(
             "KNOWLEDGE_BASE_UNAVAILABLE", "已配置的知识库索引暂不可读。", result["request_id"],
