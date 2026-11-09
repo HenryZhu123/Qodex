@@ -1,4 +1,4 @@
-.DS_Store
+﻿.DS_Store
 Qodex.pdf
 
 # Ignore all PDF files
@@ -35,3 +35,5 @@ research-assets/review_eval/**/smoke*/
 # SQLite runtime sidecars
 *.db-wal
 *.db-shm
+# Test scratch directories
+research-assets/skills/*/tests/.tmp/

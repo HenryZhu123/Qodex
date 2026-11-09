@@ -12,9 +12,11 @@ from utils import tokenize_for_fts
 
 
 def test_tokenizes_multi_character_terms_into_parts() -> None:
+    # Pins the actual behaviour: a four-character term must be split, otherwise
+    # the FTS index (built from jieba) never matches a whole-term query.
     tokens = tokenize_for_fts("突发传输").split()
-    assert tokens, "expected at least one token"
-    assert "突发传输" not in tokens or len(tokens) > 1, tokens
+    assert "突发" in tokens
+    assert "传输" in tokens
 
 
 def test_same_text_same_tokens() -> None:
