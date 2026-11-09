@@ -36,6 +36,34 @@ MUTATIONS = [
         '    return (content or "").lstrip()\n    if not heading_path:',
         "tests/test_stub_filter.py",
     ),
+    (
+        "ingest stops skipping fragments",
+        SCRIPTS / "store.py",
+        "            if is_stub(body):\n                # Page numbers, figure captions and bare labels rank high because\n                # BM25 rewards short documents. Keep the row, leave it out of the\n                # index so it can never be returned as evidence.\n                skipped += 1\n                continue",
+        "            if False:\n                skipped += 1\n                continue",
+        "tests/test_store_contract.py",
+    ),
+    (
+        "re-ingest stops replacing rows",
+        SCRIPTS / "store.py",
+        "            INSERT OR REPLACE INTO chunks",
+        "            INSERT INTO chunks",
+        "tests/test_store_contract.py",
+    ),
+    (
+        "heading path no longer joined",
+        SCRIPTS / "store.py",
+        '                " > ".join(ch.get("heading_path") or []),',
+        '                "".join(ch.get("heading_path") or []),',
+        "tests/test_store_contract.py",
+    ),
+    (
+        "rebuild ignores the fragment rule",
+        SCRIPTS / "store.py",
+        "        body = strip_leading_heading(row[\"content\"], heading)\n        if is_stub(body):\n            continue",
+        "        body = strip_leading_heading(row[\"content\"], heading)",
+        "tests/test_rebuild_contract.py",
+    ),
 ]
 
 

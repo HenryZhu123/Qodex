@@ -242,17 +242,31 @@ def export_chunks_jsonl(chunks: Iterable[dict[str, Any]], path: str | Path) -> i
 
 
 def rebuild_fts(conn: sqlite3.Connection) -> int:
+    """Rebuild the index from `chunks`, applying the same rules as insert_chunks.
+
+    Without the stub filter and the heading strip, a rebuild silently undoes both:
+    fragments become searchable again and heading words get double weight.
+    Returns the number of chunks actually indexed.
+    """
     conn.execute("DELETE FROM chunks_fts")
-    rows = conn.execute("SELECT chunk_id, doc_id, content, heading_path FROM chunks").fetchall()
+    rows = conn.execute(
+        "SELECT chunk_id, doc_id, content, heading_path FROM chunks"
+    ).fetchall()
+    indexed = 0
     for row in rows:
+        heading = [part.strip() for part in (row["heading_path"] or "").split(">") if part.strip()]
+        body = strip_leading_heading(row["content"], heading)
+        if is_stub(body):
+            continue
         conn.execute(
             "INSERT INTO chunks_fts (content_tokens, heading_path, doc_id, chunk_id) VALUES (?, ?, ?, ?)",
             (
-                tokenize_for_fts(row["content"]),
+                tokenize_for_fts(body),
                 row["heading_path"] or "",
                 row["doc_id"],
                 row["chunk_id"],
             ),
         )
+        indexed += 1
     conn.commit()
-    return len(rows)
+    return indexed
