@@ -28,8 +28,9 @@ ALL_REVIEW_TASKS: tuple[ReviewTaskId, ...] = (
     "punctuation_check",
     "options_check",
     "mismatch_check",
-    "solvability_check",
+    "missing_check",
     "ambiguity_check",
+    "unsolvability_check",
     "answer_leak_check",
     "logic_check",
 )

@@ -216,6 +216,6 @@ class Settings:
             ).strip(),
             knowledge_base_dir=os.getenv(
                 "EXAM_CHECKER_KB_DIR",
-                str(Path(r"D:\Code\hku\LLM\kb_review\books")),
+                "",
             ).strip(),
         )

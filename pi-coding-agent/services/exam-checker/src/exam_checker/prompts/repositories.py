@@ -117,8 +117,9 @@ REVIEW_TASK_MODES: dict[ReviewTaskId, str] = {
     "punctuation_check": "explicit",
     "options_check": "disabled",
     "mismatch_check": "disabled",
-    "solvability_check": "explicit",
+    "missing_check": "disabled",
     "ambiguity_check": "disabled",
+    "unsolvability_check": "explicit",
     "answer_leak_check": "explicit",
     "logic_check": "explicit",
 }

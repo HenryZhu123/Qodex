@@ -13,7 +13,7 @@ Pipeline:
 5. Normalize the result into one `ExamDocument`.
 6. Build a per-question checker payload.
 7. Run Jev-gated and direct specialist checks concurrently.
-8. Aggregate all eight error types into one question review result.
+8. Aggregate all nine error types into one question review result.
 9. Create an immutable question version and persist each full review in PostgreSQL.
 10. For passed questions, generate difficulty and knowledge points and store the complete question JSON in the question bank.
 
@@ -125,7 +125,7 @@ The revision endpoint requires `base_version_id`. It accepts either a complete u
 question JSON, the latest review's `errors`, and the user instruction without converting the
 question to another schema. It returns the complete revised question plus one natural-language
 `changes` record; the service builds the four-field `change_log`, creates a new version, and
-runs all eight checks again. A stale
+runs all nine checks again. A stale
 `base_version_id` returns HTTP 409 instead of overwriting a newer edit.
 
 The MinerU Agent API accepts files up to 10 MB and PDFs up to 20 pages. It is IP-rate-limited and returns only Markdown.

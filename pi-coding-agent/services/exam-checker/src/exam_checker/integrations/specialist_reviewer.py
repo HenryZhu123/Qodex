@@ -42,8 +42,9 @@ EXPECTED_ERROR_TYPES: dict[ReviewTaskId, str] = {
     "punctuation_check": "标点符号错误",
     "options_check": "选项错误",
     "mismatch_check": "题目与题型不一致",
-    "solvability_check": "可解性错误",
+    "missing_check": "信息缺失",
     "ambiguity_check": "语义不清",
+    "unsolvability_check": "题目无解",
     "answer_leak_check": "答案泄露",
     "logic_check": "事实/逻辑错误",
 }
