@@ -277,7 +277,15 @@ def check_document(
         parsed = json.loads(parsed_json.read_text(encoding="utf-8"))
         text = "".join(unit["text"] for unit in parsed.get("units", []))
     else:
-        text = extract_pdf_text(pdf)
+        try:
+            text = extract_pdf_text(pdf)
+        except Exception as exc:  # corrupt file, encrypted PDF, missing text layer
+            conn.close()
+            return {
+                "decision": "blocked_unreadable",
+                "reason": f"无法读取 PDF 文本层（{type(exc).__name__}），先修复文件或走 OCR",
+                "path": str(pdf),
+            }
     has_text_layer = len(normalize_text(text)) >= 5000
     content_hash = content_sha256(text) if has_text_layer else None
     if content_hash:

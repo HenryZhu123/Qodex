@@ -64,6 +64,27 @@ MUTATIONS = [
         "        body = strip_leading_heading(row[\"content\"], heading)",
         "tests/test_rebuild_contract.py",
     ),
+    (
+        "dedup stops checking the file hash",
+        SCRIPTS / "kb_registry.py",
+        '    row = conn.execute(\n        "SELECT doc_id, subject, title, added_at FROM documents WHERE file_sha256 = ?",\n        (file_hash,),\n    ).fetchone()',
+        "    row = None",
+        "tests/test_registry_dedup.py",
+    ),
+    (
+        "unreadable pdf is not guarded",
+        SCRIPTS / "kb_registry.py",
+        "        except Exception as exc:  # corrupt file, encrypted PDF, missing text layer",
+        "        except ZeroDivisionError as exc:  # corrupt file, encrypted PDF, missing text layer",
+        "tests/test_registry_dedup.py",
+    ),
+    (
+        "packing ignores max_chars",
+        SCRIPTS / "chunker.py",
+        '    max_chars = plan["max_chars"]',
+        '    max_chars = plan["max_chars"] * 10',
+        "tests/test_chunk_packing.py",
+    ),
 ]
 
 
