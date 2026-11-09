@@ -35,16 +35,17 @@ Pi 不接触数据库账号，不执行 SQL。正式入口没有 JSON/mock 回�
 
 1. Docker 中启动团队 PostgreSQL，按审校服务原说明配置数据库、完成迁移并启动审校后端 8091。
 
-本地使用个人 DeepSeek 时可运行 `run-local-exam-checker.ps1 -Provider deepseek`，按隐藏输入提示填写自己的密钥。脚本先检查模型列表，再启动数据库、迁移和8091服务；API Key只保留在该进程环境中，不写入仓库。
+本地运行时把所选模型提供方的地址、模型 ID 和密钥写入被 Git 忽略的 `pi-coding-agent/.env`，然后依次运行 `pi-coding-agent/start-exam-checker-db.sh` 与 `pi-coding-agent/start-exam-checker.sh`。完整命令见根目录 `README.md`；API Key 不得写入源码或提交到仓库。
 
 对已人工核对的纯文字PDF，可显式加 `-PreferEmbeddedPdfText`：每页至少200个非空白字符且没有栅格图片时优先读取文字层，再调用真实模型提取结构。默认仍调用MinerU；扫描件、混合图片页和文字稀疏页也仍走MinerU。此检查无法排除矢量图，不应对未核对的图文试卷启用。文字来源标记为 `embedded-pdf-text`，不会冒充MinerU任务，审校和入库要求不变。
 2. 在仓库根目录启动组卷后端：
 
-```powershell
-& .\run-assembly-service.ps1
+```bash
+source .venv/bin/activate
+./scripts/start-exam-assembly.sh
 ```
 
-脚本优先使用本目录 `.venv`，其次使用原 `hku-agent-exam-checker` 的已有 Python 环境。也可通过 `-Python` 指定已装 FastAPI/httpx/uvicorn 的 Python。脚本为本地源码设置导入路径，不需要移动模块。
+脚本默认使用 `python3`，可通过 `QODEX_PYTHON` 指定已安装 FastAPI/httpx/uvicorn 的 Python。脚本会设置仓库根目录和组卷服务源码的导入路径，不需要移动模块。
 
 独立部署时安装两个 Python 包：
 
