@@ -87,6 +87,23 @@ class KnowledgeTests(TestCase):
         result = with_knowledge(generate_question, self.request, provider.find)
         self.assertEqual(result["status"], "NEEDS_MATERIAL")
 
+    def test_cross_edition_conflict_in_sidecar_excludes_primary_chunk(self):
+        provider = self.provider()
+        relations = self.index.parent / "relations.json"
+        relations.write_text(json.dumps({"conflicts": {"g1": [
+            {"chunk_id": "section-1"}, {"chunk_id": "other-edition"},
+        ]}}))
+        result = with_knowledge(generate_question, self.request, provider.find)
+        self.assertEqual(result["status"], "NEEDS_MATERIAL")
+        relations.write_text('{"conflicts": {"g1": [{"source": "other-edition"}]}}')
+        result = with_knowledge(generate_question, self.request, provider.find)
+        self.assertEqual(result["status"], "KNOWLEDGE_BASE_UNAVAILABLE")
+
+    def test_reviewed_section_replaces_extracted_heading_but_keeps_location(self):
+        provider = self.provider(section="Verified chapter")
+        ref, = provider.find("operating_systems", "single_level_paging")
+        self.assertEqual(ref["anchor"], "Verified chapter · p. 3–4 · chunk section-1")
+
     def test_bad_index_reports_unavailability_without_creating_files(self):
         provider = self.provider(database="kb_missing.sqlite")
         result = with_knowledge(generate_question, self.request, provider.find)

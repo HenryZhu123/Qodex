@@ -96,7 +96,7 @@ LIMIT 100;
 
 ### 按考点从知识库取材
 
-可同时配置 `QUESTION_GENERATION_KB_ROOT` 和 `QUESTION_GENERATION_KB_CATALOG`。配置后，Pi 的 `single`、`comprehensive` 和 `batch` 请求中省略 `evidence` 的题或槽位按 `subject` 和 `topic` 取材。显式材料数组照常校验，显式空数组返回缺材料。修订继续使用原题证据。命令行和本地验证台沿用原有显式材料契约。
+可同时配置 `QUESTION_GENERATION_KB_ROOT` 和 `QUESTION_GENERATION_KB_CATALOG`。配置后，`single`、`comprehensive`、`batch` 和 `replenishment` 请求中省略 `evidence` 的题或槽位按 `subject` 和 `topic` 取材。显式材料数组照常校验，显式空数组返回缺材料。修订继续使用原题证据。命令行和本地验证台沿用原有显式材料契约。
 
 知识库根目录沿用 `operating_system`、`data_structure`、`computer_organization`、`computer_network` 四个科目子目录，每科可引用 `kb.sqlite` 或 `kb_*.sqlite`。命题以只读方式读取 `documents` 和 `chunks`，取材范围由已核验清单指定。
 
@@ -109,10 +109,15 @@ LIMIT 100;
 | `source`、`edition` | 审校可以追溯的来源和教材版次 |
 | `source_sha256`、`content_sha256` | 源文档 SHA-256 和 SQLite 片段正文 UTF-8 的 SHA-256，均为小写十六进制 |
 | `summary`、`rules` | 预核验的摘要与该片段实际支撑的命题规则数组 |
+| `section` | 可选。章节路径抽取混入正文或误标时填写核验后的章节名，保留索引页码和分块 ID |
 
-清单由取材方核验来源、使用许可和规则覆盖。服务核对文档和片段指纹，跳过缺定位、有冲突标记或指纹不匹配的片段。有效证据的题目包保留来源、版次、文档与片段指纹、章节页码及片段 ID。规则不足时返回 `NEEDS_MATERIAL` 和缺失规则。配置的索引无法读取且没有可用证据时，返回 `KNOWLEDGE_BASE_UNAVAILABLE`。批量在对应槽位记录缺口并保留其他合格题。
+清单由取材方核验来源、使用许可和规则覆盖。服务核对文档和片段指纹，跳过缺定位、指纹不匹配、片段元数据标记有冲突或列在同科目录 `relations.json` 冲突组里的片段。冲突文件存在但无法解析时，该科取材报 `KNOWLEDGE_BASE_UNAVAILABLE`。有效证据保留来源、版次、文档与片段指纹、章节、索引页码及片段 ID。规则不足时返回 `NEEDS_MATERIAL` 和缺失规则。配置的索引无法读取且没有可用证据时，返回 `KNOWLEDGE_BASE_UNAVAILABLE`。批量在对应槽位记录缺口并保留其他合格题。
 
 分页链路已用 OSTEP 1.10 第 18 章 §18.1 的本地隔离索引验证，从 Pi 发起到 PostgreSQL 待审表回读均带同一证据定位。[OSTEP 官方分页章节](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf)
+
+团队 2026.11 教材包的命题配置使用解压后的 `books/` 作为根目录，清单指向单独维护的本地 JSON。首次接入核对 `MANIFEST.json` 中的文件 SHA-256、大小和分块数。建立清单时按科目和版次分别查询 `chunks_fts`，先用 jieba 对查询分词，再用 `MATCH` 和 `ORDER BY bm25(chunks_fts)` 召回候选。逐条核对支持的命题规则、章节和版次后登记分块 ID 与指纹。在线命题只读取已核验清单里的分块。教材包、正文和配套本地清单按团队约定保存在 Git 忽略目录中。[SQLite FTS5 BM25](https://www.sqlite.org/fts5.html#the_bm25_function)
+
+2026-11-09 已用团队教材包在隔离环境完成取材验收。7 个核验片段覆盖分页、栈、直接映射 Cache、IPv4 子网和 TCP 消息边界。验证了 Pi 分页单选、全部五类单选、分页与栈综合题、修订保留证据、四科混合批量及组卷缺口补题。审校只读账号从待审视图回读了 14 条当前题目版本。网络题使用第 7 版。第 8 版增量库缺少源文档指纹，页码为分卷定位，当前仅用于候选检索分析。
 
 ### 组卷联合缺口到待审
 

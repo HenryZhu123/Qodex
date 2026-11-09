@@ -21,6 +21,7 @@ TEXT_FIELDS = (
     "subject", "topic", "database", "doc_id", "chunk_id", "source", "edition", "source_sha256", "content_sha256",
     "summary",
 )
+REQUIRED_ENTRY_FIELDS = {*TEXT_FIELDS, "rules"}
 
 
 class KnowledgeUnavailable(Exception):
@@ -44,10 +45,15 @@ class KnowledgeEvidence:
         self.entries = {}
         seen = set()
         for entry in value["entries"]:
-            if not isinstance(entry, dict) or entry.keys() != {*TEXT_FIELDS, "rules"} or not all(
-                isinstance(entry[key], str) and entry[key].strip() for key in TEXT_FIELDS
+            if (
+                not isinstance(entry, dict)
+                or not REQUIRED_ENTRY_FIELDS <= entry.keys()
+                or entry.keys() - REQUIRED_ENTRY_FIELDS - {"section"}
+                or not all(isinstance(entry[key], str) and entry[key].strip() for key in TEXT_FIELDS)
             ):
                 raise ValueError("Invalid knowledge catalog entry")
+            if "section" in entry and (not isinstance(entry["section"], str) or not entry["section"].strip()):
+                raise ValueError("Knowledge catalog section must be nonempty text")
             if entry["subject"] not in SUBJECT_DIRS or not re.fullmatch(r"kb(?:_[^/\\]+)?\.sqlite", entry["database"]):
                 raise ValueError("Invalid subject or database in knowledge catalog")
             if not all(re.fullmatch(r"[0-9a-f]{64}", entry[field]) for field in ("source_sha256", "content_sha256")):
@@ -65,10 +71,17 @@ class KnowledgeEvidence:
             self.entries.setdefault(topic, []).append(entry)
 
     def find(self, subject: str, topic: str) -> list[dict]:
+        entries = self.entries.get((subject, topic))
+        if not entries:
+            return []
+        subject_dir = self.root / SUBJECT_DIRS[subject]
+        conflicts = self._conflicting_chunks(subject_dir / "relations.json")
         evidence = []
         unavailable = False
-        for entry in self.entries.get((subject, topic), ()):
-            path = self.root / SUBJECT_DIRS[subject] / entry["database"]
+        for entry in entries:
+            if entry["chunk_id"] in conflicts:
+                continue
+            path = subject_dir / entry["database"]
             try:
                 item = self._read(path, entry)
             except (OSError, sqlite3.Error):
@@ -79,6 +92,29 @@ class KnowledgeEvidence:
         if unavailable and not evidence:
             raise KnowledgeUnavailable()
         return evidence
+
+    @staticmethod
+    def _conflicting_chunks(path: Path) -> set[str]:
+        # Some editions only list conflict membership in the sidecar. The
+        # groups identify both sides even when per-chunk metadata does not.
+        try:
+            groups = json.loads(path.read_text(encoding="utf-8"))["conflicts"]
+            if not isinstance(groups, dict):
+                raise ValueError("Invalid knowledge conflict groups")
+            chunks = set()
+            for members in groups.values():
+                if not isinstance(members, list) or not members:
+                    raise ValueError("Invalid knowledge conflict group")
+                for member in members:
+                    chunk_id = member["chunk_id"]
+                    if not isinstance(chunk_id, str) or not chunk_id.strip():
+                        raise ValueError("Invalid conflicting chunk ID")
+                    chunks.add(chunk_id)
+            return chunks
+        except FileNotFoundError:
+            return set()
+        except (OSError, ValueError, TypeError, KeyError) as error:
+            raise KnowledgeUnavailable() from error
 
     @staticmethod
     def _read(path: Path, entry: dict) -> dict | None:
@@ -106,6 +142,7 @@ class KnowledgeEvidence:
         if not isinstance(metadata, dict) or metadata.get("conflict_group_id"):
             return None
         location = []
+        heading = entry.get("section", heading)
         if isinstance(heading, str) and heading.strip():
             location.append(heading.strip())
         if type(page_start) is int and page_start > 0:
