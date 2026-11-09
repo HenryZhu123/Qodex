@@ -1,15 +1,16 @@
 {
-  "model": "bm25 (sqlite fts5, jieba)",
+  "backend": "sqlite fts5 + jieba, rebuilt indexes (heading gate, stub filter, heading-stripped tokens)",
+  "index_version": "2026.11-rebuild",
   "top_k_production": 2,
   "positives": {
     "n": 80,
-    "recall@1": 0.7375,
+    "recall@1": 0.725,
     "recall@2": 0.8625,
-    "recall@3": 0.875,
+    "recall@3": 0.8625,
     "misses": [
       "os-01",
-      "os-07",
       "os-08",
+      "os-19",
       "co-08",
       "ds-02",
       "ds-03",
@@ -23,8 +24,7 @@
   "negatives": {
     "n": 20,
     "returned_any": 19,
-    "false_positive_rate@2": 1.0,
-    "note": "bm25 always returns top-k for any query, so a query with no answer still gets evidence"
+    "note": "bm25 returns top-k for any query; a query with no answer still gets evidence"
   },
   "per_subject": {
     "operating_system": {
@@ -34,8 +34,8 @@
       "recall@3": 0.85,
       "misses": [
         "os-01",
-        "os-07",
-        "os-08"
+        "os-08",
+        "os-19"
       ]
     },
     "computer_organization": {
@@ -51,7 +51,7 @@
       "n": 20,
       "recall@1": 0.75,
       "recall@2": 0.85,
-      "recall@3": 0.9,
+      "recall@3": 0.85,
       "misses": [
         "ds-02",
         "ds-03",
@@ -60,7 +60,7 @@
     },
     "computer_network": {
       "n": 20,
-      "recall@1": 0.65,
+      "recall@1": 0.6,
       "recall@2": 0.8,
       "recall@3": 0.8,
       "misses": [
