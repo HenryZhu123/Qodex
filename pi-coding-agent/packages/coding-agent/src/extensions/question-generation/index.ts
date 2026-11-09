@@ -5,6 +5,7 @@ const parameters = Type.Object({
 	operation: Type.Union([
 		Type.Literal("single"),
 		Type.Literal("batch"),
+		Type.Literal("replenishment"),
 		Type.Literal("comprehensive"),
 		Type.Literal("revise"),
 	]),
@@ -18,11 +19,12 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 		name: "question_generation",
 		label: "Question generation",
 		description:
-			"Generate or revise 408 questions and submit the successfully generated versions to the pending review queue.",
+			"Generate or revise 408 questions, including exam assembly supplements, and queue successful versions for review.",
 		promptSnippet: "Generate or revise 408 questions and submit them for review",
 		promptGuidelines: [
 			"Use single for one single-choice question, batch for scored slots, comprehensive for one structured problem, and revise for version-specific feedback.",
-			"Send the structured request unchanged. Use pre-verified evidence supplied for the topic. Report missing evidence and batch deficits.",
+			"Use replenishment for an exam assembly v1.0 joint shortage plan. Send it unchanged as request.replenishment_request with a seed and slot_profiles keyed by assembly-1, assembly-2, and so on. Use only supplied topic mappings.",
+			"Use supplied evidence or omit evidence for configured knowledge-base lookup. Report remaining deficits and queue receipts, including partial success.",
 			"Treat queued versions as pending independent review. The student_view is the student-facing content; keep instructor_view separate.",
 		],
 		parameters,

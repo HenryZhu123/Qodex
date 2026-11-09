@@ -60,7 +60,7 @@
 
 ### Pi 调用与待审表交接
 
-Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和原有 JSON `request`，支持 `single`、`batch`、`comprehensive`、`revise`。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。
+Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和 JSON `request`，支持 `single`、`batch`、`replenishment`、`comprehensive`、`revise`。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。
 
 从仓库根目录，用 Python 3.11 或更新版本安装服务依赖。数据库管理员先在约定的 PostgreSQL 数据库执行 [建表脚本](../question_generation/sql/001_pending_questions.sql)，再授权已创建的服务账号和审校只读账号。下面以 `qg_writer` 和 `qg_reviewer` 为示例角色。
 
@@ -121,9 +121,11 @@ LIMIT 100;
 
 ### 组卷联合缺口到待审
 
-向 `POST /v1/question-generation/replenishment` 提交组卷的 `replenishment_request.json`，外层提供整数 `seed` 和 `slot_profiles`。适配器使用 v1.0 联合计划的 `deficits`，按原顺序分配 `assembly-1`、`assembly-2` 等槽位 ID。保留原科目、考点、题型、难度、分值和题量，按槽位填充并过滤 `avoid_stems` 中的规范化题干。单独的考点或难度缺口统计只用于组卷诊断。
+在 Pi 中调用 `question_generation`，将 `operation` 设为 `replenishment`，在 `request` 中提供 `replenishment_request`（组卷原始计划）、整数 `seed` 和 `slot_profiles`。同一个 `request` 也可直接发给 `POST /v1/question-generation/replenishment`。适配器使用 v1.0 联合计划的 `deficits`，按原顺序分配 `assembly-1`、`assembly-2` 等槽位 ID。保留原科目、考点、题型、难度、分值和题量，按槽位填充并过滤 `avoid_stems` 中的规范化题干。单独的考点或难度缺口统计只用于组卷诊断。
 
 `slot_profiles` 由调用方为每个可命题槽位指定命题模块的 `topic`，可提供原有 `constraints` 和 `evidence`。配置了知识库时，省略材料的槽位也可按考点取材。未配置映射、题型不支持或材料不足的槽位会在结果中保留缺口。下面用组卷演示生成的「困难栈题」缺口和已有栈材料构造请求。
+
+使用已配置的知识库在 Pi 中复验时，可提供这份计划并指示「调用 `question_generation` 的 `replenishment`，使用种子 42，将 `assembly-1` 映射到 `stack_pop_sequence`，省略 `evidence`，返回入队回执和剩余缺口」。
 
 ```bash
 python3 - /path/to/replenishment_request.json <<'PY' | \
@@ -145,7 +147,9 @@ print(json.dumps({
 PY
 ```
 
-结果的 `assembly_request_id` 对应组卷请求。入队题包和剩余缺口的 `assembly_slot` 都可追溯到原槽位。待审题包上的 `difficulty_status: REVIEW_REQUIRED` 表示难度仍需审校确认。若保留题干命中，`reserved-stem-1` 等编号对应 `avoid_stems` 的位置。原样重试复用待审记录。当前补题适配通过 HTTP 调用。组卷应在审校通过并正式入库后重新运行。
+Pi 返回完整的命题结果。结果的 `assembly_request_id` 对应组卷请求。入队题包和剩余缺口的 `assembly_slot` 都可追溯到原槽位。待审题包上的 `difficulty_status: REVIEW_REQUIRED` 表示难度仍需审校确认。若保留题干命中，`reserved-stem-1` 等编号对应 `avoid_stems` 的位置。原样重试复用待审记录。自主命题模块的装配验收到 Pi 调用和待审表回读为止。
+
+装配验收使用组卷演示输出的原始计划、本地知识库和隔离 PostgreSQL。Pi 侧验证补题成功、部分成功和重试，原有四种操作同步回归。待审只读账号回读的 9 份当前题目包与 Pi 返回一致。
 
 ## 本地命题契约 v0.1
 
