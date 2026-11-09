@@ -222,6 +222,34 @@ def prepare_paragraphs(text: str, detect_headings: bool = True) -> list[dict[str
     return paragraphs
 
 
+_TITLE_MAX_CHARS = 48
+_TITLE_BODY_PUNCT = re.compile(r"[。；！？，：]")
+_TITLE_CODE_MARK = re.compile(r"(/\*|//|#include|__|\breturn\b|\bdef\b|wake_up)")
+_TITLE_BINARY = re.compile(r"^[01\s]{8,}$")
+_TITLE_NUMERIC_ONLY = re.compile(r"^[\d\s.]+$")
+
+
+def _looks_like_title(text: str) -> bool:
+    """Reject body lines that merely start with a number.
+
+    A 408 PDF has many lines shaped like "100 个数据中心分布于…" or
+    "1110 1101 1100 1011…". The old rule took any leading digits as a section
+    number, so those lines became headings and polluted heading_path.
+    """
+    s = text.strip()
+    if not s or len(s) > _TITLE_MAX_CHARS:
+        return False
+    if _TITLE_BODY_PUNCT.search(s):
+        return False
+    if _TITLE_CODE_MARK.search(s):
+        return False
+    if _TITLE_BINARY.match(s):
+        return False
+    if _TITLE_NUMERIC_ONLY.match(s):
+        return False
+    return True
+
+
 def detect_heading_level(text: str) -> int | None:
     s = normalize_heading(text)
     if not s or len(s) > 120:
@@ -230,19 +258,27 @@ def detect_heading_level(text: str) -> int | None:
         level = 0
         while level < len(s) and s[level] == "#":
             level += 1
+        # The parser marks styled headings with "#", but style detection also
+        # fires on emphasised body lines; keep only title-shaped ones.
+        if not _looks_like_title(s[level:].strip()):
+            return None
         return min(max(level, 1), 6)
     if re.match(r"^第\s*[0-9一二三四五六七八九十百千]+\s*[章节]", s):
-        return 1
+        return 1 if _looks_like_title(s) else None
     if re.match(r"^(Chapter|Appendix)\s+", s, re.IGNORECASE):
-        return 1
+        return 1 if _looks_like_title(s) else None
     if re.match(r"^附录\s*[A-Z0-9]?", s):
-        return 1
-    m = re.match(r"^([0-9]+(?:\.[0-9]+)*)\s+\S", s)
-    if m:
-        return m.group(1).count(".") + 1
-    if re.match(r"^[一二三四五六七八九十]+\s*[、.．]", s):
+        return 1 if _looks_like_title(s) else None
+    m = re.match(r"^([0-9]{1,2}(?:\.[0-9]{1,2})*)\s+(\S.*)$", s)
+    if m and _looks_like_title(s):
+        rest = m.group(2)
+        # "1 173单元…" and "1110 1101…" are body lines, not section numbers.
+        if not re.match(r"^[\d\s]", rest):
+            return m.group(1).count(".") + 1
+        return None
+    if _looks_like_title(s) and re.match(r"^[一二三四五六七八九十]+\s*[、.．]", s):
         return 2
-    if re.match(r"^（[一二三四五六七八九十]+）", s):
+    if _looks_like_title(s) and re.match(r"^（[一二三四五六七八九十]+）", s):
         return 3
     return None
 

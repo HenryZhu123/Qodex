@@ -4,11 +4,43 @@
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
+import sys
 from pathlib import Path
 from typing import Any, Iterable
 
 from utils import sanitize_obj, tokenize_for_fts, write_jsonl
+
+SENTENCE_PUNCT = re.compile(r"[。；！？]")
+STUB_MAX_CHARS = 120
+
+
+def strip_leading_heading(content: str, heading_path: list[str] | None) -> str:
+    """Drop the leading line when it merely repeats the section title.
+
+    Roughly half of the chunks open with their own heading text. Indexing it
+    again double-weights the heading words, so tokens come from the body only.
+    The stored content keeps the heading for context.
+    """
+    text = (content or "").lstrip()
+    if not heading_path:
+        return text
+    title = str(heading_path[-1]).lstrip("#").strip()
+    if not title:
+        return text
+    first, _, rest = text.partition("\n")
+    if first.strip().lstrip("#").strip() == title:
+        return rest.lstrip()
+    if text.startswith(title):
+        return text[len(title):].lstrip("\n ：:.-")
+    return text
+
+
+def is_stub(body: str) -> bool:
+    """A fragment carries no sentence: a figure caption, a page number, a stray label."""
+    text = (body or "").strip()
+    return len(text) < STUB_MAX_CHARS and not SENTENCE_PUNCT.search(text)
 
 SCHEMA = """
 PRAGMA journal_mode=WAL;
@@ -136,16 +168,27 @@ def insert_chunks(conn: sqlite3.Connection, chunks: Iterable[dict[str, Any]]) ->
             batch = chunk_ids[batch_start:batch_start + 500]
             placeholders = ",".join("?" for _ in batch)
             conn.execute(f"DELETE FROM chunks_fts WHERE chunk_id IN ({placeholders})", batch)
+        skipped = 0
         for ch in chunks:
+            heading = ch.get("heading_path") or []
+            body = strip_leading_heading(ch["content"], heading)
+            if is_stub(body):
+                # Page numbers, figure captions and bare labels rank high because
+                # BM25 rewards short documents. Keep the row, leave it out of the
+                # index so it can never be returned as evidence.
+                skipped += 1
+                continue
             conn.execute(
                 "INSERT INTO chunks_fts (content_tokens, heading_path, doc_id, chunk_id) VALUES (?, ?, ?, ?)",
                 (
-                    tokenize_for_fts(ch["content"]),
-                    " > ".join(ch.get("heading_path") or []),
+                    tokenize_for_fts(body),
+                    " > ".join(heading),
                     ch["doc_id"],
                     ch["chunk_id"],
                 ),
             )
+        if skipped:
+            print(f"[store] {skipped} fragment chunks kept but not indexed", file=sys.stderr)
     conn.commit()
     return count
 

@@ -31,6 +31,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 from kb_registry import content_sha256  # noqa: E402
 from phase6_align import chunk_eighth  # noqa: E402
+from store import is_stub  # noqa: E402
 from utils import tokenize_for_fts  # noqa: E402
 
 SUBJECT_DIR = Path(r"D:\Code\hku\LLM\kb_review\books\computer_network")
@@ -85,6 +86,7 @@ def main() -> None:
 
     indexed = [cid for cid, row in delta.items() if row.get("relation") in INDEXED]
     total_chars = 0
+    skipped = 0
     for position, cid in enumerate(sorted(indexed), start=1):
         row = delta[cid]
         chunk = chunks.get(cid)
@@ -116,10 +118,15 @@ def main() -> None:
                 json.dumps(metadata, ensure_ascii=False),
             ),
         )
-        conn.execute(
-            "INSERT INTO chunks_fts (content_tokens, heading_path, doc_id, chunk_id) VALUES (?,?,?,?)",
-            (tokenize_for_fts(text), "", "kurose8th", cid),
-        )
+        if is_stub(text):
+            # A caption or a page number would rank high in BM25 precisely
+            # because it is short; keep the row, leave it out of the index.
+            skipped += 1
+        else:
+            conn.execute(
+                "INSERT INTO chunks_fts (content_tokens, heading_path, doc_id, chunk_id) VALUES (?,?,?,?)",
+                (tokenize_for_fts(text), "", "kurose8th", cid),
+            )
 
     conn.execute(
         "INSERT INTO documents VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",

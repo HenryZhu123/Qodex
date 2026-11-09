@@ -104,6 +104,26 @@ python scripts/kb_pipeline.py chunk --out <run-dir> [--mode hierarchical|paragra
 
 Writes `chunks/<doc_id>.jsonl` and `chunks.jsonl`. Each chunk has `chunk_id`, `doc_id`, `content`, `char_count`, `chunk_type`, `heading_path`, `page_start`, `page_end`, and `content_hash`. Heading-only fragments smaller than `min_chars` are dropped. With `--mode auto`, existing `chunk_plans/*.json` are reused, so manual plan edits survive; an explicit `--mode` regenerates them.
 
+#### Heading detection is a quality gate, not a heuristic
+
+Three defects shipped in the 2026.11 indexes and are now blocked in code. Check any new build against all three.
+
+**Defect 1 — body lines became headings.** The old rule accepted any line starting with digits, so `100 个数据中心分布于…`, `1110 1101 1100 1011…` and `1 /* 定义并声明一个信号量 */` all became `heading_path`. 902 of 2,698 chunks (33%) carried such a segment, worst in 计组 (440/625) and 计网 (306/1,061).
+
+Fix: `chunker._looks_like_title()` rejects a candidate that is longer than 48 chars, contains `。；！？，：`, contains code markers (`/*`, `//`, `#include`, `wake_up`), is all-binary, or is all digits. All heading rules — chapter, numbered, markdown `#` — run through it.
+
+**Defect 2 — short fragments outranked real content.** A chunk holding `虚拟存储器` or `26` scores well in BM25 precisely because it is short. 158 fragments sat in the index.
+
+Fix: `store.is_stub()` treats a chunk under 120 chars without `。；！？` as a fragment. The row stays in `chunks` (so nothing is lost) but is skipped in `chunks_fts`, so it can never be returned as evidence. Ingest logs the count.
+
+**Defect 3 — headings were indexed twice.** 46% of chunks open with their own heading line, so heading words got double weight.
+
+Fix: `store.strip_leading_heading()` removes the leading line when it equals the last heading segment, and the FTS tokens come from the body only. Stored `content` keeps the heading for context.
+
+Verified by rebuilding all indexes from the parsed artefacts: bad heading segments 902 → 0, chunk count 2,698 → 2,352, indexed 2,338 (114 fragments kept but not indexed), and 76 of 80 labelled queries still return the same top passage.
+
+Known remainder: 15 chunks still contain a literal ` > ` inside their body text, produced by the parser rather than the chunker.
+
 ### Phase 5 — ingest and verify
 
 ```bash
