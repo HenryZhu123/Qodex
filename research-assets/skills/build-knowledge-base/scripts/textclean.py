@@ -16,8 +16,11 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from collections import Counter
 from pathlib import Path
+
+from kb_registry import chunk_sha256 as sha256_text
 
 # Fragmented watermark: allow newlines/spaces between every character.
 _WM_CHARS = ["（", "C", "（", "第", "2", "版", "）", "——"]
@@ -322,10 +325,29 @@ def stats(units: list[dict]) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--parsed", required=True, help="path to parsed/<doc>.json")
+    parser.add_argument("--parsed", help="path to parsed/<doc>.json")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--min-repeat", type=int, default=12)
+    parser.add_argument(
+        "command",
+        nargs="?",
+        choices=["repair"],
+        help="'repair' audits a built database instead of cleaning a parsed file",
+    )
+    parser.add_argument("--db", action="append", default=[], help="database(s) to audit")
+    parser.add_argument(
+        "--apply",
+        action="store_true",
+        help="write the repairs back (default is a dry run that only prints)",
+    )
+    parser.add_argument("--samples", type=int, default=8)
     args = parser.parse_args()
+
+    if args.command == "repair":
+        raise SystemExit(audit_databases(args.db, apply=args.apply, samples=args.samples))
+
+    if not args.parsed:
+        parser.error("--parsed is required unless the command is 'repair'")
 
     src = Path(args.parsed)
     doc = json.loads(src.read_text(encoding="utf-8"))
@@ -355,6 +377,72 @@ def main() -> None:
             json.dumps(doc, ensure_ascii=False), encoding="utf-8"
         )
         print(f"wrote {out_dir / src.name}")
+
+
+def audit_databases(paths: list[str], apply: bool = False, samples: int = 8) -> int:
+    """Dry-run or apply the OCR repairs over built indexes.
+
+    Prints the rule counts and a before/after sample for each rule. Reading the
+    samples is the point: counts alone once looked correct while a rule turned
+    the formula "2l/R" into "21/R".
+    """
+    import sqlite3
+
+    if not paths:
+        print("no --db given", file=sys.stderr)
+        return 2
+
+    totals: dict[str, int] = {}
+    touched = 0
+    shown: dict[str, int] = {}
+    for db_path in paths:
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        try:
+            rows = conn.execute("SELECT chunk_id, content FROM chunks").fetchall()
+            updates: list[tuple[str, str, str, int]] = []
+            for row in rows:
+                before = row["content"] or ""
+                result = repair_ocr(before)
+                if not result["counts"]:
+                    continue
+                touched += 1
+                for rule, count in result["counts"].items():
+                    totals[rule] = totals.get(rule, 0) + count
+                after = result["text"]
+                if before != after:
+                    pointer = next(
+                        (i for i in range(min(len(before), len(after))) if before[i] != after[i]),
+                        0,
+                    )
+                    start = max(0, pointer - 30)
+                    for rule in result["counts"]:
+                        if shown.get(rule, 0) < samples:
+                            shown[rule] = shown.get(rule, 0) + 1
+                            print(f"[{Path(db_path).name}] {rule}")
+                            print("  -", before[start:pointer + 30].replace("\n", "⏎"))
+                            print("  +", after[start:pointer + 30].replace("\n", "⏎"))
+                    updates.append((after, sha256_text(after), row["chunk_id"], len(after)))
+            print(
+                json.dumps(
+                    {"db": db_path, "chunks": len(rows), "would_change": len(updates),
+                     "apply": apply},
+                    ensure_ascii=False,
+                )
+            )
+            if apply and updates:
+                conn.executemany(
+                    "UPDATE chunks SET content=?, content_hash=?, char_count=? WHERE chunk_id=?",
+                    [(u[0], u[1], u[3], u[2]) for u in updates],
+                )
+                conn.commit()
+        finally:
+            conn.close()
+
+    print(json.dumps({"rule_totals": totals, "chunks_touched": touched}, ensure_ascii=False, indent=2))
+    if apply and touched:
+        print("content changed: run `kb_pipeline.py reindex --db ...` to refresh FTS")
+    return 0
 
 
 if __name__ == "__main__":
