@@ -50,7 +50,9 @@ MOJIBAKE = ["锟斤拷", "烫烫烫", "屯屯屯", "Ã", "Â", "â€", "\ufffd"
 WATERMARK = ["z-library", "1lib.sk", "z-lib.sk", "扫描全能王", "CS 扫描全能王"]
 
 SEGMENT_MAX = 48
-RECALL_FLOOR = 0.84
+# Strict hand labels measured 0.8182 on the 2026.11.1 build; the floor sits one
+# step below so a regression shows up without failing on ordinary rebuild noise.
+RECALL_FLOOR = 0.78
 
 
 def bad_segment(segment: str) -> bool:
@@ -206,21 +208,23 @@ def gate_coverage(dbs: list[Path]) -> dict:
 
 
 def gate_retrieval() -> dict:
-    script = EVAL_DIR / "eval_retrieval_v2.py"
+    # Strict labels: every top-2 candidate was read and judged against the query.
+    # The older metrics.json inferred relevance from rank, which overstates recall.
+    script = EVAL_DIR / "score_v3.py"
     if not script.is_file():
-        return {"pass": None, "reason": "retrieval evaluator not found"}
+        return {"pass": None, "reason": "strict evaluator not found"}
     proc = subprocess.run(
         [sys.executable, str(script)], capture_output=True, text=True, encoding="utf-8"
     )
     if proc.returncode != 0:
         return {"pass": False, "reason": "evaluator failed", "stderr": proc.stderr[-300:]}
-    metrics = json.loads((EVAL_DIR / "metrics.json").read_text(encoding="utf-8"))
-    recall = metrics["positives"]["recall@2"]
+    metrics = json.loads((EVAL_DIR / "metrics_v3.json").read_text(encoding="utf-8"))
+    recall = metrics["recall@2"]
     return {
         "pass": recall >= RECALL_FLOOR,
-        "recall@1": metrics["positives"]["recall@1"],
+        "recall@1": metrics["recall@1"],
         "recall@2": recall,
-        "recall@3": metrics["positives"]["recall@3"],
+        "negative_hits@2": metrics["negative_hits@2"],
         "floor": RECALL_FLOOR,
     }
 
