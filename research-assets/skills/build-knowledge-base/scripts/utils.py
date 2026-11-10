@@ -160,6 +160,7 @@ def tokenize_for_fts(text: str) -> str:
                 continue
             if CJK_RE.search(tok) or tok.isalnum():
                 tokens.append(tok)
+        tokens.extend(english_aliases(text, exclude=set(tokens)))
         return " ".join(tokens)
     except Exception:
         pass
@@ -178,7 +179,40 @@ def tokenize_for_fts(text: str) -> str:
         pos = match.end()
     if pos < len(text):
         tokens.extend(ASCII_WORD_RE.findall(text[pos:].lower()))
+    tokens.extend(english_aliases(text, exclude=set(tokens)))
     return " ".join(tokens)
+
+
+# A Latin name that the source and the question may split differently:
+# JamesF.Kurose / James F. Kurose, TCP/IP, IEEE802.11.
+LATIN_NAME_RE = re.compile(r"[A-Za-z][A-Za-z0-9._\-/ ]{4,}[A-Za-z0-9]")
+
+
+def english_aliases(text: str, exclude: set[str] | None = None, min_len: int = 6) -> list[str]:
+    """Return joined lowercase forms of multi-part Latin names.
+
+    OCR glue ("JamesF.Kurose") and spaced text ("James F. Kurose") then share one
+    token, so an English query matches either form. Only names carrying a
+    separator (dot, slash, hyphen) or a lowercase→uppercase boundary qualify;
+    plain phrases such as "Eighth Edition" would otherwise become noise.
+    """
+    exclude = exclude or set()
+    out: list[str] = []
+    for match in LATIN_NAME_RE.finditer(text or ""):
+        # "A. Author and B. Author" is two names, not one token.
+        for part in re.split(r"\s+and\s+", match.group(0)):
+            raw = part.strip()
+            if len(raw) < min_len:
+                continue
+            has_separator = any(mark in raw for mark in ".-_/")
+            has_camel = re.search(r"[a-z][A-Z]", raw) is not None
+            if not (has_separator or has_camel):
+                continue
+            joined = re.sub(r"[^A-Za-z0-9]", "", raw).lower()
+            if not (5 <= len(joined) <= 40) or joined in exclude or joined in out:
+                continue
+            out.append(joined)
+    return out
 
 
 def split_sentences(text: str) -> list[str]:

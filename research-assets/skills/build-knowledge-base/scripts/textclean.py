@@ -232,6 +232,73 @@ def repair_ocr(text: str) -> dict:
     if n:
         counts["bullet_run"] = n
 
+    numeric = repair_numeric_ocr(out)
+    out = numeric["text"]
+    counts.update(numeric["counts"])
+
+    return {"text": out, "counts": counts}
+
+
+# ----------------------- context-dependent repairs -----------------------
+#
+# These are the repairs that cannot be applied blindly: "l" is a variable in
+# code, and a leading number may be data rather than a line number.
+
+CODE_HINT = re.compile(r"(#include|for\s*\(|while\s*\(|\bint\s+\w|\bvoid\s+\w|\breturn\b|;\s*$|\{|\})")
+L_BETWEEN_DIGITS = re.compile(r"(?<=\d)l(?=\d)")
+# "l000", "l00KB", "0.l66" — a word-initial l followed by digits is a mangled 1.
+# Deliberately no rule for "2l/R": there the l is the formula variable L.
+L_BEFORE_DIGITS = re.compile(r"(?<![A-Za-z0-9])l(?=\d{2,})")
+YEAR_WITH_O = re.compile(r"(?<!\d)2O(\d{2})(?!\d)")
+LINE_NUMBER = re.compile(r"(?m)^[ \t]*\d{1,3}[ \t]{2,}(?=\S)")
+CODE_PUNCT = re.compile(r"[;{}()#]")
+FOOTER_PAGE = re.compile(r"(?m)^[ \t]*\d{1,3}[ \t]*$")
+
+
+def looks_like_code(text: str) -> bool:
+    return len(CODE_HINT.findall(text or "")) >= 2
+
+
+def repair_numeric_ocr(text: str) -> dict:
+    """Fix 1/l and 0/O confusions without touching code identifiers.
+
+    A leading number is only treated as a line number when at least three lines
+    share that shape; one stray number is usually real data.
+    """
+    counts: dict[str, int] = {}
+    out = text or ""
+
+    year_fixed, n = YEAR_WITH_O.subn(r"20\1", out)
+    if n:
+        counts["2Oxx→20xx"] = n
+    out = year_fixed
+
+    if not looks_like_code(out):
+        fixed, n = L_BETWEEN_DIGITS.subn("1", out)
+        if n:
+            counts["l→1 (between digits)"] = n
+        out = fixed
+        fixed, n = L_BEFORE_DIGITS.subn("1", out)
+        if n:
+            counts["l→1 (before digits)"] = n
+        out = fixed
+
+    # A listing has at least three numbered lines and most of them carry code
+    # punctuation. Plain tables also start with numbers, so require both.
+    candidates = [m.group(0) for m in LINE_NUMBER.finditer(out)]
+    if len(candidates) >= 3 and sum(1 for line in candidates if CODE_PUNCT.search(line)) >= len(candidates) / 2:
+        stripped, n = LINE_NUMBER.subn("", out)
+        if n:
+            counts["code line numbers"] = n
+        out = stripped
+
+    candidates = LINE_NUMBER.findall(out)
+    if len(candidates) >= 3:
+        stripped, n = LINE_NUMBER.subn("", out)
+        if n:
+            counts["code line numbers"] = n
+        out = stripped
+
     return {"text": out, "counts": counts}
 
 

@@ -448,6 +448,11 @@ def _build_parser() -> argparse.ArgumentParser:
     query.add_argument("--q", required=True)
     query.add_argument("--top-k", type=int, default=5)
 
+    reindex = sub.add_parser(
+        "reindex", help="rebuild the FTS index from stored chunks (content untouched)"
+    )
+    reindex.add_argument("--db", required=True, action="append", help="repeatable")
+
     return p
 
 
@@ -654,6 +659,20 @@ def main() -> int:
             print(f"pages: {hit['page_start']}-{hit['page_end']}")
             print(hit["content"][:500].replace("\n", " "))
         return 0
+
+    if args.command == "reindex":
+        from store import rebuild_fts
+
+        status = 0
+        for db in args.db:
+            conn = init_db(db)
+            indexed = rebuild_fts(conn)
+            total = conn.execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
+            conn.close()
+            _print(f"[reindex] {db}: {total} chunks, {indexed} indexed")
+            if indexed == 0:
+                status = 1
+        return status
 
     return 1
 
