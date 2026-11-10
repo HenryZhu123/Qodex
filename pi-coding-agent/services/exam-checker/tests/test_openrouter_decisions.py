@@ -55,6 +55,42 @@ async def test_jev_client_sends_locked_task_and_parses_probabilities() -> None:
     assert prediction.p_skip == 0.03
 
 
+@pytest.mark.asyncio
+async def test_jev_client_uses_exact_relay_endpoint_when_configured() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert str(request.url) == "https://relay.example/v1/systemone"
+        return httpx.Response(
+            200,
+            json={
+                "model": "jev-1.14.0",
+                "answers": {
+                    "answer_leak_check": {
+                        "choice": "SKIP",
+                        "probabilities": {"RUN": 0.02, "SKIP": 0.98},
+                        "confidence": 0.96,
+                    }
+                },
+            },
+        )
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+        router = OpenRouterJevClient(
+            "https://openrouter.example/api/alpha",
+            "secret",
+            "jev-1.14",
+            JevPromptRepository(PROMPT_ROOT),
+            endpoint_url="https://relay.example/v1/systemone",
+            client=client,
+        )
+        prediction = await router.predict(
+            "answer_leak_check",
+            CheckerPayload(reference="", detection_content="普通题目"),
+        )
+
+    assert prediction.choice == "SKIP"
+    assert prediction.model == "jev-1.14.0"
+
+
 def test_locked_jev_tasks_include_answer_leak() -> None:
     repository = JevPromptRepository(PROMPT_ROOT)
 

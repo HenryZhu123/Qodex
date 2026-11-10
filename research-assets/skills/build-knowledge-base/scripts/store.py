@@ -4,11 +4,45 @@
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
+import sys
 from pathlib import Path
 from typing import Any, Iterable
 
+from profiles import get_profile
 from utils import sanitize_obj, tokenize_for_fts, write_jsonl
+
+SENTENCE_PUNCT = re.compile(r"[。；！？]")
+STUB_MAX_CHARS = 120
+
+
+def strip_leading_heading(content: str, heading_path: list[str] | None) -> str:
+    """Drop the leading line when it merely repeats the section title.
+
+    Roughly half of the chunks open with their own heading text. Indexing it
+    again double-weights the heading words, so tokens come from the body only.
+    The stored content keeps the heading for context.
+    """
+    text = (content or "").lstrip()
+    if not heading_path:
+        return text
+    title = str(heading_path[-1]).lstrip("#").strip()
+    if not title:
+        return text
+    first, _, rest = text.partition("\n")
+    if first.strip().lstrip("#").strip() == title:
+        return rest.lstrip()
+    if text.startswith(title):
+        return text[len(title):].lstrip("\n ：:.-")
+    return text
+
+
+def is_stub(body: str, language: str = "zh") -> bool:
+    """A fragment carries no sentence: a figure caption, a page number, a stray label."""
+    text = (body or "").strip()
+    profile = get_profile(language)
+    return len(text) < STUB_MAX_CHARS and not profile.sentence_punct.search(text)
 
 SCHEMA = """
 PRAGMA journal_mode=WAL;
@@ -101,7 +135,11 @@ def delete_document_chunks(conn: sqlite3.Connection, doc_id: str) -> None:
     conn.commit()
 
 
-def insert_chunks(conn: sqlite3.Connection, chunks: Iterable[dict[str, Any]]) -> int:
+def insert_chunks(
+    conn: sqlite3.Connection,
+    chunks: Iterable[dict[str, Any]],
+    language: str = "zh",
+) -> int:
     chunks = list(chunks)
     count = 0
     chunk_ids = []
@@ -136,16 +174,27 @@ def insert_chunks(conn: sqlite3.Connection, chunks: Iterable[dict[str, Any]]) ->
             batch = chunk_ids[batch_start:batch_start + 500]
             placeholders = ",".join("?" for _ in batch)
             conn.execute(f"DELETE FROM chunks_fts WHERE chunk_id IN ({placeholders})", batch)
+        skipped = 0
         for ch in chunks:
+            heading = ch.get("heading_path") or []
+            body = strip_leading_heading(ch["content"], heading)
+            if is_stub(body):
+                # Page numbers, figure captions and bare labels rank high because
+                # BM25 rewards short documents. Keep the row, leave it out of the
+                # index so it can never be returned as evidence.
+                skipped += 1
+                continue
             conn.execute(
                 "INSERT INTO chunks_fts (content_tokens, heading_path, doc_id, chunk_id) VALUES (?, ?, ?, ?)",
                 (
-                    tokenize_for_fts(ch["content"]),
-                    " > ".join(ch.get("heading_path") or []),
+                    tokenize_for_fts(body),
+                    " > ".join(heading),
                     ch["doc_id"],
                     ch["chunk_id"],
                 ),
             )
+        if skipped:
+            print(f"[store] {skipped} fragment chunks kept but not indexed", file=sys.stderr)
     conn.commit()
     return count
 
@@ -199,17 +248,35 @@ def export_chunks_jsonl(chunks: Iterable[dict[str, Any]], path: str | Path) -> i
 
 
 def rebuild_fts(conn: sqlite3.Connection) -> int:
+    """Rebuild the index from `chunks`, applying the same rules as insert_chunks.
+
+    Without the stub filter and the heading strip, a rebuild silently undoes both:
+    fragments become searchable again and heading words get double weight.
+    Returns the number of chunks actually indexed.
+    """
     conn.execute("DELETE FROM chunks_fts")
-    rows = conn.execute("SELECT chunk_id, doc_id, content, heading_path FROM chunks").fetchall()
+    # The language lives on the document, not the chunk, so join it back: an
+    # English book must not have its short paragraphs filtered as fragments.
+    rows = conn.execute(
+        "SELECT c.chunk_id, c.doc_id, c.content, c.heading_path, "
+        "COALESCE(d.language, 'zh') AS language "
+        "FROM chunks c LEFT JOIN documents d ON d.doc_id = c.doc_id"
+    ).fetchall()
+    indexed = 0
     for row in rows:
+        heading = [part.strip() for part in (row["heading_path"] or "").split(">") if part.strip()]
+        body = strip_leading_heading(row["content"], heading)
+        if is_stub(body, row["language"]):
+            continue
         conn.execute(
             "INSERT INTO chunks_fts (content_tokens, heading_path, doc_id, chunk_id) VALUES (?, ?, ?, ?)",
             (
-                tokenize_for_fts(row["content"]),
+                tokenize_for_fts(body),
                 row["heading_path"] or "",
                 row["doc_id"],
                 row["chunk_id"],
             ),
         )
+        indexed += 1
     conn.commit()
-    return len(rows)
+    return indexed

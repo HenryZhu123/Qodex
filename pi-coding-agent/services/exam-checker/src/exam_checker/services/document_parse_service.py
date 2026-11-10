@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import re
 from io import BytesIO
 from pathlib import Path
@@ -11,6 +12,7 @@ from ..domain.models import ExamDocument
 from ..integrations.libreoffice import LibreOfficeConverter
 from ..integrations.mineru_agent import (
     MAX_FILE_BYTES,
+    ExtractedDocument,
     MinerUAgentClient,
     MinerULimitError,
 )
@@ -36,6 +38,7 @@ class DocumentParseService:
         word_converter: LibreOfficeConverter,
         question_service: QuestionService | None = None,
         version_repository: QuestionVersionRepository | None = None,
+        prefer_embedded_pdf_text: bool = False,
     ) -> None:
         self.mineru = mineru
         self.structure_extractor = structure_extractor
@@ -44,6 +47,7 @@ class DocumentParseService:
         self.word_converter = word_converter
         self.question_service = question_service
         self.version_repository = version_repository
+        self.prefer_embedded_pdf_text = prefer_embedded_pdf_text
 
     async def parse(self, file_bytes: bytes, file_name: str) -> ExamDocument:
         safe_name = Path(file_name).name
@@ -72,7 +76,18 @@ class DocumentParseService:
                 f"PDF contains {page_count} pages; MinerU Agent API accepts at most 20"
             )
 
-        extracted = await self.mineru.parse_file(pdf_bytes, pdf_name)
+        embedded = ""
+        if self.prefer_embedded_pdf_text:
+            embedded = await asyncio.to_thread(self._complete_embedded_pdf_text, pdf_bytes)
+        if embedded:
+            extracted = ExtractedDocument(
+                markdown=embedded,
+                provider="embedded-pdf-text",
+                provider_task_id="local-sha256:" + hashlib.sha256(pdf_bytes).hexdigest(),
+                source_file_name=pdf_name,
+            )
+        else:
+            extracted = await self.mineru.parse_file(pdf_bytes, pdf_name)
         structure_source = await asyncio.to_thread(
             self._select_structure_source,
             pdf_bytes,
@@ -84,6 +99,7 @@ class DocumentParseService:
             source_file_name=safe_name,
             provider_task_id=extracted.provider_task_id,
             markdown=extracted.markdown,
+            parser=extracted.provider,
         )
         await self.store.save(document)
         if self.version_repository is not None and self.question_service is not None:
@@ -91,6 +107,26 @@ class DocumentParseService:
                 self.question_service.list_questions(document)
             )
         return document
+
+    @classmethod
+    def _complete_embedded_pdf_text(cls, pdf_bytes: bytes) -> str:
+        """Conservative opt-in for verified text PDFs, never an OCR-error fallback.
+
+        Sparse pages and raster images require MinerU. Vector diagrams cannot be
+        ruled out by this check; enable only for text-only documents checked by
+        the caller. Extraction and review still use the normal model workflow.
+        """
+        try:
+            reader = PdfReader(BytesIO(pdf_bytes))
+            pages: list[str] = []
+            for page in reader.pages:
+                text = (page.extract_text() or "").strip()
+                if cls._content_size(text) < 200 or len(page.images):
+                    return ""
+                pages.append(text)
+            return "\n\n".join(pages)
+        except Exception:
+            return ""
 
     @classmethod
     def _select_structure_source(

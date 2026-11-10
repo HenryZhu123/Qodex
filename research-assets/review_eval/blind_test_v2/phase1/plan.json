@@ -1,0 +1,134 @@
+{
+  "run_id": "blind_test_v2",
+  "created_at": "2026-10-30T09:44:33.531972+00:00",
+  "purpose": "Untouched held-out set; method frozen before first measurement.",
+  "source_accounting": {
+    "pool_total": 720,
+    "used_by_dev_a": 320,
+    "used_by_dev_b": 240,
+    "allocated_to_v2": 216,
+    "remaining_after_v2": 0
+  },
+  "quota": {
+    "typo": 24,
+    "punctuation": 18,
+    "option_structure": 18,
+    "missing_info": 18,
+    "ambiguity": 18,
+    "unsolvable": 18,
+    "answer_leakage": 24,
+    "type_mismatch": 12,
+    "factual_logical": 6
+  },
+  "clean": 60,
+  "total": 216,
+  "freeze_rule": [
+    "No prompt, rule, or pipeline change may be made after the first measurement on this set.",
+    "If a change is made anyway, this set is demoted to a development set and a further untouched set must be built."
+  ],
+  "actual_counts": {
+    "factual_logical": 6,
+    "type_mismatch": 12,
+    "option_structure": 18,
+    "typo": 23,
+    "punctuation": 18,
+    "missing_info": 17,
+    "ambiguity": 13,
+    "unsolvable": 6,
+    "answer_leakage": 24,
+    "none": 60
+  },
+  "actual_subtypes": {
+    "factual_logical": {
+      "位宽与容量矛盾": 1,
+      "定义自相矛盾": 1,
+      "调制阶数与比特数矛盾": 1,
+      "协议行为定义矛盾": 1,
+      "协议规则矛盾": 1,
+      "性质与数据矛盾": 1
+    },
+    "type_mismatch": {
+      "简答题作答": 1,
+      "排序题作答": 1,
+      "作图题作答": 1,
+      "证明题作答": 1,
+      "判断题作答": 1,
+      "多选指令": 1,
+      "计算过程要求": 1,
+      "英文作答要求": 1,
+      "列举要求": 1,
+      "程序设计要求": 1,
+      "填空改造": 1,
+      "流程描述要求": 1
+    },
+    "option_structure": {
+      "标号重复": 1,
+      "圆圈数字标号": 1,
+      "末尾多余顿号": 1,
+      "标号与内容粘连": 1,
+      "缺少首个标号": 1,
+      "小写字母标号": 1,
+      "越界标号": 1,
+      "混用右括号": 1,
+      "全角句点标号": 1,
+      "标号错位重复": 1,
+      "顿号替代句点": 1,
+      "末尾多余分号": 1,
+      "方括号标号": 1,
+      "双句点冗余": 1,
+      "末尾多余右括号": 1,
+      "标号跳变": 1,
+      "标点重复堆叠": 1,
+      "内容空白": 1
+    },
+    "typo": {
+      "形近或繁体替换": 5,
+      "衍字": 6,
+      "脱字": 6,
+      "语序颠倒": 6
+    },
+    "punctuation": {
+      "句号误用为分号": 5,
+      "逗号误用为顿号": 4,
+      "逗号误用为句号": 4,
+      "逗号误用为分号": 3,
+      "顿号误用为逗号": 2
+    },
+    "missing_info": {
+      "删除任意分句": 7,
+      "删除条件从句": 1,
+      "删除并列限定": 1,
+      "删除插入分句": 3,
+      "删除括号限定": 4,
+      "删除范围限定": 1
+    },
+    "ambiguity": {
+      "代词指代不明": 1,
+      "全称量化弱化": 3,
+      "范围限定弱化": 2,
+      "逻辑连接词歧义": 5,
+      "边界缺失": 2
+    },
+    "unsolvable": {
+      "关键机制未指明": 1,
+      "数值改为模糊占位符": 2,
+      "删除计数条件": 2,
+      "删除关键参数": 1
+    },
+    "answer_leakage": {
+      "题干提示正确项": 5,
+      "题干复述正确结论": 5,
+      "题干给出解题步骤": 5,
+      "题干排除干扰项": 5,
+      "题干给出中间结果": 4
+    }
+  },
+  "constructed_total": 197,
+  "shortfalls": {
+    "typo": 24,
+    "missing_info": 18,
+    "ambiguity": 18,
+    "unsolvable": 18
+  },
+  "shortfall_reason": "Some source stems do not contain a span that can carry the assigned error type (no numeric value for a placeholder, no qualifying clause to delete, no candidate pronoun). Those items were rejected rather than coerced into a dubious label, so per-type counts are slightly below quota."
+}

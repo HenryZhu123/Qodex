@@ -66,7 +66,10 @@ FILL_SYSTEM_PROMPT = """你是试卷题目提取工具。根据给定骨架和�
 4. 每个叶节点的 content 只放本题题干；选项放 options，答案放 answer。
 5. 题号已由 id 表示，content 不重复题号前缀。
 6. 原文没有答案、题型或分值时使用空字符串或 null，不得猜测。
-7. 只返回填充后的当前根节点 JSON，不要返回 Markdown 或说明文字。"""
+7. options 必须为字符串数组，例如 ["A. 原文选项", "B. 原文选项"]；保留原文标签，不凭顺序补标签，不返回 label/text 对象。
+8. reference 只放解题所需的共享材料，不放卷头、学科、分值说明、页眉页脚或测试用途说明；无共享材料时为空字符串。
+9. 单项选择题的 question_type 使用 single_choice；无法明确判断时为空字符串。
+10. 只返回填充后的当前根节点 JSON，不要返回 Markdown 或说明文字。"""
 
 
 QUESTION_REPAIR_SYSTEM_PROMPT = """你是单道缺失题目补全工具。根据目标题目骨架和所属大题原文，只补全这一道题。
@@ -78,7 +81,8 @@ QUESTION_REPAIR_SYSTEM_PROMPT = """你是单道缺失题目补全工具。根据
 4. content 只放题干，选项放 options，答案放 answer；题号不重复写入 content。
 5. 原文没有答案、题型或分值时使用空字符串或 null，不得猜测。
 6. 必须根据 target_path、题号和原文定位目标题目，不得返回相邻题目。
-7. 只返回 JSON 对象，不要返回 Markdown 或说明文字。"""
+7. options 为保留原文标签的字符串数组；不返回对象、不补造缺失标签。reference 不包含卷头、页眉页脚或测试说明。明确为单项选择题时 question_type 使用 single_choice。
+8. 只返回 JSON 对象，不要返回 Markdown 或说明文字。"""
 
 
 @dataclass(frozen=True, slots=True)

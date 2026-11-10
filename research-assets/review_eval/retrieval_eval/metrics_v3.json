@@ -1,0 +1,47 @@
+{
+  "caliber": "strict: every candidate read and judged against the query",
+  "queries": 97,
+  "positives": 77,
+  "negatives": 20,
+  "recall@1": 0.7013,
+  "recall@2": 0.8182,
+  "negative_hits@2": 0,
+  "per_subject": {
+    "cn": {
+      "n": 20,
+      "recall@1": 0.65,
+      "recall@2": 0.8
+    },
+    "co": {
+      "n": 17,
+      "recall@1": 0.7059,
+      "recall@2": 0.8235
+    },
+    "ds": {
+      "n": 20,
+      "recall@1": 0.75,
+      "recall@2": 0.8
+    },
+    "os": {
+      "n": 20,
+      "recall@1": 0.7,
+      "recall@2": 0.85
+    }
+  },
+  "misses@2": [
+    "os-01",
+    "os-08",
+    "os-19",
+    "co-01",
+    "co-08",
+    "co-10",
+    "ds-02",
+    "ds-03",
+    "ds-16",
+    "ds-17",
+    "cn-05",
+    "cn-06",
+    "cn-17",
+    "cn-19"
+  ]
+}

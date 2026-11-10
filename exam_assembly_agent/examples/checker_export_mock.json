@@ -1,0 +1,24 @@
+{
+  "questions": [
+    {
+      "record_id": "00000000-0000-0000-0000-000000000001",
+      "document_id": "MOCK_DOCUMENT",
+      "question_id": "q1",
+      "source_version_id": "00000000-0000-0000-0000-000000000002",
+      "question_json": {
+        "document_id": "MOCK_DOCUMENT",
+        "question_id": "q1",
+        "review_status": "PASS",
+        "question": {
+          "subject": "数据结构",
+          "question_type": "单选题",
+          "question_text": "栈遵循什么访问规则？",
+          "options": ["A. 先进先出", "B. 后进先出", "C. 随机访问", "D. 按数值排序"],
+          "answer_text": "后进先出",
+          "points": 2.0
+        },
+        "metadata": {"difficulty": "easy", "knowledge_points": ["栈", "后进先出"]}
+      }
+    }
+  ]
+}

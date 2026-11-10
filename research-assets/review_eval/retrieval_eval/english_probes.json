@@ -1,0 +1,26 @@
+[
+  {
+    "query": "James F. Kurose",
+    "note": "作者英文名（OCR 里写作 JamesF.Kurose）",
+    "hits": 2,
+    "top_chunk": "2367b64d37e4dadb:00247",
+    "top_heading": "第3章",
+    "snippet": "( TCP segment ) 。\n这些报文段被下传给网络层，\n网络层将其分别封装在网络层IP 数据报中。\n然后这些IP 数\n据报被发送到网络中。\n当TCP 在"
+  },
+  {
+    "query": "Keith W. Ross",
+    "note": "第二作者",
+    "hits": 2,
+    "top_chunk": "2367b64d37e4dadb:00766",
+    "top_heading": "第9章",
+    "snippet": "197.87.54.21 上工作的keiLh@ upe血皇edu 发起IP 语音\n\n( VoIP )\n会话。\n采用下面的步骤：\n(DJim 向umass 的SI"
+  },
+  {
+    "query": "TCP/IP 协议",
+    "note": "原文写作 TCP/IP，查询写作 TCP / IP 也应命中",
+    "hits": 2,
+    "top_chunk": "2367b64d37e4dadb:00005",
+    "top_heading": "第1章",
+    "snippet": "( protocol ) , 这些协议控\n制因特网中信息的接收和发送。\nTCP (Transmission Control Protocol, 传输控制协议）和"
+  }
+]

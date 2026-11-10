@@ -37,10 +37,25 @@ def _points(value: object) -> float | None:
     return None
 
 
-def _string_list(value: object) -> list[str]:
+def _options(value: object) -> list[str]:
     if not isinstance(value, Sequence) or isinstance(value, (str, bytes, bytearray)):
         return []
-    return [str(item).strip() for item in value if str(item).strip()]
+    options: list[str] = []
+    for item in value:
+        if isinstance(item, str):
+            if item.strip():
+                options.append(item.strip())
+        elif isinstance(item, Mapping):
+            # Preserve explicitly extracted labels; never invent labels from order.
+            label = _text(item.get("label"))
+            text = _text(item.get("text"))
+            match = re.fullmatch(r"([A-Za-z])[.．、:：)）]?", label)
+            if not match or not text:
+                raise NormalizationError("Option objects require an explicit letter label and text")
+            options.append(f"{match.group(1)}. {text}")
+        else:
+            raise NormalizationError("Options must be strings or labeled text objects")
+    return options
 
 
 @dataclass(slots=True)
@@ -67,6 +82,7 @@ class ExamDocumentNormalizer:
         source_file_name: str,
         provider_task_id: str,
         markdown: str,
+        parser: str = "mineru-agent",
     ) -> ExamDocument:
         raw_questions = raw_tree.get("questions")
         if not isinstance(raw_questions, Sequence) or isinstance(
@@ -110,6 +126,7 @@ class ExamDocumentNormalizer:
             root_node_ids=root_ids,
             nodes=state.nodes,
             source=SourceMetadata(
+                parser=parser,
                 file_name=source_file_name,
                 provider_task_id=provider_task_id,
                 markdown_sha256=hashlib.sha256(markdown.encode("utf-8")).hexdigest(),
@@ -179,14 +196,20 @@ class ExamDocumentNormalizer:
             raise NormalizationError(
                 f"Question at path {'.'.join(current_path)} has empty content"
             )
+        question_type = _text(raw.get("question_type")) or inherited_type
+        if question_type in {
+            "单选题", "单项选择题", "单项选择题（single_choice）",
+            "单项选择题(single_choice)",
+        }:
+            question_type = "single_choice"
         question = QuestionNode(
             id=node_id,
             parent_id=parent_id,
             source_id=source_id,
             question_number=source_id,
-            question_type=_text(raw.get("question_type")) or inherited_type,
+            question_type=question_type,
             question_text=question_text,
-            options=_string_list(raw.get("options")),
+            options=_options(raw.get("options")),
             answer_text=_text(raw.get("answer") or raw.get("answer_text")),
             points=_points(raw.get("points") or raw.get("score")),
             reference=_text(raw.get("reference") or raw.get("reading_passage")),

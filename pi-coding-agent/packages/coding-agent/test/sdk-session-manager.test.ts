@@ -46,6 +46,24 @@ describe("createAgentSession session manager defaults", () => {
 		session.dispose();
 	});
 
+	it("loads the Qodex built-in extensions for SDK-created sessions", async () => {
+		const model = getModel("anthropic", "claude-sonnet-4-5");
+		expect(model).toBeTruthy();
+
+		const { session } = await createAgentSession({
+			cwd,
+			agentDir,
+			model: model!,
+			sessionManager: SessionManager.inMemory(cwd),
+		});
+
+		expect(session.getActiveToolNames()).toEqual(
+			expect.arrayContaining(["exam_checker", "question_bank", "exam_assembly", "question_generation"]),
+		);
+
+		session.dispose();
+	});
+
 	it("keeps an explicit sessionManager override", async () => {
 		const model = getModel("anthropic", "claude-sonnet-4-5");
 		expect(model).toBeTruthy();

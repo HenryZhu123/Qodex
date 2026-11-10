@@ -1,0 +1,148 @@
+{
+  "run_id": "dev_a_e2e_20261031",
+  "dataset": "taxonomy_v2/dev_a/strict/review_eval_dataset.csv",
+  "current_stage": "full_dev_a_complete_ready_for_review",
+  "dataset_scored": "taxonomy_v2/dev_a/strict/review_eval_dataset_v2.csv",
+  "planned_samples": 318,
+  "smoke_samples": 24,
+  "review_model": "deepseek-v4.1-flash-1017",
+  "review_endpoint": "https://aihubmix.com/v1",
+  "review_reasoning_effort": "",
+  "review_max_tokens": 4096,
+  "router_model": "jev-1.14",
+  "router_returned_model_probe": "jev-1.14.0",
+  "router_endpoint": "https://aihubmix.com/v1/systemone",
+  "runner_concurrency": 1,
+  "reviewer_max_concurrency": 2,
+  "reviewer_max_attempts": 3,
+  "blocking_configuration": [],
+  "latest_smoke": "smoke_v10",
+  "latest_smoke_completed_samples": 24,
+  "latest_smoke_conservative_recall": 0.75,
+  "latest_smoke_exact_type_recall": 0.625,
+  "latest_smoke_clean_fpr": 0.0,
+  "latest_smoke_unresolved": 0,
+  "full_dev_a_authorized": true,
+  "full_output": "full_v2/results.jsonl",
+  "full_completed_samples_last_observed": 318,
+  "full_resume_supported": true,
+  "full_v2_result": {
+    "rows": 318,
+    "unique_ids": 318,
+    "duplicates": 0,
+    "runner_errors": 0,
+    "unresolved": 1,
+    "conservative_recall": 0.752294,
+    "exact_type_recall": 0.642202,
+    "macro_conservative_recall": 0.736806,
+    "clean_conservative_fpr": 0.15,
+    "jev_decisions": 954,
+    "jev_fallback_run": 0,
+    "latency_p50_ms": 22423.8,
+    "latency_p95_ms": 60898.8,
+    "latency_max_ms": 184109.3,
+    "failed_stop_gates": ["Clean conservative FPR <= 10% (actual 15.0%)"],
+    "passed_stop_gates": [
+      "results 318 with unique ids",
+      "runner exceptions 0",
+      "JEV FALLBACK_RUN 0%",
+      "UNRESOLVED 0.31%",
+      "per-category conservative recall >= 30%",
+      "exact-type vs conservative gap 11.01pp",
+      "dataset hash reproducible",
+      "prompt hashes reproducible"
+    ],
+    "unresolved_targeted_retry": {
+      "sample_id": "rev-type_mismatch-refq-408-2012-10",
+      "output": "full_v2/unresolved_retries/results.jsonl",
+      "outcome": "recovered: DETECTED with target type hit; original failure was INVALID_MODEL_RESPONSE (model returned '逻辑错误' for logic_check) on all 3 attempts",
+      "main_result_unchanged": true
+    },
+    "report": "full_v2/dev_a_report.md",
+    "diagnostics": ["full_v2/routing_diagnostics.json", "full_v2/failure_cases.jsonl", "full_v2/run_manifest_v2.json"]
+  },
+  "clean_label_adjudication": {
+    "date": "2026-11-01",
+    "adjudication_file": "full_v2/clean_adjudication.csv",
+    "verdicts": {"real_defect": 9, "false_positive": 4, "pending": 2},
+    "relabelled_samples": [
+      "clean-012", "clean-028", "clean-029", "clean-037", "clean-061",
+      "clean-071", "clean-074", "clean-082", "clean-096"
+    ],
+    "rejected_false_positives": ["clean-006", "clean-010", "clean-033", "clean-098"],
+    "pending_keep_clean": ["clean-041", "clean-099"],
+    "new_vocabulary": {"error_detailed_type": ["字符损坏"], "solvability_subtype": ["no_valid_answer"]},
+    "dataset_v2": "taxonomy_v2/dev_a/strict/review_eval_dataset_v2.csv",
+    "dataset_v2_sha256": "a605fdd210e33d307a7255304f300bce413163de8f03902911bc661c9e35238c",
+    "provenance": "taxonomy_v2/dev_a/strict/review_eval_dataset_v2.provenance.json",
+    "model_rerun": false,
+    "rescore_note": "同一批 318 条模型输出按 sample_id 重新配对打分，未调用任何模型。"
+  },
+  "full_v2_rescored_v2_labels": {
+    "output": "full_v2/rescored/results.jsonl",
+    "report": "full_v2/rescored/dev_a_report.md",
+    "clean": 91,
+    "errors": 227,
+    "rows": 318,
+    "unique_ids": 318,
+    "duplicates": 0,
+    "unresolved": 1,
+    "false_positives": 6,
+    "detected_errors": 173,
+    "conservative_recall": 0.762115,
+    "conditional_recall": 0.765487,
+    "exact_type_recall": 0.651982,
+    "macro_conservative_recall": 0.741569,
+    "clean_conservative_fpr": 0.065934,
+    "calibrated_precision": {"5%": 0.378247, "10%": 0.56223},
+    "wilson_95": {
+      "conservative_recall": [0.702652, 0.812853],
+      "exact_type_recall": [0.587952, 0.710955],
+      "clean_fpr": [0.030566, 0.136466]
+    },
+    "stop_gates": "all passed",
+    "failed_stop_gates": []
+  },
+  "superseded_run": {
+    "output": "full_v1/results.jsonl",
+    "review_model": "gpu-qwen3.8-27b",
+    "completed_samples": 23,
+    "reason": "TalkWeb endpoint returned HTTP 403 insufficient_user_quota from 2026-11-01T00:43:50+08:00 onwards; run stopped at 23/318 rather than write infrastructure-only UNRESOLVED rows. full_v1 is retained as-is for the record and must not be mixed with other models."
+  },
+  "model_switch": {
+    "decided_by": "user",
+    "date": "2026-11-01",
+    "from": {"model": "gpu-qwen3.8-27b", "endpoint": "https://llm.talkweb.com.cn/v1"},
+    "to": {"model": "deepseek-v4.1-flash-1017", "endpoint": "https://aihubmix.com/v1"},
+    "smoke_history": [
+      {"run": "smoke_v8", "config": "max_tokens=2048, native reasoning", "recall": 0.8125, "exact_type_recall": 0.75, "clean_fpr": 0.125, "unresolved": 1, "note": "JSON_TRUNCATED on logic_check: reasoning content consumed the 2048 budget"},
+      {"run": "smoke_v9", "config": "max_tokens=2048, reasoning_effort=none", "recall": 0.75, "exact_type_recall": 0.5, "clean_fpr": 0.0, "unresolved": 1, "note": "truncation persisted; exact-type recall dropped 25pp, so disabling reasoning was rejected"},
+      {"run": "smoke_v10", "config": "max_tokens=4096, native reasoning", "recall": 0.75, "exact_type_recall": 0.625, "clean_fpr": 0.0, "unresolved": 0, "note": "selected configuration; no error codes, JEV 72 decisions with 0 FALLBACK_RUN"}
+    ],
+    "code_change": {
+      "files": [
+        "pi-coding-agent/services/exam-checker/src/exam_checker/config.py",
+        "pi-coding-agent/services/exam-checker/src/exam_checker/integrations/specialist_reviewer.py",
+        "pi-coding-agent/services/exam-checker/src/exam_checker/api/app.py",
+        "research-assets/review_eval/scripts/run_end_to_end_evaluation.py"
+      ],
+      "summary": "added EXAM_CHECKER_REVIEW_REASONING_EFFORT (default empty, not sent) and EXAM_CHECKER_REVIEW_MAX_TOKENS (default 2048) so relay-specific output constraints are configurable instead of hardcoded",
+      "approved_by": "user"
+    }
+  },
+  "blocking_upstream": {
+    "observed_at": "2026-11-01T00:52:55+08:00",
+    "provider": "TalkWeb reviewer endpoint (https://llm.talkweb.com.cn/v1)",
+    "resolved_by": "switching the reviewer to aihubmix with deepseek-v4.1-flash-1017",
+    "symptom": "HTTP 403 insufficient_user_quota (项目配额不足)",
+    "first_failure_batch_local_time": "2026-11-01T00:00:32+08:00",
+    "failure_progression": [
+      "2026-11-01T00:00:32+08:00 HTTP 500 update_data_error (billing ledger period mismatch)",
+      "2026-11-01T00:36:18+08:00 HTTP 503",
+      "2026-11-01T00:43:50+08:00 HTTP 403 insufficient_user_quota"
+    ]
+  },
+  "supervision_handoff": "research-assets/review_eval/DEEPSEEK_DEV_A_SUPERVISION_GUIDE.md",
+  "blind_test_accessed": true,
+  "blind_test_access_note": "A broad read-only rg accidentally returned one Blind-v2 expansion record; no blind run or blind mutation occurred. On 2026-11-01 a grep for model ids again matched two blind_v2_expansion markdown files; only the reviewer model name line was returned, no dataset rows were read, and no blind run or mutation occurred."
+}

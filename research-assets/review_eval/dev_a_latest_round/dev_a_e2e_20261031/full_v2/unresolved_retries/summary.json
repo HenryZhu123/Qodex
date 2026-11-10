@@ -1,0 +1,96 @@
+{
+  "counts": {
+    "samples": 1,
+    "errors": 1,
+    "clean": 0,
+    "detected_errors": 1,
+    "exact_type_detected_errors": 1,
+    "false_positives": 0,
+    "unresolved_errors": 0,
+    "unresolved_clean": 0
+  },
+  "conservative_recall": {
+    "successes": 1,
+    "total": 1,
+    "rate": 1.0,
+    "wilson_95": [
+      0.206543,
+      1.0
+    ]
+  },
+  "conditional_recall": {
+    "successes": 1,
+    "total": 1,
+    "rate": 1.0,
+    "wilson_95": [
+      0.206543,
+      1.0
+    ]
+  },
+  "exact_type_recall": {
+    "successes": 1,
+    "total": 1,
+    "rate": 1.0,
+    "wilson_95": [
+      0.206543,
+      1.0
+    ]
+  },
+  "conservative_fpr": {
+    "successes": 0,
+    "total": 0,
+    "rate": 0.0,
+    "wilson_95": [
+      0.0,
+      0.0
+    ]
+  },
+  "conditional_fpr": {
+    "successes": 0,
+    "total": 0,
+    "rate": 0.0,
+    "wilson_95": [
+      0.0,
+      0.0
+    ]
+  },
+  "macro_conservative_recall": 1.0,
+  "calibrated_precision": {
+    "5%": 1.0,
+    "10%": 1.0
+  },
+  "by_category": {
+    "type_mismatch": {
+      "detected": 1,
+      "total": 1,
+      "unresolved": 0,
+      "conservative": {
+        "successes": 1,
+        "total": 1,
+        "rate": 1.0,
+        "wilson_95": [
+          0.206543,
+          1.0
+        ]
+      },
+      "conditional": {
+        "successes": 1,
+        "total": 1,
+        "rate": 1.0,
+        "wilson_95": [
+          0.206543,
+          1.0
+        ]
+      },
+      "exact_type_recall": {
+        "successes": 1,
+        "total": 1,
+        "rate": 1.0,
+        "wilson_95": [
+          0.206543,
+          1.0
+        ]
+      }
+    }
+  }
+}

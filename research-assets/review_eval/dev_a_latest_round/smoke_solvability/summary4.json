@@ -1,0 +1,91 @@
+{
+  "samples": 100,
+  "model": "qwen/qwen-2.5-72b-instruct",
+  "base_url": "https://openrouter.ai/api/v1",
+  "arms": [
+    {
+      "arm": "split",
+      "n_error": 80,
+      "detected": 43,
+      "recall": 0.5375,
+      "n_clean": 20,
+      "false_positives": 6,
+      "fpr": 0.3,
+      "failed": 0,
+      "avg_latency_s": 15.8,
+      "by_legacy_type": {
+        "missing_info": {
+          "n": 40,
+          "detected": 24
+        },
+        "unsolvable": {
+          "n": 40,
+          "detected": 19
+        }
+      }
+    },
+    {
+      "arm": "short",
+      "n_error": 80,
+      "detected": 51,
+      "recall": 0.6375,
+      "n_clean": 20,
+      "false_positives": 2,
+      "fpr": 0.1,
+      "failed": 0,
+      "avg_latency_s": 14.8,
+      "by_legacy_type": {
+        "missing_info": {
+          "n": 40,
+          "detected": 19
+        },
+        "unsolvable": {
+          "n": 40,
+          "detected": 32
+        }
+      }
+    },
+    {
+      "arm": "long",
+      "n_error": 80,
+      "detected": 44,
+      "recall": 0.55,
+      "n_clean": 20,
+      "false_positives": 0,
+      "fpr": 0.0,
+      "failed": 0,
+      "avg_latency_s": 12.9,
+      "by_legacy_type": {
+        "missing_info": {
+          "n": 40,
+          "detected": 16
+        },
+        "unsolvable": {
+          "n": 40,
+          "detected": 28
+        }
+      }
+    },
+    {
+      "arm": "short_v2",
+      "n_error": 80,
+      "detected": 53,
+      "recall": 0.6625,
+      "n_clean": 20,
+      "false_positives": 1,
+      "fpr": 0.05,
+      "failed": 0,
+      "avg_latency_s": 14.1,
+      "by_legacy_type": {
+        "missing_info": {
+          "n": 40,
+          "detected": 18
+        },
+        "unsolvable": {
+          "n": 40,
+          "detected": 35
+        }
+      }
+    }
+  ]
+}

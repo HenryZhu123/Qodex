@@ -1,0 +1,106 @@
+{
+  "run_id": "dev_a_e2e_20261031",
+  "output": "full_v2/results.jsonl",
+  "created_at": "2026-11-01T12:05:00+08:00",
+  "purpose": "Dev A strict full run after switching the reviewer model because the TalkWeb endpoint returned HTTP 403 insufficient_user_quota from 2026-11-01T00:43:50+08:00.",
+  "dataset": {
+    "path": "research-assets/review_eval/taxonomy_v2/dev_a/strict/review_eval_dataset.csv",
+    "sha256": "3a538730214753808d01b8a76cbd1e0996416181eec3ed70c5d8549a43bf40b8",
+    "samples": 318,
+    "errors": 218,
+    "clean": 100
+  },
+  "configuration": {
+    "runner": "research-assets/review_eval/scripts/run_end_to_end_evaluation.py",
+    "review_base_url": "https://aihubmix.com/v1",
+    "review_model": "deepseek-v4.1-flash-1017",
+    "review_max_tokens": 4096,
+    "review_reasoning_effort": "",
+    "review_llm_max_attempts": 3,
+    "reviewer_max_concurrency": 2,
+    "runner_concurrency": 1,
+    "jev_endpoint": "https://aihubmix.com/v1/systemone",
+    "jev_requested_model": "jev-1.14",
+    "jev_returned_model": "jev-1.14.0",
+    "secrets_recorded": false
+  },
+  "environment_variables": {
+    "EXAM_CHECKER_REVIEW_LLM_BASE_URL": "https://aihubmix.com/v1",
+    "EXAM_CHECKER_REVIEW_LLM_MODEL": "deepseek-v4.1-flash-1017",
+    "EXAM_CHECKER_REVIEW_REASONING_EFFORT": "",
+    "EXAM_CHECKER_REVIEW_MAX_TOKENS": "4096",
+    "EXAM_CHECKER_JEV_ENDPOINT": "https://aihubmix.com/v1/systemone",
+    "EXAM_CHECKER_JEV_MODEL": "jev-1.14"
+  },
+  "git_commit": "4252f822c923717e7e8a28c04a7ce4d19ace6ab8",
+  "working_tree_note": "The run used approved, uncommitted integration changes listed in code_change below. git_commit alone does not identify the executed code.",
+  "code_change": {
+    "approved_by": "user",
+    "intent": "make relay-specific output parameters configurable instead of hardcoded; behaviour unchanged when the new variables are unset",
+    "files": [
+      {
+        "path": "pi-coding-agent/services/exam-checker/src/exam_checker/config.py",
+        "sha256": "e6a19eedeef20752599ddf7ab956a304867a1795f5f6ae2e99f10c5760987a71",
+        "change": "added review_reasoning_effort and review_max_tokens settings"
+      },
+      {
+        "path": "pi-coding-agent/services/exam-checker/src/exam_checker/integrations/specialist_reviewer.py",
+        "sha256": "f17308891ac5efd270473d5611585cfffde55ed63fee2d0e712c1e083a3c51e7",
+        "change": "constructor accepts reasoning_effort and max_tokens; injects reasoning_effort when set; hardcoded 2048/1536 replaced by self.max_tokens"
+      },
+      {
+        "path": "pi-coding-agent/services/exam-checker/src/exam_checker/api/app.py",
+        "sha256": "d5c5b39e2803f2aa4bf61c1e520c06bcf519ab50cfda1dd74fd6b23379c71e4c",
+        "change": "passes the two new settings to the reviewer"
+      },
+      {
+        "path": "research-assets/review_eval/scripts/run_end_to_end_evaluation.py",
+        "sha256": "49b9bbf2a34e0072ab8c1cbc812fd9d1ee0a4a0726604d8b369a90e9d37b157d",
+        "change": "passes the two new settings to the reviewer"
+      }
+    ]
+  },
+  "smoke_gate": {
+    "selected": "smoke_v10",
+    "samples": 24,
+    "conservative_recall": 0.75,
+    "exact_type_recall": 0.625,
+    "clean_fpr": 0.0,
+    "unresolved": 0,
+    "rejected_candidates": [
+      {"run": "smoke_v8", "reason": "max_tokens=2048 truncated logic_check JSON (reasoning tokens)", "unresolved": 1},
+      {"run": "smoke_v9", "reason": "reasoning_effort=none kept the truncation and cut exact-type recall from 0.75 to 0.50", "unresolved": 1}
+    ]
+  },
+  "result": {
+    "rows": 318,
+    "unique_ids": 318,
+    "duplicates": 0,
+    "runner_errors": 0,
+    "unresolved": 1,
+    "conservative_recall": 0.752294,
+    "exact_type_recall": 0.642202,
+    "macro_conservative_recall": 0.736806,
+    "clean_conservative_fpr": 0.15,
+    "jev_decisions": 954,
+    "jev_fallback_run": 0,
+    "latency_p50_ms": 22423.8,
+    "latency_p95_ms": 60898.8,
+    "latency_max_ms": 184109.3
+  },
+  "stop_gates": {
+    "rows_and_uniqueness": "pass",
+    "runner_exceptions": "pass",
+    "jev_fallback_rate": "pass",
+    "unresolved_rate": "pass",
+    "clean_fpr": "fail",
+    "per_category_recall": "pass",
+    "exact_type_gap": "pass",
+    "data_hash": "pass",
+    "prompt_hash": "pass",
+    "code_version": "pass_with_documented_dirty_tree"
+  },
+  "stage_result": "full_dev_a_failed_quality_gate",
+  "blind_test_accessed": false,
+  "blind_test_note": "No blind dataset was read, run, or modified in this round."
+}

@@ -1,0 +1,58 @@
+{
+  "sample_csv": "D:\\Code\\hku\\LLM\\hku_agent\\research-assets\\review_eval\\dev_a_latest_round\\ablation_logic\\logic_sample_100.csv",
+  "sample": 100,
+  "logic": 40,
+  "clean": 60,
+  "model": "gpu-qwen3.8-27b",
+  "settings": {
+    "max_tokens": 4096,
+    "reasoning_effort": ""
+  },
+  "arms": [
+    {
+      "arm": "A0",
+      "kb_mode": "off",
+      "samples": 100,
+      "tp": 15,
+      "fp": 0,
+      "tn": 60,
+      "fn": 25,
+      "failed": 0,
+      "precision": 1.0,
+      "recall": 0.375,
+      "f1": 0.5455,
+      "fpr": 0.0,
+      "avg_latency_ms": 14959
+    },
+    {
+      "arm": "A1",
+      "kb_mode": "single",
+      "samples": 100,
+      "tp": 19,
+      "fp": 0,
+      "tn": 60,
+      "fn": 21,
+      "failed": 0,
+      "precision": 1.0,
+      "recall": 0.475,
+      "f1": 0.6441,
+      "fpr": 0.0,
+      "avg_latency_ms": 21399
+    },
+    {
+      "arm": "A2",
+      "kb_mode": "multi",
+      "samples": 100,
+      "tp": 18,
+      "fp": 0,
+      "tn": 60,
+      "fn": 21,
+      "failed": 1,
+      "precision": 1.0,
+      "recall": 0.4615,
+      "f1": 0.6316,
+      "fpr": 0.0,
+      "avg_latency_ms": 22603
+    }
+  ]
+}

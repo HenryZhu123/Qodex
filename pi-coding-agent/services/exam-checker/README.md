@@ -32,6 +32,19 @@ isolated PostgreSQL 17 + pgvector database with one command:
 ./start-exam-checker-db.sh
 ```
 
+For direct Python runs (including the evaluation scripts), the service also
+loads `services/exam-checker/.env.local` and then `services/exam-checker/.env`.
+Existing process environment variables take precedence. Copy
+`.env.example` to `.env.local`; the local file is ignored by Git. An
+alternative file can be selected with `EXAM_CHECKER_ENV_FILE`.
+
+The specialist reviewer uses an OpenAI-compatible endpoint and calls
+`{EXAM_CHECKER_REVIEW_LLM_BASE_URL}/chat/completions`. The Jev router uses the
+OpenRouter Decisions protocol and calls
+`EXAM_CHECKER_JEV_ENDPOINT` exactly when configured, otherwise it calls
+`{EXAM_CHECKER_JEV_BASE_URL}/decisions`. A relay that only supports OpenAI Chat
+Completions is not directly compatible.
+
 The database listens on host port `5433` by default, so it does not conflict
 with a PostgreSQL instance already using `5432`. The command is idempotent: it
 reuses the named Docker volume and waits for PostgreSQL to become healthy.
@@ -124,7 +137,7 @@ The review phase is question-oriented, not error-type-oriented:
 1. Read one normalized question by `question_id` and build its checker payload.
 2. Run Jev independently for `options_check`, `mismatch_check`, and `answer_leak_check`.
 3. Skip a gated specialist only when `p_skip` reaches its locked threshold. Low-confidence or failed routing fails open to the specialist LLM.
-4. Start all six direct specialist checks without waiting for Jev.
+4. Start all five direct specialist checks without waiting for Jev.
 5. Retry retryable specialist failures up to `EXAM_CHECKER_REVIEW_LLM_MAX_ATTEMPTS` attempts (three by default).
 6. Aggregate every specialist result for the question into one JSON object and return it as the question result.
 7. Review multiple questions concurrently. The global maximum concurrency is configuration-driven and will be fixed only after load testing.

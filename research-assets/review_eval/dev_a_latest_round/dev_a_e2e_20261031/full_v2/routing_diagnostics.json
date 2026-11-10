@@ -1,0 +1,151 @@
+{
+  "decisions_total": 954,
+  "overall": {
+    "SKIP": 745,
+    "RUN": 209
+  },
+  "fallback_rate": 0.0,
+  "by_task": {
+    "answer_leak_check": {
+      "RUN": 166,
+      "SKIP": 152
+    },
+    "mismatch_check": {
+      "SKIP": 290,
+      "RUN": 28
+    },
+    "options_check": {
+      "SKIP": 303,
+      "RUN": 15
+    }
+  },
+  "by_category": {
+    "ambiguity": {
+      "SKIP": 43,
+      "RUN": 11
+    },
+    "answer_leakage": {
+      "SKIP": 40,
+      "RUN": 20
+    },
+    "clean": {
+      "SKIP": 262,
+      "RUN": 38
+    },
+    "factual_logical": {
+      "SKIP": 50,
+      "RUN": 10
+    },
+    "option_structure": {
+      "RUN": 28,
+      "SKIP": 32
+    },
+    "punctuation": {
+      "SKIP": 52,
+      "RUN": 8
+    },
+    "solvability_failure": {
+      "SKIP": 98,
+      "RUN": 22
+    },
+    "type_mismatch": {
+      "SKIP": 25,
+      "RUN": 35
+    },
+    "typo": {
+      "SKIP": 143,
+      "RUN": 37
+    }
+  },
+  "fallback_error_kinds": {},
+  "fallback_samples": [],
+  "task_execution_status": {
+    "ambiguity_check": {
+      "COMPLETED": 318
+    },
+    "answer_leak_check": {
+      "COMPLETED": 166,
+      "SKIPPED_BY_ROUTER": 152
+    },
+    "logic_check": {
+      "COMPLETED": 317,
+      "FAILED": 1
+    },
+    "mismatch_check": {
+      "SKIPPED_BY_ROUTER": 290,
+      "COMPLETED": 28
+    },
+    "options_check": {
+      "SKIPPED_BY_ROUTER": 303,
+      "COMPLETED": 15
+    },
+    "punctuation_check": {
+      "COMPLETED": 318
+    },
+    "solvability_check": {
+      "COMPLETED": 318
+    },
+    "typo_check": {
+      "COMPLETED": 318
+    }
+  },
+  "task_retries": {
+    "logic_check": 14,
+    "punctuation_check": 5
+  },
+  "task_error_codes": {
+    "logic_check": {
+      "INVALID_MODEL_RESPONSE": 1
+    }
+  },
+  "task_latency_ms": {
+    "ambiguity_check": {
+      "p50": 11581.0,
+      "p95": 29770.0,
+      "max": 59651.0,
+      "n": 318
+    },
+    "answer_leak_check": {
+      "p50": 12518.5,
+      "p95": 34391.7,
+      "max": 57718.0,
+      "n": 318
+    },
+    "logic_check": {
+      "p50": 20638.0,
+      "p95": 60437.8,
+      "max": 184106.0,
+      "n": 313
+    },
+    "mismatch_check": {
+      "p50": 349.0,
+      "p95": 929.2,
+      "max": 41365.0,
+      "n": 300
+    },
+    "options_check": {
+      "p50": 348.5,
+      "p95": 685.8,
+      "max": 57320.0,
+      "n": 306
+    },
+    "punctuation_check": {
+      "p50": 7991.5,
+      "p95": 18773.7,
+      "max": 64036.0,
+      "n": 318
+    },
+    "solvability_check": {
+      "p50": 12275.5,
+      "p95": 35934.5,
+      "max": 80032.0,
+      "n": 318
+    },
+    "typo_check": {
+      "p50": 3276.5,
+      "p95": 13263.7,
+      "max": 34253.0,
+      "n": 318
+    }
+  }
+}

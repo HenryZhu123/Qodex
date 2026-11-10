@@ -15,7 +15,7 @@ Read these before beginning a run:
 - [quality-gates.md](references/quality-gates.md): construction and audit standards learned from prior runs.
 - [schemas.md](references/schemas.md): manifests, source registry, and gold-answer schema.
 
-Read the relevant error-specific prompt under `C:\hyt-agent\提示词-微调版` and inspect comparable rows in the target training dataset before fixing field names or prompt composition. The target dataset's established system prompt, specialty prompt, JSON constraint, and column schema take precedence over legacy agent formats.
+Read the relevant error-specific prompt under `D:\Code\hku\LLM\hku_agent\research-assets\提示词-微调版` and inspect comparable rows in the target training dataset before fixing field names or prompt composition. The target dataset's established system prompt, specialty prompt, JSON constraint, and column schema take precedence over legacy agent formats.
 
 ## Non-negotiable workflow
 
@@ -24,6 +24,10 @@ Read the relevant error-specific prompt under `C:\hyt-agent\提示词-微调版`
 3. Stop after the report and wait for explicit user approval before starting the next phase.
 4. An earlier approval of the overall task is not approval of later phases.
 5. Never mutate the original dataset. Work in a new, clearly versioned output directory and retain a backup or immutable source reference.
+
+## Solvability taxonomy
+
+Use `solvability_failure` (`可解性错误`) as the single top-level type for defects that prevent a unique, valid, scorable answer. Do not create parallel top-level `missing_info` and `unsolvable` labels. Select exactly one subtype from `references/quality-gates.md` and store it in `solvability_subtype`; legacy labels may be retained only as provenance fields.
 
 ## Division of responsibility
 

@@ -1,0 +1,20 @@
+{
+  "question_id": "DS_STACK_001",
+  "version": 1,
+  "subject": "数据结构",
+  "topic": "栈",
+  "question_type": "single_choice",
+  "difficulty": "easy",
+  "score": 2,
+  "stem": "一个初始为空的栈依次执行 push(1)、push(2)、pop()、push(3)，此时栈顶元素是？",
+  "options": {"A": "1", "B": "2", "C": "3", "D": "栈为空"},
+  "answer": "C",
+  "explanation": "弹出 2 后栈中剩下 1，再压入 3，因此栈顶是 3。",
+  "source": "本项目开发用合成示例",
+  "review": {
+    "status": "PASS",
+    "question_version": 1,
+    "is_mock": true,
+    "note": "接口演示用占位结果，未经真实审校模块验收"
+  }
+}

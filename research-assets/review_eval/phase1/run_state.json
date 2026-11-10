@@ -1,0 +1,18 @@
+{
+  "run_id": "review-eval-p1",
+  "phase": "phase1_approved",
+  "approvals": {
+    "phase1": "2026-10-23T13:23:51+08:00",
+    "phase1_user_confirmation": "user approved: keep 540 samples (60 per type), one root error per sample, standard answers deferred to phase 3/4",
+    "phase2": null,
+    "phase3": null,
+    "phase4": null
+  },
+  "outputs": {
+    "plan": "research-assets/review_eval/phase1/plan.md",
+    "plan_json": "research-assets/review_eval/phase1/plan.json",
+    "selection": "research-assets/review_eval/phase1/source_selection.jsonl",
+    "mutation_manifest": "research-assets/review_eval/phase2/mutation_manifest.jsonl",
+    "phase2_report": "research-assets/review_eval/phase2/phase2_report.md"
+  }
+}

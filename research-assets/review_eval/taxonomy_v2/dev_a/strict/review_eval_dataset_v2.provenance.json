@@ -1,0 +1,118 @@
+{
+  "purpose": "Dev A strict clean-label adjudication",
+  "source_dataset": "research-assets/review_eval/taxonomy_v2/dev_a/strict/review_eval_dataset.csv",
+  "source_dataset_sha256": "3a538730214753808d01b8a76cbd1e0996416181eec3ed70c5d8549a43bf40b8",
+  "adjudication_file": "research-assets/review_eval/dev_a_latest_round/dev_a_e2e_20261031/full_v2/clean_adjudication.csv",
+  "adjudication_sha256": "8592d83f320ea38729d125dc8130bf1cf26263d61525cce6698b62fe851d6d31",
+  "relabelled": [
+    {
+      "sample_id": "clean-012",
+      "error_type": "typo",
+      "error_detailed_type": "形近字",
+      "model_detected_types": [
+        "错别字"
+      ],
+      "note": "形近字误写"
+    },
+    {
+      "sample_id": "clean-028",
+      "error_type": "solvability_failure",
+      "error_detailed_type": "missing_required_condition",
+      "model_detected_types": [
+        "错别字",
+        "可解性错误"
+      ],
+      "note": "另有“交换网网络”字符重复（typo），单标签数据集取更严重的缺条件为主类。"
+    },
+    {
+      "sample_id": "clean-029",
+      "error_type": "solvability_failure",
+      "error_detailed_type": "missing_required_condition",
+      "model_detected_types": [
+        "可解性错误"
+      ],
+      "note": "缺图；纯文本链路必然触发"
+    },
+    {
+      "sample_id": "clean-037",
+      "error_type": "solvability_failure",
+      "error_detailed_type": "missing_required_condition",
+      "model_detected_types": [
+        "可解性错误",
+        "事实/逻辑错误"
+      ],
+      "note": "logic_check 是同一根因的第二种描述，不算第二个独立缺陷"
+    },
+    {
+      "sample_id": "clean-061",
+      "error_type": "typo",
+      "error_detailed_type": "字符损坏",
+      "model_detected_types": [
+        "可解性错误"
+      ],
+      "note": "根因是上划线被抽成组合符乱码，归 typo/字符损坏；模型报的是可解性错误，重标后计为 wrong-type。"
+    },
+    {
+      "sample_id": "clean-071",
+      "error_type": "typo",
+      "error_detailed_type": "形近字",
+      "model_detected_types": [
+        "错别字"
+      ],
+      "note": "罗马数字 I 被抽成数字 1"
+    },
+    {
+      "sample_id": "clean-074",
+      "error_type": "solvability_failure",
+      "error_detailed_type": "no_valid_answer",
+      "model_detected_types": [
+        "可解性错误",
+        "事实/逻辑错误"
+      ],
+      "note": "表象为无正确项；根因疑为负号与上标在抽取中丢失。本表按人工确认归入 solvability_failure，并新增子类 no_valid_answer。"
+    },
+    {
+      "sample_id": "clean-082",
+      "error_type": "typo",
+      "error_detailed_type": "音近字",
+      "model_detected_types": [
+        "错别字"
+      ],
+      "note": "同音形近字误写"
+    },
+    {
+      "sample_id": "clean-096",
+      "error_type": "typo",
+      "error_detailed_type": "术语错字",
+      "model_detected_types": [
+        "错别字"
+      ],
+      "note": "相邻字倒序"
+    }
+  ],
+  "kept_clean_pending": [
+    "clean-041",
+    "clean-099"
+  ],
+  "kept_clean_rejected": [
+    "clean-006",
+    "clean-010",
+    "clean-033",
+    "clean-098"
+  ],
+  "new_vocabulary": {
+    "error_detailed_type": [
+      "字符损坏"
+    ],
+    "solvability_subtype": [
+      "no_valid_answer"
+    ]
+  },
+  "counts": {
+    "before_clean": 100,
+    "before_error": 218,
+    "after_clean": 91,
+    "after_error": 227
+  },
+  "note": "v2 only relabels samples that a human confirmed as real defects. Model outputs are unchanged; metrics are recomputed by joining on sample_id."
+}

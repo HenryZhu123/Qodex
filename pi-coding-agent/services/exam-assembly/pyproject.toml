@@ -1,0 +1,15 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "qodex-exam-assembly-service"
+version = "0.2.0"
+requires-python = ">=3.11"
+dependencies = ["fastapi==0.143.0", "httpx==0.28.1", "uvicorn==0.54.0", "qodex-exam-assembly-core==0.2.0"]
+
+[project.optional-dependencies]
+pdf = ["reportlab==4.4.9"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/exam_assembly_service"]

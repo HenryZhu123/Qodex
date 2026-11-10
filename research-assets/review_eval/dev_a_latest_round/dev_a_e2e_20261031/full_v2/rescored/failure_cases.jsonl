@@ -1,0 +1,85 @@
+{"kind": "false_positive", "reason": "clean 题被判 DETECTED", "sample_id": "clean-006", "status": "DETECTED", "detected_error_types": ["标点符号错误"], "latency_ms": 14572.1}
+{"kind": "false_positive", "reason": "clean 题被判 DETECTED", "sample_id": "clean-010", "status": "DETECTED", "detected_error_types": ["标点符号错误"], "latency_ms": 17883.4}
+{"kind": "false_positive", "reason": "clean 题被判 DETECTED", "sample_id": "clean-033", "status": "DETECTED", "detected_error_types": ["标点符号错误"], "latency_ms": 35060.9}
+{"kind": "false_positive", "reason": "clean 题被判 DETECTED", "sample_id": "clean-041", "status": "DETECTED", "detected_error_types": ["错别字"], "latency_ms": 15794.3}
+{"kind": "false_positive", "reason": "clean 题被判 DETECTED", "sample_id": "clean-098", "status": "DETECTED", "detected_error_types": ["标点符号错误"], "latency_ms": 17490.6}
+{"kind": "false_positive", "reason": "clean 题被判 DETECTED", "sample_id": "clean-099", "status": "DETECTED", "detected_error_types": ["错别字"], "latency_ms": 14818.7}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2013-25", "gold_type": "ambiguity", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2016-16", "gold_type": "ambiguity", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2018-29", "gold_type": "ambiguity", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2019-09", "gold_type": "ambiguity", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2020-13", "gold_type": "ambiguity", "status": "CLEAN", "subject": "computer_organization"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2020-16", "gold_type": "ambiguity", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2021-04", "gold_type": "ambiguity", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2022-16", "gold_type": "ambiguity", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2022-31", "gold_type": "ambiguity", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-ambiguity-refq-408-2023-11", "gold_type": "ambiguity", "status": "CLEAN", "subject": "computer_organization"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-answer_leakage-refq-408-2018-16", "gold_type": "answer_leakage", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-answer_leakage-refq-408-2021-11", "gold_type": "answer_leakage", "status": "CLEAN", "subject": "computer_organization"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-factual_logical-refq-408-2016-14", "gold_type": "factual_logical", "status": "CLEAN", "subject": "computer_organization"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-factual_logical-refq-408-2017-31", "gold_type": "factual_logical", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-factual_logical-refq-408-2023-15", "gold_type": "factual_logical", "status": "CLEAN", "subject": "computer_organization"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-factual_logical-refq-408-2024-20", "gold_type": "factual_logical", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-factual_logical-refq-408-2025-20", "gold_type": "factual_logical", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-factual_logical-refq-408-2026-20", "gold_type": "factual_logical", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-missing_info-refq-408-2011-35", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-missing_info-refq-408-2013-38", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-missing_info-refq-408-2014-08", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-missing_info-refq-408-2014-10", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-missing_info-refq-408-2014-27", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-missing_info-refq-408-2014-31", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-missing_info-refq-408-2015-01", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-missing_info-refq-408-2015-04", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-option_structure-refq-408-2013-11", "gold_type": "option_structure", "status": "CLEAN", "subject": "computer_organization"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-option_structure-refq-408-2018-11", "gold_type": "option_structure", "status": "CLEAN", "subject": "computer_organization"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-option_structure-refq-408-2021-22", "gold_type": "option_structure", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-punctuation-refq-408-2009-09", "gold_type": "punctuation", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-punctuation-refq-408-2009-11", "gold_type": "punctuation", "status": "CLEAN", "subject": "computer_organization"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-punctuation-refq-408-2009-17", "gold_type": "punctuation", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-punctuation-refq-408-2009-23", "gold_type": "punctuation", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-punctuation-refq-408-2009-28", "gold_type": "punctuation", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-punctuation-refq-408-2009-37", "gold_type": "punctuation", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-punctuation-refq-408-2010-30", "gold_type": "punctuation", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-punctuation-refq-408-2011-04", "gold_type": "punctuation", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-type_mismatch-refq-408-2017-23", "gold_type": "type_mismatch", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-type_mismatch-refq-408-2023-20", "gold_type": "type_mismatch", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2014-38", "gold_type": "typo", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2016-01", "gold_type": "typo", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2016-27", "gold_type": "typo", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2017-25", "gold_type": "typo", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2018-24", "gold_type": "typo", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2020-14", "gold_type": "typo", "status": "CLEAN", "subject": "computer_organization"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2021-40", "gold_type": "typo", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2022-26", "gold_type": "typo", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2023-19", "gold_type": "typo", "status": "CLEAN", "subject": "operating_system"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2023-40", "gold_type": "typo", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2025-26", "gold_type": "typo", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-typo-refq-408-2025-33", "gold_type": "typo", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-unsolvable-refq-408-2009-39", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "computer_network"}
+{"kind": "false_negative", "reason": "错误题被判 CLEAN", "sample_id": "rev-unsolvable-refq-408-2020-09", "gold_type": "solvability_failure", "status": "CLEAN", "subject": "data_structure"}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "clean-061", "gold_type": "typo", "detected_error_types": ["可解性错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-ambiguity-refq-408-2016-36", "gold_type": "ambiguity", "detected_error_types": ["可解性错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-ambiguity-refq-408-2017-17", "gold_type": "ambiguity", "detected_error_types": ["可解性错误", "事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-ambiguity-refq-408-2019-19", "gold_type": "ambiguity", "detected_error_types": ["可解性错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-ambiguity-refq-408-2021-03", "gold_type": "ambiguity", "detected_error_types": ["可解性错误", "事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-ambiguity-refq-408-2021-15", "gold_type": "ambiguity", "detected_error_types": ["事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-ambiguity-refq-408-2025-14", "gold_type": "ambiguity", "detected_error_types": ["可解性错误", "可解性错误", "事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-answer_leakage-refq-408-2015-07", "gold_type": "answer_leakage", "detected_error_types": ["可解性错误", "事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-factual_logical-refq-408-2016-25", "gold_type": "factual_logical", "detected_error_types": ["语义不清"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-factual_logical-refq-408-2024-38", "gold_type": "factual_logical", "detected_error_types": ["可解性错误", "语义不清"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-missing_info-refq-408-2012-01", "gold_type": "solvability_failure", "detected_error_types": ["错别字", "事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-missing_info-refq-408-2014-02", "gold_type": "solvability_failure", "detected_error_types": ["事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-missing_info-refq-408-2014-28", "gold_type": "solvability_failure", "detected_error_types": ["错别字", "事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-missing_info-refq-408-2015-06", "gold_type": "solvability_failure", "detected_error_types": ["事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-missing_info-refq-408-2015-08", "gold_type": "solvability_failure", "detected_error_types": ["错别字", "语义不清"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-option_structure-refq-408-2012-26", "gold_type": "option_structure", "detected_error_types": ["标点符号错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-option_structure-refq-408-2018-13", "gold_type": "option_structure", "detected_error_types": ["标点符号错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-option_structure-refq-408-2020-07", "gold_type": "option_structure", "detected_error_types": ["事实/逻辑错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-option_structure-refq-408-2022-36", "gold_type": "option_structure", "detected_error_types": ["标点符号错误", "可解性错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-option_structure-refq-408-2024-35", "gold_type": "option_structure", "detected_error_types": ["标点符号错误", "可解性错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-punctuation-refq-408-2009-03", "gold_type": "punctuation", "detected_error_types": ["可解性错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-typo-refq-408-2020-40", "gold_type": "typo", "detected_error_types": ["可解性错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-typo-refq-408-2024-32", "gold_type": "typo", "detected_error_types": ["标点符号错误", "标点符号错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-typo-refq-408-2025-37", "gold_type": "typo", "detected_error_types": ["可解性错误"]}
+{"kind": "wrong_type", "reason": "检出但类别不符", "sample_id": "rev-unsolvable-refq-408-2009-14", "gold_type": "solvability_failure", "detected_error_types": ["事实/逻辑错误"]}
+{"kind": "unresolved", "reason": "存在无法完成的检查", "sample_id": "rev-type_mismatch-refq-408-2012-10", "gold_type": "type_mismatch", "unresolved_checks": ["logic_check"], "runner_error": null, "failed_checks": [{"task_id": "logic_check", "error_code": "INVALID_MODEL_RESPONSE", "attempts": 3, "error": "Specialist returned '逻辑错误' for logic_check"}]}

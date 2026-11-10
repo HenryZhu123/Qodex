@@ -1,0 +1,502 @@
+[
+  {
+    "question_id": "DEV_DS_001",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "线性表",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "顺序表使用什么方式存储元素？",
+    "options": {
+      "A": "连续存储空间",
+      "B": "任意散列地址",
+      "C": "仅使用树节点",
+      "D": "仅使用图边"
+    },
+    "answer": "A",
+    "explanation": "顺序表将元素存放在连续的存储空间。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_002",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "线性表",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "长度为 n 的顺序表，在表头插入元素最坏需要移动多少个原有元素？",
+    "options": {
+      "A": "0",
+      "B": "1",
+      "C": "n",
+      "D": "n²"
+    },
+    "answer": "C",
+    "explanation": "表头插入需要将原来的 n 个元素后移。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_003",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "线性表",
+    "question_type": "single_choice",
+    "difficulty": "hard",
+    "score": 2,
+    "stem": "不带尾指针的单链表只有头指针，尾部追加一个节点的时间复杂度是？",
+    "options": {
+      "A": "O(1)",
+      "B": "O(log n)",
+      "C": "O(n)",
+      "D": "O(n²)"
+    },
+    "answer": "C",
+    "explanation": "需要遍历链表找到尾节点。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_004",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "线性表",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "已知单链表中非尾节点 p，在其后插入节点的时间复杂度是？",
+    "options": {
+      "A": "O(1)",
+      "B": "O(n)",
+      "C": "O(n log n)",
+      "D": "O(n²)"
+    },
+    "answer": "A",
+    "explanation": "只需修改固定数量的指针。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_005",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "栈",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "栈中元素按什么顺序出栈？",
+    "options": {
+      "A": "先进先出",
+      "B": "后进先出",
+      "C": "随机顺序",
+      "D": "按数值排序"
+    },
+    "answer": "B",
+    "explanation": "栈遵循后进先出。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_006",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "栈",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "元素依次入栈 1、2、3，允许入栈过程中出栈，哪个出栈序列不可能？",
+    "options": {
+      "A": "1,2,3",
+      "B": "2,1,3",
+      "C": "3,1,2",
+      "D": "3,2,1"
+    },
+    "answer": "C",
+    "explanation": "3 先出栈意味着 1、2 已在栈内，接下来只能先弹出 2。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_007",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "栈",
+    "question_type": "single_choice",
+    "difficulty": "hard",
+    "score": 2,
+    "stem": "4 个不同元素按固定顺序入栈，允许交错出栈，共有多少种合法出栈排列？",
+    "options": {
+      "A": "8",
+      "B": "12",
+      "C": "14",
+      "D": "24"
+    },
+    "answer": "C",
+    "explanation": "合法排列数量为第 4 个卡特兰数，即 14。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_008",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "栈",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "后缀表达式 2 3 + 4 * 的值是？",
+    "options": {
+      "A": "14",
+      "B": "20",
+      "C": "24",
+      "D": "9"
+    },
+    "answer": "B",
+    "explanation": "先计算 2+3=5，再计算 5×4=20。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_009",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "队列",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "普通队列遵循什么访问规则？",
+    "options": {
+      "A": "后进先出",
+      "B": "先进先出",
+      "C": "最大值先出",
+      "D": "最小值先出"
+    },
+    "answer": "B",
+    "explanation": "普通队列在队尾入队、队头出队。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_010",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "队列",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "容量为 8 的循环队列，采用牺牲一个单元区分空满，最多存多少个元素？",
+    "options": {
+      "A": "6",
+      "B": "7",
+      "C": "8",
+      "D": "9"
+    },
+    "answer": "B",
+    "explanation": "保留一个空位，因此有效容量为 7。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_011",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "队列",
+    "question_type": "single_choice",
+    "difficulty": "hard",
+    "score": 2,
+    "stem": "容量为 8 的循环队列，front 指向队头，rear 指向下一入队位置，当前 front=6、rear=2，队内有多少元素？",
+    "options": {
+      "A": "2",
+      "B": "3",
+      "C": "4",
+      "D": "6"
+    },
+    "answer": "C",
+    "explanation": "元素数为 (rear-front+8)%8=4。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_012",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "队列",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "队列初始为空，依次入队 A、B，出队一次，再入队 C，此时队头是？",
+    "options": {
+      "A": "A",
+      "B": "B",
+      "C": "C",
+      "D": "为空"
+    },
+    "answer": "B",
+    "explanation": "A 已出队，剩余顺序为 B、C。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_013",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "树",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "一棵有 n 个节点的非空树共有多少条边？",
+    "options": {
+      "A": "n-1",
+      "B": "n",
+      "C": "n+1",
+      "D": "2n"
+    },
+    "answer": "A",
+    "explanation": "树的边数等于节点数减一。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_014",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "树",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "二叉树中节点 A 的左孩子为 B、右孩子为 C，无其他节点，先序遍历为？",
+    "options": {
+      "A": "B A C",
+      "B": "B C A",
+      "C": "A B C",
+      "D": "C A B"
+    },
+    "answer": "C",
+    "explanation": "先序遍历为根、左子树、右子树。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_015",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "树",
+    "question_type": "single_choice",
+    "difficulty": "hard",
+    "score": 2,
+    "stem": "一棵非空二叉树有 10 个度为 2 的节点，叶节点有多少个？",
+    "options": {
+      "A": "9",
+      "B": "10",
+      "C": "11",
+      "D": "20"
+    },
+    "answer": "C",
+    "explanation": "二叉树的叶节点数等于度为 2 的节点数加一。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_016",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "树",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "含 7 个节点的完全二叉树，按根为第 1 层计算，有多少层？",
+    "options": {
+      "A": "2",
+      "B": "3",
+      "C": "4",
+      "D": "7"
+    },
+    "answer": "B",
+    "explanation": "前 3 层的节点数为 1+2+4=7。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_017",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "图",
+    "question_type": "single_choice",
+    "difficulty": "easy",
+    "score": 2,
+    "stem": "无向图中所有顶点度数之和等于边数的多少倍？",
+    "options": {
+      "A": "1",
+      "B": "2",
+      "C": "3",
+      "D": "4"
+    },
+    "answer": "B",
+    "explanation": "每条无向边对度数之和贡献 2。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_018",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "图",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "简单无向完全图有 5 个顶点，共有多少条边？",
+    "options": {
+      "A": "5",
+      "B": "10",
+      "C": "15",
+      "D": "20"
+    },
+    "answer": "B",
+    "explanation": "边数为 5×4÷2=10。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_019",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "图",
+    "question_type": "single_choice",
+    "difficulty": "hard",
+    "score": 2,
+    "stem": "有 6 个顶点的连通无向图，其任意一棵生成树包含多少条边？",
+    "options": {
+      "A": "4",
+      "B": "5",
+      "C": "6",
+      "D": "取决于原图边数"
+    },
+    "answer": "B",
+    "explanation": "生成树包含全部顶点，边数为顶点数减一。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  },
+  {
+    "question_id": "DEV_DS_020",
+    "version": 1,
+    "subject": "数据结构",
+    "topic": "图",
+    "question_type": "single_choice",
+    "difficulty": "medium",
+    "score": 2,
+    "stem": "在所有边权都为 1 的图中，从起点求到各可达顶点的最短距离，适合使用？",
+    "options": {
+      "A": "深度优先搜索",
+      "B": "广度优先搜索",
+      "C": "拓扑排序",
+      "D": "直接按编号排序"
+    },
+    "answer": "B",
+    "explanation": "广度优先搜索按距离层次访问顶点。",
+    "source": "AI 辅助编写的开发样例；难度为演示标签，未经校准",
+    "review": {
+      "status": "PASS",
+      "question_version": 1,
+      "is_mock": true,
+      "note": "模拟审校状态，未经真实审校模块验收"
+    }
+  }
+]

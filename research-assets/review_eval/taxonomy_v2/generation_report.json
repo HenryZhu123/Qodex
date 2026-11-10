@@ -1,0 +1,122 @@
+[
+  {
+    "dataset": "dev_a",
+    "source_directory": "research-assets/review_eval/dataset",
+    "source_rows": 320,
+    "adjudicated_rows": 320,
+    "strict_rows": 320,
+    "removed_by_human": 0,
+    "excluded_from_strict": 0,
+    "strict_policy": "taxonomy_migration_only_no_human_quality_exclusion",
+    "manual_decision_counts": {},
+    "inferred_keep_count": 0,
+    "legacy_type_counts": {
+      "none": 100,
+      "ambiguity": 20,
+      "answer_leakage": 20,
+      "factual_logical": 20,
+      "missing_info": 20,
+      "option_structure": 20,
+      "punctuation": 20,
+      "type_mismatch": 20,
+      "typo": 60,
+      "unsolvable": 20
+    },
+    "new_type_counts": {
+      "none": 100,
+      "ambiguity": 20,
+      "answer_leakage": 20,
+      "factual_logical": 20,
+      "solvability_failure": 40,
+      "option_structure": 20,
+      "punctuation": 20,
+      "type_mismatch": 20,
+      "typo": 60
+    },
+    "solvability_subtype_counts": {
+      "missing_required_condition": 40
+    }
+  },
+  {
+    "dataset": "dev_b",
+    "source_directory": "research-assets/review_eval/blind_test_set/dataset",
+    "source_rows": 240,
+    "adjudicated_rows": 240,
+    "strict_rows": 240,
+    "removed_by_human": 0,
+    "excluded_from_strict": 0,
+    "strict_policy": "taxonomy_migration_only_no_human_quality_exclusion",
+    "manual_decision_counts": {},
+    "inferred_keep_count": 0,
+    "legacy_type_counts": {
+      "type_mismatch": 20,
+      "option_structure": 20,
+      "factual_logical": 20,
+      "typo": 20,
+      "punctuation": 20,
+      "missing_info": 20,
+      "ambiguity": 20,
+      "unsolvable": 20,
+      "answer_leakage": 20,
+      "none": 60
+    },
+    "new_type_counts": {
+      "type_mismatch": 20,
+      "option_structure": 20,
+      "factual_logical": 20,
+      "typo": 20,
+      "punctuation": 20,
+      "solvability_failure": 40,
+      "ambiguity": 20,
+      "answer_leakage": 20,
+      "none": 60
+    },
+    "solvability_subtype_counts": {
+      "missing_required_condition": 35,
+      "no_valid_answer": 5
+    }
+  },
+  {
+    "dataset": "blind_v2",
+    "source_directory": "research-assets/review_eval/blind_test_v2/dataset",
+    "source_rows": 197,
+    "adjudicated_rows": 185,
+    "strict_rows": 169,
+    "removed_by_human": 12,
+    "excluded_from_strict": 16,
+    "strict_policy": "human_adjudication_plus_leakage_strength",
+    "manual_decision_counts": {
+      "keep": 19,
+      "remove": 12,
+      "diagnostic_only": 5
+    },
+    "inferred_keep_count": 6,
+    "legacy_type_counts": {
+      "factual_logical": 6,
+      "type_mismatch": 12,
+      "option_structure": 18,
+      "typo": 23,
+      "punctuation": 18,
+      "missing_info": 17,
+      "ambiguity": 13,
+      "unsolvable": 6,
+      "answer_leakage": 24,
+      "none": 60
+    },
+    "new_type_counts": {
+      "factual_logical": 6,
+      "type_mismatch": 12,
+      "option_structure": 18,
+      "typo": 23,
+      "punctuation": 18,
+      "solvability_failure": 14,
+      "ambiguity": 13,
+      "answer_leakage": 21,
+      "none": 60
+    },
+    "solvability_subtype_counts": {
+      "underspecified_task": 9,
+      "missing_required_condition": 5
+    }
+  }
+]

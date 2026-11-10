@@ -1,6 +1,8 @@
-# Qodex 工作区开发指导
+# Qodex Agent 开发指南
 
-本文件记录长期稳定的项目目标、架构约束与开发原则。**当前任务与进度写到工作区根目录 `TASK_STATE.md`，不写在这里。**
+本文件是仓库级 Agent 指令入口。用户使用与启动方式以 `README.md` 为准，设计、接口和验收资料从 `docs/README.md` 进入。进入子目录工作前继续读取该目录内更具体的 `AGENTS.md`；修改 Pi 时必须同时遵守 `pi-coding-agent/AGENTS.md`。
+
+本文件同时记录长期稳定的项目目标、架构约束与开发原则。**当前任务与进度写到工作区根目录 `TASK_STATE.md`，不写在这里。**
 模块接口见 `docs/question-generation.md`，当前主线见 `docs/question-generalization.md`，实测依据见
 `docs/question-generalization-evaluation.md`，历史阶段记录见 `docs/` 中标注为历史快照的页面。
 文档与代码冲突时，以代码和可复现验证为准，并先修正文档。
@@ -28,6 +30,23 @@
   不得替代领域知识或伪装成教材原文。
 - **交付一律 `PENDING`**，不篡改调用方给定的考点、题型、分值和要求。新能力通过明确数据契约接入，
   不破坏既有入口；废弃的入口要显式关闭并说明原因，而不是靠提示词宣称已解决。
+- **保持高内聚、低耦合**。把命题规则、题目结构与自检留在模块内，通过明确的数据契约接入模型、知识库、
+  审校和组卷。外部依赖通过现有接口或独立适配器接入。
+
+## 当前系统
+
+Qodex main 已合并四个业务模块：
+
+| 模块 | 主要代码 | 服务/工具 |
+| --- | --- | --- |
+| 自主命题 | `question_generation/` | HTTP 8093；Pi 工具 `question_generation` |
+| AI 审校与题库 | `pi-coding-agent/services/exam-checker/` | HTTP 8091；Pi 工具 `exam_checker`、`question_bank` |
+| 智能组卷 | `exam_assembly_agent/`、`pi-coding-agent/services/exam-assembly/` | HTTP 8092；Pi 工具 `exam_assembly` |
+| Pi Agent | `pi-coding-agent/packages/coding-agent/` | 统一注册和调用业务工具 |
+
+知识库检索已经接入 exam-checker 专项审校。自主命题已支持单题、批量槽位、综合题和按反馈修订，并把自检通过的版本写入 `question_generation.pending_questions`。
+
+不要声称命题到审校已经全自动闭环：当前 exam-checker 尚未自动消费命题待审表。接入时必须保留 `(question_id, version)`，将审校结果绑定不可变题目版本，PASS 后才能写 `question_bank`。
 
 ## 开发原则
 
@@ -49,28 +68,12 @@
 6. **文档可信、精炼、可持续。** 长期原则放本文件，当前状态放 `TASK_STATE.md`，接口与实测依据放 `docs/`；
    已完成的工作及时从待办中移除，过时设计标注为历史快照或归档，不层层追加。不要把单个具体问题
    写成永久规则，让指导文档自己陷入补丁循环。
-
-## 分支与提交
-
-- 以更新后的 `origin/main` 为开发基线，在任务分支工作。自主命题使用 `feat/question-generation`。
-- 每个阶段达到验收条件后，运行相关检查，只暂存本次阶段的明确文件路径并做一次本地提交；
-  提交信息写清范围和结果，例如 `feat(question-generation): add request validation`。
-- 验证失败时先修复，记录未通过或未能运行的检查。保护已有改动和历史。推送、开 PR 和合并单独按用户授权执行。
-
-## 开发前调研
-
-- 新功能写代码前，先联网搜索相关实现，再检查仓库现有实现。优先读官方文档、开源项目源码及测试，或原始论文。
-  结合接口、依赖和许可证判断可借鉴的部分。
-- 在本地调研记录中写下来源链接、可复用点和采用理由。联网失败时记录阻塞，调研完成后再开始实现。
-
-## 模块边界与验收
-
-- 保持高内聚、低耦合。把命题规则、题目结构与自检留在模块内，通过明确的数据契约接入模型、知识库、
-  审校和组卷。外部依赖通过现有接口或独立适配器接入。
-- 优先复用已经验证的逻辑，围绕实际变化点扩展。按正常入口验证功能和接口，保留调用方已有行为。
-- `research-assets/` 是历史研究资料。引用其中的数据、脚本或 Prompt 前，核验来源、许可、质量与当前接口适配性。
-  人为注错的样本只能作为经核验的反例。
-- 修改子目录前查看其开发说明。Pi 代码同时遵循 [Pi 开发纪律](pi-coding-agent/AGENTS.md)（包括其中的提交与检查规则）。
+7. **先调研再实现。** 新功能写代码前，先联网搜索相关实现，再检查仓库现有实现。优先读官方文档、
+   开源项目源码及测试，或原始论文，结合接口、依赖和许可证判断可借鉴的部分。在本地调研记录中写下
+   来源链接、可复用点和采用理由；联网失败时记录阻塞，调研完成后再开始实现。
+8. **复用已验证逻辑，按正常入口验证。** 围绕实际变化点扩展，保留调用方已有行为。
+   `research-assets/` 是历史研究资料，引用其中的数据、脚本或 Prompt 前，核验来源、许可、质量与当前接口适配性；
+   人为注错的样本只能作为经核验的反例。
 
 ## 模型调用与实验
 
@@ -78,8 +81,56 @@
 - 无授权时只用本机模型、脚本模型和离线复算。保存原始输入、可见输出、用量与失败终态，保留完整分母，
   不删除失败样例，不把结构通过率当作质量结论。
 
-## 共享与本地文件
+## 服务与脚本
 
-- 代码、测试、脱敏配置示例、稳定接口及团队共用文档可纳入版本控制。共享文档从 [项目开发文档](docs/README.md) 进入。
-- 个人计划、调研笔记、问题修复流水、实验原始记录、临时数据与运行日志放在仓库根目录的 `.local/`。
-  真实凭据放在被忽略的本地环境文件中。禁止强制添加这些文件，提交和推送前核对文件清单。
+| 名称 | 作用 |
+| --- | --- |
+| `npm run demo:setup` | 首次创建 Python 环境、安装 Pi 依赖并生成本地环境模板 |
+| `npm run demo` | 准备数据库、启动三个服务、健康检查后进入 Pi |
+| `npm run demo:db` | 只准备 PostgreSQL、Alembic 迁移和命题待审表 |
+| `npm run demo:services` | 只启动三个 Python 服务，不进入 Pi |
+| `npm run demo:status` | 检查 8091、8092、8093 健康状态 |
+| `scripts/demo.sh` | NPM 演示命令的 Bash 编排实现 |
+| `pi-coding-agent/start-exam-checker-db.sh` | 启动 PostgreSQL 并运行 exam-checker 迁移 |
+| `pi-coding-agent/start-exam-checker.sh` | 启动 exam-checker，默认端口 8091 |
+| `scripts/start-question-generation.sh` | 启动命题服务，默认端口 8093 |
+| `scripts/start-exam-assembly.sh` | 启动组卷服务，默认端口 8092 |
+| `pi-coding-agent/pi-test.sh` | 从源码启动 Pi |
+
+根目录 `pyproject.toml` 定义 `qodex-exam-assembly-core`，是组卷服务的本地依赖，不得当作冗余文件删除。
+
+## 数据边界
+
+- `question_generation.pending_questions`：命题产生的不可变待审版本。
+- `question_versions`：审校侧不可变题目版本。
+- `question_reviews`：每次审校的追加记录。
+- `question_bank`：仅保存绑定 PASS 审校和同一内容版本的正式题目。
+- `research-assets/`：历史研究资料，不是运行时事实来源；复用前核验来源、许可、质量和当前接口。
+
+题目修订不得覆盖旧版本。取题时可以选择最新版本，但开始审校后必须固定具体版本；入库前再次确认 PASS 审校、来源版本和题目快照完全一致。
+
+## 开发与验证
+
+- 以更新后的 `origin/main` 为开发基线，在任务分支工作；不要在功能分支之间复制过期接口。自主命题使用
+  `feat/question-generation`。
+- 每个阶段达到验收条件后，运行相关检查，只暂存本次阶段的明确文件路径并做一次本地提交；
+  提交信息写清范围和结果，例如 `feat(question-generation): add request validation`。
+- 验证失败时先修复，记录未通过或未能运行的检查。保护已有改动和历史。推送、开 PR 和合并单独按用户授权执行。
+- 优先修改模块内实现，通过明确契约连接命题、审校、题库和组卷。
+- 新增或修改数据库结构时使用现有 Alembic/SQL 迁移，不在启动代码里临时建表。
+- 代码、测试、脱敏配置示例、稳定接口及团队共用文档可纳入版本控制；共享文档从 [项目开发文档](docs/README.md) 进入。
+- 真实密钥只放本地环境文件，不写入代码、文档、测试或提交历史。
+- 个人计划、调研记录、运行日志和临时数据放在 `.local/`；提交和推送前核对文件清单，禁止强制添加这些文件。
+
+按改动范围运行验证：
+
+```bash
+python -m unittest discover -s tests
+python -m pytest pi-coding-agent/services/exam-checker/tests -q
+python -m pytest pi-coding-agent/services/exam-assembly/tests -q
+
+cd pi-coding-agent
+npm run check
+```
+
+未运行的检查和已知限制必须在交付说明中明确列出。

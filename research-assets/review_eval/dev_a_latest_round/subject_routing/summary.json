@@ -1,0 +1,88 @@
+{
+  "n": 40,
+  "failed": 4,
+  "queried_kb": 31,
+  "detected": 10,
+  "with_subject_label": 31,
+  "first_subject_agree": 19,
+  "first_subject_agree_rate": 0.6129,
+  "any_subject_agree": 19,
+  "asked_subject_counts": {
+    "operating_system": 10,
+    "computer_network": 8,
+    "computer_organization": 11,
+    "data_structure": 6
+  },
+  "mismatch_examples": [
+    {
+      "sample_id": "rev-factual_logical-refq-408-2009-29",
+      "expected": "computer_network",
+      "asked": [
+        "operating_system"
+      ]
+    },
+    {
+      "sample_id": "rev-factual_logical-refq-408-2017-31",
+      "expected": "computer_network",
+      "asked": [
+        "operating_system"
+      ]
+    },
+    {
+      "sample_id": "rev-factual_logical-refq-408-2020-19",
+      "expected": "operating_system",
+      "asked": [
+        "computer_organization"
+      ]
+    },
+    {
+      "sample_id": "rev-factual_logical-refq-408-2024-20",
+      "expected": "operating_system",
+      "asked": [
+        "computer_organization"
+      ]
+    },
+    {
+      "sample_id": "rev-factual_logical-refq-408-2025-20",
+      "expected": "operating_system",
+      "asked": [
+        "computer_organization"
+      ]
+    },
+    {
+      "sample_id": "rev-factual_logical-refq-408-2026-20",
+      "expected": "operating_system",
+      "asked": [
+        "computer_organization"
+      ]
+    },
+    {
+      "sample_id": "blind-factual_logical-refq-408-2014-16",
+      "expected": "operating_system",
+      "asked": [
+        "computer_organization"
+      ]
+    },
+    {
+      "sample_id": "blind-factual_logical-refq-408-2014-18",
+      "expected": "operating_system",
+      "asked": [
+        "computer_organization"
+      ]
+    },
+    {
+      "sample_id": "blind-factual_logical-refq-408-2014-20",
+      "expected": "operating_system",
+      "asked": [
+        "computer_organization"
+      ]
+    },
+    {
+      "sample_id": "blind-factual_logical-refq-408-2014-19",
+      "expected": "operating_system",
+      "asked": [
+        "computer_organization"
+      ]
+    }
+  ]
+}
