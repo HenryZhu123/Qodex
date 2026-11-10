@@ -13,11 +13,13 @@ from urllib.request import Request, build_opener, HTTPRedirectHandler
 class ModelError(Exception):
     def __init__(self, message: str, *, code: str | None = None,
                  finish_reason: str | None = None, http_status: int | None = None,
-                 response_issue: str | None = None):
+                 response_issue: str | None = None, content_decode_position: int | None = None,
+                 content_length: int | None = None):
         super().__init__(message)
         self.diagnostics = {key: value for key, value in (
             ("code", code), ("finish_reason", finish_reason), ("http_status", http_status),
             ("response_issue", response_issue),
+            ("content_decode_position", content_decode_position), ("content_length", content_length),
         ) if value is not None}
 
 
@@ -139,6 +141,10 @@ class JsonModel:
                              response_issue="content_type")
         try:
             value = json.loads(content)
+        except json.JSONDecodeError as error:
+            raise ModelError(INVALID_JSON_MESSAGE, code="invalid_content", finish_reason=finish_reason,
+                             response_issue="content_decode", content_decode_position=error.pos,
+                             content_length=len(content)) from None
         except (ValueError, RecursionError):
             raise ModelError(INVALID_JSON_MESSAGE, code="invalid_content", finish_reason=finish_reason,
                              response_issue="content_decode") from None

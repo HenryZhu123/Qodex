@@ -291,7 +291,7 @@ class TransportTests(TestCase):
             ('stop', {'content': ' '}, 'empty_content', 'stop', None),
             ('stop', {}, 'invalid_content', 'stop', 'envelope_shape'),
             ('stop', {'content': {'private': True}}, 'invalid_content', 'stop', 'content_type'),
-            ('stop', {'content': '{"private":'}, 'invalid_content', 'stop', 'content_decode'),
+            ('stop', {'content': '{"private题":'}, 'invalid_content', 'stop', 'content_decode'),
             ('stop', {'content': '[]'}, 'invalid_content', 'stop', 'content_not_object'),
         ):
             raw = json.dumps({'choices': [{'finish_reason': reason, 'message': message}],
@@ -308,6 +308,12 @@ class TransportTests(TestCase):
                     self.assertEqual(error.exception.diagnostics.get('code'), code)
                     self.assertEqual(error.exception.diagnostics.get('finish_reason'), reason)
                     self.assertEqual(error.exception.diagnostics.get('response_issue'), issue)
+                    if issue == 'content_decode':
+                        self.assertEqual(error.exception.diagnostics['content_decode_position'], 12)
+                        self.assertEqual(error.exception.diagnostics['content_length'], 12)
+                    else:
+                        self.assertNotIn('content_decode_position', error.exception.diagnostics)
+                        self.assertNotIn('content_length', error.exception.diagnostics)
                     self.assertNotIn('private', str(error.exception) + str(error.exception.diagnostics))
                     if reason is not None:
                         self.assertEqual(model.usage[0]['reasoning_tokens'], 75)

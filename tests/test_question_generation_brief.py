@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 from question_generation.brief_authoring import CHAPTER_QUERIES, PLAN_PROMPT, SCOUT_PROMPT, generate_from_brief
 from question_generation.curriculum import AREAS
-from question_generation.general_authoring import AUTHOR_PROMPT, AUDIT_PROMPT, READER_PROMPT
+from question_generation.general_authoring import AUTHOR_PROMPT, AUTHOR_VIEWS, AUDIT_PROMPT, READER_PROMPT
 from question_generation.model_client import ModelError
 from test_question_generation_general import CASES, Replay
 
@@ -26,9 +26,8 @@ class BriefReplay(Replay):
         if system in (PLAN_PROMPT, SCOUT_PROMPT):
             self.calls.append((system, deepcopy(payload)))
             return {'plan': self.plan}
-        for base in (AUTHOR_PROMPT, AUDIT_PROMPT):
-            if system.startswith(base):
-                return super().complete(base, payload)
+        if system.startswith(AUDIT_PROMPT):
+            return super().complete(AUDIT_PROMPT, payload)
         return super().complete(system, payload)
 
 
@@ -50,7 +49,10 @@ class BriefAuthoringTests(TestCase):
                 result = generate_from_brief(payload, client=model, cache_path=self.cache)
                 self.assertEqual(result['status'], 'GENERATED', result)
                 self.assertEqual(generate_from_brief(payload, client=model, cache_path=self.cache), result)
-                self.assertEqual([s for s, _ in model.calls], [PLAN_PROMPT, AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT])
+                author = AUTHOR_PROMPT + AUTHOR_VIEWS[request['question_type']]
+                plan_prompt, author_prompt, reader_prompt, audit_prompt = [s for s, _ in model.calls]
+                self.assertEqual((plan_prompt, reader_prompt, audit_prompt), (PLAN_PROMPT, READER_PROMPT, AUDIT_PROMPT))
+                self.assertTrue(author_prompt.startswith(author + '\nbrief_plan.brief'))
                 question, = result['questions']
                 self.assertEqual(question['review_status'], 'PENDING')
                 self.assertEqual(question['student_view'], case['candidate']['student_view'])

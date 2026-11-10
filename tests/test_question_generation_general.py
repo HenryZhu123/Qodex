@@ -5,6 +5,7 @@ No result here measures a model's authoring or judgment quality.
 from copy import deepcopy
 import ipaddress
 import itertools
+from io import BytesIO
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -15,10 +16,11 @@ from question_generation.authoring import generate_authored, read_authoring
 from question_generation.batch import generate_batch
 from question_generation.comprehensive import generate_comprehensive
 from question_generation.curriculum import AREAS, coverage_report
-from question_generation.general_authoring import AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT, CHECKS
+from question_generation.general_authoring import AUTHOR_PROMPT, AUTHOR_VIEWS, READER_PROMPT, AUDIT_PROMPT, CHECKS
 from question_generation.general_contract import contains_span, contains_given_span
 from question_generation.generation import generate_question
 from question_generation.knowledge import with_knowledge
+from question_generation.model_client import JsonModel
 
 CASES = json.loads((Path(__file__).parent / 'fixtures/question_generation/general_cases.json').read_text())
 
@@ -34,7 +36,7 @@ class Replay:
     def complete(self, system, payload):
         self.calls.append((system, deepcopy(payload)))
         c = self.candidate
-        if system == AUTHOR_PROMPT:
+        if system.startswith(AUTHOR_PROMPT):
             return {'candidate': c}
         if system == READER_PROMPT:
             student = payload['student_view']
@@ -90,6 +92,10 @@ class GeneralContractTests(TestCase):
                 self.assertEqual(q['review_status'], 'PENDING')
                 self.assertEqual(q['self_check']['verification_scope']['typed_calculation_count'], len(case['candidate']['calculations']))
                 self.assertEqual(len(model.calls), 3)
+                prompt, _ = model.calls[0]
+                self.assertEqual(prompt, AUTHOR_PROMPT + AUTHOR_VIEWS[q['metadata']['question_type']])
+                self.assertEqual('correct_option_id' in prompt, q['metadata']['question_type'] == 'single_choice')
+                self.assertEqual('scoring_points' in prompt, q['metadata']['question_type'] == 'comprehensive')
                 self.assertEqual(self.run_case(case, model)[0], result)
                 self.assertEqual(len(model.calls), 3)
 
@@ -119,12 +125,31 @@ class GeneralContractTests(TestCase):
         class WrongEnvelope(Replay):
             def complete(self, system, payload):
                 result = super().complete(system, payload)
-                if system == AUTHOR_PROMPT:
+                if system.startswith(AUTHOR_PROMPT):
                     result['calculations'] = []
                 return result
         result, model = self.run_case(CASES[0], WrongEnvelope(CASES[0]['candidate']))
         self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
         self.assertEqual(len(model.calls), 1)
+
+    def test_author_decode_failure_keeps_safe_diagnostics_without_a_question(self):
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        content = '{"private题":'
+        envelope = {'choices': [{'finish_reason': 'stop', 'message': {'content': content}}],
+                    'usage': {'completion_tokens': 20}}
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(json.dumps(envelope).encode())
+            result, _ = self.run_case(CASES[0], model)
+        self.assertEqual(result['status'], 'MODEL_UNAVAILABLE')
+        self.assertEqual(result['questions'], [])
+        self.assertEqual(result['authoring_report']['model_failure'], {
+            'stage': 'author', 'code': 'invalid_content', 'finish_reason': 'stop',
+            'response_issue': 'content_decode', 'content_decode_position': len(content),
+            'content_length': len(content),
+        })
+        self.assertEqual(result['authoring_report']['usage'][0]['completion_tokens'], 20)
+        self.assertNotIn('private', json.dumps(result))
+        self.assertEqual(opener.return_value.open.call_count, 1)
 
     def test_student_issue_blocks_before_material_aware_audit(self):
         class Unanswerable(Replay):
