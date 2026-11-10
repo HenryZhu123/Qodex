@@ -120,6 +120,19 @@ class AuthoringTests(TestCase):
         self.assertEqual(self.run_model(model)['status'], 'SELF_CHECK_FAILED')
         self.assertEqual(len(model.calls), 1)
 
+    def test_different_output_budgets_do_not_share_cached_questions(self):
+        model = FakeModel()
+        default = self.run_model(model)
+        model.max_output_tokens = 32768
+        expanded = self.run_model(model)
+        self.assertEqual(expanded, default)
+        self.assertEqual(len(model.calls), 6)
+        self.assertEqual(self.run_model(model), expanded)
+        self.assertEqual(len(model.calls), 6)
+        model.max_output_tokens = 16384
+        self.assertEqual(self.run_model(model), default)
+        self.assertEqual(len(model.calls), 6)
+
     def test_blind_disagreement_and_bad_explanation_fail_closed(self):
         for model in (FakeModel(bad_reader=True), FakeModel(bad_audit=True)):
             with self.subTest(model=model):
@@ -229,6 +242,26 @@ class WitnessTests(TestCase):
         verify_witnesses('tcp_message_boundaries', [])
 
 class TransportTests(TestCase):
+    def test_explicit_output_budget_is_sent_to_provider(self):
+        from io import BytesIO
+        from question_generation.model_client import JsonModel
+        with patch.dict('os.environ', {'DEEPSEEK_BASE_URL': 'https://fixture.invalid',
+                                      'DEEPSEEK_MODEL': 'test', 'DEEPSEEK_API_KEY': 'fixture',
+                                      'QUESTION_GENERATION_MAX_OUTPUT_TOKENS': '32768'}):
+            model = JsonModel.from_env()
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(
+                b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}')
+            self.assertEqual(model.complete('json', {}), {})
+            self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 32768)
+        for value in ('bad', '0'):
+            with self.subTest(value=value), patch.dict('os.environ', {
+                'DEEPSEEK_BASE_URL': 'https://fixture.invalid', 'DEEPSEEK_MODEL': 'test',
+                'DEEPSEEK_API_KEY': 'fixture', 'QUESTION_GENERATION_MAX_OUTPUT_TOKENS': value
+            }):
+                with self.assertRaises(ModelError):
+                    JsonModel.from_env()
+
     def test_truncated_or_malformed_responses_are_not_successes(self):
         from io import BytesIO
         from question_generation.model_client import JsonModel

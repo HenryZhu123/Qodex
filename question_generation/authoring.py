@@ -13,7 +13,7 @@ from pathlib import Path
 import sqlite3
 
 from .generation import RequestError, _read_request, failure_result
-from .model_client import JsonModel, ModelError
+from .model_client import DEFAULT_OUTPUT_TOKENS, JsonModel, ModelError
 from .verification import verify_witnesses
 
 VERSION = "evidence-authoring-v1.1"
@@ -292,6 +292,9 @@ def cached_authoring(payload, version, run, *, client=None, cache_path=None):
         path = Path(cache_path)
         path.parent.mkdir(parents=True, exist_ok=True)
         cache_key = [version, model.base_url, model.model, getattr(model, "reasoning_effort", None), payload]
+        output_tokens = getattr(model, "max_output_tokens", DEFAULT_OUTPUT_TOKENS)
+        if output_tokens != DEFAULT_OUTPUT_TOKENS:
+            cache_key.append(output_tokens)
         digest = hashlib.sha256(json.dumps(cache_key,
                                           sort_keys=True, ensure_ascii=False).encode()).hexdigest()
         # Hold the transaction during authoring: concurrent identical calls

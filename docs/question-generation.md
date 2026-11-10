@@ -273,6 +273,8 @@ TCP 使用 `computer_networks` 和 `tcp_message_boundaries`。可选约束 `scen
 
 模型调用失败时仍返回 `MODEL_UNAVAILABLE`。DeepSeek 适配器可在 `authoring_report.model_failure` 追加错误类别，以及实际可得的结束原因或 HTTP 状态码。`authoring_report.usage` 保留服务商已返回的用量，含可得的推理 token 数。报告不含服务商的推理正文或截断内容。
 
+DeepSeek 每次调用默认使用 16,384 个输出 token。部署时可通过 `QUESTION_GENERATION_MAX_OUTPUT_TOKENS` 设置正整数，选择时考虑服务商的模型窗口和输出能力、延迟及成本。变更额度后使用独立缓存，原默认配置的缓存仍可回读。评测可以只改变作者阶段的额度，以便和盲解、审计的配置分开比较。
+
 失败时返回 `INVALID_REQUEST`、`UNSUPPORTED_REQUEST`、`NEEDS_MATERIAL` 或 `SELF_CHECK_FAILED`，附原因及空题目列表。材料不足时列出缺失的规则。未知请求字段视为无效，避免忽略约束。
 
 手算对照使用 256 B 页、虚拟地址 `0x02B4` 和映射 `VPN 2 → PFN 5`。虚页号为 2，偏移为 `0xB4`，物理地址为 `0x05B4`。同一映射下，虚拟地址 `0x0200` 的正确结果为 `0x0500`，此时“丢弃偏移”会与正确答案重合，必须换一个干扰项。

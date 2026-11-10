@@ -22,6 +22,7 @@ class ModelError(Exception):
 FINISH_REASONS = (
     "stop", "length", "content_filter", "tool_calls", "insufficient_system_resource", "aborted",
 )
+DEFAULT_OUTPUT_TOKENS = 16384
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -32,25 +33,34 @@ class NoRedirect(HTTPRedirectHandler):
 class JsonModel:
     reasoning_effort = "high"
 
-    def __init__(self, *, base_url: str, model: str, api_key: str, timeout: float = 120):
+    def __init__(self, *, base_url: str, model: str, api_key: str, timeout: float = 120,
+                 max_output_tokens: int = DEFAULT_OUTPUT_TOKENS):
         parsed = urlsplit(base_url)
         if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.query or parsed.fragment:
             raise ModelError("模型服务地址须为不含凭据、查询参数的 HTTPS 地址。")
         if not model.strip() or not api_key.strip():
             raise ModelError("请配置 DEEPSEEK_MODEL 和 DEEPSEEK_API_KEY。")
+        if type(max_output_tokens) is not int or max_output_tokens < 1:
+            raise ModelError("模型输出 token 预算须为正整数。")
         self.base_url, self.model, self.api_key, self.timeout = base_url.rstrip("/"), model, api_key, timeout
+        self.max_output_tokens = max_output_tokens
         self.usage = []
 
     @classmethod
     def from_env(cls):
+        try:
+            output_tokens = int(os.environ.get("QUESTION_GENERATION_MAX_OUTPUT_TOKENS", str(DEFAULT_OUTPUT_TOKENS)))
+        except ValueError:
+            raise ModelError("模型输出 token 预算须为正整数。") from None
         return cls(base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
-                   model=os.environ.get("DEEPSEEK_MODEL", ""), api_key=os.environ.get("DEEPSEEK_API_KEY", ""))
+                   model=os.environ.get("DEEPSEEK_MODEL", ""), api_key=os.environ.get("DEEPSEEK_API_KEY", ""),
+                   max_output_tokens=output_tokens)
 
     def complete(self, system: str, payload: dict) -> dict:
         body = json.dumps({"model": self.model, "messages": [
             {"role": "system", "content": system},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
-        ], "response_format": {"type": "json_object"}, "max_tokens": 16384,
+        ], "response_format": {"type": "json_object"}, "max_tokens": self.max_output_tokens,
             "thinking": {"type": "enabled"}, "reasoning_effort": self.reasoning_effort}, ensure_ascii=False).encode()
         if len(body) > 100_000:
             raise ModelError("命题材料超过单次调用预算。", code="request_size_limit")
