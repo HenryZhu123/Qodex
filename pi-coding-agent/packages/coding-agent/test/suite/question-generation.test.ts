@@ -101,3 +101,55 @@ it("runs the built-in question-generation tool and preserves the service receipt
 	const result = harness.session.messages.find((message) => message.role === "toolResult");
 	expect(JSON.parse(getMessageText(result))).toEqual(response);
 });
+
+it("preserves authoring constraints and allows the configured model timeout", async () => {
+	vi.stubEnv("QUESTION_GENERATION_TIMEOUT_MS", "420000");
+	const timeout = vi.spyOn(AbortSignal, "timeout");
+	const request = {
+		schema_version: "0.1",
+		request_id: "reasoning-item",
+		constraints: { authoring: { objective: "diagnose" } },
+	};
+	const response = { status: "MODEL_UNAVAILABLE", questions: [], message: "provider timeout" };
+	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json(response));
+	vi.stubGlobal("fetch", fetchStub);
+	try {
+		harness = await createHarness({
+			extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+		});
+		harness.setResponses([
+			fauxAssistantMessage(fauxToolCall("question_generation", { operation: "single", request }), {
+				stopReason: "toolUse",
+			}),
+			fauxAssistantMessage("done"),
+		]);
+		await harness.session.prompt("Generate a diagnostic question.");
+		expect(timeout).toHaveBeenCalledWith(420000);
+		expect(fetchStub.mock.calls[0]?.[1]?.body).toBe(JSON.stringify(request));
+		const result = harness.session.messages.find((message) => message.role === "toolResult");
+		expect(JSON.parse(getMessageText(result))).toEqual(response);
+	} finally {
+		timeout.mockRestore();
+	}
+});
+
+it("passes a rough request to the author operation for the service to plan", async () => {
+	const request = { schema_version: "0.1", request_id: "rough-item", brief: "想练内存这块" };
+	const response = { status: "NEEDS_MATERIAL", questions: [] };
+	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json(response));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage("done"),
+	]);
+	await harness.session.prompt("想练内存这块");
+	expect(fetchStub.mock.calls[0]?.[0]).toMatch(/\/v1\/question-generation\/author$/);
+	expect(fetchStub.mock.calls[0]?.[1]?.body).toBe(JSON.stringify(request));
+	const result = harness.session.messages.find((message) => message.role === "toolResult");
+	expect(JSON.parse(getMessageText(result))).toEqual(response);
+});
