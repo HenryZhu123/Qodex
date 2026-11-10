@@ -27,6 +27,36 @@ NOTES = (
      "在忽略中继处理、检测等额外延时的题设下，为保证发送期间能察觉最迟冲突，"
      "最短帧的发送时间 L/R 须覆盖 2τ，其中 L 是比特数，R 是 bit/s。"
      "若要求帧长为整字节，须向上取整。实际标准的时隙预算还涉及设备，不能把简化式当成完整合规判定。"),
+    ("ds.linear", ("尾指针", "删除尾结点", "删除尾节点"),
+     "https://opendsa-server.cs.vt.edu/ODSA/Books/eu/cs330/spring-2025/Excelsior2/html/ListAnalysis.html",
+     "OpenDSA, 3.6.2 Time Comparison",
+     "在普通单链表中，每个结点只保存后继链接。尾指针能直接定位当前尾结点，但删除它还需要找到前驱，"
+     "将前驱的后继置空并让尾指针指向前驱。仅有头指针与尾指针时，两个以上结点通常要从头找前驱，"
+     "最坏为线性时间。若已持有有效前驱指针，重连和更新尾指针只需常数时间。无哨兵的单元素表删空后头、尾均为空。"),
+    ("ds.stack_queue_array", ("稀疏矩阵", "三元组"),
+     "https://math.nist.gov/MatrixMarket/formats.html",
+     "NIST Matrix Market File Formats, Coordinate Format",
+     "一般稀疏矩阵可用行数、列数和非零项数记录规模，再以（行号，列号，值）三元组记录每个非零元素。"
+     "若每个坐标至多有一条记录，未出现的坐标表示零。转置会交换矩阵行列数，并将每个三元组的行号和列号交换，值不变。"
+     "若接口要求输出按行号、列号排序，还要按交换后的坐标重排，原三元组顺序未必仍然有效。"),
+    ("co.system", ("阿姆达尔", "阿姆达尔定律", "amdahl"),
+     "https://pages.cs.wisc.edu/~markhill/cs354/Fall2008/notes/performance.html",
+     "University of Wisconsin–Madison, CS 354, Performance features, Amdahl's Law",
+     "Amdahl 定律适用于固定工作量和明确的原始时间分解。若占原执行时间比例 f 的部分加速到原来的 s 倍，"
+     "其余耗时与额外开销不变，新总耗时与旧总耗时的比为 1−f+f/s，总加速比是该比值的倒数。"
+     "若 0≤f<1，即使 s 趋于无穷，总加速比也至多为 1/(1−f)。f 必须按改造前的执行时间计算。"),
+    ("os.io", ("磁盘调度", "look", "扫描算法"),
+     "https://codex.cs.yale.edu/avi/os-book/OS8/os8e/slide-dir/PDF-dir/ch11.pdf",
+     "Silberschatz, Galvin & Gagne, Operating System Concepts Essentials, Ch. 11, SCAN and C-LOOK",
+     "在给定初始磁头位置、移动方向和静态请求集合时，扫描调度（SCAN）沿当前方向服务请求，并在物理端点掉头。"
+     "LOOK 只走到当前方向最后一个待处理请求，在需要掉头服务另一侧时不再额外走到物理端点。"
+     "因此访问顺序相同也可能有不同的总移动量。比较前应说明磁道上下界、统计是否在服务完最后一条请求时结束，以及有无新到请求。"),
+    ("cn.physical", ("曼彻斯特", "manchester", "自同步编码"),
+     "https://cseweb.ucsd.edu/classes/sp16/cse123-a/lectures/123-sp16-l4.pdf",
+     "UC San Diego CSE 123, Lecture 4 Layers & Framing, Manchester Encoding",
+     "曼彻斯特编码把每个数据位分为两个等长半位，两半电平相反。位中点必有跳变，可供接收端恢复位时钟并维持同步。"
+     "跳变方向对应 0 或 1，题面要声明约定。相邻位的边界也可能跳变，不能把每个跳变都当作新数据位。"
+     "若线路预算按每秒可承载的等长半位数给出，一个数据位需要两个半位。帧起点或位相位的识别仍需明确条件。"),
 )
 
 

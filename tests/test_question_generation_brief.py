@@ -95,7 +95,7 @@ class BriefAuthoringTests(TestCase):
         self.assertEqual(set(CHAPTER_QUERIES), {a for group in AREAS.values() for a in group})
         payload = {'schema_version': '0.1', 'request_id': 'note-only', 'subject': 'computer_networks',
                    'syllabus_areas': ['cn.physical']}
-        for addition in ({}, {'brief': '想练信道容量这块'}):
+        for addition in ({}, {'brief': '想练信道容量这块'}, {'brief': '直接出一道 408 题。'}):
             with self.subTest(addition=addition):
                 model = BriefReplay(CASES[0])
                 with patch.object(model, 'complete', return_value={'material_gaps': ['需要更多编码机制']}) as complete:
@@ -103,6 +103,7 @@ class BriefAuthoringTests(TestCase):
                 self.assertEqual(result['status'], 'NEEDS_MATERIAL', result)
                 self.assertEqual(complete.call_count, 1)
                 planning_input = complete.call_args.args[1]
+                self.assertEqual(planning_input['brief'], addition.get('brief', ''))
                 self.assertEqual(len(planning_input['evidence']), 2)
                 self.assertEqual({item['subject'] for item in planning_input['evidence']}, {'computer_networks'})
 

@@ -52,6 +52,8 @@ HTTP 服务可据 `material_query` 检索已配置的知识库和当前范围内
 
 信道容量和共享半双工碰撞时序已有三条带来源与内容指纹的项目释义，覆盖先前实测中的两个材料缺口。它们按章节与查询匹配，可与教材一起使用。未配置教材索引时，HTTP 服务也可返回命中的这三条释义。来源、定位和公式边界列于[样题](question-generalization-examples.md)。
 
+后续按同一方式补充了单链表删除尾结点、三元组转置、阿姆达尔定律、SCAN 与 LOOK、曼彻斯特时钟同步。参见[具体考点取材复测](question-generalization-evaluation.md#粗需求优化器与材料发现)。
+
 返回版本含`discovery: source-pinned; not chunk-curated`，表示来源和完整性核对，不表示片段已经人工审定或OCR完全正确。旧人工整理目录不会被自动扩充。模型遇到目录、缺图、冲突或缺关键规则，可返回`NEEDS_MATERIAL`及具体缺口。
 
 当前没有检索召回率基准；同义词、OCR误字和错误标题仍会漏检或带入噪声。材料数量不等于充分性。纯英文内部考点名不自动翻译；用`material_query`给出教材用语，或者显式提供材料。跨科任务可指定最多四个章节范围，至少一个属于主科目。
@@ -100,7 +102,7 @@ Pi 可用 `question_generation` 的 `author` 操作把原始需求直接交给�
 {"schema_version":"0.1","request_id":"memory-practice-001","brief":"想练内存这块"}
 ```
 
-只需 `schema_version` 和 `request_id`。无具体偏好的「直接出一道 408 题」可省略 `brief`。已有参考材料可直接传 `evidence`，沿用来源、版本、定位、摘要和原文格式。可选 `subject`、`syllabus_areas`、`question_type`、`total_score`、`requirements`、`seed`。`syllabus_areas` 限定可选范围，若要同题考查其中多个章节，可在 `requirements` 写明。给出总分会固定为综合题。自动选择综合题时默认 10 分。省略种子时由请求 ID 稳定推导。
+只需 `schema_version` 和 `request_id`。无具体偏好可省略 `brief`，也可直接写「出一道 408 题」。已有参考材料可直接传 `evidence`，沿用来源、版本、定位、摘要和原文格式。可选 `subject`、`syllabus_areas`、`question_type`、`total_score`、`requirements`、`seed`。`syllabus_areas` 限定可选范围，若要同题考查其中多个章节，可在 `requirements` 写明。给出总分会固定为综合题。自动选择综合题时默认 10 分。省略种子时由请求 ID 稳定推导。
 
 服务先搜集材料，再请模型提出考查计划，包括可观察的学习表现、任务及学生应给出的推理证据。无具体方向时，种子决定先查看哪个章节的材料。检索词只负责找到材料，具体考法由模型根据片段决定。短需求若匹配多个章节，会呈现各章节材料，例如「内存」可同时检索组成原理的 Cache 和操作系统的虚拟内存。显式 `evidence` 优先，空材料返回 `NEEDS_MATERIAL`。如果没有足以支持所需机制的材料，优化器可返回具体缺口。
 

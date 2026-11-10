@@ -88,3 +88,20 @@ class DiscoveryTests(TestCase):
         self.assertEqual(discover(None, request), [])
         settings.update(syllabus_areas=['cn.application'], material_query='香农 CSMA/CD')
         self.assertEqual(discover(None, request), [])
+
+    def test_source_notes_fill_five_frozen_leaf_gaps(self):
+        for area, query, mechanism in (
+            ('ds.linear', '单链表的尾指针与删除尾结点', '前驱'),
+            ('ds.stack_queue_array', '稀疏矩阵的三元组存储', '非零元素'),
+            ('co.system', '阿姆达尔定律的性能瓶颈', '原执行时间'),
+            ('os.io', '磁盘调度 SCAN 和 LOOK 怎么区分', '物理端点'),
+            ('cn.physical', '曼彻斯特编码时钟同步', '位中点必有跳变'),
+        ):
+            with self.subTest(area=area):
+                settings = {'syllabus_areas': [area], 'material_query': query}
+                request = {'constraints': {'authoring': settings}}
+                note, = discover(None, request)
+                self.assertIn(mechanism, note['summary'])
+                self.assertEqual(note['id'], 'reference:' + sha256(note['summary'].encode()).hexdigest())
+                settings['syllabus_areas'] = ['ds.trees']
+                self.assertEqual(discover(None, request), [])

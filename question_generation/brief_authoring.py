@@ -16,6 +16,7 @@ QUESTION_TYPES = ("single_choice", "comprehensive")
 FIELDS = {"schema_version", "request_id", "brief", "seed", "subject", "syllabus_areas", "question_type",
           "total_score", "requirements", "evidence"}
 AREA_SUBJECTS = {area: subject for subject, group in AREAS.items() for area in group}
+UNRESTRICTED_BRIEF = re.compile(r"(?:请|帮我|给我)?(?:直接|随便|随机)?(?:出|生成|来)(?:一(?:道|个))?(?:(?:计算机)?408)?(?:练习|试)?题[。！？!?]*")
 
 # Search anchors for a chapter when there is no user search text. These do
 # not select the learning objective or supply the rules used in the item.
@@ -150,6 +151,8 @@ def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None
             materials = [{"material": item} for item in payload["evidence"]]
         else:
             search_text = brief or " ".join(payload.get("requirements", []))
+            if brief and UNRESTRICTED_BRIEF.fullmatch("".join(brief.split())):
+                search_text = " ".join(payload.get("requirements", []))
             materials, areas = shortlist(knowledge, areas, search_text, seed, pinned="syllabus_areas" in payload)
     except RequestError as error:
         return failure_result(error.status, str(error), identifier if text(identifier, 200) else None)
