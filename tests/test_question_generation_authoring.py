@@ -175,6 +175,22 @@ class AuthoringTests(TestCase):
             payload['constraints']['authoring'] = settings
             self.assertEqual(self.run_model(model, payload)['status'], 'INVALID_REQUEST')
 
+    def test_provider_response_issue_reaches_authoring_report(self):
+        from io import BytesIO
+        from question_generation.model_client import JsonModel
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(
+                b'{"choices":[{"finish_reason":"stop","message":{"content":"[]"}}],'
+                b'"usage":{"prompt_tokens":10,"completion_tokens":20}}')
+            result = self.run_model(model)
+        self.assertEqual(result['status'], 'MODEL_UNAVAILABLE')
+        self.assertEqual(result['questions'], [])
+        report = result['authoring_report']
+        self.assertEqual(report['model_failure'], {
+            'code': 'invalid_content', 'finish_reason': 'stop', 'response_issue': 'content_not_object'})
+        self.assertEqual(report['usage'][0]['completion_tokens'], 20)
+
     def test_unvalidated_tcp_transfer_is_blocked_before_api_or_cache(self):
         payload = json.loads((ROOT / 'question_generation/examples/tcp.json').read_text())
         payload['constraints']['authoring'] = {'objective': 'transfer'}
@@ -265,20 +281,24 @@ class TransportTests(TestCase):
     def test_truncated_or_malformed_responses_are_not_successes(self):
         from io import BytesIO
         from question_generation.model_client import JsonModel
-        cases = [(b'[]', 'invalid_response', None),
-                 (b'not json', 'invalid_response', None),
-                 (b'{"choices":[]}', 'invalid_response', None)]
-        for reason, content, code, safe_reason in (
-            ('length', '{}', 'incomplete_output', 'length'),
-            ('unexpected provider text', '{}', 'incomplete_output', 'unknown'),
-            ('stop', ' ', 'empty_content', 'stop'),
-            ('stop', '{', 'invalid_content', 'stop'),
+        cases = [(b'[]', 'invalid_response', None, 'envelope_shape'),
+                 (b'not json', 'invalid_response', None, 'envelope_decode'),
+                 (b'{"choices":[]}', 'invalid_response', None, 'envelope_shape')]
+        for reason, message, code, safe_reason, issue in (
+            ('length', {'content': '{}'}, 'incomplete_output', 'length', None),
+            ('unexpected provider text', {'content': '{}'}, 'incomplete_output', 'unknown', None),
+            ('stop', {'content': None}, 'empty_content', 'stop', None),
+            ('stop', {'content': ' '}, 'empty_content', 'stop', None),
+            ('stop', {}, 'invalid_content', 'stop', 'envelope_shape'),
+            ('stop', {'content': {'private': True}}, 'invalid_content', 'stop', 'content_type'),
+            ('stop', {'content': '{"private":'}, 'invalid_content', 'stop', 'content_decode'),
+            ('stop', {'content': '[]'}, 'invalid_content', 'stop', 'content_not_object'),
         ):
-            raw = json.dumps({'choices': [{'finish_reason': reason, 'message': {'content': content}}],
+            raw = json.dumps({'choices': [{'finish_reason': reason, 'message': message}],
                               'usage': {'prompt_tokens': 10, 'completion_tokens': 90,
                                         'completion_tokens_details': {'reasoning_tokens': 75}}}).encode()
-            cases.append((raw, code, safe_reason))
-        for raw, code, reason in cases:
+            cases.append((raw, code, safe_reason, issue))
+        for raw, code, reason, issue in cases:
             with self.subTest(raw=raw):
                 model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
                 with patch('question_generation.model_client.build_opener') as opener:
@@ -287,6 +307,8 @@ class TransportTests(TestCase):
                         model.complete('json', {})
                     self.assertEqual(error.exception.diagnostics.get('code'), code)
                     self.assertEqual(error.exception.diagnostics.get('finish_reason'), reason)
+                    self.assertEqual(error.exception.diagnostics.get('response_issue'), issue)
+                    self.assertNotIn('private', str(error.exception) + str(error.exception.diagnostics))
                     if reason is not None:
                         self.assertEqual(model.usage[0]['reasoning_tokens'], 75)
 

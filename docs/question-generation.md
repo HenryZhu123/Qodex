@@ -271,7 +271,7 @@ TCP 使用 `computer_networks` 和 `tcp_message_boundaries`。可选约束 `scen
 
 成功时返回 `GENERATED` 和一个含一道题的 `questions` 数组。面向学生的输出使用 `student_view`，含题干和带稳定 ID 的四个选项。教师视图提供答案 ID、解法和逐项说明。题目包还记录生成器版本、种子、实际题设、出处、自检结果和 `PENDING` 审校状态。选项显示字母可按顺序分配，答案按 ID 关联。
 
-模型调用失败时仍返回 `MODEL_UNAVAILABLE`。DeepSeek 适配器可在 `authoring_report.model_failure` 追加错误类别，以及实际可得的结束原因或 HTTP 状态码。`authoring_report.usage` 保留服务商已返回的用量，含可得的推理 token 数。报告不含服务商的推理正文或截断内容。
+模型调用失败时仍返回 `MODEL_UNAVAILABLE`。DeepSeek 适配器可在 `authoring_report.model_failure` 追加错误类别，以及实际可得的结束原因或 HTTP 状态码。`authoring_report.usage` 保留服务商已返回的用量，含可得的推理 token 数。对于原有的 `invalid_response` 和 `invalid_content`，可选字段 `response_issue` 进一步区分响应封装无法解码（`envelope_decode`）、封装缺字段或形态错误（`envelope_shape`）、正文不是字符串（`content_type`）、正文无法解码（`content_decode`）和正文解码后不是对象（`content_not_object`）。诊断只记录固定类别，响应正文、推理和截断内容均留在调用边界内。
 
 DeepSeek 每次调用默认使用 16,384 个输出 token。部署时可通过 `QUESTION_GENERATION_MAX_OUTPUT_TOKENS` 设置正整数，选择时考虑服务商的模型窗口和输出能力、延迟及成本。变更额度后使用独立缓存，原默认配置的缓存仍可回读。评测可以只改变作者阶段的额度，以便和盲解、审计的配置分开比较。
 
