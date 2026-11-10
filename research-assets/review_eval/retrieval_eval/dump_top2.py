@@ -9,7 +9,7 @@ from pathlib import Path
 
 OUT = Path(r"D:\Code\hku\LLM\hku_agent\research-assets\review_eval\retrieval_eval")
 KB = Path(r"D:\Code\hku\LLM\kb_review\books")
-LIMIT = 560
+LIMIT = 300
 
 
 def main() -> int:

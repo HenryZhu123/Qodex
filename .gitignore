@@ -37,3 +37,5 @@ research-assets/review_eval/**/smoke*/
 *.db-shm
 # Test scratch directories
 research-assets/skills/*/tests/.tmp/
+# pytest temp dirs the sandbox creates with restrictive ACLs
+pytest-cache-files-*
