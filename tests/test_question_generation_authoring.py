@@ -153,8 +153,10 @@ class AuthoringTests(TestCase):
 
     def test_provider_failure_and_invalid_settings_are_structured(self):
         model = FakeModel()
-        with patch.object(model, 'complete', side_effect=ModelError('timeout')):
-            self.assertEqual(self.run_model(model)['status'], 'MODEL_UNAVAILABLE')
+        with patch.object(model, 'complete', side_effect=ModelError('timeout', code='transport_error')):
+            result = self.run_model(model)
+            self.assertEqual(result['status'], 'MODEL_UNAVAILABLE')
+            self.assertEqual(result['authoring_report']['model_failure'], {'code': 'transport_error'})
         for settings in (None, [], {'objective': []}, {'objective': 'invent'}, {'objective': 'analyze', 'focus': 1}):
             payload = request()
             payload['constraints']['authoring'] = settings
@@ -230,17 +232,30 @@ class TransportTests(TestCase):
     def test_truncated_or_malformed_responses_are_not_successes(self):
         from io import BytesIO
         from question_generation.model_client import JsonModel
-        cases = [b'[]', b'not json', json.dumps({'choices': []}).encode(),
-                 json.dumps({'choices': [{'finish_reason': 'length', 'message': {'content': '{}'}}],
-                             'usage': {'total_tokens': 100}}).encode(),
-                 json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': ' '}}]}).encode()]
-        for raw in cases:
+        cases = [(b'[]', 'invalid_response', None),
+                 (b'not json', 'invalid_response', None),
+                 (b'{"choices":[]}', 'invalid_response', None)]
+        for reason, content, code, safe_reason in (
+            ('length', '{}', 'incomplete_output', 'length'),
+            ('unexpected provider text', '{}', 'incomplete_output', 'unknown'),
+            ('stop', ' ', 'empty_content', 'stop'),
+            ('stop', '{', 'invalid_content', 'stop'),
+        ):
+            raw = json.dumps({'choices': [{'finish_reason': reason, 'message': {'content': content}}],
+                              'usage': {'prompt_tokens': 10, 'completion_tokens': 90,
+                                        'completion_tokens_details': {'reasoning_tokens': 75}}}).encode()
+            cases.append((raw, code, safe_reason))
+        for raw, code, reason in cases:
             with self.subTest(raw=raw):
                 model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
                 with patch('question_generation.model_client.build_opener') as opener:
                     opener.return_value.open.return_value = BytesIO(raw)
-                    with self.assertRaises(ModelError):
+                    with self.assertRaises(ModelError) as error:
                         model.complete('json', {})
+                    self.assertEqual(error.exception.diagnostics.get('code'), code)
+                    self.assertEqual(error.exception.diagnostics.get('finish_reason'), reason)
+                    if reason is not None:
+                        self.assertEqual(model.usage[0]['reasoning_tokens'], 75)
 
     def test_interrupted_chunked_response_fails_without_retry_or_partial_output(self):
         from http.client import IncompleteRead
@@ -255,6 +270,7 @@ class TransportTests(TestCase):
             with self.assertRaises(ModelError) as error:
                 model.complete('json', {})
             self.assertNotIn('private', str(error.exception))
+            self.assertEqual(error.exception.diagnostics, {'code': 'transport_error'})
             self.assertEqual(opener.return_value.open.call_count, 1)
             self.assertEqual(model.usage, [])
 

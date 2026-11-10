@@ -271,6 +271,8 @@ TCP 使用 `computer_networks` 和 `tcp_message_boundaries`。可选约束 `scen
 
 成功时返回 `GENERATED` 和一个含一道题的 `questions` 数组。面向学生的输出使用 `student_view`，含题干和带稳定 ID 的四个选项。教师视图提供答案 ID、解法和逐项说明。题目包还记录生成器版本、种子、实际题设、出处、自检结果和 `PENDING` 审校状态。选项显示字母可按顺序分配，答案按 ID 关联。
 
+模型调用失败时仍返回 `MODEL_UNAVAILABLE`。DeepSeek 适配器可在 `authoring_report.model_failure` 追加错误类别，以及实际可得的结束原因或 HTTP 状态码。`authoring_report.usage` 保留服务商已返回的用量，含可得的推理 token 数。报告不含服务商的推理正文或截断内容。
+
 失败时返回 `INVALID_REQUEST`、`UNSUPPORTED_REQUEST`、`NEEDS_MATERIAL` 或 `SELF_CHECK_FAILED`，附原因及空题目列表。材料不足时列出缺失的规则。未知请求字段视为无效，避免忽略约束。
 
 手算对照使用 256 B 页、虚拟地址 `0x02B4` 和映射 `VPN 2 → PFN 5`。虚页号为 2，偏移为 `0xB4`，物理地址为 `0x05B4`。同一映射下，虚拟地址 `0x0200` 的正确结果为 `0x0500`，此时“丢弃偏移”会与正确答案重合，必须换一个干扰项。

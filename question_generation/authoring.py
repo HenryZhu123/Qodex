@@ -313,6 +313,8 @@ def cached_authoring(payload, version, run, *, client=None, cache_path=None):
         result = failure_result("MODEL_UNAVAILABLE", str(error), identifier)
         if "model" in locals():
             result["authoring_report"] = {"usage": model.usage}
+            if error.diagnostics:
+                result["authoring_report"]["model_failure"] = error.diagnostics
         return result
     except (OSError, sqlite3.Error):
         return failure_result("AUTHORING_CACHE_UNAVAILABLE", "命题缓存不可用，本次未确认生成；请检查缓存路径。", identifier)
