@@ -40,6 +40,11 @@ Qodex 面向计算机考研 408，围绕知识库、命题、单题审校和组�
 
 历史快照保留可追溯性，不随实现更新。若与代码冲突，以代码和可复现验证为准。
 
+### 给人看的材料
+
+- [自主命题模块通俗介绍](overview.md)：面向老师和非技术同学，解释这套系统在做什么、边界在哪。
+  **AI / 开发会话可跳过，不需要读。**
+
 ## 本地开发环境
 
 - Pi 使用 Node.js 22.19.0 或以上。在 `pi-coding-agent/` 运行 `npm ci --ignore-scripts` 安装锁定依赖。首次从源码启动前运行 `npm run hydrate:model-data` 获取本地模型目录，可用 `./pi-test.sh --no-env --help` 检查启动入口。修改 Pi 代码时按 [Pi 开发纪律](../pi-coding-agent/AGENTS.md) 运行检查。
