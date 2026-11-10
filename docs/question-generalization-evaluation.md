@@ -12,6 +12,8 @@
 
 补充五条可追溯释义后，用同一知识库和冻结的原 24 条查询复测，前三段同段字面命中从 19/24 到 24/24。这五条是依据前次漏检定向补料，仍需另选查询评估推广效果。每条释义支持具体推理，例如单链表删除尾结点须获得前驱，三元组转置后可能要重排，阿姆达尔上界取决于原执行时间比例，LOOK 不必走到物理端点，曼彻斯特位中点和位边界的跳变用途不同。测试同时覆盖章节约束和内容指纹。 [链表](https://opendsa-server.cs.vt.edu/ODSA/Books/eu/cs330/spring-2025/Excelsior2/html/ListAnalysis.html) · [稀疏矩阵](https://math.nist.gov/MatrixMarket/formats.html) · [性能](https://pages.cs.wisc.edu/~markhill/cs354/Fall2008/notes/performance.html) · [磁盘调度](https://codex.cs.yale.edu/avi/os-book/OS8/os8e/slide-dir/PDF-dir/ch11.pdf) · [物理层](https://cseweb.ucsd.edu/classes/sp16/cse123-a/lectures/123-sp16-l4.pdf)
 
+补料后另外写了 10 条针对相同机制的改述，沿用同段字面指标，仅 4/10 命中。几条命中的写法仍直接使用了「三元组」「Amdahl」「LOOK」「Manchester」。省略正式术语的六条均未命中，表明材料可用和自然语言召回仍需分别验收。这是小规模诊断，原始结果保存在本地 `brief-paraphrase-probe.json`。
+
 计划选型借鉴证据中心设计，让优化器先确定可观察学习表现、要求学生提供的证据和对应任务。多材料样题把环形下标和信号量可见时刻放进同一问题，有限状态穷举证实四格配置有 5 个满状态与初始读数相同，五格配置在 210 个可达状态中均能从模距离恢复占用量。样题由开发助手编写。[证据中心设计技术报告](https://www.sri.com/wp-content/uploads/2021/12/tr9_ecd.pdf) · [样题与评分](question-generalization-examples.md#11-环形缓冲区的实时占用量综合题10-分)
 
 ### 本机模型的 12 组配对

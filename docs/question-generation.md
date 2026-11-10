@@ -103,6 +103,17 @@ curl -fsS http://127.0.0.1:8093/v1/question-generation/single \
 
 审校同学使用以下查询取题，按 `question_id` 和 `version` 识别审校对象，`question_json` 内含学生题面、教师答案、评分点和证据来源。记录结果前重新按同一身份和版本核对视图，避免把旧版结论关联到新版。审校及通过后的落库由审校模块负责。
 
+| 底表字段 | 类型 | 含义 |
+| --- | --- | --- |
+| `question_id` | `text` | 题目 ID，与 `version` 共同构成主键 |
+| `version` | `integer` | 正整数，生成时为 1 |
+| `request_id` | `text` | 触发这次生成或修订的请求 ID |
+| `question_json` | `jsonb` | 完整题包，内含 `metadata`、`student_view`、`instructor_view`、`evidence_refs`、`generator`、`self_check` 和 `review_status`。通用创作还可带考查设计 |
+| `queued_at` | `timestamptz` | 入队时间 |
+| `superseded_at` | `timestamptz`，可空 | 被新版本替代的时间。当前视图只返回此字段为空的记录，并省略此列 |
+
+[待审表完整行样例](../question_generation/examples/pending-questions.sample.json)包含一条分页单选、一条栈综合题。两行均通过命题 HTTP 服务写入临时 PostgreSQL 后原样回读，可直接供审校方核对嵌套字段。建表定义见 [001_pending_questions.sql](../question_generation/sql/001_pending_questions.sql)。
+
 ```sql
 SELECT question_id, version, request_id, question_json, queued_at
 FROM question_generation.current_pending_questions
