@@ -4,12 +4,20 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from question_generation.brief_authoring import generate_from_brief
+from question_generation.preview import unfinished_draft
 from question_generation.ui import preview_result
 from test_question_generation_brief import BriefReplay
 from test_question_generation_general import CASES
 
 
 class WorkbenchTests(TestCase):
+    def test_incomplete_output_can_preview_only_complete_view_fields(self):
+        prefix = '{"candidate":{"student_view":{"stem":"模型题干","options":[]},'
+        self.assertEqual(unfinished_draft(prefix + '"instructor_view":{"explanation":"截断'),
+                         {'student_view': {'stem': '模型题干', 'options': []}})
+        self.assertIsNone(unfinished_draft('{"message":"student_view 不完整'))
+        self.assertIsNone(unfinished_draft('{"candidate":{"student_view":{"stem":"截断'))
+
     def test_cloud_requires_confirmation_before_loading_credentials(self):
         with patch('question_generation.ui.JsonModel.from_env') as model:
             for value in (None, False, 1, 'true'):

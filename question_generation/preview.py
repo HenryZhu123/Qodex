@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from http.client import HTTPException
 import json
+import re
 import time
 from urllib.error import HTTPError, URLError
 from urllib.request import ProxyHandler, Request, build_opener
@@ -33,6 +34,33 @@ def planning_format(payload):
     return {"anyOf": [record({"plan": record(fields)}), record({"material_gaps": array(prose, 8)})]}
 
 
+def unfinished_draft(content):
+    """Read complete JSON view fields from a truncated candidate prefix."""
+    prefix = re.match(r'\s*\{\s*"candidate"\s*:\s*\{\s*', content)
+    if not prefix:
+        return None
+    read = json.JSONDecoder().raw_decode
+    colon_pattern, comma_pattern = re.compile(r'\s*:\s*'), re.compile(r'\s*,\s*')
+    offset = prefix.end()
+    draft = {}
+    while offset < len(content):
+        try:
+            key, offset = read(content, offset)
+            colon = colon_pattern.match(content, offset)
+            if not colon:
+                break
+            value, offset = read(content, colon.end())
+        except (ValueError, RecursionError):
+            break
+        if key in ("student_view", "instructor_view") and isinstance(value, dict):
+            draft[key] = value
+        comma = comma_pattern.match(content, offset)
+        if not comma:
+            break
+        offset = comma.end()
+    return draft if isinstance(draft.get("student_view", {}).get("stem"), str) else None
+
+
 class LocalPreviewModel:
     base_url = "http://127.0.0.1:11434"
     model = "jun-e4b:latest"
@@ -40,6 +68,7 @@ class LocalPreviewModel:
 
     def __init__(self):
         self.usage = []
+        self.partial_draft = None
 
     def complete(self, system, payload):
         format = planning_format(payload) if system == PLAN_PROMPT else "json"
@@ -63,6 +92,9 @@ class LocalPreviewModel:
                 if type(wire.get(field)) is int
             }})
             if wire.get("done_reason") != "stop":
+                content = wire.get("message", {}).get("content")
+                if isinstance(content, str):
+                    self.partial_draft = unfinished_draft(content)
                 raise ModelError("本机模型输出未完整结束。")
             result = json.loads(wire["message"]["content"])
             if not isinstance(result, dict):
@@ -92,7 +124,12 @@ class PreviewTrace:
     def complete(self, system, payload):
         self.stage = self.stages[self.calls]
         self.calls += 1
-        result = self.client.complete(system, payload)
+        try:
+            result = self.client.complete(system, payload)
+        except ModelError:
+            if self.calls == 2:
+                self.draft = getattr(self.client, "partial_draft", None)
+            raise
         if self.calls == 1 and isinstance(result.get("plan"), dict):
             self.proposed_plan = result["plan"]
         if self.calls == 2 and isinstance(result.get("candidate"), dict):
