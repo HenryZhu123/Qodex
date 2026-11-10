@@ -62,7 +62,7 @@ def _generate(operation: str, payload: dict, knowledge: KnowledgeEvidence | None
     if operation == "author":
         return generate_from_brief(payload, knowledge=knowledge)
     if operation == "revise":
-        return OPERATIONS[operation](payload)
+        return revise_comprehensive(payload, knowledge=knowledge)
     find_evidence = cache(knowledge.find) if knowledge else lambda subject, topic: []
     discover_evidence = knowledge.discover if knowledge else lambda item: discover(None, item)
     if operation in {"batch", "replenishment"}:

@@ -9,19 +9,20 @@ from urllib.error import HTTPError, URLError
 from urllib.request import ProxyHandler, Request, build_opener
 
 from .authoring import OBJECTIVES
-from .brief_authoring import PLAN_PROMPT, QUESTION_TYPES
+from .brief_authoring import PLAN_PROMPT, SCOUT_PROMPT, QUESTION_TYPES
 from .model_client import ModelError, NoRedirect
 
 
-def planning_format(payload):
+def planning_format(payload, *, allow_queries=False):
     def choices(values):
         return {"type": "string", "enum": list(values)}
 
     def array(items, maximum):
         return {"type": "array", "items": items, "minItems": 1, "maxItems": maximum}
 
-    def record(fields):
-        return {"type": "object", "properties": fields, "required": list(fields), "additionalProperties": False}
+    def record(fields, **optional):
+        return {"type": "object", "properties": {**fields, **optional},
+                "required": list(fields), "additionalProperties": False}
 
     prose = {"type": "string"}
     fields = {k: prose for k in ("topic", "target", "task", "student_evidence")}
@@ -31,7 +32,13 @@ def planning_format(payload):
                   evidence_ids=array(choices(item["material"]["id"] for item in payload["evidence"]), 4))
     for key in payload["fixed"]:
         fields.pop(key)
-    return {"anyOf": [record({"plan": record(fields)}), record({"material_gaps": array(prose, 8)})]}
+    if allow_queries:
+        fields["evidence_ids"]["minItems"] = 0
+        query = record({"area": choices(item["id"] for item in payload["scope"]), "query": prose})
+        plan = record(fields, material_queries=array(query, 3))
+    else:
+        plan = record(fields)
+    return {"anyOf": [record({"plan": plan}), record({"material_gaps": array(prose, 8)})]}
 
 
 def unfinished_draft(content):
@@ -71,7 +78,8 @@ class LocalPreviewModel:
         self.partial_draft = None
 
     def complete(self, system, payload):
-        format = planning_format(payload) if system == PLAN_PROMPT else "json"
+        format = planning_format(payload, allow_queries=system == SCOUT_PROMPT) if system in (
+            PLAN_PROMPT, SCOUT_PROMPT) else "json"
         body = json.dumps({"model": self.model, "stream": False, "think": False, "format": format,
                            "options": {"temperature": 0, "num_ctx": 12288, "num_predict": 4096},
                            "messages": [{"role": "system", "content": system},

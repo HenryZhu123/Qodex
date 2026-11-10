@@ -78,7 +78,7 @@ def generated(identifier: str, prefix: str, question: dict) -> dict:
     return _result(identifier, "GENERATED", question)
 
 
-def read_revision(payload: object, action_field: str, action_label: str) -> tuple[dict, dict]:
+def read_revision(payload: object, action_field: str | None = None, action_label: str = "") -> tuple[dict, dict]:
     if (
         request_id(payload) is None or payload.keys() != {"schema_version", "request_id", "current_question", "feedback"}
         or payload["schema_version"] != SCHEMA_VERSION
@@ -88,10 +88,12 @@ def read_revision(payload: object, action_field: str, action_label: str) -> tupl
     feedback = payload["feedback"]
     if not isinstance(current, dict) or not _is_text(current.get("question_id")):
         raise RequestError("current_question 必须包含题目 ID 和当前版本。")
-    if not isinstance(feedback, dict) or feedback.keys() != FEEDBACK_FIELDS | {action_field} or not all(
+    fields = FEEDBACK_FIELDS | ({action_field} if action_field else set())
+    if not isinstance(feedback, dict) or feedback.keys() != fields or not all(
         _is_text(feedback[key]) for key in ("feedback_id", "question_id", "part_id", "action", "comment")
     ):
-        raise RequestError(f"feedback 必须包含反馈 ID、题目 ID、目标版本、小问、动作、{action_label}和说明。")
+        extra = f"、{action_label}" if action_field else ""
+        raise RequestError(f"feedback 必须包含反馈 ID、题目 ID、目标版本、小问、动作{extra}和说明。")
     version = current.get("version")
     target_version = feedback["target_version"]
     if type(version) is not int or type(target_version) is not int or min(version, target_version) < 1:
@@ -154,15 +156,15 @@ def generate_comprehensive(payload: object) -> dict:
     return paging_comprehensive.generate_comprehensive(payload)
 
 
-def revise_comprehensive(payload: object) -> dict:
+def revise_comprehensive(payload: object, *, knowledge=None) -> dict:
     from . import paging_comprehensive, stack_comprehensive
 
     current = payload.get("current_question") if isinstance(payload, dict) else None
     generator = current.get("generator") if isinstance(current, dict) else None
     generator_version = generator.get("version") if isinstance(generator, dict) else None
     if isinstance(generator_version, str) and generator_version.startswith("general-authoring-"):
-        from .generation import failure_result
-        return failure_result("UNSUPPORTED_REQUEST", "通用创作题暂不支持版本修订；请通过审校反馈形成新的命题请求。", request_id(payload))
+        from .general_revision import revise_authored
+        return revise_authored(payload, knowledge=knowledge)
     metadata = current.get("metadata") if isinstance(current, dict) else None
     if isinstance(metadata, dict) and metadata.get("topic") == stack_comprehensive.METADATA["topic"]:
         return stack_comprehensive.revise_comprehensive(payload)

@@ -304,7 +304,7 @@ def cached_authoring(payload, version, run, *, client=None, cache_path=None):
             if row:
                 return json.loads(row[0])
             result = run(payload, model)
-            if result["status"] == "GENERATED":
+            if result["status"] in {"GENERATED", "REVISED"}:
                 db.execute("INSERT INTO results VALUES (?, ?)", (digest, json.dumps(result, ensure_ascii=False)))
             return result
     except RequestError as error:

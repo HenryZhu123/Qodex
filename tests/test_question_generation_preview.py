@@ -4,13 +4,24 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from question_generation.brief_authoring import generate_from_brief
-from question_generation.preview import unfinished_draft
+from question_generation.preview import planning_format, unfinished_draft
 from question_generation.ui import preview_result
 from test_question_generation_brief import BriefReplay
 from test_question_generation_general import CASES
 
 
 class WorkbenchTests(TestCase):
+    def test_automatic_material_plan_allows_optional_queries_without_existing_selection(self):
+        payload = {'scope': [{'id': 'os.memory', 'subject': 'operating_systems'}],
+                   'evidence': [{'material': {'id': 'source-1'}}], 'fixed': {'subject': 'operating_systems'}}
+        explicit = planning_format(payload)['anyOf'][0]['properties']['plan']
+        automatic = planning_format(payload, allow_queries=True)['anyOf'][0]['properties']['plan']
+        self.assertNotIn('material_queries', explicit['properties'])
+        self.assertEqual(automatic['properties']['evidence_ids']['minItems'], 0)
+        self.assertIn('material_queries', automatic['properties'])
+        self.assertNotIn('material_queries', automatic['required'])
+        self.assertNotIn('subject', automatic['properties'])
+
     def test_incomplete_output_can_preview_only_complete_view_fields(self):
         prefix = '{"candidate":{"student_view":{"stem":"模型题干","options":[]},'
         self.assertEqual(unfinished_draft(prefix + '"instructor_view":{"explanation":"截断'),

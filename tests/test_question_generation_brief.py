@@ -4,7 +4,7 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest.mock import patch
 
-from question_generation.brief_authoring import CHAPTER_QUERIES, PLAN_PROMPT, generate_from_brief
+from question_generation.brief_authoring import CHAPTER_QUERIES, PLAN_PROMPT, SCOUT_PROMPT, generate_from_brief
 from question_generation.curriculum import AREAS
 from question_generation.general_authoring import AUTHOR_PROMPT, AUDIT_PROMPT, READER_PROMPT
 from test_question_generation_general import CASES, Replay
@@ -22,7 +22,7 @@ class BriefReplay(Replay):
                          evidence_ids=list(dict.fromkeys(c['evidence_id'] for c in design['claims'])))
 
     def complete(self, system, payload):
-        if system == PLAN_PROMPT:
+        if system in (PLAN_PROMPT, SCOUT_PROMPT):
             self.calls.append((system, deepcopy(payload)))
             return {'plan': self.plan}
         for base in (AUTHOR_PROMPT, AUDIT_PROMPT):
@@ -116,3 +116,46 @@ class BriefAuthoringTests(TestCase):
                            {'total_score': 4, 'question_type': 'single_choice'}, {'evidence': [{}]}):
                 self.assertNotEqual(generate_from_brief({**payload, **fields}, client=model)['status'], 'GENERATED')
         self.assertEqual(model.calls, [])
+
+    def test_focused_lookup_adds_separate_evidence_without_another_model_call(self):
+        case = CASES[0]
+        request = case['request']
+        materials = request['evidence']
+        model = BriefReplay(case)
+        area, = model.plan['syllabus_areas']
+        model.plan.update(evidence_ids=[], material_queries=[{'area': area, 'query': '拓扑序 唯一'}])
+        payload = {'schema_version': '0.1', 'request_id': 'scouted', 'brief': '只能排成一种次序',
+                   'syllabus_areas': [area]}
+        unrelated = {**materials[0], 'id': 'irrelevant'}
+        with patch('question_generation.brief_authoring.discover', side_effect=[[unrelated], materials]) as search:
+            result = generate_from_brief(payload, client=model, cache_path=self.cache)
+        self.assertEqual(result['status'], 'GENERATED', result)
+        self.assertEqual(len(model.calls), 4)
+        self.assertEqual(model.calls[0][0], SCOUT_PROMPT)
+        self.assertEqual(model.calls[1][1]['evidence'], materials)
+        self.assertEqual(search.call_args.kwargs, {'limit': 1, 'exact_anchor': True, 'related_notes': True})
+        self.assertEqual(result['authoring_report']['plan']['evidence_ids'], [materials[0]['id']])
+
+    def test_focused_lookup_fails_before_author_when_material_is_missing_or_out_of_scope(self):
+        case = CASES[0]
+        model = BriefReplay(case)
+        area, = model.plan['syllabus_areas']
+        payload = {'schema_version': '0.1', 'request_id': 'no-match', 'brief': '只能排成一种次序',
+                   'syllabus_areas': [area]}
+        for addition, status in (
+            ({'area': area, 'query': '缺失机制'}, 'NEEDS_MATERIAL'),
+            ({'area': 'cn.link', 'query': '以太网'}, 'SELF_CHECK_FAILED'),
+        ):
+            model.plan.update(evidence_ids=[], material_queries=[addition])
+            model.calls.clear()
+            with patch('question_generation.brief_authoring.discover',
+                       side_effect=[[case['request']['evidence'][0]], []]) as search:
+                result = generate_from_brief(payload, client=model, cache_path=self.cache)
+            self.assertEqual(result['status'], status, result)
+            self.assertEqual(len(model.calls), 1)
+            self.assertEqual(search.call_count, 2 if status == 'NEEDS_MATERIAL' else 1)
+        model.plan.update(material_queries=[{'area': area, 'query': '不应查询'}])
+        with patch('question_generation.brief_authoring.discover', side_effect=AssertionError('Explicit evidence wins')):
+            result = generate_from_brief({**payload, 'evidence': case['request']['evidence']},
+                                         client=model, cache_path=self.cache)
+        self.assertEqual(result['status'], 'SELF_CHECK_FAILED')

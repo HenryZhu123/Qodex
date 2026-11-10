@@ -17,14 +17,47 @@ from .knowledge import KnowledgeUnavailable, SUBJECT_DIRS
 from .reference_material import reference_evidence
 
 
-def discover(provider, payload, *, limit=6, exact_anchor=False):
+DISCOVERY_MARKER = " · discovery: source-pinned; not chunk-curated"
+
+
+def restore_discovered(provider, reference, areas):
+    """Read the exact recorded discovery chunk, without running a new search."""
+    if not reference["version"].endswith(DISCOVERY_MARKER):
+        return None
+    pin = re.search(r" · source sha256:([a-f0-9]{64}) · chunk sha256:([a-f0-9]{64})$",
+                    reference["version"][:-len(DISCOVERY_MARKER)])
+    _, marker, chunk_id = reference["anchor"].rpartition(" · chunk ")
+    if not pin or not marker or not chunk_id:
+        return None
+    for entries in provider.entries.values():
+        for source in entries:
+            if (source["source"] != reference["source"] or source["source_sha256"] != pin[1]
+                    or not any(a in AREAS[source["subject"]] for a in areas)):
+                continue
+            directory = provider.root / SUBJECT_DIRS[source["subject"]]
+            if chunk_id in provider._conflicting_chunks(directory / "relations.json"):
+                continue
+            entry = {**source, "chunk_id": chunk_id, "content_sha256": pin[2], "rules": []}
+            entry.pop("section", None)
+            try:
+                item = provider._read(directory / source["database"], entry)
+            except (OSError, sqlite3.Error) as error:
+                raise KnowledgeUnavailable() from error
+            if item and item["id"] == reference["id"] and "excerpt" in item:
+                item["summary"] = item["excerpt"][:1000]
+                item["version"] += DISCOVERY_MARKER
+                return item
+    return None
+
+
+def discover(provider, payload, *, limit=6, exact_anchor=False, related_notes=False):
     settings = payload["constraints"]["authoring"]
     query = settings.get("material_query")
     if not query:
         return []
     # Keep independently sourced notes for known gaps alongside the textbook.
     areas = settings["syllabus_areas"]
-    references = list(reference_evidence(areas, query))
+    references = list(reference_evidence(areas, query, related=related_notes))
     # Chinese word segmentation needs no new dependency or writable FTS index.
     words = set(re.findall(r"[a-z0-9]+|[\u4e00-\u9fff]+", query.lower()))
     tokens = set()
@@ -103,7 +136,7 @@ def discover(provider, payload, *, limit=6, exact_anchor=False):
         size = len(item.get("excerpt", "")) + len(item["summary"])
         if characters + size > 18000:
             continue
-        item["version"] += " · discovery: source-pinned; not chunk-curated"
+        item["version"] += DISCOVERY_MARKER
         results.append(item)
         characters += size
         used.add(entry["content_sha256"])

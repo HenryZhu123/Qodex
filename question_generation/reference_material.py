@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from hashlib import sha256
+import re
 from unicodedata import normalize
 
 # Text is project-authored. URLs identify the underlying course or textbook,
@@ -60,11 +61,38 @@ NOTES = (
 )
 
 
-def reference_evidence(areas, query):
+def reference_evidence(areas, query, *, related=False):
     query = normalize("NFKC", query).casefold()
+    direct, nearby = [], []
+    pairs = {m[1] for m in re.finditer(r"(?=([\u4e00-\u9fff]{2}))", query)} if related else set()
     for area, terms, source, anchor, summary in NOTES:
-        if area in areas and any(term in query for term in terms):
-            digest = sha256(summary.encode()).hexdigest()
-            yield {"id": "reference:" + digest, "source": source, "anchor": anchor,
-                   "summary": summary, "version": "Qodex explanatory note · sha256:" + digest,
-                   "rules": []}
+        if area not in areas:
+            continue
+        overlap = sum(pair in summary for pair in pairs)
+        if any(term in query for term in terms):
+            direct.append((overlap, source, anchor, summary))
+        elif overlap >= 3:
+            # Search the note itself, so exact tag vocabulary is not required.
+            # Keep at most one extra note in the initial brief shortlist.
+            nearby.append((overlap, source, anchor, summary))
+    for _, source, anchor, summary in sorted(direct, key=lambda item: -item[0]):
+        yield _evidence(source, anchor, summary)
+    if nearby:
+        _, source, anchor, summary = max(nearby)
+        yield _evidence(source, anchor, summary)
+
+
+def _evidence(source, anchor, summary):
+    digest = sha256(summary.encode()).hexdigest()
+    return {"id": "reference:" + digest, "source": source, "anchor": anchor,
+            "summary": summary, "version": "Qodex explanatory note · sha256:" + digest,
+            "rules": []}
+
+
+def restore_reference(areas, reference):
+    for area, _, source, anchor, summary in NOTES:
+        if area in areas and source == reference["source"] and anchor == reference["anchor"]:
+            item = _evidence(source, anchor, summary)
+            if item["id"] == reference["id"]:
+                return item
+    return None

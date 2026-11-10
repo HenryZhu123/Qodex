@@ -6,7 +6,7 @@ import re
 
 from .authoring import OBJECTIVES, cached_authoring, read_authoring
 from .curriculum import AREAS, read_scope
-from .general_authoring import BRIEF_VERSION, run
+from .general_authoring import BRIEF_VERSION, SCOUTED_BRIEF_VERSION, run
 from .general_contract import text, texts
 from .generation import SCHEMA_VERSION, RequestError, _evidence_refs, failure_result
 from .knowledge import KnowledgeUnavailable
@@ -50,6 +50,15 @@ PLAN_PROMPT = """严格输出JSON对象。为408粗需求拟定一道题的考�
 若材料不能支撑需求，输出 {"material_gaps":["缺的知识机制及原因"]}。不要用题目绕开用户指定的难点。
 """
 
+SCOUT_PROMPT = PLAN_PROMPT.replace("选择1至4个章节、1至4条材料。", "选择1至4个章节。") + """
+evidence是第一轮找到的材料，可能相关但缺少关键机制。先将原始需求中的各项机制与可见材料对照。
+如果关键机制在这些片段中没有依据，但能定位到所选章节，可在plan中附加material_queries，
+格式为[{"area":"所选章节ID","query":"能在教材中找到该机制的简短检索词"}]，最多3条。
+每条查询针对一项缺失机制。将口语换成学科术语；如果教材可能是英文，也可附同一机制的英文术语或缩写。
+不要把整句用户要求复制成检索词。两个机制需要互补材料时分别搜索。已有适用材料则沿用evidence_ids。
+evidence_ids与material_queries合计1至4项，可仅请求检索。查不到所需材料时服务会返回缺口。
+"""
+
 
 def read_brief(payload):
     if payload.keys() - FIELDS or payload.get("schema_version") != SCHEMA_VERSION or not text(payload.get("request_id"), 200):
@@ -86,7 +95,7 @@ def read_brief(payload):
 def shortlist(provider, areas, brief, seed, *, pinned):
     def search(group, query, exact_anchor):
         return discover(provider, {"constraints": {"authoring": {"syllabus_areas": group, "material_query": query}}},
-                        limit=3, exact_anchor=exact_anchor)
+                        limit=3, exact_anchor=exact_anchor, related_notes=not exact_anchor)
 
     if brief:
         query = re.sub(r"^(?:我)?(?:想|要)?(?:练习?|复习|考查|出(?:一道|一题|题)|做(?:一道|一题|题))\s*", "", brief)
@@ -118,11 +127,14 @@ def shortlist(provider, areas, brief, seed, *, pinned):
     return list(hits.values()), areas
 
 
-def valid_plan(plan, constraints, areas, sources):
+def valid_plan(plan, constraints, areas, sources, *, allow_queries=False):
     prose = {"topic": 200, "target": 500, "task": 1000, "student_evidence": 1000}
-    if not isinstance(plan, dict) or plan.keys() != prose.keys() | {
+    required = prose.keys() | {
         "subject", "syllabus_areas", "question_type", "objective", "evidence_ids"
-    } or not all(text(plan[k], limit) for k, limit in prose.items()):
+    }
+    if (not isinstance(plan, dict) or not required <= plan.keys()
+            or plan.keys() - required - ({"material_queries"} if allow_queries else set())
+            or not all(text(plan[k], limit) for k, limit in prose.items())):
         return False
     subject, kind, objective = plan["subject"], plan["question_type"], plan["objective"]
     if (subject != constraints.get("subject", subject) or kind not in QUESTION_TYPES
@@ -135,9 +147,29 @@ def valid_plan(plan, constraints, areas, sources):
     if any(entry["id"] not in areas for entry in scope):
         return False
     ids = plan["evidence_ids"]
+    queries = plan.get("material_queries", [])
+    if (not isinstance(queries, list) or len(queries) > 3
+            or any(not isinstance(q, dict) or q.keys() != {"area", "query"}
+                   or q["area"] not in plan["syllabus_areas"] or not text(q["query"], 120) for q in queries)
+            or len({(q["area"], q["query"].strip().casefold()) for q in queries}) != len(queries)):
+        return False
     subjects = {AREA_SUBJECTS[entry["id"]] for entry in scope}
-    return (texts(ids, 1, 4) and len(set(ids)) == len(ids)
+    return (texts(ids, 0, 4) and 1 <= len(ids) + len(queries) <= 4 and len(set(ids)) == len(ids)
             and all(i in sources and sources[i].get("subject", subject) in subjects for i in ids))
+
+
+def resolve_materials(plan, sources, provider):
+    selected = {i: sources[i]["material"] for i in plan["evidence_ids"]}
+    gaps = []
+    for query in plan.get("material_queries", []):
+        settings = {"syllabus_areas": [query["area"]], "material_query": query["query"]}
+        hits = discover(provider, {"constraints": {"authoring": settings}}, limit=1, exact_anchor=True,
+                        related_notes=True)
+        if hits:
+            selected.setdefault(hits[0]["id"], hits[0])
+        else:
+            gaps.append(f'{query["area"]}：未找到「{query["query"]}」的材料。')
+    return selected, gaps
 
 
 def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None):
@@ -147,13 +179,16 @@ def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None
     try:
         seed, areas = read_brief(payload)
         brief = payload.get("brief", "").strip()
-        if "evidence" in payload:
+        auto_material = "evidence" not in payload
+        if not auto_material:
             materials = [{"material": item} for item in payload["evidence"]]
         else:
             search_text = brief or " ".join(payload.get("requirements", []))
             if brief and UNRESTRICTED_BRIEF.fullmatch("".join(brief.split())):
                 search_text = " ".join(payload.get("requirements", []))
             materials, areas = shortlist(knowledge, areas, search_text, seed, pinned="syllabus_areas" in payload)
+            if not materials and search_text and (len(areas) == 1 or "syllabus_areas" in payload):
+                materials, areas = shortlist(knowledge, areas, "", seed, pinned=True)
     except RequestError as error:
         return failure_result(error.status, str(error), identifier if text(identifier, 200) else None)
     except KnowledgeUnavailable:
@@ -171,32 +206,42 @@ def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None
         fixed.update(subject=AREA_SUBJECTS[areas[0]], syllabus_areas=areas)
 
     def author(_, model):
-        planning = model.complete(PLAN_PROMPT, {"brief": brief, "scope": scope, "constraints": constraints,
-                                               "fixed": fixed, "evidence": materials, "seed": seed})
+        planning = model.complete(SCOUT_PROMPT if auto_material else PLAN_PROMPT,
+                                  {"brief": brief, "scope": scope, "constraints": constraints,
+                                   "fixed": fixed, "evidence": materials, "seed": seed})
         if planning.keys() == {"material_gaps"} and texts(planning["material_gaps"]):
             return {**failure_result("NEEDS_MATERIAL", "材料未能支撑粗需求。", identifier),
                     "authoring_report": {"stage": "需求细化", "details": planning["material_gaps"], "usage": model.usage}}
         plan = planning.get("plan")
         if (planning.keys() != {"plan"} or not isinstance(plan, dict)
                 or any(k in plan and plan[k] != value for k, value in fixed.items())
-                or not valid_plan({**fixed, **plan}, constraints, areas, sources)):
+                or not valid_plan({**fixed, **plan}, constraints, areas, sources, allow_queries=auto_material)):
             return {**failure_result("SELF_CHECK_FAILED", "考查计划不完整、越出指定范围或引用了不可用材料。", identifier),
                     "authoring_report": {"stage": "需求细化", "usage": model.usage}}
         plan = {**fixed, **plan}
+        try:
+            selected, gaps = resolve_materials(plan, sources, knowledge)
+        except KnowledgeUnavailable:
+            return failure_result("KNOWLEDGE_BASE_UNAVAILABLE", "计划所需的教材索引暂不可读。", identifier)
+        if gaps:
+            return {**failure_result("NEEDS_MATERIAL", "未找到计划需要的补充材料。", identifier),
+                    "authoring_report": {"stage": "定向取材", "details": gaps, "usage": model.usage}}
+        plan["evidence_ids"] = list(selected)
         planned = {k: plan[k] for k in ("subject", "topic", "question_type")}
         planned.update(schema_version=SCHEMA_VERSION, request_id=identifier, seed=seed,
                        constraints={"authoring": {"objective": plan["objective"], "focus": plan["target"],
                                                   "syllabus_areas": plan["syllabus_areas"]}},
-                       evidence=[sources[i]["material"] for i in plan["evidence_ids"]])
+                       evidence=list(selected.values()))
         if "requirements" in constraints:
             planned["constraints"]["requirements"] = constraints["requirements"]
         if plan["question_type"] == "comprehensive":
             planned["constraints"]["total_score"] = constraints.get("total_score", 10)
         request, settings, base = read_authoring(planned)
         brief_plan = {"brief": brief, **plan}
-        result = run(base, model, request, settings, brief_plan=brief_plan)
+        result = run(base, model, request, settings, brief_plan=brief_plan, version=version)
         result["authoring_report"]["plan"] = brief_plan
         return result
 
-    return cached_authoring({**payload, "scouted_materials": materials, "scope": areas}, BRIEF_VERSION, author,
+    version = SCOUTED_BRIEF_VERSION if auto_material else BRIEF_VERSION
+    return cached_authoring({**payload, "scouted_materials": materials, "scope": areas}, version, author,
                             client=client, cache_path=cache_path)

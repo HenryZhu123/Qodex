@@ -6,7 +6,7 @@ from unittest import TestCase
 
 import test_question_generation_knowledge as fixtures
 from question_generation.knowledge import with_knowledge
-from question_generation.material_discovery import discover
+from question_generation.material_discovery import discover, restore_discovered
 from question_generation.generation import generate_question
 
 
@@ -40,6 +40,20 @@ class DiscoveryTests(TestCase):
     def test_discovery_rejects_source_and_content_changes(self):
         provider = self.provider(source_sha256='0'*64)
         self.assertEqual(provider.discover(self.payload), [])
+
+    def test_restore_discovers_exact_old_chunk_and_respects_conflicts(self):
+        provider = self.provider()
+        item, = provider.discover(self.payload)
+        reference = {k: item[k] for k in ('id', 'source', 'anchor', 'version', 'rules')}
+        self.assertEqual(restore_discovered(provider, reference, ['os.process']), item)
+        self.assertIsNone(restore_discovered(provider, reference, ['cn.link']))
+        with sqlite3.connect(self.index) as db:
+            db.execute("UPDATE chunks SET content=content||'新内容' WHERE chunk_id='discovery-0'")
+        self.assertIsNone(restore_discovered(provider, reference, ['os.process']))
+        with sqlite3.connect(self.index) as db:
+            db.execute("UPDATE chunks SET content=? WHERE chunk_id='discovery-0'", (item['excerpt'],))
+        (self.index.parent/'relations.json').write_text(json.dumps({'conflicts':{'g1':[{'chunk_id':'discovery-0'}]}}))
+        self.assertIsNone(restore_discovered(provider, reference, ['os.process']))
         provider = self.provider()
         with sqlite3.connect(self.index) as db:
             db.execute("UPDATE chunks SET content_hash='changed' WHERE chunk_id='discovery-0'")
