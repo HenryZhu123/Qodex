@@ -15,8 +15,8 @@ from question_generation.authoring import generate_authored, read_authoring
 from question_generation.batch import generate_batch
 from question_generation.comprehensive import generate_comprehensive
 from question_generation.curriculum import AREAS, coverage_report
-from question_generation.general_authoring import AUTHOR_PROMPTS, READER_PROMPT, AUDIT_PROMPT, CHECKS
-from question_generation.general_contract import contains_span, contains_given_span, index_evidence
+from question_generation.general_authoring import AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT, CHECKS
+from question_generation.general_contract import contains_span, contains_given_span
 from question_generation.generation import generate_question
 from question_generation.knowledge import with_knowledge
 
@@ -34,8 +34,8 @@ class Replay:
     def complete(self, system, payload):
         self.calls.append((system, deepcopy(payload)))
         c = self.candidate
-        if system in AUTHOR_PROMPTS.values():
-            return c
+        if system == AUTHOR_PROMPT:
+            return {'candidate': c}
         if system == READER_PROMPT:
             student = payload['student_view']
             if 'options' in student:
@@ -60,7 +60,7 @@ class Replay:
 
 class GeneralContractTests(TestCase):
     def test_all_stages_satisfy_provider_json_mode_precondition(self):
-        for prompt in (*AUTHOR_PROMPTS.values(), READER_PROMPT, AUDIT_PROMPT):
+        for prompt in (AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT):
             self.assertIn('json', prompt.lower())
 
     def setUp(self):
@@ -119,8 +119,8 @@ class GeneralContractTests(TestCase):
         class WrongEnvelope(Replay):
             def complete(self, system, payload):
                 result = super().complete(system, payload)
-                if system in AUTHOR_PROMPTS.values():
-                    result['extra'] = []
+                if system == AUTHOR_PROMPT:
+                    result['calculations'] = []
                 return result
         result, model = self.run_case(CASES[0], WrongEnvelope(CASES[0]['candidate']))
         self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
@@ -137,13 +137,15 @@ class GeneralContractTests(TestCase):
         self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
         self.assertEqual(len(model.calls), 2)
 
-    def test_invalid_citations_conditions_and_options_stop_before_reader(self):
+    def test_invalid_dependencies_quotes_and_conditions_stop_before_reader(self):
         changes = [
-            lambda c: c['design']['claims'][0].update(span_ids=['M1.99']),
-            lambda c: c['design']['claims'][0].update(span_ids=['M1.1', 'M1.1']),
             lambda c: c['design']['claims'][0].update(quote='invented source text'),
-            lambda c: c['design']['claims'].append(deepcopy(c['design']['claims'][0])),
-            lambda c: c['design']['hinge'].update(given='  '),
+            lambda c: c['design']['claims'][0].update(evidence_id='missing'),
+            lambda c: c['design']['givens'].append(deepcopy(c['design']['givens'][0])),
+            lambda c: c['design']['derivation'][0].update(uses=['d2']),
+            lambda c: c['design']['derivation'][1].update(uses=['g1']),
+            lambda c: c['design']['counterfactual'].update(given_id='missing'),
+            lambda c: c['design']['derivation'][0].update(uses=['k1', 'k1']),
             lambda c: c['student_view']['options'][1].update(text=c['student_view']['options'][0]['text']),
             lambda c: c.update(calculations=[{'kind': 'python', 'inputs': {'code': 'print(1)'}, 'result': 1}]),
         ]
@@ -210,23 +212,12 @@ class GeneralContractTests(TestCase):
         self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
         self.assertEqual(len(model.calls), 1)
 
-    def test_excerpt_is_authority_and_cited_span_is_resolved_by_program(self):
+    def test_excerpt_is_authority_for_quote_when_present(self):
         case = deepcopy(CASES[0])
-        item = case['request']['evidence'][0]
-        item['excerpt'] = '这是已核对的原文。'
+        case['request']['evidence'][0]['excerpt'] = '原文中没有摘要给出的结论。'
         result, model = self.run_case(case)
-        self.assertEqual(result['status'], 'GENERATED')
-        self.assertEqual(model.calls[0][1]['evidence'][0]['spans'], {'M1.1': item['excerpt']})
-        citation, = result['questions'][0]['pedagogy']['claims'][0]['citations']
-        self.assertEqual(citation, {'span_id': 'M1.1', 'evidence_id': item['id'], 'quote': item['excerpt']})
-        self.assertEqual(result['questions'][0]['evidence_refs'][0]['id'], item['id'])
-
-    def test_long_material_keeps_contiguous_spans_and_all_nonspace_text(self):
-        source = '第一节。' * 130 + '\n' + '长' * 500 + '尾句'
-        material, spans = index_evidence([{'source': 'Fixture', 'anchor': 'Test', 'id': 'local', 'summary': source}])
-        self.assertEqual(''.join(text for _, text in spans.values()), source.replace('\n', ''))
-        self.assertTrue(all(text in source and len(text) <= 480 for _, text in spans.values()))
-        self.assertEqual(list(material[0]['spans']), list(spans))
+        self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
+        self.assertEqual(len(model.calls), 1)
 
     def test_citation_layout_normalization_does_not_accept_semantic_edits(self):
         self.assertTrue(contains_span('overflow 等于 0', 'overﬂow\n等于　０'))
@@ -235,17 +226,17 @@ class GeneralContractTests(TestCase):
 
     def test_option_data_is_visible_but_teacher_only_data_is_not(self):
         case = deepcopy(CASES[0])
-        case['candidate']['design']['hinge']['given'] = case['candidate']['student_view']['options'][0]['text']
+        case['candidate']['design']['givens'][0]['text'] = case['candidate']['student_view']['options'][0]['text']
         result, _ = self.run_case(case)
         self.assertEqual(result['status'], 'GENERATED')
         case['request']['request_id'] += '-hidden'
-        case['candidate']['design']['hinge']['given'] = 'Only the teacher knows this condition'
+        case['candidate']['design']['givens'][0]['text'] = 'Only the teacher knows this condition'
         case['candidate']['instructor_view']['explanation'] += ' Only the teacher knows this condition'
         result, model = self.run_case(case, Replay(case['candidate'], bad_audit='ambiguity'))
         self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
         self.assertEqual(len(model.calls), 3)
         diagnostic = model.calls[2][1]['program_design_diagnostics']['nonliteral_givens']
-        self.assertEqual(diagnostic[0], 'Only the teacher knows this condition')
+        self.assertEqual(diagnostic[0]['text'], 'Only the teacher knows this condition')
         self.assertNotIn('Only the teacher knows this condition', json.dumps(model.calls[1][1]))
 
     def test_given_sentence_terminator_can_introduce_code_without_fuzzy_matching(self):
@@ -257,23 +248,19 @@ class GeneralContractTests(TestCase):
     def test_nonliteral_condition_is_explicitly_sent_for_semantic_audit(self):
         case = deepcopy(CASES[0])
         case['candidate']['student_view']['stem'] += ' Uses variable allocation and local replacement.'
-        case['candidate']['design']['hinge']['given'] = 'Uses local replacement.'
+        case['candidate']['design']['givens'][0]['text'] = 'Uses local replacement.'
         result, model = self.run_case(case)
         self.assertEqual(result['status'], 'GENERATED')
-        self.assertEqual(model.calls[2][1]['program_design_diagnostics']['nonliteral_givens'][0],
+        self.assertEqual(model.calls[2][1]['program_design_diagnostics']['nonliteral_givens'][0]['text'],
                          'Uses local replacement.')
 
-    def test_optional_witness_and_multiple_citations_preserve_provenance(self):
+    def test_supplementary_claim_is_a_diagnostic_not_a_fake_correctness_failure(self):
         case = deepcopy(CASES[0])
-        case['candidate'].pop('calculations')
-        second = {**case['request']['evidence'][0], 'id': 'second-material'}
-        case['request']['evidence'].append(second)
-        case['candidate']['design']['claims'][0]['span_ids'].append('M2.1')
-        result, _ = self.run_case(case)
+        extra = deepcopy(case['candidate']['design']['claims'][0]); extra['id'] = 'supplement'
+        case['candidate']['design']['claims'].append(extra)
+        result, model = self.run_case(case)
         self.assertEqual(result['status'], 'GENERATED')
-        q, = result['questions']
-        self.assertEqual(q['self_check']['verification_scope']['typed_calculation_count'], 0)
-        self.assertEqual([e['id'] for e in q['evidence_refs']], [case['request']['evidence'][0]['id'], second['id']])
+        self.assertEqual(model.calls[2][1]['program_design_diagnostics']['unlinked_claims'], ['supplement'])
 
     def test_model_can_report_a_specific_material_gap(self):
         model = Replay(CASES[0]['candidate'])
