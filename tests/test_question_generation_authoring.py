@@ -4,11 +4,12 @@ from concurrent.futures import ThreadPoolExecutor
 import itertools
 import json
 from pathlib import Path
+import sqlite3
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest.mock import patch
 
-from question_generation.authoring import generate_authored, AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT
+from question_generation.authoring import generate_authored, VERSION, AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT
 from question_generation.batch import generate_batch
 from question_generation.generation import generate_question
 from question_generation.knowledge import with_knowledge
@@ -93,6 +94,22 @@ class AuthoringTests(TestCase):
         with ThreadPoolExecutor(2) as executor:
             results = list(executor.map(lambda _: self.run_model(model), range(2)))
         self.assertEqual(results[0], results[1])
+        self.assertEqual(len(model.calls), 3)
+
+    def test_high_effort_does_not_reuse_historical_low_effort_cache(self):
+        from hashlib import sha256
+
+        model = FakeModel()
+        model.reasoning_effort = 'high'
+        payload = request()
+        old_key = json.dumps([VERSION, model.base_url, model.model, payload], sort_keys=True, ensure_ascii=False)
+        with sqlite3.connect(self.path) as db:
+            db.execute('CREATE TABLE results (digest TEXT PRIMARY KEY, result TEXT NOT NULL)')
+            db.execute('INSERT INTO results VALUES (?, ?)', (sha256(old_key.encode()).hexdigest(), '{}'))
+        result = self.run_model(model, payload)
+        self.assertEqual(result['status'], 'GENERATED')
+        self.assertEqual(len(model.calls), 3)
+        self.assertEqual(self.run_model(model, payload), result)
         self.assertEqual(len(model.calls), 3)
 
     def test_failed_numerical_witnesses_never_reach_model_reader(self):
@@ -254,6 +271,7 @@ class TransportTests(TestCase):
             req = opener.return_value.open.call_args.args[0]
             sent = json.loads(req.data)
             self.assertEqual(sent['max_tokens'], 16384)
-            self.assertEqual(sent['reasoning_effort'], 'low')
+            self.assertEqual(sent['thinking'], {'type': 'enabled'})
+            self.assertEqual(sent['reasoning_effort'], 'high')
             self.assertEqual(len(model.usage), 1)
             self.assertNotIn('reasoning_content', str(model.usage))

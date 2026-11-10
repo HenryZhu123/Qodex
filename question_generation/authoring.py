@@ -279,7 +279,8 @@ def generate_authored(payload, *, client=None, cache_path=None):
             cache_path = os.environ.get("QUESTION_GENERATION_AUTHORING_CACHE", ".local/question-generation/authoring-cache.sqlite")
         path = Path(cache_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        digest = hashlib.sha256(json.dumps([version, model.base_url, model.model, payload],
+        cache_key = [version, model.base_url, model.model, getattr(model, "reasoning_effort", None), payload]
+        digest = hashlib.sha256(json.dumps(cache_key,
                                           sort_keys=True, ensure_ascii=False).encode()).hexdigest()
         # Hold the transaction during authoring: concurrent identical calls
         # cannot create conflicting content or duplicate paid work. Serializes

@@ -20,6 +20,8 @@ class NoRedirect(HTTPRedirectHandler):
 
 
 class JsonModel:
+    reasoning_effort = "high"
+
     def __init__(self, *, base_url: str, model: str, api_key: str, timeout: float = 120):
         parsed = urlsplit(base_url)
         if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.query or parsed.fragment:
@@ -39,7 +41,7 @@ class JsonModel:
             {"role": "system", "content": system},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ], "response_format": {"type": "json_object"}, "max_tokens": 16384,
-            "thinking": {"type": "enabled"}, "reasoning_effort": "low"}, ensure_ascii=False).encode()
+            "thinking": {"type": "enabled"}, "reasoning_effort": self.reasoning_effort}, ensure_ascii=False).encode()
         if len(body) > 100_000:
             raise ModelError("命题材料超过单次调用预算。")
         request = Request(self.base_url + "/chat/completions", data=body, headers={
