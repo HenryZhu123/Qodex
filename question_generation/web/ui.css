@@ -8,7 +8,7 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; }
-button, input, select { font: inherit; }
+button, input, select, textarea { font: inherit; }
 .wrap { width: min(1100px, calc(100% - 36px)); margin-inline: auto; }
 .hero { padding: 28px 0 30px; color: #fff; background: #142941; }
 .eyebrow, .section-label { font-size: .79rem; font-weight: 750; letter-spacing: .08em; }
@@ -59,6 +59,26 @@ details ul { padding-left: 22px; }
 pre { background: #eef3f7; border-radius: 8px; padding: 11px; overflow: auto; max-height: 22rem; font: .82rem/1.55 ui-monospace, monospace; }
 .scope { grid-column: 1 / -1; margin: 0 2px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.workbench-nav { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; margin-bottom: 16px; }
+.workbench-nav a { color: #e0e9f3; font-size: .85rem; text-underline-offset: 3px; }
+.author-workspace { grid-template-columns: minmax(300px, .9fr) minmax(0, 1.25fr); }
+.author-workspace .result { min-height: 24rem; }
+.author-label { display: block; font-size: .9rem; font-weight: 650; margin: 11px 0 4px; }
+textarea { display: block; resize: vertical; width: 100%; border: 1px solid #b5c7d8; border-radius: 7px; padding: 9px 10px; color: inherit; }
+.brief-presets { margin: 0 0 15px; }
+.author-input-details { padding-block: 10px; }
+.author-fields { margin-top: 8px; }
+.author-fields label:last-child { grid-column: auto; }
+.cloud-confirm:not([hidden]) { display: block; font-size: .87rem; padding: 10px; background: #fff2dc; border-radius: 7px; margin-bottom: 8px; }
+#generate-author { margin-top: 7px; }
+.history-button { width: 100%; margin-top: 8px; }
+.question-parts { margin-top: 10px; padding-left: 23px; }
+.question-parts li { margin-bottom: 7px; padding: 7px 8px; border-radius: 5px; background: #f3f7f9; }
+.prose { white-space: pre-wrap; overflow-wrap: anywhere; }
+.author-workspace h3 { margin: 8px 0 3px; font-size: .92rem; }
+.author-workspace details p { margin: 4px 0 9px; }
+.rubric li { margin-bottom: 6px; }
 
 @media (max-width: 720px) {
   .workspace { grid-template-columns: 1fr; }

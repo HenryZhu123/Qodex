@@ -202,9 +202,19 @@ python3 -m unittest discover -s tests
 
 样例均把 UTF-8 JSON 结果写到标准输出。成功退出码为 0，命题失败退出码为 1。重复使用同一个请求、生成器和 Python 版本可重放同一道题。修改示例中的 `seed` 可生成另一变体。Python 调用方也可以使用 `question_generation.generation.generate_question(payload)`。
 
-### 浏览器验证台
+### 浏览器试题台
 
-在仓库根目录运行 `python3 -m question_generation.ui`，打开 [本地验证台](http://127.0.0.1:8765/)。验证台只在本机监听，可用 `--port` 更换端口。按 Ctrl+C 停止。
+在仓库根目录启动试题台，打开 [自主命题试题台](http://127.0.0.1:8765/)。可直接输入需求、粘贴材料或留空让模块选题。先看学生题面，再展开教师答案、评分、材料和考查计划。若模型已给出题面但自检失败，页面标记为「模型原始候选」，并显示失败阶段。试题台与 Pi 共用命题流程，预览无需 PostgreSQL。
+
+```bash
+python3 -m question_generation.ui \
+  --kb-root .local/question-generation/team-kb/books \
+  --kb-catalog .local/question-generation/team-kb/catalog.json
+```
+
+默认连接本机 Ollama 的 `jun-e4b:latest`，需已安装且运行。知识库目录与清单可以一起省略，此时可粘贴材料或使用内置出处释义。`--history-example` 可指定一份此前成功生成的 JSON 题包，页面将其标为历史实测。若自行选择用已配置的 DeepSeek，可在启动时加 `--provider deepseek`，并在页面逐次确认请求。试题台仅监听本机，可用 `--port` 更换端口，按 Ctrl+C 停止。
+
+[规则题验证台](http://127.0.0.1:8765/rules) 保留原有参数和预设。
 
 | 预设 | 预期结果 |
 | --- | --- |
@@ -221,7 +231,7 @@ python3 -m unittest discover -s tests
 | IPv4 · 超出前缀范围 | 以 `/31` 发出请求，返回 `INVALID_REQUEST`，无题目 |
 | TCP · 未知场景 | 返回 `INVALID_REQUEST`，无题目 |
 
-从题型下拉框切换样例，可调整种子、该题型的参数和材料规则覆盖。验证台复用命令行入口的命题逻辑，题目保留待独立审校状态。Pi、真实知识库、独立审校、入库和组卷在后续接入阶段验收。
+从规则题下拉框切换样例，可调整种子、题型参数和材料规则覆盖。结果与本地命令行一致，题目保留待独立审校状态。
 
 ### 请求
 
