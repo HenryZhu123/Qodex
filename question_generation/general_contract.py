@@ -1,6 +1,8 @@
 """Material-grounded task designs; structural checks are not semantic proofs."""
 from __future__ import annotations
 
+import json
+import re
 from unicodedata import normalize
 
 from .curriculum import read_scope
@@ -45,16 +47,26 @@ def visible_text(student):
                      + [o["text"] for o in student.get("options", [])])
 
 
-def design_diagnostics(design, student=None):
-    reachable = set(design["conclusions"])
-    for step in reversed(design["derivation"]):
-        if step["id"] in reachable:
-            reachable.update(step["uses"])
-    return {"unlinked_claims": [c["id"] for c in design["claims"] if c["id"] not in reachable],
-            "unlinked_steps": [s["id"] for s in design["derivation"] if s["id"] not in reachable],
-            "counterfactual_dependency_unlinked": design["counterfactual"]["given_id"] not in reachable,
-            "nonliteral_givens": [] if student is None else [g for g in design["givens"]
-                if not contains_given_span(g["text"], visible_text(student))]}
+def index_evidence(evidence):
+    """Address contiguous source text without asking the model to transcribe it."""
+    material, spans = [], {}
+    for number, item in enumerate(evidence, 1):
+        source = item.get("excerpt", item["summary"])
+        sections = {}
+        # Prefer nearby sentence or paragraph boundaries. Bound long OCR lines.
+        for match in re.finditer(r".{1,479}(?:[。！？；\n]|$)|.{1,480}", source, re.DOTALL):
+            excerpt = match.group().strip()
+            if excerpt:
+                key = f"M{number}.{len(sections) + 1}"
+                sections[key] = excerpt
+                spans[key] = (item["id"], excerpt)
+        material.append({"source": item["source"], "anchor": item["anchor"], "spans": sections})
+    return material, spans
+
+
+def design_diagnostics(design, student):
+    given = design["hinge"]["given"]
+    return {"nonliteral_givens": [] if contains_given_span(given, visible_text(student)) else [given]}
 
 
 def read_request(payload, settings):
@@ -94,60 +106,37 @@ def read_request(payload, settings):
                    ("subject", "topic", "question_type")}, constraints, refs)
 
 
-def validate_design(design, evidence, student):
-    require(isinstance(design, dict) and design.keys() == {
-        "target", "concepts", "claims", "givens", "derivation", "conclusions", "counterfactual"
-    }, "考查设计字段不完整。")
-    require(text(design["target"]) and texts(design["concepts"], 1, 8), "缺少具体学习表现或概念。")
-    sources = {e["id"]: e for e in evidence}
-    nodes, claims = set(), set()
-    require(isinstance(design["claims"], list) and 1 <= len(design["claims"]) <= 12, "须提供材料知识依据。")
-    for claim in design["claims"]:
-        require(isinstance(claim, dict) and claim.keys() == {"id", "statement", "evidence_id", "quote"}, "知识依据字段无效。")
-        require(all(text(v, 2000) for v in claim.values()), "知识依据须为非空文本。")
-        require(claim["id"] not in nodes and claim["evidence_id"] in sources, "知识依据ID重复或来源不存在。")
-        source = sources[claim["evidence_id"]]
-        require(contains_span(claim["quote"], source.get("excerpt", source["summary"])), "知识依据引文未出现在所选原文或摘要中。")
-        nodes.add(claim["id"])
-        claims.add(claim["id"])
-    givens = design["givens"]
-    require(isinstance(givens, list) and 1 <= len(givens) <= 12, "须明确列出题设条件。")
-    for given in givens:
-        require(isinstance(given, dict) and given.keys() == {"id", "text"}
-                and text(given["id"], 100) and text(given["text"], 2000), "题设条件字段无效。")
-        require(given["id"] not in nodes, "题设ID重复。")
-        nodes.add(given["id"])
-    derivation = design["derivation"]
-    require(isinstance(derivation, list) and 2 <= len(derivation) <= 12, "须给出可检查的解题依赖，步骤数量不代表深度。")
-    dependencies = {}
-    for step in derivation:
-        require(isinstance(step, dict) and step.keys() == {"id", "uses", "result"}
-                and text(step["id"], 100) and text(step["result"]), "推导字段无效。")
-        require(texts(step["uses"], 1, 12) and len(set(step["uses"])) == len(step["uses"])
-                and set(step["uses"]) <= nodes and step["id"] not in nodes, "推导依赖不存在、重复或成环。")
-        dependencies[step["id"]] = set(step["uses"])
-        nodes.add(step["id"])
-    ends = design["conclusions"]
-    require(texts(ends, 1, 6) and set(ends) <= dependencies.keys(), "结论须引用推导节点。")
-    reachable = set(ends)
-    for step in reversed(derivation):
-        if step["id"] in reachable:
-            reachable.update(step["uses"])
-    require(bool(claims & reachable), "结论没有依赖任何材料知识依据。")
-    change = design["counterfactual"]
-    require(isinstance(change, dict) and change.keys() == {"given_id", "replacement", "effect", "reason"}
-            and all(text(v) for v in change.values())
-            and change["given_id"] in {g["id"] for g in givens}, "条件变化须指向已有题设并解释结论如何变化。")
-    # Unlinked nodes are diagnostic evidence for semantic review, not proof that
-    # a correct problem is unusable. Equivalent methods and prerequisite work
-    # may legitimately be outside the author's minimal dependency graph.
-    return sorted({c["evidence_id"] for c in design["claims"]})
+def resolve_design(design, spans):
+    require(isinstance(design, dict) and design.keys() == {"target", "claims", "hinge"},
+            "考查设计字段无效。")
+    require(text(design["target"], 1000), "缺少具体可观察的学习表现。")
+    hinge = design["hinge"]
+    require(isinstance(hinge, dict) and hinge.keys() == {"given", "reasoning", "change", "effect"}
+            and all(text(v, 2000) for v in hinge.values()), "须说明决定性题设、推理及改变题设后的结果。")
+    claims = design["claims"]
+    require(isinstance(claims, list) and 1 <= len(claims) <= 12, "须提供材料知识依据。")
+    resolved = []
+    seen = set()
+    for claim in claims:
+        require(isinstance(claim, dict) and claim.keys() == {"statement", "span_ids"}
+                and text(claim["statement"], 2000) and texts(claim["span_ids"], 1, 4)
+                and len(set(claim["span_ids"])) == len(claim["span_ids"]),
+                "知识依据须给出规则和不重复的材料片段ID。")
+        require(all(key in spans for key in claim["span_ids"]), "知识依据引用了不存在的材料片段。")
+        identity = (claim["statement"].strip(), frozenset(claim["span_ids"]))
+        require(identity not in seen, "知识依据重复。")
+        seen.add(identity)
+        resolved.append({"statement": claim["statement"], "citations": [
+            {"span_id": key, "evidence_id": spans[key][0], "quote": spans[key][1]}
+            for key in claim["span_ids"]
+        ]})
+    return {**design, "claims": resolved}
 
 
-def validate_candidate(candidate, request, evidence):
-    require(isinstance(candidate, dict) and candidate.keys() == {
-        "student_view", "instructor_view", "design", "calculations"
-    }, "候选字段无效。")
+def validate_candidate(candidate, request, spans):
+    fields = {"student_view", "instructor_view", "design"}
+    require(isinstance(candidate, dict) and fields <= candidate.keys()
+            and candidate.keys() <= fields | {"calculations"}, "候选字段无效。")
     student, teacher = candidate["student_view"], candidate["instructor_view"]
     require(isinstance(student, dict) and text(student.get("stem")) and isinstance(teacher, dict), "题面或教师视图无效。")
     if request.metadata["question_type"] == "single_choice":
@@ -193,11 +182,10 @@ def validate_candidate(candidate, request, evidence):
             seen.add(part["id"])
             total += part["score"]
         require(total == request.constraints["total_score"], "综合题总分与请求不符。")
-    evidence_ids = validate_design(candidate["design"], evidence, student)
-    witnesses = candidate["calculations"]
+    design = resolve_design(candidate["design"], spans)
+    witnesses = candidate.get("calculations", [])
     require(isinstance(witnesses, list) and len(witnesses) <= 16, "计算见证须为最多16项的数组。")
     for w in witnesses:
         require(isinstance(w, dict) and w.keys() == {"kind", "inputs", "result"}, "见证字段无效。")
-        import json
         require(json.dumps(solve(w["kind"], w["inputs"]), sort_keys=True) == json.dumps(w["result"], sort_keys=True), "数值见证与求解结果不一致。")
-    return evidence_ids
+    return {**candidate, "design": design, "calculations": witnesses}

@@ -6,6 +6,7 @@ from unittest import TestCase
 
 import test_question_generation_knowledge as fixtures
 from question_generation.knowledge import with_knowledge
+from question_generation.material_discovery import discover
 from question_generation.generation import generate_question
 
 
@@ -65,3 +66,25 @@ class DiscoveryTests(TestCase):
             db.execute("UPDATE chunks SET doc_id='untrusted' WHERE chunk_id='discovery-0'")
             db.execute('INSERT INTO documents VALUES (?,?)',('untrusted',self.source_hash))
         self.assertEqual(self.provider().discover(self.payload), [])
+
+
+    def test_source_notes_fill_capacity_and_collision_gaps_without_index(self):
+        settings = self.payload['constraints']['authoring']
+        request = {**self.payload, 'subject': 'computer_networks'}
+        for area, query, count in (
+            ('cn.physical', '奈奎斯特 香农 信噪比', 2),
+            ('cn.link', 'CSMA/CD 争用期 最短帧', 1),
+        ):
+            settings.update(syllabus_areas=[area], material_query=query)
+            notes = discover(None, request)
+            self.assertEqual(len(notes), count)
+            self.assertEqual(self.provider().discover(request), notes)
+            self.assertTrue(all(note['source'].startswith('https://')
+                                and 'Qodex explanatory note' in note['version']
+                                and note['rules'] == [] and 'excerpt' not in note
+                                and note['id'] == 'reference:' + sha256(note['summary'].encode()).hexdigest()
+                                for note in notes))
+        settings['material_query'] = 'CRC 汉明距离'
+        self.assertEqual(discover(None, request), [])
+        settings.update(syllabus_areas=['cn.application'], material_query='香农 CSMA/CD')
+        self.assertEqual(discover(None, request), [])

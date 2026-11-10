@@ -18,6 +18,7 @@ from .batch import generate_batch
 from .comprehensive import generate_comprehensive, revise_comprehensive
 from .generation import failure_result, generate_question
 from .knowledge import KnowledgeEvidence, with_knowledge
+from .material_discovery import discover
 from .replenishment import generate_replenishment
 
 OPERATIONS = {
@@ -57,15 +58,16 @@ async def health() -> dict:
 
 
 def _generate(operation: str, payload: dict, knowledge: KnowledgeEvidence | None) -> dict:
-    if knowledge is None or operation == "revise":
+    if operation == "revise":
         return OPERATIONS[operation](payload)
-    find_evidence = cache(knowledge.find)
+    find_evidence = cache(knowledge.find) if knowledge else lambda subject, topic: []
+    discover_evidence = knowledge.discover if knowledge else lambda item: discover(None, item)
     if operation in {"batch", "replenishment"}:
         return OPERATIONS[operation](
             payload, single_generator=lambda item: with_knowledge(
-                generate_question, item, find_evidence, discover_evidence=knowledge.discover),
+                generate_question, item, find_evidence, discover_evidence=discover_evidence),
         )
-    return with_knowledge(OPERATIONS[operation], payload, find_evidence, discover_evidence=knowledge.discover)
+    return with_knowledge(OPERATIONS[operation], payload, find_evidence, discover_evidence=discover_evidence)
 
 
 @app.post("/v1/question-generation/{operation}")
