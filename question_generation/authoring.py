@@ -272,13 +272,20 @@ def _run(payload, client):
 
 
 def generate_authored(payload, *, client=None, cache_path=None):
-    identifier = payload.get("request_id")
     try:
         _, settings, _ = read_authoring(payload)  # missing evidence must precede API configuration
         version = VERSION
         if "syllabus_areas" in settings:
             from .general_authoring import engine_version
             version = engine_version(settings)
+    except RequestError as error:
+        return failure_result(error.status, str(error), payload.get("request_id"), missing_rules=error.missing_rules)
+    return cached_authoring(payload, version, _run, client=client, cache_path=cache_path)
+
+
+def cached_authoring(payload, version, run, *, client=None, cache_path=None):
+    identifier = payload["request_id"]
+    try:
         model = client if client is not None else JsonModel.from_env()
         if cache_path is None:
             cache_path = os.environ.get("QUESTION_GENERATION_AUTHORING_CACHE", ".local/question-generation/authoring-cache.sqlite")
@@ -296,7 +303,7 @@ def generate_authored(payload, *, client=None, cache_path=None):
             row = db.execute("SELECT result FROM results WHERE digest=?", (digest,)).fetchone()
             if row:
                 return json.loads(row[0])
-            result = _run(payload, model)
+            result = run(payload, model)
             if result["status"] == "GENERATED":
                 db.execute("INSERT INTO results VALUES (?, ?)", (digest, json.dumps(result, ensure_ascii=False)))
             return result

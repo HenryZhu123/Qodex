@@ -15,6 +15,7 @@ from fastapi import Body, FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from .batch import generate_batch
+from .brief_authoring import generate_from_brief
 from .comprehensive import generate_comprehensive, revise_comprehensive
 from .generation import failure_result, generate_question
 from .knowledge import KnowledgeEvidence, with_knowledge
@@ -58,6 +59,8 @@ async def health() -> dict:
 
 
 def _generate(operation: str, payload: dict, knowledge: KnowledgeEvidence | None) -> dict:
+    if operation == "author":
+        return generate_from_brief(payload, knowledge=knowledge)
     if operation == "revise":
         return OPERATIONS[operation](payload)
     find_evidence = cache(knowledge.find) if knowledge else lambda subject, topic: []
@@ -72,7 +75,7 @@ def _generate(operation: str, payload: dict, knowledge: KnowledgeEvidence | None
 
 @app.post("/v1/question-generation/{operation}")
 async def submit(
-    operation: Literal["single", "batch", "replenishment", "comprehensive", "revise"],
+    operation: Literal["single", "batch", "replenishment", "comprehensive", "revise", "author"],
     request: Request,
     payload: dict = Body(),
 ):

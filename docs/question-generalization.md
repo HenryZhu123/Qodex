@@ -2,7 +2,7 @@
 
 新路径把考查范围、材料获取、题目设计与可执行验证分开：具体考点无需新增生成函数；单选和综合题使用同一个引擎。原规则题及五考点创作保持不变。章节导航覆盖四科，不等于完整考纲的内容质量已经验证。
 
-[样题](question-generalization-examples.md)包括八道接口测试题和两道依据网络补充材料编写的题，均由开发助手编写。模型实测另见[评测报告](question-generalization-evaluation.md)。
+[样题](question-generalization-examples.md)包括八道接口测试题、两道依据网络补充材料编写的题和一道跨科环形缓冲区题，均由开发助手编写。模型实测另见[评测报告](question-generalization-evaluation.md)。
 
 ## 设计选择
 
@@ -94,9 +94,17 @@ HTTP 服务可据 `material_query` 检索已配置的知识库和当前范围内
 
 ## 上游需求细化
 
-Pi 接受操作名和结构化请求，当前由调用者提供具体科目、考点和题型。通用创作还要求章节范围和目标类型。组卷联合缺题计划本身包含固定的考点、题型、难度、分值与数量，考查能力由命题环节确定。
+Pi 可用 `question_generation` 的 `author` 操作把原始需求直接交给命题服务。HTTP 入口是 `POST /v1/question-generation/author`。
 
-后续将在自主命题入口支持粗需求，依据材料可支撑的机制提出具体考查目标、题型和分值。自动细化会保留调用者明确指定的条件和组卷原始槽位。当前应按上述结构化契约调用。
+```json
+{"schema_version":"0.1","request_id":"memory-practice-001","brief":"想练内存这块"}
+```
+
+只需 `schema_version` 和 `request_id`。无具体偏好的「直接出一道 408 题」可省略 `brief`。已有参考材料可直接传 `evidence`，沿用来源、版本、定位、摘要和原文格式。可选 `subject`、`syllabus_areas`、`question_type`、`total_score`、`requirements`、`seed`。`syllabus_areas` 限定可选范围，若要同题考查其中多个章节，可在 `requirements` 写明。给出总分会固定为综合题。自动选择综合题时默认 10 分。省略种子时由请求 ID 稳定推导。
+
+服务先搜集材料，再请模型提出考查计划，包括可观察的学习表现、任务及学生应给出的推理证据。无具体方向时，种子决定先查看哪个章节的材料。检索词只负责找到材料，具体考法由模型根据片段决定。短需求若匹配多个章节，会呈现各章节材料，例如「内存」可同时检索组成原理的 Cache 和操作系统的虚拟内存。显式 `evidence` 优先，空材料返回 `NEEDS_MATERIAL`。如果没有足以支持所需机制的材料，优化器可返回具体缺口。
+
+固定科目、题型和唯一章节由服务填入。模型只能选择可用范围内的章节和确实提供的材料。原始需求与计划进入创作和审计，学生盲解仍只收到 `student_view` 和题型。成功题包仍为 `PENDING`，教师侧的 `generator.parameters.brief_plan` 和返回的 `authoring_report.plan` 可回看实际采用的计划。通常最多四次模型调用，成功结果按请求、材料快照和模型配置缓存。组卷补题及既有结构化入口沿用原契约。见[粗需求验证](question-generalization-evaluation.md#粗需求优化器与材料发现)。
 
 ## 研究依据与未完成验证
 

@@ -17,7 +17,7 @@ from .knowledge import KnowledgeUnavailable, SUBJECT_DIRS
 from .reference_material import reference_evidence
 
 
-def discover(provider, payload):
+def discover(provider, payload, *, limit=6, exact_anchor=False):
     settings = payload["constraints"]["authoring"]
     query = settings.get("material_query")
     if not query:
@@ -34,7 +34,7 @@ def discover(provider, payload):
         elif len(word) >= 2:
             tokens.add(word)
     if not tokens or provider is None:
-        return references
+        return references[:limit]
     subjects = {s for s, group in AREAS.items() if any(a in group for a in areas)}
     sources = {}
     for entries in provider.entries.values():
@@ -69,7 +69,7 @@ def discover(provider, payload):
                     document_count += 1
                     for token in matched:
                         frequencies[token] += 1
-                    if len(matched) < min(2, len(tokens)):
+                    if len(matched) < min(2, len(tokens)) or (exact_anchor and not any(w in lower for w in words)):
                         continue
                     # Extracted ancestor headings sometimes contain whole OCR
                     # paragraphs. They must not dominate every descendant chunk.
@@ -81,7 +81,7 @@ def discover(provider, payload):
                     ranked.append((lower, heading, matched, chunk_id, path, entry))
         except (OSError, sqlite3.Error):
             unavailable = True
-    results = references[:6]
+    results = references[:limit]
     used, characters = set(), sum(len(item["summary"]) for item in results)
     def relevance(item):
         lower, heading, matched = item[:3]
@@ -89,7 +89,7 @@ def discover(provider, payload):
                    (1 + min(lower.count(t), 4)/4 + (0.5 if t in heading else 0)) for t in matched) + 4*sum(
                        len(w) > 2 and w in lower for w in words)
     for _, _, _, _, path, entry in sorted(ranked, key=lambda item: (-relevance(item), str(item[4]), item[3])):
-        if len(results) == 6:
+        if len(results) == limit:
             break
         if entry["content_sha256"] in used:
             continue
