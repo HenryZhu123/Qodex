@@ -83,13 +83,18 @@ def read_authoring(payload):
     if not isinstance(constraints, dict):
         raise RequestError("constraints 必须为对象。")
     settings = constraints.get("authoring")
-    if (not isinstance(settings, dict) or settings.keys() - {"objective", "focus", "syllabus_areas", "material_query"}
+    if (not isinstance(settings, dict) or settings.keys() - {"objective", "focus", "syllabus_areas", "material_query", "public_scenario"}
             or not isinstance(settings.get("objective"), str) or settings["objective"] not in OBJECTIVES):
         raise RequestError("authoring 须指定 objective: analyze、diagnose、transfer 或 design，可附 focus。")
     if "focus" in settings and not _text(settings["focus"], 500):
         raise RequestError("focus 须为不超过 500 字的非空文本。")
     if "material_query" in settings and ("syllabus_areas" not in settings or not _text(settings["material_query"], 500)):
         raise RequestError("material_query仅用于通用创作，须为不超过500字的非空检索词。")
+    if "public_scenario" in settings:
+        from .public_scenarios import SCENARIOS
+        kind = settings["public_scenario"]
+        if "syllabus_areas" not in settings or not isinstance(kind, str) or kind not in SCENARIOS:
+            raise RequestError("public_scenario仅用于通用创作，须为pipeline或selective_repeat。")
     base = {**payload, "constraints": {k: v for k, v in constraints.items() if k != "authoring"}}
     if "syllabus_areas" in settings:
         from .general_contract import read_request
@@ -272,8 +277,8 @@ def generate_authored(payload, *, client=None, cache_path=None):
         _, settings, _ = read_authoring(payload)  # missing evidence must precede API configuration
         version = VERSION
         if "syllabus_areas" in settings:
-            from .general_authoring import VERSION as general_version
-            version = general_version
+            from .general_authoring import engine_version
+            version = engine_version(settings)
         model = client if client is not None else JsonModel.from_env()
         if cache_path is None:
             cache_path = os.environ.get("QUESTION_GENERATION_AUTHORING_CACHE", ".local/question-generation/authoring-cache.sqlite")
