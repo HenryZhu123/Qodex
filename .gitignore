@@ -1,4 +1,4 @@
-﻿.DS_Store
+.DS_Store
 Qodex.pdf
 
 # Ignore all PDF files
@@ -14,7 +14,7 @@ __pycache__/
 # Local virtualenvs
 .venv/
 venv/
-node_modules/
+node_modules
 
 # Local run outputs (knowledge-base builds, OCR review sheets, scratch dirs)
 kb_refq_out/
@@ -31,11 +31,23 @@ research-assets/review_eval/**/smoke*/
 .env
 .env.local
 .env.*.local
+.env.*
+!.env.example
+!.env.*.example
 
 # SQLite runtime sidecars
 *.db-wal
 *.db-shm
+
 # Test scratch directories
 research-assets/skills/*/tests/.tmp/
 # pytest temp dirs the sandbox creates with restrictive ACLs
 pytest-cache-files-*
+
+# Local assembly exports and integration test evidence
+/outputs/
+/output/
+
+# Private workspace plans, repair notes and scratch files
+/.local/
+/mini-agent-demo/

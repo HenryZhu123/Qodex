@@ -169,6 +169,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         normalizer=ExamDocumentNormalizer(),
         store=store,
         word_converter=LibreOfficeConverter(),
+        prefer_embedded_pdf_text=resolved.prefer_embedded_pdf_text,
         question_service=question_service,
         version_repository=version_repository,
     )

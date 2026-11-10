@@ -4,8 +4,6 @@ import asyncio
 import json
 import sqlite3
 from pathlib import Path
-from tempfile import TemporaryDirectory
-
 import httpx
 import pytest
 
@@ -14,7 +12,6 @@ from exam_checker.integrations.knowledge_base import KnowledgeBaseRetriever
 from exam_checker.integrations.specialist_reviewer import (
     OpenAICompatibleSpecialistReviewer,
 )
-from exam_checker.prompts.repositories import JevPromptRepository, ReviewPromptRepository
 from exam_checker.services.question_review_service import QuestionReviewService
 
 
@@ -23,25 +20,56 @@ class FakePrompts:
         return f"PROMPT:{task_id}"
 
 
-from exam_checker.domain.models import CheckerPayload, SpecialistReviewResult
-from exam_checker.integrations.knowledge_base import (
-    DEFAULT_KB_ROOT,
-    KnowledgeBaseRetriever,
-)
-from exam_checker.integrations.specialist_reviewer import (
-    OpenAICompatibleSpecialistReviewer,
-)
-from exam_checker.prompts.repositories import JevPromptRepository, ReviewPromptRepository
-from exam_checker.services.question_review_service import QuestionReviewService
+def _write_kb(root: Path, subject: str, rows: list[tuple[str, str]]) -> None:
+    subject_dir = root / subject
+    subject_dir.mkdir(parents=True)
+    with sqlite3.connect(subject_dir / "kb.sqlite") as conn:
+        conn.executescript(
+            """
+            CREATE TABLE chunks (
+                chunk_id TEXT PRIMARY KEY,
+                heading_path TEXT,
+                page_start INTEGER,
+                content TEXT NOT NULL,
+                metadata_json TEXT
+            );
+            CREATE VIRTUAL TABLE chunks_fts USING fts5(
+                chunk_id UNINDEXED,
+                content
+            );
+            """
+        )
+        for chunk_id, content in rows:
+            conn.execute(
+                "INSERT INTO chunks VALUES (?, ?, ?, ?, ?)",
+                (chunk_id, "测试章节", 1, content, "{}"),
+            )
+            conn.execute(
+                "INSERT INTO chunks_fts(chunk_id, content) VALUES (?, ?)",
+                (chunk_id, content),
+            )
 
 
-class FakePrompts:
-    def system_prompt(self, task_id: str) -> str:
-        return f"PROMPT:{task_id}"
+@pytest.fixture
+def kb_root(tmp_path: Path) -> Path:
+    _write_kb(
+        tmp_path,
+        "computer_network",
+        [
+            ("net-1", "TCP 拥塞窗口采用慢开始和拥塞避免算法。"),
+            ("net-2", "WLAN frame：地址1是接收站，地址2是发送站。"),
+        ],
+    )
+    _write_kb(
+        tmp_path,
+        "computer_organization",
+        [("org-1", "interrupt：中断隐指令负责保存断点、关中断并转入中断服务程序。")],
+    )
+    return tmp_path
 
 
-def test_knowledge_base_retriever_search_and_format() -> None:
-    kb = KnowledgeBaseRetriever(DEFAULT_KB_ROOT)
+def test_knowledge_base_retriever_search_and_format(kb_root: Path) -> None:
+    kb = KnowledgeBaseRetriever(kb_root)
     assert kb.is_available() is True
 
     evs, lat = kb.search("computer_network", "TCP 拥塞窗口 慢开始", top_k=2)
@@ -53,25 +81,25 @@ def test_knowledge_base_retriever_search_and_format() -> None:
     assert "【计算机网络｜" in fmt
 
 
-def test_knowledge_base_auto_subject_routes_across_books() -> None:
-    kb = KnowledgeBaseRetriever(DEFAULT_KB_ROOT)
+def test_knowledge_base_auto_subject_routes_across_books(kb_root: Path) -> None:
+    kb = KnowledgeBaseRetriever(kb_root)
     assert kb.is_available() is True
 
     # A term that only the computer-organization book defines: routing on "auto"
     # must reach it without the caller naming the subject.
-    evs, _ = kb.search("auto", "中断隐指令 保存断点 关中断", top_k=2)
+    evs, _ = kb.search("auto", "interrupt", top_k=2)
     assert len(evs) > 0
     assert evs[0].subject == "computer_organization"
 
     # A network-only term must still resolve to the network book.
-    evs, _ = kb.search("auto", "802.11 帧 地址1 接收站 地址2 发送站", top_k=2)
+    evs, _ = kb.search("auto", "WLAN frame", top_k=2)
     assert len(evs) > 0
     assert evs[0].subject == "computer_network"
 
 
 @pytest.mark.asyncio
-async def test_specialist_reviewer_agentic_tool_call_flow() -> None:
-    kb = KnowledgeBaseRetriever(DEFAULT_KB_ROOT)
+async def test_specialist_reviewer_agentic_tool_call_flow(kb_root: Path) -> None:
+    kb = KnowledgeBaseRetriever(kb_root)
 
     # Mock transport that simulates tool calling on first turn, then final response on second turn
     round_count = 0
@@ -185,7 +213,7 @@ class DummyJevRouter:
 
 @pytest.mark.asyncio
 async def test_question_review_service_timing_and_kb_metrics() -> None:
-    kb = KnowledgeBaseRetriever(DEFAULT_KB_ROOT)
+    kb = KnowledgeBaseRetriever()
 
     class MockSpecialist:
         model = "mock-qwen"

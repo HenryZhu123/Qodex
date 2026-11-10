@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1",
+  "request_id": "cache-demo",
+  "subject": "computer_organization",
+  "topic": "direct_mapped_cache",
+  "question_type": "single_choice",
+  "seed": 42,
+  "constraints": {
+    "cache_size": 256,
+    "block_size": 16,
+    "address": 4660
+  },
+  "evidence": [
+    {
+      "id": "mit-direct-mapped-cache",
+      "source": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/pages/c14/c14s1/",
+      "version": "MIT 6.004 Spring 2017",
+      "anchor": "§14.1, slides 25–27",
+      "summary": "直接映射 Cache 用地址的索引位选择一行，标记区分映射到同一行的主存块，低位确定块内字节偏移。",
+      "rules": ["cache_byte_offset", "cache_line_index", "cache_tag"]
+    }
+  ]
+}

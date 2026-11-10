@@ -1,0 +1,12 @@
+{
+  "request_id": "DEMO_001",
+  "subject": "数据结构",
+  "question_type": "single_choice",
+  "question_count": 10,
+  "score_per_question": 2,
+  "total_score": 20,
+  "topic_counts": {"线性表": 2, "栈": 2, "队列": 2, "树": 2, "图": 2},
+  "difficulty_counts": {"easy": 3, "medium": 5, "hard": 2},
+  "max_repair_rounds": 3,
+  "allow_mock_reviews": true
+}

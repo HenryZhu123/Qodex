@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "request_id": "real_001",
+  "subject": "数据结构",
+  "question_count": 2,
+  "total_score": 4,
+  "question_type_counts": {"single_choice": 2},
+  "question_type_scores": {"single_choice": 2},
+  "knowledge_point_counts": {"栈": 1, "队列": 1},
+  "difficulty_counts": {"easy": 1, "medium": 1, "hard": 0},
+  "max_repair_rounds": 3,
+  "export_pdf": false
+}

@@ -7,7 +7,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 
-DEFAULT_KB_ROOT = Path(r"D:\Code\hku\LLM\kb_review\books")
+DEFAULT_KB_ROOT = Path(__file__).resolve().parents[3] / "knowledge-base"
 
 SUBJECT_MAP = {
     "data_structure": "数据结构",

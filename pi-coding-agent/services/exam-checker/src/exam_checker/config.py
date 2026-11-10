@@ -104,6 +104,7 @@ class Settings:
     revision_prompt_root: str
     metadata_prompt_root: str
     knowledge_base_dir: str = ""
+    prefer_embedded_pdf_text: bool = False
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -118,7 +119,15 @@ class Settings:
         llm_base_url = os.getenv("EXAM_CHECKER_LLM_BASE_URL", "").strip().rstrip("/")
         llm_api_key = os.getenv("EXAM_CHECKER_LLM_API_KEY", "").strip()
         llm_model = os.getenv("EXAM_CHECKER_LLM_MODEL", "").strip()
+        embedded_text_flag = (
+            os.getenv("EXAM_CHECKER_PREFER_EMBEDDED_PDF_TEXT", "false")
+            .strip()
+            .lower()
+        )
+        if embedded_text_flag not in {"true", "false", "1", "0"}:
+            raise ValueError("EXAM_CHECKER_PREFER_EMBEDDED_PDF_TEXT must be true or false")
         return cls(
+            prefer_embedded_pdf_text=embedded_text_flag in {"true", "1"},
             host=os.getenv("EXAM_CHECKER_HOST", "127.0.0.1").strip() or "127.0.0.1",
             port=_positive_int("EXAM_CHECKER_PORT", 8091),
             database_url=os.getenv("EXAM_CHECKER_DATABASE_URL", "").strip(),
@@ -216,6 +225,6 @@ class Settings:
             ).strip(),
             knowledge_base_dir=os.getenv(
                 "EXAM_CHECKER_KB_DIR",
-                str(Path(r"D:\Code\hku\LLM\kb_review\books")),
+                "",
             ).strip(),
         )
