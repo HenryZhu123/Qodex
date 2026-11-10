@@ -2,7 +2,7 @@
 
 自主命题面向 408 专项练习和模拟卷补题。模块依据题型、考点和可追溯的资料生成题目、参考答案和解析，完成自检后交由独立审校。收到审校反馈时修订题目并重新自检。
 
-新增 [材料驱动的模型创作](question-authoring.md)，通过 `constraints.authoring` 设计条件反推、错误诊断和方案选择题，复用原有 Pi、知识库与待审表接口。旧请求保持确定性规则生成。启用方式、成本边界、十组真实实验及已知限制见该页。
+[材料驱动的模型创作](question-authoring.md)（旧五考点 v1.1，历史快照）通过 `constraints.authoring` 设计条件反推、错误诊断和方案选择题；[通用材料驱动创作](question-generalization.md)（当前主线）在此基础上支持 24 章节、单选与综合题、粗需求入口和一轮定向修订。旧请求保持确定性规则生成。
 
 | 职责 | 边界 |
 | --- | --- |
@@ -16,7 +16,7 @@
 
 ## 接手开发
 
-先读仓库 [AGENTS.md](../AGENTS.md) 和本页。当前工作区的最新提交、范围、复验记录与下一步见 `.local/question-generation/handoff.md`，开发计划见同目录的 `plan.md`。这些本地记录随工作区保存。
+先读仓库 [AGENTS.md](../AGENTS.md) 和本页。当前任务、真实进度与恢复方式见工作区根目录的 `TASK_STATE.md`；通用命题主线的设计、接续顺序与验证边界见 [通用命题主线](question-generalization.md)。这些是本模块的当前依据；`.local/question-generation/` 下的计划与交接记录属于个人开发笔记，可能停留在旧阶段。
 
 | 需要修改 | 代码入口 |
 | --- | --- |
@@ -76,7 +76,7 @@
 
 ### Pi 调用与待审表交接
 
-Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和 JSON `request`，支持 `single`、`batch`、`replenishment`、`comprehensive`、`revise`，也可用 `author` [从粗需求或材料生成一道推理题](question-generalization.md#上游需求细化)。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。
+Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和 JSON `request`，支持 `single`、`batch`、`replenishment`、`comprehensive`、`revise`；`author` [从粗需求或材料生成一道推理题](question-generalization.md#上游需求细化)已在 HTTP 服务和模块测试中可用，但 Pi 侧注册目前只在未提交的工作树改动里。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。
 
 从仓库根目录，用 Python 3.11 或更新版本安装服务依赖。数据库管理员先在约定的 PostgreSQL 数据库执行 [建表脚本](../question_generation/sql/001_pending_questions.sql)，再授权已创建的服务账号和审校只读账号。下面以 `qg_writer` 和 `qg_reviewer` 为示例角色。
 

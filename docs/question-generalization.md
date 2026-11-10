@@ -6,7 +6,7 @@
 
 ## 当前开发进度
 
-更新于 2026-11-10。自主命题已经可以从粗需求生成单选或综合题，并将通过自检的题包交给审校。当前仍处于质量验证阶段，完整 408 考纲的逐项材料覆盖和生产模型的成题可用率尚待验证。
+更新于 2026-11-10。自主命题已经可以从粗需求生成单选或综合题，并将通过自检的题包交给审校。当前仍处于质量验证阶段，完整 408 考纲的逐项材料覆盖和生产模型的成题可用率尚待验证。当前任务、真实进度与恢复方式见工作区根目录的 `TASK_STATE.md`。
 
 | 主线 | 已实现 | 已有验证 |
 | --- | --- | --- |
@@ -114,7 +114,7 @@ HTTP 服务可据 `material_query` 检索已配置的知识库和当前范围内
 
 ## 上游需求细化
 
-Pi 可用 `question_generation` 的 `author` 操作把原始需求直接交给命题服务。HTTP 入口是 `POST /v1/question-generation/author`。
+Pi 可用 `question_generation` 的 `author` 操作把原始需求直接交给命题服务。HTTP 入口是 `POST /v1/question-generation/author`。注意：`author` 在 Pi 扩展中的注册目前只在未提交的工作树改动里，仓库 HEAD 的 Pi 工具还只能调用前五个操作；HTTP 入口和模块测试不受影响。
 
 ```json
 {"schema_version":"0.1","request_id":"memory-practice-001","brief":"想练内存这块"}
