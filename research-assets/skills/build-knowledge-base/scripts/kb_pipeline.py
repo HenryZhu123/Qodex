@@ -325,7 +325,7 @@ def ingest_all(
         insert_document(conn, doc)
         delete_document_chunks(conn, doc["doc_id"])
         chunks = by_doc.get(doc["doc_id"], [])
-        insert_chunks(conn, chunks)
+        insert_chunks(conn, chunks, language=doc.get("language") or "zh")
     stats = get_stats(conn)
     conn.close()
     report = {"db_path": str(db_path), "stats": stats, "generated_at": now_iso()}

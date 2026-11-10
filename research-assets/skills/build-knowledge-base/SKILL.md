@@ -214,8 +214,28 @@ When only the tokenizer changed, rebuild the index without touching content:
 python scripts/kb_pipeline.py reindex --db <db> [--db <db> ...]
 ```
 
-## Cleaning rules: three tiers
+## Language profiles: this skill is not Chinese-only
 
+The book may be a medical, chemistry or biology text, and it may be in English. Typography therefore lives in `scripts/profiles.py`, keyed by the document's detected language (`zh` / `en` / `mixed`), and the tests below lock the behaviour down:
+
+| Setting | zh | en |
+| --- | --- | --- |
+| Sentence end (fragment test) | `。；！？` plus ASCII `; ! ?` | `. ; ! ?`, where a dot only counts after a word (`Figure 3.2` is not a sentence) |
+| Maximum heading length | 48 characters | 90 characters |
+| Heading forms | 第N章 / 一、/（一）/ numbered | Chapter / Part / Section / Appendix / numbered |
+| Chunk overlap | 100 | 150 |
+
+The dangerous case is the fragment test. `is_stub` keeps short chunks out of the index, so a Chinese-only punctuation set silently discards every English paragraph under 120 characters — an English textbook would lose most of its searchable content with no error anywhere. A test builds an English document end to end and asserts that indexed chunks equal total chunks.
+
+Rules that follow:
+
+1. **Never add a language-specific pattern to a shared function.** Put it in the profile and pass `language` through.
+2. **`is_stub`, title shape and heading detection all take `language`.** If a new caller forgets, it silently falls back to `zh`.
+3. **A profile change is an index change.** `reindex` after editing `profiles.py`, then run the gate: G1 compares the fragment count it computes with the one that was actually indexed.
+
+Domain packs (chemistry subscripts, Latin binomials, gene symbols) belong in a separate layer that only *adds checks*. They must never change how text is split or indexed, or every domain needs its own copy of the pipeline.
+
+## Cleaning rules: three tiers
 Cleaning rules go wrong in the same way every time — someone writes a plausible substitution and applies it to the whole corpus. Sort every rule into one of three tiers before writing code.
 
 **Tier 1 — shape-unique, apply automatically.** The replacement is either impossible in legitimate text or a fixed collocation.

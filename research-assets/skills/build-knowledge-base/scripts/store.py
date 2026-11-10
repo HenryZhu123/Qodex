@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from typing import Any, Iterable
 
+from profiles import get_profile
 from utils import sanitize_obj, tokenize_for_fts, write_jsonl
 
 SENTENCE_PUNCT = re.compile(r"[。；！？]")
@@ -37,10 +38,11 @@ def strip_leading_heading(content: str, heading_path: list[str] | None) -> str:
     return text
 
 
-def is_stub(body: str) -> bool:
+def is_stub(body: str, language: str = "zh") -> bool:
     """A fragment carries no sentence: a figure caption, a page number, a stray label."""
     text = (body or "").strip()
-    return len(text) < STUB_MAX_CHARS and not SENTENCE_PUNCT.search(text)
+    profile = get_profile(language)
+    return len(text) < STUB_MAX_CHARS and not profile.sentence_punct.search(text)
 
 SCHEMA = """
 PRAGMA journal_mode=WAL;
@@ -133,7 +135,11 @@ def delete_document_chunks(conn: sqlite3.Connection, doc_id: str) -> None:
     conn.commit()
 
 
-def insert_chunks(conn: sqlite3.Connection, chunks: Iterable[dict[str, Any]]) -> int:
+def insert_chunks(
+    conn: sqlite3.Connection,
+    chunks: Iterable[dict[str, Any]],
+    language: str = "zh",
+) -> int:
     chunks = list(chunks)
     count = 0
     chunk_ids = []
@@ -249,14 +255,18 @@ def rebuild_fts(conn: sqlite3.Connection) -> int:
     Returns the number of chunks actually indexed.
     """
     conn.execute("DELETE FROM chunks_fts")
+    # The language lives on the document, not the chunk, so join it back: an
+    # English book must not have its short paragraphs filtered as fragments.
     rows = conn.execute(
-        "SELECT chunk_id, doc_id, content, heading_path FROM chunks"
+        "SELECT c.chunk_id, c.doc_id, c.content, c.heading_path, "
+        "COALESCE(d.language, 'zh') AS language "
+        "FROM chunks c LEFT JOIN documents d ON d.doc_id = c.doc_id"
     ).fetchall()
     indexed = 0
     for row in rows:
         heading = [part.strip() for part in (row["heading_path"] or "").split(">") if part.strip()]
         body = strip_leading_heading(row["content"], heading)
-        if is_stub(body):
+        if is_stub(body, row["language"]):
             continue
         conn.execute(
             "INSERT INTO chunks_fts (content_tokens, heading_path, doc_id, chunk_id) VALUES (?, ?, ?, ?)",

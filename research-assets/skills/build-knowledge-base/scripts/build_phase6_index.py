@@ -188,7 +188,7 @@ def main() -> None:
                     json.dumps({**metadata, "part": part_index}, ensure_ascii=False),
                 ),
             )
-            if is_stub(part):
+            if is_stub(part, "zh"):
                 # A caption or a page number would rank high in BM25 precisely
                 # because it is short; keep the row, leave it out of the index.
                 skipped += 1

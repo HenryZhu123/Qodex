@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
+from profiles import get_profile
+
 SUPPORTED_TEXT_EXTENSIONS = {".txt", ".md", ".markdown", ".rst", ".csv", ".tsv", ".log"}
 SUPPORTED_HTML_EXTENSIONS = {".html", ".htm"}
 SUPPORTED_DOC_EXTENSIONS = {".docx", ".doc"}
@@ -223,16 +225,22 @@ def split_sentences(text: str) -> list[str]:
     return [p.strip() for p in parts if p.strip()]
 
 
-def is_heading_line(line: str) -> bool:
+def is_heading_line(line: str, language: str = "zh") -> bool:
+    """True when a line looks like a section heading in the given language.
+
+    The patterns come from `profiles`: Chinese books use 第N章 / 一、, English
+    books use Chapter / Part / Section, and the sentence-end test differs too.
+    """
     s = line.strip()
     if not s or len(s) > 120:
         return False
-    if s.endswith(("。", "．", ".", "？", "?", "！", "!", "；", ";", "，", ",")):
+    profile = get_profile(language)
+    if profile.ends_like_sentence(s):
         return False
     # Code fragments and equations are not headings.
     if any(ch in s for ch in "={}[]"):
         return False
-    return bool(HEADING_RE.match(s))
+    return profile.is_heading(s)
 
 
 def is_question_start(line: str) -> bool:

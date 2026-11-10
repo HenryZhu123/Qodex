@@ -18,16 +18,23 @@ MUTATIONS = [
     (
         "heading gate disabled",
         SCRIPTS / "chunker.py",
-        "    s = text.strip()\n    if not s or len(s) > _TITLE_MAX_CHARS:",
-        "    s = text.strip()\n    return True\n    if not s or len(s) > _TITLE_MAX_CHARS:",
+        "    profile = get_profile(language)\n    if not profile.title_shape_ok(s):",
+        "    profile = get_profile(language)\n    if False:",
         "tests/test_heading_gate.py",
     ),
     (
         "fragment filter disabled",
         SCRIPTS / "store.py",
-        '    text = (body or "").strip()\n    return len(text) < STUB_MAX_CHARS and not SENTENCE_PUNCT.search(text)',
-        '    text = (body or "").strip()\n    return False',
+        "    profile = get_profile(language)\n    return len(text) < STUB_MAX_CHARS and not profile.sentence_punct.search(text)",
+        "    profile = get_profile(language)\n    return False",
         "tests/test_stub_filter.py",
+    ),
+    (
+        "fragment filter ignores language",
+        SCRIPTS / "store.py",
+        "    return len(text) < STUB_MAX_CHARS and not profile.sentence_punct.search(text)",
+        "    return len(text) < STUB_MAX_CHARS and not get_profile(\"zh\").sentence_punct.search(text)",
+        "tests/test_language_profiles.py",
     ),
     (
         "heading stripping disabled",
@@ -60,7 +67,7 @@ MUTATIONS = [
     (
         "rebuild ignores the fragment rule",
         SCRIPTS / "store.py",
-        "        body = strip_leading_heading(row[\"content\"], heading)\n        if is_stub(body):\n            continue",
+        "        body = strip_leading_heading(row[\"content\"], heading)\n        if is_stub(body, row[\"language\"]):\n            continue",
         "        body = strip_leading_heading(row[\"content\"], heading)",
         "tests/test_rebuild_contract.py",
     ),

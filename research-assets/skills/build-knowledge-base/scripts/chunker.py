@@ -6,6 +6,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+from profiles import get_profile
 from textclean import repair_ocr
 from utils import (
     HEADING_RE,
@@ -37,7 +38,7 @@ def choose_chunk_plan(
     # scans the whole document's line metadata (cheap) so a sample that happens
     # to miss headings does not force a flat paragraph plan on a textbook.
     full_lines = doc.get("text", "").splitlines()
-    full_heading_count = sum(1 for line in full_lines if is_heading_line(line))
+    full_heading_count = sum(1 for line in full_lines if is_heading_line(line, language))
     full_question_count = sum(1 for line in full_lines if is_question_start(line))
     full_code_lines = sum(
         1
@@ -180,7 +181,7 @@ def choose_chunk_plan(
 
 # ----------------------------- paragraph preparation -----------------------------
 
-def prepare_paragraphs(text: str, detect_headings: bool = True) -> list[dict[str, Any]]:
+def prepare_paragraphs(text: str, detect_headings: bool = True, language: str = "zh") -> list[dict[str, Any]]:
     """Split text into paragraphs, tracking PDF page numbers and heading kind."""
     paragraphs: list[dict[str, Any]] = []
     current: list[str] = []
@@ -197,7 +198,7 @@ def prepare_paragraphs(text: str, detect_headings: bool = True) -> list[dict[str
                 "text": body,
                 "page_start": min(current_pages) if current_pages else None,
                 "page_end": max(current_pages) if current_pages else None,
-                "kind": "heading" if is_heading_line(body.splitlines()[0]) else "paragraph",
+                "kind": "heading" if is_heading_line(body.splitlines()[0], language) else "paragraph",
             })
         current = []
         current_pages = []
@@ -211,12 +212,12 @@ def prepare_paragraphs(text: str, detect_headings: bool = True) -> list[dict[str
             flush()
             continue
         # A heading always starts a new paragraph.
-        if detect_headings and is_heading_line(raw_line) and current:
+        if detect_headings and is_heading_line(raw_line, language) and current:
             flush()
         current.append(raw_line)
         if current_page is not None:
             current_pages.append(current_page)
-        if detect_headings and is_heading_line(raw_line):
+        if detect_headings and is_heading_line(raw_line, language):
             flush()
 
     flush()
@@ -230,17 +231,20 @@ _TITLE_BINARY = re.compile(r"^[01\s]{8,}$")
 _TITLE_NUMERIC_ONLY = re.compile(r"^[\d\s.]+$")
 
 
-def _looks_like_title(text: str) -> bool:
+def _looks_like_title(text: str, language: str = "zh") -> bool:
     """Reject body lines that merely start with a number.
 
     A 408 PDF has many lines shaped like "100 个数据中心分布于…" or
     "1110 1101 1100 1011…". The old rule took any leading digits as a section
     number, so those lines became headings and polluted heading_path.
+
+    Title length and punctuation come from the language profile: an English
+    chapter title needs about twice the characters of a Chinese one, and only
+    the Chinese profile forbids full-width commas.
     """
     s = text.strip()
-    if not s or len(s) > _TITLE_MAX_CHARS:
-        return False
-    if _TITLE_BODY_PUNCT.search(s):
+    profile = get_profile(language)
+    if not profile.title_shape_ok(s):
         return False
     if _TITLE_CODE_MARK.search(s):
         return False
@@ -251,38 +255,47 @@ def _looks_like_title(text: str) -> bool:
     return True
 
 
-def detect_heading_level(text: str) -> int | None:
+def detect_heading_level(text: str, language: str = "zh") -> int | None:
     s = normalize_heading(text)
     if not s or len(s) > 120:
         return None
+    profile = get_profile(language)
+    # English and mixed profiles add Part / Section / Appendix / Chapter forms.
+    if profile.code != "zh":
+        m = re.match(r"^Part\s+(?:[0-9]+|[IVXLC]+)\b", s, re.IGNORECASE)
+        if m and _looks_like_title(s, language):
+            return 1
+        m = re.match(r"^(?:Section|Chapter)\s+[0-9]+(?:\.[0-9]+)*", s, re.IGNORECASE)
+        if m and _looks_like_title(s, language):
+            return 1 + m.group(0).count(".")
     if s.startswith("#"):
         # "#include <stdio.h>" is code, not a markdown heading.
-        if not _looks_like_title(s):
+        if not _looks_like_title(s, language):
             return None
         level = 0
         while level < len(s) and s[level] == "#":
             level += 1
         # The parser marks styled headings with "#", but style detection also
         # fires on emphasised body lines; keep only title-shaped ones.
-        if not _looks_like_title(s[level:].strip()):
+        if not _looks_like_title(s[level:].strip(), language):
             return None
         return min(max(level, 1), 6)
     if re.match(r"^第\s*[0-9一二三四五六七八九十百千]+\s*[章节]", s):
-        return 1 if _looks_like_title(s) else None
+        return 1 if _looks_like_title(s, language) else None
     if re.match(r"^(Chapter|Appendix)\s+", s, re.IGNORECASE):
-        return 1 if _looks_like_title(s) else None
+        return 1 if _looks_like_title(s, language) else None
     if re.match(r"^附录\s*[A-Z0-9]?", s):
-        return 1 if _looks_like_title(s) else None
+        return 1 if _looks_like_title(s, language) else None
     m = re.match(r"^([0-9]{1,2}(?:\.[0-9]{1,2})*)\s+(\S.*)$", s)
-    if m and _looks_like_title(s):
+    if m and _looks_like_title(s, language):
         rest = m.group(2)
         # "1 173单元…" and "1110 1101…" are body lines, not section numbers.
         if not re.match(r"^[\d\s]", rest):
             return m.group(1).count(".") + 1
         return None
-    if _looks_like_title(s) and re.match(r"^[一二三四五六七八九十]+\s*[、.．]", s):
+    if _looks_like_title(s, language) and re.match(r"^[一二三四五六七八九十]+\s*[、.．]", s):
         return 2
-    if _looks_like_title(s) and re.match(r"^（[一二三四五六七八九十]+）", s):
+    if _looks_like_title(s, language) and re.match(r"^（[一二三四五六七八九十]+）", s):
         return 3
     return None
 
@@ -291,7 +304,7 @@ def _strip_heading_markup(text: str) -> str:
     return normalize_heading(re.sub(r"^#{1,6}\s*", "", text))
 
 
-def build_sections(paragraphs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def build_sections(paragraphs: list[dict[str, Any]], language: str = "zh") -> list[dict[str, Any]]:
     sections: list[dict[str, Any]] = []
     stack: list[tuple[int, str]] = []
     current: dict[str, Any] | None = None
@@ -300,7 +313,7 @@ def build_sections(paragraphs: list[dict[str, Any]]) -> list[dict[str, Any]]:
         return {"path": [t for _, t in stack], "level": stack[-1][0] if stack else 0, "paragraphs": []}
 
     for para in paragraphs:
-        level = detect_heading_level(para["text"].splitlines()[0]) if para.get("kind") == "heading" else None
+        level = detect_heading_level(para["text"].splitlines()[0], language) if para.get("kind") == "heading" else None
         if level is not None:
             title = _strip_heading_markup(para["text"].splitlines()[0])
             # "1. 方便性" inside a chapter is usually an enumerated point, not a new chapter.
@@ -436,8 +449,10 @@ def _pack_paragraphs(
 
 # ----------------------------- modes -----------------------------
 
-def chunk_hierarchical(paragraphs: list[dict[str, Any]], plan: dict[str, Any]) -> list[dict[str, Any]]:
-    sections = build_sections(paragraphs)
+def chunk_hierarchical(
+    paragraphs: list[dict[str, Any]], plan: dict[str, Any], language: str = "zh"
+) -> list[dict[str, Any]]:
+    sections = build_sections(paragraphs, language)
     if not sections:
         return chunk_paragraphs(paragraphs, plan)
     chunks: list[dict[str, Any]] = []
@@ -480,7 +495,7 @@ def chunk_questions(paragraphs: list[dict[str, Any]], plan: dict[str, Any]) -> l
 
     for para in paragraphs:
         first_line = para["text"].splitlines()[0]
-        level = detect_heading_level(first_line) if para.get("kind") == "heading" else None
+        level = detect_heading_level(first_line, language) if para.get("kind") == "heading" else None
         if level is not None:
             title = _strip_heading_markup(first_line)
             while stack and stack[-1][0] >= level:
@@ -525,7 +540,8 @@ def chunk_document(
         raise ValueError("chunk plan is blocked by integrity failure")
     text = doc.get("text", "")
     mode = plan.get("mode", "paragraph")
-    paragraphs = prepare_paragraphs(text, detect_headings=(mode != "code"))
+    language = doc.get("language") or "zh"
+    paragraphs = prepare_paragraphs(text, detect_headings=(mode != "code"), language=language)
     if not paragraphs:
         return []
 
@@ -549,7 +565,7 @@ def chunk_document(
             if not paragraphs:
                 return []
     if mode == "hierarchical":
-        raw_chunks = chunk_hierarchical(paragraphs, plan)
+        raw_chunks = chunk_hierarchical(paragraphs, plan, language)
     elif mode == "question":
         raw_chunks = chunk_questions(paragraphs, plan)
     elif mode == "code":
@@ -565,7 +581,7 @@ def chunk_document(
         # Drop heading-only fragments (e.g. a chapter title with no body).
         if len(content) < plan.get("min_chars", 100):
             lines = [ln for ln in content.splitlines() if ln.strip()]
-            if lines and all(is_heading_line(ln) for ln in lines):
+            if lines and all(is_heading_line(ln, language) for ln in lines):
                 continue
         i = len(out) + 1
         out.append({

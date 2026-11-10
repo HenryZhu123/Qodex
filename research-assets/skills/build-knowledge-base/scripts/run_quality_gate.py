@@ -74,14 +74,17 @@ def gate_index_consistency(dbs: list[Path]) -> dict:
     for db in dbs:
         conn = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
         try:
-            rows = conn.execute("SELECT content, heading_path FROM chunks").fetchall()
+            rows = conn.execute(
+                "SELECT c.content, c.heading_path, COALESCE(d.language, 'zh') AS language "
+                "FROM chunks c LEFT JOIN documents d ON d.doc_id = c.doc_id"
+            ).fetchall()
             indexed = conn.execute("SELECT COUNT(*) FROM chunks_fts").fetchone()[0]
         finally:
             conn.close()
         fragments = 0
-        for content, heading in rows:
+        for content, heading, language in rows:
             path = [p.strip() for p in (heading or "").split(">") if p.strip()]
-            if is_stub(strip_leading_heading(content or "", path)):
+            if is_stub(strip_leading_heading(content or "", path), language):
                 fragments += 1
         total_chunks += len(rows)
         total_indexed += indexed

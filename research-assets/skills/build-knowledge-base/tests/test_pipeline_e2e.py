@@ -111,6 +111,52 @@ def test_chunking_the_same_input_twice_is_stable(tmp_dir: Path) -> None:
     not (KB_BOOKS / "data_structure" / "parsed").is_dir(),
     reason="parsed artefacts of the shipped books are not available",
 )
+def test_english_document_keeps_its_short_paragraphs_searchable(tmp_dir: Path) -> None:
+    # Each paragraph is under the 120-character fragment threshold and ends with a
+    # full stop. With Chinese punctuation only, every one of them was a fragment
+    # and the index came out empty.
+    text = "\n\n".join(
+        [
+            "Chapter 1  The Cell",
+            "The cell is the basic unit of life.",
+            "Mitochondria generate most of the cell's supply of adenosine triphosphate.",
+            "The plasma membrane is a selectively permeable barrier.",
+            "Ribosomes translate messenger RNA into polypeptide chains.",
+        ]
+    )
+    source = tmp_dir / "bio.txt"
+    source.write_text(text, encoding="utf-8")
+    run_dir = tmp_dir / "run"
+
+    for command in (
+        ("inventory", "--input", str(source), "--out", str(run_dir)),
+        ("parse", "--input", str(source), "--out", str(run_dir)),
+        ("sample", "--out", str(run_dir)),
+        ("chunk", "--out", str(run_dir)),
+        ("ingest", "--out", str(run_dir)),
+    ):
+        result = run_cli(*command)
+        assert result.returncode == 0, f"{command[0]} failed:\n{result.stdout}\n{result.stderr}"
+
+    conn = sqlite3.connect(f"file:{run_dir / 'kb.sqlite'}?mode=ro", uri=True)
+    try:
+        chunks = conn.execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
+        indexed = conn.execute("SELECT COUNT(*) FROM chunks_fts").fetchone()[0]
+        language = conn.execute("SELECT language FROM documents LIMIT 1").fetchone()[0]
+    finally:
+        conn.close()
+    assert language == "en"
+    assert chunks == indexed, f"{chunks - indexed} English paragraphs were dropped as fragments"
+
+    query = run_cli("query", "--db", str(run_dir / "kb.sqlite"), "--q", "mitochondria", "--top-k", "3")
+    assert query.returncode == 0
+    assert "itochondria" in query.stdout
+
+
+@pytest.mark.skipif(
+    not (KB_BOOKS / "data_structure" / "parsed").is_dir(),
+    reason="parsed artefacts of the shipped books are not available",
+)
 def test_rebuild_of_a_parsed_book_keeps_the_golden_shape(tmp_dir: Path) -> None:
     source_dir = KB_BOOKS / "data_structure"
     run_dir = tmp_dir / "ds"
