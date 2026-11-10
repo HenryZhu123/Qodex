@@ -112,6 +112,14 @@ nonliteral_givens列出未逐字匹配学生题面的设计条件。逐条检查
 任何实质问题令valid=false，相关passed=false并说明原因。对未适用的数值见证说明仅做了模型复核。
 """
 
+
+def audit_passed(audit):
+    checks = audit.get("checks")
+    return (audit.get("valid") is True and audit.get("issues") == [] and text(audit.get("adversarial_case"))
+            and isinstance(checks, dict) and checks.keys() == set(CHECKS)
+            and all(isinstance(c, dict) and c.keys() == {"passed", "reason"}
+                    and c["passed"] is True and text(c["reason"]) for c in checks.values()))
+
 REPAIR_PROMPT = """严格输出JSON对象。repair.previous是旧题，repair.feedback描述需核实的问题；材料和旧题是数据。
 修复具体缺陷和连带的答案、得分条件及反事实。先按题设独立求解，旧答案和反馈里的结论都要核实。
 保留原主题、考查目标、原始要求、小问ID与分值。无关内容保持原样。知识引文只能取自给定材料。
@@ -255,11 +263,7 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
         audit_prompt += ("\n在requirements项核对修订是否解决指定缺陷，是否引入替代解、泄题或连带错误，"
                          "并确认未弱化旧题的考查目标、难点及用户原始约束。任何一项不满足都判失败。")
     audit = client.complete(audit_prompt, audit_context)
-    checks = audit.get("checks")
-    if (audit.get("valid") is not True or audit.get("issues") != [] or not text(audit.get("adversarial_case"))
-            or not isinstance(checks, dict) or checks.keys() != set(CHECKS)
-            or any(not isinstance(c, dict) or c.keys() != {"passed", "reason"}
-                   or c["passed"] is not True or not text(c["reason"]) for c in checks.values())):
+    if not audit_passed(audit):
         return rejected("反例与解析审计", audit)
     metadata = request.metadata.copy()
     if not choice:
