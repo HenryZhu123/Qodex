@@ -14,6 +14,7 @@ from . import scenario_binding
 from .curriculum import read_scope
 from .general_contract import text, texts, validate_candidate, design_diagnostics
 from .generation import failure_result
+from .model_client import complete_stage
 
 VERSION = "general-authoring-v0.5"
 BRIEF_VERSION = VERSION + "-brief-v1"
@@ -30,7 +31,8 @@ AUTHOR_PROMPT = """严格输出JSON对象。你是408命题教师。输入包含
 并发顺序、各角色知道的信息、单位、取整方式必须在题面明确，不能依赖教师视图补充。
 一般408先修知识与本题考查知识要区分。超出材料支持的关键规则应返回材料缺口，不能硬编。
 若材料仅有目录、互相冲突或不能支撑目标，输出 {"material_gaps":["具体缺什么机制及为何需要"]}。
-否则只输出 {"candidate":{student_view:...,instructor_view:...,design:...,calculations:[]}}。
+否则顶层唯一键为"candidate"，其内部恰有"student_view"、"instructor_view"、"design"、"calculations"四键。
+即使不需要复算见证，也在candidate内部写"calculations":[]；不要在顶层另加calculations。
 单选student_view={"stem":"...","options":[{"id":"A","text":"..."},B,C,D]}。
 单选instructor_view={"correct_option_id":"A","explanation":"完整推导",
 "option_explanations":{"A":"...","B":"...","C":"...","D":"..."},
@@ -103,13 +105,15 @@ nonliteral_givens列出未逐字匹配学生题面的设计条件。逐条检查
 核对所有请求约束、章节和主科目；允许概念联动，但不得任意引入超纲机制。
 用用户原始focus判断目标是否实现：作者额外加入的限制若直接回避原目标要解决的难点，不能视为满足要求。
 不能用design或教师解答中的补充条件替学生题面消除歧义；独立解答仅使用学生可见内容。
-综合题核对分值、评分点可操作性、等价方法、前问错后问合理的处理，不能把标准答案写法当唯一方法。
+逐项核对教师解析的断言，即使正确选项与独立答案一致。综合题核对评分是否只要求题面所问，
+并接受达到同一结果的合法方法，处理前问错误延续。
 数值见证只证明所给输入对应输出，必须检查和题面一致且未遗漏关键计算。无见证不等于已程序验证。
 输出 {"valid":true或false,"issues":[],"adversarial_case":"实际尝试的反例/替代读法和检验结果",
 "checks":{"answer_agreement":{"passed":true,"reason":"..."},"grounding":同结构,
 "scope":同结构,"requirements":同结构,"reasoning_necessity":同结构,"counterfactual":同结构,
 "ambiguity":同结构,"grading":同结构,"witness_alignment":同结构}}。
-任何实质问题令valid=false，相关passed=false并说明原因。对未适用的数值见证说明仅做了模型复核。
+任何实质问题令valid=false，相关passed=false并说明原因。issues只放说明问题的字符串，不放对象。
+对未适用的数值见证说明仅做了模型复核。
 """
 
 
@@ -200,7 +204,7 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                           "保持原主题、考查目标、原始要求、小问ID和分值，保留与缺陷无关的条件。"
                           "只改动解决缺陷及其连带影响所需的题面、解析、评分和设计。"
                           "重新求解并检查所有受影响的选项或得分点。旧答案和反馈里的结论都需要独立核实。")
-    authored = client.complete(author_prompt, context)
+    authored = complete_stage(client, "author", author_prompt, context)
     if authored.keys() == {"material_gaps"} and texts(authored["material_gaps"]):
         return rejected("材料不足", authored["material_gaps"], "NEEDS_MATERIAL")
     field = "replacements" if patch_repair else "candidate"
@@ -231,8 +235,8 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
             mapping[label] = option["id"]
             option["id"] = label
     # Author context can silently repair an underspecified student question.
-    review = client.complete(READER_PROMPT, {"question_type": request.metadata["question_type"],
-                                           "student_view": student})
+    review = complete_stage(client, "reader", READER_PROMPT,
+                            {"question_type": request.metadata["question_type"], "student_view": student})
     if not student_quality(review) or not text(review.get("depth_evidence")):
         return rejected("独立解答与质量检查", review)
     perturbation = review.get("condition_test")
@@ -262,7 +266,7 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     if repair is not None:
         audit_prompt += ("\n在requirements项核对修订是否解决指定缺陷，是否引入替代解、泄题或连带错误，"
                          "并确认未弱化旧题的考查目标、难点及用户原始约束。任何一项不满足都判失败。")
-    audit = client.complete(audit_prompt, audit_context)
+    audit = complete_stage(client, "audit", audit_prompt, audit_context)
     if not audit_passed(audit):
         return rejected("反例与解析审计", audit)
     metadata = request.metadata.copy()

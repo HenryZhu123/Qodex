@@ -21,6 +21,15 @@ class ModelError(Exception):
         ) if value is not None}
 
 
+def complete_stage(client, stage: str, system: str, payload: dict) -> dict:
+    """Attach the calling stage without replacing the provider diagnostics."""
+    try:
+        return client.complete(system, payload)
+    except ModelError as error:
+        error.diagnostics["stage"] = stage
+        raise
+
+
 FINISH_REASONS = (
     "stop", "length", "content_filter", "tool_calls", "insufficient_system_resource", "aborted",
 )

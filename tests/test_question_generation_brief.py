@@ -7,6 +7,7 @@ from unittest.mock import patch
 from question_generation.brief_authoring import CHAPTER_QUERIES, PLAN_PROMPT, SCOUT_PROMPT, generate_from_brief
 from question_generation.curriculum import AREAS
 from question_generation.general_authoring import AUTHOR_PROMPT, AUDIT_PROMPT, READER_PROMPT
+from question_generation.model_client import ModelError
 from test_question_generation_general import CASES, Replay
 
 
@@ -72,6 +73,30 @@ class BriefAuthoringTests(TestCase):
             result = generate_from_brief(payload, client=model, cache_path=self.cache)
             self.assertEqual(result['status'], 'SELF_CHECK_FAILED', result)
             self.assertEqual(len(model.calls), 1)
+
+    def test_provider_failure_identifies_each_stage_without_returning_a_question(self):
+        case = CASES[0]
+        payload = {k: case['request'][k] for k in ('schema_version', 'request_id', 'evidence')}
+        for index, stage in enumerate(('plan', 'author', 'reader', 'audit')):
+            with self.subTest(stage=stage):
+                model = BriefReplay(case)
+                complete = model.complete
+
+                def fail_at_stage(system, inputs):
+                    if len(model.calls) == index:
+                        model.usage.append({'completion_tokens': 16384})
+                        raise ModelError('incomplete', code='incomplete_output', finish_reason='length')
+                    return complete(system, inputs)
+
+                with patch.object(model, 'complete', side_effect=fail_at_stage) as invoke:
+                    result = generate_from_brief(payload, client=model, cache_path=self.cache)
+                self.assertEqual(result['status'], 'MODEL_UNAVAILABLE')
+                self.assertEqual(result['questions'], [])
+                self.assertEqual(result['authoring_report']['usage'], model.usage)
+                self.assertEqual(result['authoring_report']['model_failure'], {
+                    'code': 'incomplete_output', 'finish_reason': 'length', 'stage': stage,
+                })
+                self.assertEqual(invoke.call_count, index + 1)
 
     def test_pinned_comprehensive_and_user_requirement_survive_planning(self):
         case = next(c for c in CASES if c['request']['question_type'] == 'comprehensive')

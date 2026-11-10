@@ -11,6 +11,7 @@ from .general_contract import text, texts
 from .generation import SCHEMA_VERSION, RequestError, _evidence_refs, failure_result
 from .knowledge import KnowledgeUnavailable
 from .material_discovery import discover
+from .model_client import complete_stage
 
 QUESTION_TYPES = ("single_choice", "comprehensive")
 FIELDS = {"schema_version", "request_id", "brief", "seed", "subject", "syllabus_areas", "question_type",
@@ -206,7 +207,7 @@ def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None
         fixed.update(subject=AREA_SUBJECTS[areas[0]], syllabus_areas=areas)
 
     def author(_, model):
-        planning = model.complete(SCOUT_PROMPT if auto_material else PLAN_PROMPT,
+        planning = complete_stage(model, "plan", SCOUT_PROMPT if auto_material else PLAN_PROMPT,
                                   {"brief": brief, "scope": scope, "constraints": constraints,
                                    "fixed": fixed, "evidence": materials, "seed": seed})
         if planning.keys() == {"material_gaps"} and texts(planning["material_gaps"]):
