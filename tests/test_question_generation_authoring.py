@@ -335,6 +335,36 @@ class TransportTests(TestCase):
             self.assertEqual(opener.return_value.open.call_count, 1)
             self.assertEqual(model.usage, [])
 
+    def test_opencode_go_session_and_billing_survive_incomplete_output(self):
+        from io import BytesIO
+        from question_generation.model_client import JsonModel
+        model = JsonModel(base_url='https://opencode.ai/inference/go/openai/v1',
+                          model='deepseek-v4.1-flash', api_key='fixture')
+        receipts = []
+        for finish in ('stop', 'length'):
+            raw = json.dumps({'model': 'deepseek-v4.1-flash',
+                              'choices': [{'finish_reason': finish, 'message': {'content': '{}'}}],
+                              'usage': {'completion_tokens': 20, 'cost': 0,
+                                        'opencode': {'billing_source': 'go', 'allowance': 0.001,
+                                                     'list_cost': 0.002, 'private': 'excluded'}}}).encode()
+            with patch('question_generation.model_client.build_opener') as opener:
+                opener.return_value.open.return_value = BytesIO(raw)
+                if finish == 'stop':
+                    self.assertEqual(model.complete('json', {}), {})
+                else:
+                    with self.assertRaises(ModelError):
+                        model.complete('json', {})
+                request = opener.return_value.open.call_args.args[0]
+                self.assertEqual(request.get_header('User-agent'), 'Qodex-question-generation/0.5')
+                receipts.append(request.get_header('X-opencode-session'))
+        self.assertEqual(receipts, [model.session_id] * 2)
+        self.assertNotEqual(JsonModel(base_url=model.base_url, model=model.model, api_key='fixture').session_id,
+                            model.session_id)
+        for usage in model.usage:
+            self.assertEqual(usage['cost'], 0)
+            self.assertEqual(usage['response_model'], 'deepseek-v4.1-flash')
+            self.assertEqual(usage['opencode'], {'billing_source': 'go', 'allowance': 0.001, 'list_cost': 0.002})
+
     def test_transport_bounds_tokens_and_ignores_provider_reasoning_text(self):
         from io import BytesIO
         from question_generation.model_client import JsonModel

@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import json
+import math
 from http.client import HTTPException
 import os
 import time
+from uuid import uuid4
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, HTTPRedirectHandler
@@ -59,6 +61,8 @@ class JsonModel:
         self.base_url, self.model, self.api_key, self.timeout = base_url.rstrip("/"), model, api_key, timeout
         self.max_output_tokens = max_output_tokens
         self.usage = []
+        self.session_id = uuid4().hex
+        self.opencode_go = parsed.hostname == "opencode.ai" and parsed.path.rstrip("/") == "/inference/go/openai/v1"
 
     @classmethod
     def from_env(cls):
@@ -78,9 +82,12 @@ class JsonModel:
             "thinking": {"type": "enabled"}, "reasoning_effort": self.reasoning_effort}, ensure_ascii=False).encode()
         if len(body) > 100_000:
             raise ModelError("命题材料超过单次调用预算。", code="request_size_limit")
-        request = Request(self.base_url + "/chat/completions", data=body, headers={
+        headers = {
             "Authorization": "Bearer " + self.api_key, "Content-Type": "application/json",
-        })
+        }
+        if self.opencode_go:
+            headers.update({"User-Agent": "Qodex-question-generation/0.5", "x-opencode-session": self.session_id})
+        request = Request(self.base_url + "/chat/completions", data=body, headers=headers)
         start = time.monotonic()
         try:
             with build_opener(NoRedirect()).open(request, timeout=self.timeout) as response:
@@ -118,6 +125,21 @@ class JsonModel:
             reasoning_tokens = details["reasoning_tokens"]
             if 0 <= reasoning_tokens <= tokens.get("completion_tokens", -1):
                 tokens["reasoning_tokens"] = reasoning_tokens
+        if self.opencode_go:
+            billing = usage.get("opencode", {})
+            if isinstance(billing, dict):
+                tokens["opencode"] = {key: billing[key] for key in ("list_cost", "allowance")
+                                     if type(billing.get(key)) in (int, float)
+                                     and math.isfinite(billing[key]) and billing[key] >= 0}
+                source = billing.get("billing_source")
+                if source in ("free", "balance", "go", "go-plus", "go-teams", "byok"):
+                    tokens["opencode"]["billing_source"] = source
+            cost = usage.get("cost")
+            if type(cost) in (int, float) and math.isfinite(cost) and cost >= 0:
+                tokens["cost"] = cost
+            response_model = result.get("model")
+            if isinstance(response_model, str) and 0 < len(response_model) <= 200:
+                tokens["response_model"] = response_model
         self.usage.append(tokens)
 
         choices = result.get("choices")
