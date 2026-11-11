@@ -53,6 +53,7 @@ FINISH_REASONS = (
 DEFAULT_OUTPUT_TOKENS = 16384
 AUDIT_OUTPUT_TOKENS = 32768
 AUDIT_TIMEOUT_SECONDS = 420
+AUTHOR_TIMEOUT_SECONDS = 300
 INVALID_JSON_MESSAGE = "模型返回无效或空 JSON，本次未生成题目。"
 
 
@@ -87,16 +88,18 @@ class JsonModel:
             output_tokens = int(os.environ.get("QUESTION_GENERATION_MAX_OUTPUT_TOKENS", str(DEFAULT_OUTPUT_TOKENS)))
             audit_tokens = int(os.environ.get("QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS", str(AUDIT_OUTPUT_TOKENS)))
             audit_timeout = int(os.environ.get("QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS", str(AUDIT_TIMEOUT_SECONDS)))
+            author_timeout = int(os.environ.get("QUESTION_GENERATION_AUTHOR_TIMEOUT_SECONDS", str(AUTHOR_TIMEOUT_SECONDS)))
         except ValueError:
             raise ModelError("模型输出 token 预算须为正整数。") from None
-        if audit_tokens < 1 or audit_timeout < 1:
+        if min(audit_tokens, audit_timeout, author_timeout) < 1:
             raise ModelError("模型输出 token 预算须为正整数。")
         client = cls(base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
                      model=os.environ.get("DEEPSEEK_MODEL", ""), api_key=os.environ.get("DEEPSEEK_API_KEY", ""),
                      max_output_tokens=output_tokens)
         # Audit stage: 16384 exhausted reasoning on comprehensive items; 32768/420s produced verdicts in the frozen run.
         client.stage_output_tokens = {"audit": audit_tokens}
-        client.stage_timeout_seconds = {"audit": audit_timeout}
+        # Author stage: 120 s timed out on every Go author call in the paired run; 300 s produced 3/4 completions.
+        client.stage_timeout_seconds = {"audit": audit_timeout, "author": author_timeout}
         return client
 
     def complete(self, system: str, payload: dict) -> dict:

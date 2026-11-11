@@ -275,7 +275,7 @@ TCP 使用 `computer_networks` 和 `tcp_message_boundaries`。可选约束 `scen
 
 DeepSeek 每次调用默认使用 16,384 个输出 token。部署时可通过 `QUESTION_GENERATION_MAX_OUTPUT_TOKENS` 设置正整数，选择时考虑服务商的模型窗口和输出能力、延迟及成本。变更额度后使用独立缓存，原默认配置的缓存仍可回读。评测可以只改变作者阶段的额度，以便和盲解、审计的配置分开比较。
 
-审计阶段单独使用更大的预算：默认 32,768 输出、420 秒，可用 `QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS` 和 `QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS` 覆盖；作者与盲解阶段仍为 16,384 输出、120 秒。冻结对照显示，16,384 输出下七份审计输入只有四份拿到结论，32,768/420 秒下七份全部拿到，且必扣留与正例结论不变。审计单次最长可接近七分钟，调用方需容忍长请求（Pi 工具默认 600 秒）。该配置只解决“拿不到结论”，不改变审计结论本身可能不稳定的问题。
+审计阶段单独使用更大的预算：默认 32,768 输出、420 秒，可用 `QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS` 和 `QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS` 覆盖。作者阶段默认 16,384 输出、**300 秒**，可用 `QUESTION_GENERATION_AUTHOR_TIMEOUT_SECONDS` 覆盖；盲解与计划阶段仍为 16,384 输出、120 秒。冻结对照显示，16,384 输出下七份审计输入只有四份拿到结论，32,768/420 秒下七份全部拿到，且必扣留与正例结论不变。同一提供方的配对对照还显示：作者阶段 120 秒时四个任务的作者调用全部超时，300 秒时三个完成、两条流水线产出待审题。审计单次最长可接近七分钟，调用方需容忍长请求（Pi 工具默认 600 秒）。该配置只解决“拿不到结论”，不改变审计结论本身可能不稳定的问题。
 
 正文 JSON 语法错误时，`model_failure` 可附 `content_decode_position` 和 `content_length`，分别为解码器报告的从零开始的字符偏移及正文字符总数。两个字段仅含数字。无精确位置的解码异常仍沿用 `content_decode`。
 

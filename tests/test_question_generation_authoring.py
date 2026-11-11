@@ -288,18 +288,20 @@ class TransportTests(TestCase):
             model = JsonModel.from_env()
         self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
         self.assertEqual(model.stage_output_tokens, {'audit': 32768})
-        self.assertEqual(model.stage_timeout_seconds, {'audit': 420})
+        self.assertEqual(model.stage_timeout_seconds, {'audit': 420, 'author': 300})
         body = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
         with patch('question_generation.model_client.build_opener') as opener:
             opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(body)
             complete_stage(model, 'author', 'json', {})
             self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 16384)
+            self.assertEqual(model.timeout, 120)
             complete_stage(model, 'audit', 'json', {})
             self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 32768)
             self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
         for name, value in (('QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS', 'bad'),
                             ('QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS', '0'),
-                            ('QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS', '0')):
+                            ('QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS', '0'),
+                            ('QUESTION_GENERATION_AUTHOR_TIMEOUT_SECONDS', '0')):
             with self.subTest(name=name, value=value), patch.dict('os.environ', {
                     'DEEPSEEK_BASE_URL': 'https://fixture.invalid', 'DEEPSEEK_MODEL': 'test',
                     'DEEPSEEK_API_KEY': 'fixture', name: value}):
