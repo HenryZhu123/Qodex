@@ -4,6 +4,7 @@ import json
 import sqlite3
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
+from email.message import Message
 from hashlib import sha256
 from http.client import IncompleteRead
 from io import BytesIO
@@ -11,6 +12,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest.mock import patch
+from urllib.error import HTTPError, URLError
 
 from question_generation.authoring import (
     AUDIT_PROMPT,
@@ -334,6 +336,88 @@ class TransportTests(TestCase):
         self.assertEqual(error.exception.diagnostics.get('code'), 'incomplete_output')
         self.assertEqual(error.exception.diagnostics.get('finish_reason'), 'unknown')
 
+    def test_sse_allows_large_raw_reasoning_wrapper_with_small_decoded_content(self):
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        reasoning = b'x' * 1_100_000
+        raw = (b'data: {"choices":[{"delta":{"reasoning_content":"' + reasoning +
+               b'"},"finish_reason":null}]}\n\n'
+               b'data: {"choices":[{"delta":{"content":"{\\"ok\\": true}"},"finish_reason":"stop"}]}\n\n'
+               b'data: [DONE]\n\n')
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(raw)
+            self.assertEqual(model.complete('json', {}), {'ok': True})
+
+    def test_sse_cumulative_delta_content_is_not_duplicated(self):
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        raw = (b'data: {"choices":[{"delta":{"content":"{\\"a\\":"},"finish_reason":null}]}\n\n'
+               b'data: {"choices":[{"delta":{"content":"{\\"a\\": 1}"},"finish_reason":null}]}\n\n'
+               b'data: {"choices":[{"delta":{"content":"{\\"a\\": 1}"},"finish_reason":"stop"}]}\n\n'
+               b'data: [DONE]\n\n')
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(raw)
+            self.assertEqual(model.complete('json', {}), {'a': 1})
+
+    def test_decoded_content_limit_is_enforced_after_parsing(self):
+        content = 'x' * 1_000_001
+        raw = json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': content}}]}).encode()
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(raw)
+            with self.assertRaises(ModelError) as error:
+                model.complete('json', {})
+        self.assertEqual(error.exception.diagnostics.get('code'), 'response_size_limit')
+        self.assertEqual(error.exception.diagnostics.get('content_length'), 1_000_001)
+        self.assertEqual(error.exception.diagnostics.get('response_issue'), 'decoded_content')
+
+    def test_transport_error_retries_once_with_backoff_and_attempt_hook(self):
+        attempts = []
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture',
+                          max_retries=1, attempt_hook=lambda: attempts.append(1))
+        valid = BytesIO(b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}')
+        with patch('question_generation.model_client.build_opener') as opener, patch(
+                'question_generation.model_client.time.sleep') as sleep:
+            opener.return_value.open.side_effect = [URLError('reset'), valid]
+            self.assertEqual(model.complete('json', {}), {})
+            self.assertEqual(opener.return_value.open.call_count, 2)
+            sleep.assert_called_once_with(1.75)
+            self.assertEqual(attempts, [1, 1])
+
+    def test_http_503_and_incomplete_read_retry_but_timeout_and_http_500_do_not(self):
+        valid = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
+        for error, expected in (
+            (HTTPError('https://fixture.invalid', 503, 'unavailable', Message(), None), 'ok'),
+            (IncompleteRead(b'partial'), 'ok'),
+            (TimeoutError('slow'), 'response_timeout'),
+            (HTTPError('https://fixture.invalid', 500, 'error', Message(), None), 'http_error'),
+        ):
+            with self.subTest(error=type(error).__name__, expected=expected):
+                model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture',
+                                  max_retries=1)
+                with patch('question_generation.model_client.build_opener') as opener, patch(
+                        'question_generation.model_client.time.sleep') as sleep:
+                    opener.return_value.open.side_effect = [error, BytesIO(valid)]
+                    if expected == 'ok':
+                        self.assertEqual(model.complete('json', {}), {})
+                        self.assertEqual(opener.return_value.open.call_count, 2)
+                        sleep.assert_called_once_with(1.75)
+                    else:
+                        with self.assertRaises(ModelError) as raised:
+                            model.complete('json', {})
+                        self.assertEqual(raised.exception.diagnostics.get('code'), expected)
+                        self.assertEqual(opener.return_value.open.call_count, 1)
+                        sleep.assert_not_called()
+
+    def test_max_retries_zero_disables_transport_retry(self):
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture', max_retries=0)
+        with patch('question_generation.model_client.build_opener') as opener, patch(
+                'question_generation.model_client.time.sleep') as sleep:
+            opener.return_value.open.side_effect = URLError('reset')
+            with self.assertRaises(ModelError) as error:
+                model.complete('json', {})
+            self.assertEqual(error.exception.diagnostics.get('code'), 'transport_error')
+            self.assertEqual(opener.return_value.open.call_count, 1)
+            sleep.assert_not_called()
+
     def test_truncated_or_malformed_responses_are_not_successes(self):
         cases: list = [(b'[]', 'invalid_response', None, 'envelope_shape'),
                  (b'not json', 'invalid_response', None, 'envelope_decode'),
@@ -376,7 +460,7 @@ class TransportTests(TestCase):
         class BrokenResponse(BytesIO):
             def read1(self, size=None):
                 raise IncompleteRead(b'partial private response')
-        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture', max_retries=0)
         with patch('question_generation.model_client.build_opener') as opener:
             opener.return_value.open.return_value = BrokenResponse()
             with self.assertRaises(ModelError) as error:

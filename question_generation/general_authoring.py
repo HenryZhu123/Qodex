@@ -182,6 +182,23 @@ def engine_version(settings):
     return VERSION + "-public-v1" if "public_scenario" in settings else VERSION
 
 
+def normalize_reader_review(review):
+    """Move a misplaced nested quality block to the top level.
+
+    Some models put the quality object inside condition_test even when the rest
+    of the blind solve is complete. Copy the condition test so the later exact
+    key check sees only change/effect.
+    """
+    if not isinstance(review, dict):
+        return review
+    condition_test = review.get("condition_test")
+    if "quality" not in review and isinstance(condition_test, dict) and "quality" in condition_test:
+        cleaned = dict(condition_test)
+        review["quality"] = cleaned.pop("quality")
+        review["condition_test"] = cleaned
+    return review
+
+
 def student_quality(review):
     # Source entailment and undisclosed authoring goals belong to the audit.
     quality = review.get("quality")
@@ -300,6 +317,7 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     # Author context can silently repair an underspecified student question.
     review = complete_stage(client, "reader", READER_PROMPT,
                             {"question_type": request.metadata["question_type"], "student_view": student})
+    review = normalize_reader_review(review)
     if not student_quality(review) or not text(review.get("depth_evidence")):
         return rejected("独立解答与质量检查", review)
     perturbation = review.get("condition_test")

@@ -1,8 +1,8 @@
 """Turn a rough 408 request into a material-backed assessment task."""
 from __future__ import annotations
 
-from hashlib import sha256
 import re
+from hashlib import sha256
 
 from .authoring import OBJECTIVES, cached_authoring, read_authoring
 from .curriculum import AREAS, read_scope
@@ -166,6 +166,11 @@ def resolve_materials(plan, sources, provider):
         settings = {"syllabus_areas": [query["area"]], "material_query": query["query"]}
         hits = discover(provider, {"constraints": {"authoring": settings}}, limit=1, exact_anchor=True,
                         related_notes=True)
+        if not hits:
+            # Whole Chinese sentences are not single anchored words; retry with the
+            # same bounded discovery path used for related notes.
+            hits = discover(provider, {"constraints": {"authoring": settings}}, limit=1, exact_anchor=False,
+                            related_notes=True)
         if hits:
             selected.setdefault(hits[0]["id"], hits[0])
         else:
@@ -224,7 +229,7 @@ def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None
             selected, gaps = resolve_materials(plan, sources, knowledge)
         except KnowledgeUnavailable:
             return failure_result("KNOWLEDGE_BASE_UNAVAILABLE", "计划所需的教材索引暂不可读。", identifier)
-        if gaps:
+        if gaps and not selected:
             return {**failure_result("NEEDS_MATERIAL", "未找到计划需要的补充材料。", identifier),
                     "authoring_report": {"stage": "定向取材", "details": gaps, "usage": model.usage}}
         plan["evidence_ids"] = list(selected)
@@ -240,6 +245,8 @@ def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None
         request, settings, base = read_authoring(planned)
         brief_plan = {"brief": brief, **plan}
         result = run(base, model, request, settings, brief_plan=brief_plan, version=version)
+        if gaps:
+            result.setdefault("authoring_report", {})["material_query_gaps"] = gaps
         result["authoring_report"]["plan"] = brief_plan
         return result
 

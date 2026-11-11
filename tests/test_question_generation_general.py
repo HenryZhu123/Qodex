@@ -173,7 +173,7 @@ class GeneralContractTests(TestCase):
                             (URLError(TimeoutError('private details')), 'response_timeout'),
                             (URLError('private timed out text'), 'transport_error'),
                             (ConnectionRefusedError('private details'), 'transport_error')):
-            model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+            model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture', max_retries=0)
             with patch('question_generation.model_client.build_opener') as opener:
                 opener.return_value.open.side_effect = error
                 result, _ = self.run_case(CASES[0], model)
@@ -314,6 +314,19 @@ class GeneralContractTests(TestCase):
         self.assertIn('不得要求列出中间步骤', PLAN_PROMPT)
         self.assertIn('不得因题面未要求学生列出或写出中间过程', AUDIT_PROMPT)
         self.assertNotIn('即使仍需少量算术核对', AUDIT_PROMPT)
+
+    def test_nested_condition_test_quality_is_normalized_before_reader_check(self):
+        class NestedQuality(Replay):
+            def complete(self, system, payload):
+                result = super().complete(system, payload)
+                if system == READER_PROMPT:
+                    result['condition_test']['quality'] = result.pop('quality')
+                return result
+        result, _ = self.run_case(CASES[0], NestedQuality(CASES[0]['candidate']))
+        self.assertEqual(result['status'], 'GENERATED', result)
+        review = result['questions'][0]['self_check']['blind_review']
+        self.assertIn('quality', review)
+        self.assertEqual(set(review['condition_test']), {'change', 'effect'})
 
     def test_missing_material_and_lookup_before_provider(self):
         case = deepcopy(CASES[0]); evidence = case['request'].pop('evidence')

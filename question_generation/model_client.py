@@ -55,6 +55,8 @@ AUDIT_OUTPUT_TOKENS = 32768
 AUDIT_TIMEOUT_SECONDS = 420
 AUTHOR_TIMEOUT_SECONDS = 300
 INVALID_JSON_MESSAGE = "模型返回无效或空 JSON，本次未生成题目。"
+RAW_RESPONSE_LIMIT = 16_000_000
+CONTENT_LIMIT = 1_000_000
 
 
 def _stream_result(raw: bytes) -> dict:
@@ -64,6 +66,7 @@ def _stream_result(raw: bytes) -> dict:
     except UnicodeDecodeError:
         raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="stream_decode") from None
     parts, usage, finish_reason, response_model, events = [], {}, None, None, 0
+    accumulated = ""
     saw_delta = False
     for line in content.splitlines():
         line = line.strip()
@@ -95,14 +98,22 @@ def _stream_result(raw: bytes) -> dict:
         delta_content = delta.get("content") if isinstance(delta, dict) else None
         message = choice.get("message")
         if isinstance(delta_content, str):
-            parts.append(delta_content)
+            # Some gateways send cumulative delta.content instead of the standard
+            # incremental delta. Replace when the new block starts with the old one.
+            if accumulated and len(delta_content) >= len(accumulated) and delta_content.startswith(accumulated):
+                parts = [delta_content]
+                accumulated = delta_content
+            else:
+                parts.append(delta_content)
+                accumulated += delta_content
             saw_delta = True
         elif isinstance(message, dict) and isinstance(message.get("content"), str) and not saw_delta:
             parts.append(message["content"])
+            accumulated += message["content"]
     if not events:
         raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="envelope_decode")
-    result = {"choices": [{"finish_reason": finish_reason or "unknown", "message": {"content": "".join(parts)}}],
-              "usage": usage}
+    result = {"choices": [{"finish_reason": finish_reason or "unknown",
+                           "message": {"content": accumulated}}], "usage": usage}
     if response_model is not None:
         result["model"] = response_model
     return result
@@ -127,7 +138,8 @@ class JsonModel:
     reasoning_effort = "high"
 
     def __init__(self, *, base_url: str, model: str, api_key: str, timeout: float = 120,
-                 max_output_tokens: int = DEFAULT_OUTPUT_TOKENS):
+                 max_output_tokens: int = DEFAULT_OUTPUT_TOKENS, max_retries: int = 1,
+                 retry_delay: float = 1.75, attempt_hook=None):
         parsed = urlsplit(base_url)
         if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.query or parsed.fragment:
             raise ModelError("模型服务地址须为不含凭据、查询参数的 HTTPS 地址。")
@@ -135,8 +147,13 @@ class JsonModel:
             raise ModelError("请配置 DEEPSEEK_MODEL 和 DEEPSEEK_API_KEY。")
         if type(max_output_tokens) is not int or max_output_tokens < 1:
             raise ModelError("模型输出 token 预算须为正整数。")
+        if type(max_retries) is not int or max_retries < 0:
+            raise ModelError("模型重试次数须为非负整数。")
+        if isinstance(retry_delay, bool) or not isinstance(retry_delay, (int, float)) or retry_delay < 0:
+            raise ModelError("模型重试等待须为非负数。")
         self.base_url, self.model, self.api_key, self.timeout = base_url.rstrip("/"), model, api_key, timeout
         self.max_output_tokens = max_output_tokens
+        self.max_retries, self.retry_delay, self.attempt_hook = max_retries, retry_delay, attempt_hook
         self.stage_output_tokens: dict[str, int] = {}
         self.stage_timeout_seconds: dict[str, int] = {}
         self.usage = []
@@ -179,38 +196,54 @@ class JsonModel:
             headers.update({"User-Agent": "Qodex-question-generation/0.5", "x-opencode-session": self.session_id})
         # base_url is validated as HTTPS in __init__ and redirects are disabled.
         request = Request(self.base_url + "/chat/completions", data=body, headers=headers)  # noqa: S310
-        start = time.monotonic()
-        try:
-            with build_opener(NoRedirect()).open(request, timeout=self.timeout) as response:
-                chunks, size = [], 0
-                while True:
-                    if time.monotonic() - start > self.timeout:
-                        raise ModelError("模型响应超过总时限，本次不交付题目。", code="response_timeout")
-                    chunk = response.read1(min(65536, 1_000_001 - size))
-                    if not chunk:
-                        break
-                    chunks.append(chunk)
-                    size += len(chunk)
-                    if size > 1_000_000:
-                        raise ModelError("模型响应超过大小上限。", code="response_size_limit")
-        except HTTPError as error:
-            raise ModelError(f"模型服务返回 HTTP {error.code}，本次未生成题目。",
-                             code="http_error", http_status=error.code) from None
-        except TimeoutError:
-            raise ModelError("模型调用超时，本次不交付题目。", code="response_timeout") from None
-        except URLError as error:
-            if isinstance(error.reason, TimeoutError):
+        started = time.monotonic()
+        chunks: list[bytes] = []
+        for attempt in range(self.max_retries + 1):
+            if self.attempt_hook is not None:
+                self.attempt_hook()
+            attempt_start = time.monotonic()
+            try:
+                with build_opener(NoRedirect()).open(request, timeout=self.timeout) as response:
+                    chunks, size = [], 0
+                    while True:
+                        if time.monotonic() - attempt_start > self.timeout:
+                            raise ModelError("模型响应超过总时限，本次不交付题目。", code="response_timeout")
+                        chunk = response.read1(min(65536, RAW_RESPONSE_LIMIT + 1 - size))
+                        if not chunk:
+                            break
+                        chunks.append(chunk)
+                        size += len(chunk)
+                        if size > RAW_RESPONSE_LIMIT:
+                            raise ModelError("模型响应超过大小上限。", code="response_size_limit",
+                                             content_length=size, response_issue="raw_stream")
+                break
+            except HTTPError as error:
+                if error.code in {502, 503, 504} and attempt < self.max_retries:
+                    time.sleep(self.retry_delay)
+                    continue
+                raise ModelError(f"模型服务返回 HTTP {error.code}，本次未生成题目。",
+                                 code="http_error", http_status=error.code) from None
+            except TimeoutError:
                 raise ModelError("模型调用超时，本次不交付题目。", code="response_timeout") from None
-            raise ModelError("模型服务连接失败，本次未生成题目。", code="transport_error") from None
-        except (OSError, HTTPException):
-            raise ModelError("模型服务连接失败或超时，本次未生成题目。", code="transport_error") from None
+            except URLError as error:
+                if isinstance(error.reason, TimeoutError):
+                    raise ModelError("模型调用超时，本次不交付题目。", code="response_timeout") from None
+                if attempt < self.max_retries:
+                    time.sleep(self.retry_delay)
+                    continue
+                raise ModelError("模型服务连接失败，本次未生成题目。", code="transport_error") from None
+            except (OSError, HTTPException):
+                if attempt < self.max_retries:
+                    time.sleep(self.retry_delay)
+                    continue
+                raise ModelError("模型服务连接失败或超时，本次未生成题目。", code="transport_error") from None
         result = _decode_body(b"".join(chunks))
         if not isinstance(result, dict):
             raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="envelope_shape")
         usage = result.get("usage", {})
         if not isinstance(usage, dict):
             usage = {}
-        tokens = {"elapsed_seconds": round(time.monotonic() - start, 3), **{
+        tokens = {"elapsed_seconds": round(time.monotonic() - started, 3), **{
             key: usage[key] for key in ("prompt_tokens", "completion_tokens", "total_tokens")
             if type(usage.get(key)) is int and usage[key] >= 0
         }}
@@ -255,6 +288,9 @@ class JsonModel:
         if not isinstance(content, str):
             raise ModelError(INVALID_JSON_MESSAGE, code="invalid_content", finish_reason=finish_reason,
                              response_issue="content_type")
+        if len(content) > CONTENT_LIMIT:
+            raise ModelError("模型响应正文超过大小上限。", code="response_size_limit",
+                             content_length=len(content), response_issue="decoded_content")
         try:
             value = json.loads(content)
         except json.JSONDecodeError as error:

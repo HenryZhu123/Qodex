@@ -163,6 +163,40 @@ class BriefAuthoringTests(TestCase):
         self.assertEqual(search.call_args.kwargs, {'limit': 1, 'exact_anchor': True, 'related_notes': True})
         self.assertEqual(result['authoring_report']['plan']['evidence_ids'], [materials[0]['id']])
 
+    def test_material_query_falls_back_to_related_notes(self):
+        case = CASES[0]
+        model = BriefReplay(case)
+        area, = model.plan['syllabus_areas']
+        model.plan.update(evidence_ids=[], material_queries=[{'area': area, 'query': '只能排成一种次序'}])
+        payload = {'schema_version': '0.1', 'request_id': 'fallback', 'brief': '只能排成一种次序',
+                   'syllabus_areas': [area]}
+        shortlisted = case['request']['evidence'][0]
+        hit = shortlisted
+        with patch('question_generation.brief_authoring.discover',
+                   side_effect=[[shortlisted], [], [hit]]) as search:
+            result = generate_from_brief(payload, client=model, cache_path=self.cache)
+        self.assertEqual(result['status'], 'GENERATED', result)
+        self.assertEqual(search.call_count, 3)
+        self.assertEqual(search.call_args.kwargs,
+                         {'limit': 1, 'exact_anchor': False, 'related_notes': True})
+        self.assertEqual(result['authoring_report']['plan']['evidence_ids'], [hit['id']])
+
+    def test_missing_supplementary_query_keeps_selected_materials(self):
+        case = CASES[0]
+        model = BriefReplay(case)
+        area, = model.plan['syllabus_areas']
+        materials = case['request']['evidence']
+        model.plan.update(material_queries=[{'area': area, 'query': '不存在的补充机制'}])
+        payload = {'schema_version': '0.1', 'request_id': 'missing-supplement',
+                   'brief': '只能排成一种次序', 'syllabus_areas': [area]}
+        with patch('question_generation.brief_authoring.discover',
+                   side_effect=[materials, [], []]) as search:
+            result = generate_from_brief(payload, client=model, cache_path=self.cache)
+        self.assertEqual(result['status'], 'GENERATED', result)
+        self.assertEqual(search.call_count, 3)
+        self.assertEqual(model.calls[1][1]['evidence'], materials)
+        self.assertTrue(result['authoring_report']['material_query_gaps'])
+
     def test_focused_lookup_fails_before_author_when_material_is_missing_or_out_of_scope(self):
         case = CASES[0]
         model = BriefReplay(case)
@@ -175,12 +209,14 @@ class BriefAuthoringTests(TestCase):
         ):
             model.plan.update(evidence_ids=[], material_queries=[addition])
             model.calls.clear()
+            effects = ([[case['request']['evidence'][0]], [], []] if status == 'NEEDS_MATERIAL'
+                       else [[case['request']['evidence'][0]]])
             with patch('question_generation.brief_authoring.discover',
-                       side_effect=[[case['request']['evidence'][0]], []]) as search:
+                       side_effect=effects) as search:
                 result = generate_from_brief(payload, client=model, cache_path=self.cache)
             self.assertEqual(result['status'], status, result)
             self.assertEqual(len(model.calls), 1)
-            self.assertEqual(search.call_count, 2 if status == 'NEEDS_MATERIAL' else 1)
+            self.assertEqual(search.call_count, 3 if status == 'NEEDS_MATERIAL' else 1)
         model.plan.update(material_queries=[{'area': area, 'query': '不应查询'}])
         with patch('question_generation.brief_authoring.discover', side_effect=AssertionError('Explicit evidence wins')):
             result = generate_from_brief({**payload, 'evidence': case['request']['evidence']},
