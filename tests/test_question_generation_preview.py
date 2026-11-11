@@ -21,8 +21,8 @@ class WorkbenchTests(TestCase):
             model = JsonModel.from_env()
         trace = PreviewTrace(model)
         envelope = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
-        expected = {'plan': (16384, 120), 'author': (16384, 300),
-                    'reader': (16384, 120), 'audit': (32768, 420)}
+        expected = {'plan': (16384, 120), 'author': (32768, 300),
+                    'reader': (16384, 240), 'audit': (32768, 420)}
         with patch('question_generation.model_client.build_opener') as opener:
             opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(envelope)
             for stage, (tokens, timeout) in expected.items():

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from unicodedata import normalize
+from math import isfinite
 
 from .curriculum import read_scope
 from .generation import Request, RequestError, REQUEST_FIELDS, _evidence_refs
@@ -19,6 +20,12 @@ def require(condition, message):
 
 def texts(value, low=1, high=12):
     return isinstance(value, list) and low <= len(value) <= high and all(text(v, 1000) for v in value)
+
+
+def positive_half_step(value):
+    """Positive integers or exact .5 increments (e.g. 0.5, 1, 1.5)."""
+    return (isinstance(value, (int, float)) and not isinstance(value, bool)
+            and isfinite(value) and value > 0 and round(value * 2) == value * 2)
 
 
 def contains_span(quote, source):
@@ -182,10 +189,11 @@ def validate_candidate(candidate, request, evidence):
             require(isinstance(points, list) and 1 <= len(points) <= 8 and all(
                 isinstance(p, dict) and p.keys() == {"id", "points", "criterion", "expected"}
                 and all(text(p[k]) for k in ("id", "criterion", "expected"))
-                and type(p["points"]) is int and p["points"] > 0 for p in points
+                and positive_half_step(p["points"]) for p in points
             ), "评分点无效。")
             require(len({p["id"] for p in points}) == len(points)
-                    and sum(p["points"] for p in points) == part["score"], "评分点重复或分值不守恒。")
+                    and round(sum(p["points"] for p in points) * 2) == part["score"] * 2,
+                    "评分点重复或分值不守恒。")
             methods = solution["equivalent_methods"]
             require(isinstance(methods, list) and 1 <= len(methods) <= 4 and all(
                 isinstance(m, dict) and m.keys() == {"id", "acceptance"}

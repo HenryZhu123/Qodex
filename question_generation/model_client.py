@@ -51,9 +51,11 @@ FINISH_REASONS = (
     "stop", "length", "content_filter", "tool_calls", "insufficient_system_resource", "aborted",
 )
 DEFAULT_OUTPUT_TOKENS = 16384
+AUTHOR_OUTPUT_TOKENS = 32768
 AUDIT_OUTPUT_TOKENS = 32768
 AUDIT_TIMEOUT_SECONDS = 420
 AUTHOR_TIMEOUT_SECONDS = 300
+READER_TIMEOUT_SECONDS = 240
 INVALID_JSON_MESSAGE = "模型返回无效或空 JSON，本次未生成题目。"
 RAW_RESPONSE_LIMIT = 16_000_000
 CONTENT_LIMIT = 1_000_000
@@ -164,20 +166,25 @@ class JsonModel:
     def from_env(cls):
         try:
             output_tokens = int(os.environ.get("QUESTION_GENERATION_MAX_OUTPUT_TOKENS", str(DEFAULT_OUTPUT_TOKENS)))
+            author_tokens = int(os.environ.get("QUESTION_GENERATION_AUTHOR_MAX_OUTPUT_TOKENS",
+                                              str(AUTHOR_OUTPUT_TOKENS)))
             audit_tokens = int(os.environ.get("QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS", str(AUDIT_OUTPUT_TOKENS)))
             audit_timeout = int(os.environ.get("QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS", str(AUDIT_TIMEOUT_SECONDS)))
             author_timeout = int(os.environ.get("QUESTION_GENERATION_AUTHOR_TIMEOUT_SECONDS", str(AUTHOR_TIMEOUT_SECONDS)))
+            reader_timeout = int(os.environ.get("QUESTION_GENERATION_READER_TIMEOUT_SECONDS", str(READER_TIMEOUT_SECONDS)))
         except ValueError:
             raise ModelError("模型输出 token 预算须为正整数。") from None
-        if min(audit_tokens, audit_timeout, author_timeout) < 1:
+        if min(author_tokens, audit_tokens, audit_timeout, author_timeout, reader_timeout) < 1:
             raise ModelError("模型输出 token 预算须为正整数。")
         client = cls(base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
                      model=os.environ.get("DEEPSEEK_MODEL", ""), api_key=os.environ.get("DEEPSEEK_API_KEY", ""),
                      max_output_tokens=output_tokens)
-        # Audit stage: 16384 exhausted reasoning on comprehensive items; 32768/420s produced verdicts in the frozen run.
-        client.stage_output_tokens = {"audit": audit_tokens}
-        # Author stage: 120 s timed out on every Go author call in the paired run; 300 s produced 3/4 completions.
-        client.stage_timeout_seconds = {"audit": audit_timeout, "author": author_timeout}
+        # Author stage: 16384 exhausted reasoning on comprehensive items; 32768 keeps the 300 s timeout.
+        # Audit stage: 16384 exhausted reasoning; 32768/420 s produced verdicts in the frozen run.
+        client.stage_output_tokens = {"author": author_tokens, "audit": audit_tokens}
+        # Reader stage: the original 120 s cut off three comprehensive blind solves; output stays 16384.
+        client.stage_timeout_seconds = {"author": author_timeout, "reader": reader_timeout,
+                                        "audit": audit_timeout}
         return client
 
     def complete(self, system: str, payload: dict) -> dict:

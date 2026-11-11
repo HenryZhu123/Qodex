@@ -285,26 +285,39 @@ class TransportTests(TestCase):
                 with self.assertRaises(ModelError):
                     JsonModel.from_env()
 
-    def test_audit_stage_uses_its_own_output_budget_and_timeout(self):
+    def test_author_reader_and_audit_stage_budgets(self):
         with patch.dict('os.environ', {'DEEPSEEK_BASE_URL': 'https://fixture.invalid',
                                        'DEEPSEEK_MODEL': 'test', 'DEEPSEEK_API_KEY': 'fixture'}):
             model = JsonModel.from_env()
         self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
-        self.assertEqual(model.stage_output_tokens, {'audit': 32768})
-        self.assertEqual(model.stage_timeout_seconds, {'audit': 420, 'author': 300})
+        self.assertEqual(model.stage_output_tokens, {'author': 32768, 'audit': 32768})
+        self.assertEqual(model.stage_timeout_seconds, {'author': 300, 'reader': 240, 'audit': 420})
         body = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
         with patch('question_generation.model_client.build_opener') as opener:
             opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(body)
             complete_stage(model, 'author', 'json', {})
+            self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 32768)
+            self.assertEqual(opener.return_value.open.call_args.kwargs['timeout'], 300)
+            complete_stage(model, 'reader', 'json', {})
             self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 16384)
-            self.assertEqual(model.timeout, 120)
+            self.assertEqual(opener.return_value.open.call_args.kwargs['timeout'], 240)
             complete_stage(model, 'audit', 'json', {})
             self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 32768)
+            self.assertEqual(opener.return_value.open.call_args.kwargs['timeout'], 420)
             self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
+        with patch.dict('os.environ', {'DEEPSEEK_BASE_URL': 'https://fixture.invalid',
+                                       'DEEPSEEK_MODEL': 'test', 'DEEPSEEK_API_KEY': 'fixture',
+                                       'QUESTION_GENERATION_AUTHOR_MAX_OUTPUT_TOKENS': '25000',
+                                       'QUESTION_GENERATION_READER_TIMEOUT_SECONDS': '200'}):
+            overridden = JsonModel.from_env()
+        self.assertEqual(overridden.stage_output_tokens, {'author': 25000, 'audit': 32768})
+        self.assertEqual(overridden.stage_timeout_seconds, {'author': 300, 'reader': 200, 'audit': 420})
         for name, value in (('QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS', 'bad'),
                             ('QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS', '0'),
                             ('QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS', '0'),
-                            ('QUESTION_GENERATION_AUTHOR_TIMEOUT_SECONDS', '0')):
+                            ('QUESTION_GENERATION_AUTHOR_TIMEOUT_SECONDS', '0'),
+                            ('QUESTION_GENERATION_AUTHOR_MAX_OUTPUT_TOKENS', '0'),
+                            ('QUESTION_GENERATION_READER_TIMEOUT_SECONDS', '0')):
             with self.subTest(name=name, value=value), patch.dict('os.environ', {
                     'DEEPSEEK_BASE_URL': 'https://fixture.invalid', 'DEEPSEEK_MODEL': 'test',
                     'DEEPSEEK_API_KEY': 'fixture', name: value}):

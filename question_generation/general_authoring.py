@@ -72,7 +72,7 @@ instructor_view={"grading_policy":"错误延续与避免重复扣分规则","par
 "scoring_points":[{"id":"s1","points":2,"criterion":"可观察的得分条件","expected":"应有结果或论证"}],
 "equivalent_methods":[{"id":"m1","acceptance":"其他合法方法及接受条件"}]}]}。
 2至6问，考查相关但不同的能力，后问不泄露前问。小问分数合计等于constraints.total_score。
-depends_on只引用前问ID，每问评分点分数合计等于该问分数。评分点只写判分所需内容，完整论证放在solution。
+depends_on只引用前问ID，每问评分点points优先使用正整数（必要时可用0.5分），合计等于该问分数。评分点只写判分所需内容，完整论证放在solution。
 算法题说明正确性、复杂度和边界输入。
 """,
 }

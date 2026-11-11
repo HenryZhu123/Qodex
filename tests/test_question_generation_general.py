@@ -271,6 +271,25 @@ class GeneralContractTests(TestCase):
             self.assertEqual(result['status'], 'SELF_CHECK_FAILED', result)
             self.assertEqual(len(model.calls), 1)
 
+    def test_comprehensive_half_point_scoring_points_are_supported(self):
+        case = deepcopy(CASES[4])
+        part = case['candidate']['instructor_view']['parts'][0]
+        part['scoring_points'][0]['points'] = 2.5
+        part['scoring_points'][1]['points'] = 0.5
+        result, _ = self.run_case(case)
+        self.assertEqual(result['status'], 'GENERATED', result)
+        self.assertEqual(result['questions'][0]['instructor_view']['parts'][0]['scoring_points'][0]['points'], 2.5)
+        self.assertIn('0.5分', AUTHOR_VIEWS['comprehensive'])
+
+    def test_invalid_half_point_scoring_points_are_rejected(self):
+        for value in (0.25, 2.6):
+            with self.subTest(points=value):
+                case = deepcopy(CASES[4])
+                case['candidate']['instructor_view']['parts'][0]['scoring_points'][0]['points'] = value
+                result, model = self.run_case(case)
+                self.assertEqual(result['status'], 'SELF_CHECK_FAILED', result)
+                self.assertEqual(len(model.calls), 1)
+
     def test_only_hard_audit_checks_block_despite_valid_flag(self):
         for key in BLOCKING_CHECKS:
             result, _ = self.run_case(CASES[0], Replay(CASES[0]['candidate'], bad_audit=key))
