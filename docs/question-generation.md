@@ -277,7 +277,7 @@ DeepSeek 每次调用默认使用 16,384 个输出 token。部署时可通过 `Q
 
 正文 JSON 语法错误时，`model_failure` 可附 `content_decode_position` 和 `content_length`，分别为解码器报告的从零开始的字符偏移及正文字符总数。两个字段仅含数字。无精确位置的解码异常仍沿用 `content_decode`。
 
-直接捕获的 `TimeoutError` 或 `URLError.reason` 中的同类异常使用 `response_timeout`，普通连接错误仍为 `transport_error`。分类依据异常类型，不从错误文案推断网络阶段，也不改写历史回执。审计输入只删除与 `excerpt` 逐字相同的 `summary`，原文和出处仍完整保留。审计发现有据阻断时可直接返回短拒绝；放行仍须九项完整检查全部通过。
+直接捕获的 `TimeoutError` 或 `URLError.reason` 中的同类异常使用 `response_timeout`，普通连接错误仍为 `transport_error`。分类依据异常类型，不从错误文案推断网络阶段，也不改写历史回执。审计输入只删除与 `excerpt` 逐字相同的 `summary`，原文和出处仍完整保留。审计发现具体阻断时可直接返回拒绝：拒绝只要求 `valid=false`、非空 `issues`、具体反例，以及至少一项已知检查失败并给出依据。放行仍须九项完整检查全部有据通过（`audit_passed` 未改）。曾试行的“有据即提前结束”提示语在审计完成对照中未取得收益，已撤回，提示恢复到逐项检查的文本；被拒绝的题仍不生成题包。
 
 本地模型配置可将 `DEEPSEEK_BASE_URL` 指向 OpenCode Go 的 `https://opencode.ai/inference/go/openai/v1`，并用服务商提供的模型 ID 和密钥填写原有环境变量。此入口会携带 Qodex 客户端标识和每个模型客户端实例内稳定的会话 ID。可得的 Go 用量回执在 `usage` 中保留 `cost`、`response_model` 和 `opencode` 的 `billing_source`、`list_cost`、`allowance`。订阅额度消耗与余额扣款分别计量，跨服务商的结果须注明实际模型版本。Go 的 DeepSeek Flash JSON、high 推理及用量回执已在真实调用验证；完整质量验收尚未完成。 [Go 接口](https://opencode.ai/docs/console/go/) · [用量字段](https://opencode.ai/docs/console/api/inference/)
 

@@ -108,11 +108,7 @@ nonliteral_givens列出未逐字匹配学生题面的设计条件。逐条检查
 逐项核对教师解析的断言，即使正确选项与独立答案一致。综合题核对评分是否只要求题面所问，
 并接受达到同一结果的合法方法，处理前问错误延续。
 数值见证只证明所给输入对应输出，必须检查和题面一致且未遗漏关键计算。无见证不等于已程序验证。
-一旦证实具体阻断缺陷，立即返回拒绝及可复核依据，无需继续补齐其他检查：
-{"valid":false,"issues":["具体缺陷"],"adversarial_case":"题面定位及反例或复算",
-"checks":{"相关检查名":{"passed":false,"reason":"具体依据"}}}。
-不要把未检查项写成通过。未找到阻断缺陷时，逐项完成全部九项检查，只有全部有据通过才能输出：
-{"valid":true,"issues":[],"adversarial_case":"实际尝试的反例/替代读法和检验结果",
+输出 {"valid":true或false,"issues":[],"adversarial_case":"实际尝试的反例/替代读法和检验结果",
 "checks":{"answer_agreement":{"passed":true,"reason":"..."},"grounding":同结构,
 "scope":同结构,"requirements":同结构,"reasoning_necessity":同结构,"counterfactual":同结构,
 "ambiguity":同结构,"grading":同结构,"witness_alignment":同结构}}。
