@@ -75,6 +75,27 @@
 
 本轮还首次真实触发 `response_timeout`：`transport_exception_type=TimeoutError`、240.1s、无回执，这是该分类第一次在真实流量里生效。预算 14 次审计 + 2 次复核，已知 Go 额度回执 0.11261387 美元等值，保守上界 0.21627937，余额扣费 0，剩余 4 次额度未用。产物与首次本地中止记录见 `audit-quality-followup/`。
 
+### 排除法检查的单独对照（2026-11-11）
+
+只保留“错项理由与题面明示规则矛盾即可排除”的 144 字符检查，删除未取得证据的边界段。7 对同输入：
+2 个必扣留（磁盘、`034`）、3 个正例、2 个诊断（碰撞题=完成诊断、`cn-104`=标签有争议）。
+
+| 样本 | 标签 | control | candidate |
+| --- | --- | --- | --- |
+| negative-disk-shortcut | 必扣留 | 放行 | 有据拒绝，88.0s |
+| negative-elimination-heldout | 必扣留 | 放行 | 有据拒绝，73.9s |
+| positive-relative | 正例 | length 181.0s | length 187.0s |
+| positive-four-phase-bus | 正例 | timeout 240.0s | length 218.7s |
+| positive-ds-003 | 正例 | 放行 | 放行 |
+| negative-collision-boundary | 诊断 | length 176.6s | 完成并放行，112.5s |
+| positive-cn-104 | 诊断 | length 175.4s | length 174.6s |
+
+必扣留 2/2 命中且经匿名复核认可（累计两轮 4/4，control 一直放行）；删掉边界段后碰撞题在候选臂完成，
+说明上一轮的耗尽与该段有关。门禁 5 项过 4，唯 `positives_allowed` 未过，原因是两个正例在**两臂都没有结论**
+（16384 耗尽 / 240 秒超时），不是候选臂误拒。按冻结规则不落库，也不事后修改判据；这条判据把“无结论”
+与“被误拒”混为一谈，是设计缺陷。审计在 16384/240s/high 下对综合题与部分单选处于可审计边缘，
+属交付风险。预算 14 次审计 + 1 次复核，已知回执 0.0643159 美元等值，保守上界 0.1418652，余额 0。
+
 ## OpenCode Go 提示对照及独立模型复核（2026-11-11）
 
 用户授权迁移服务、关闭 Extra Usage，并明确允许教材原文片段、出处、请求与提示、题包和审计报告发往 OpenCode Go 及其模型服务商。Go 会话及用量支持提交为 `29684df`。首次接入探针收到 HTTP 429，按当时停止规则结束；官网同期报告 Flash 上游故障，但不能仅据状态码确定本请求原因。用户另行要求再试，第二次探针通过，模型为 `deepseek-v4.1-flash`，计费来源为 Go，余额费用回执为 0。公开目录 canonical ID 为 `deepseek/deepseek-v4.1-flash-1017`，与历史官方 API 别名的版本对应未能证实，因此两臂均使用同一 Go 模型。 [Go 接口](https://opencode.ai/docs/console/go/)
