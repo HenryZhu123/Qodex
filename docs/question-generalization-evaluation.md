@@ -643,3 +643,58 @@ Qwen 本机重放中，正确的局部置换题被误拒。缺少置换范围的
 - 审计 5 硬/4 软分层在两轮中均未误拦到达审计的正确题；本轮问题集中在进入审计前的 reader 超时和作者输出结构。
 - 两轮 PENDING 均为 3/8，均未达到 ≥5/8；技术完成均未达到 ≥7/8。不构成题目质量验收结论。
 - 下一轮应单独冻结 reader 超时预算（120 秒对综合题不足）与作者结构化输出（`length`、评分点）对照，不应继续用同一 8 题重复试跑；人工审校始终 `UNVERIFIED`。
+
+## smoke-v3-final 与阶段结项（2026-11-12）
+
+在 smoke-v1/v2 之后，生产默认阶段预算对齐为：作者 **32,768 输出 / 300 秒**、盲解 **16,384 输出 / 240 秒**、审计 **32,768 输出 / 420 秒**、计划 16,384 输出 / 120 秒；综合题评分点支持 **0.5 分**步长（小问分值与整题总分仍为整数）。瞬态 `transport_error` / HTTP 502–504 最多自动重试 1 次，其余失败不重试。
+
+### 结果（同一份 8 题冻结清单）
+
+| 槽位 | 终态 | 说明 |
+| --- | --- | --- |
+| co-sc-a | **PENDING** | 8 位补码；0 软警告 |
+| ds-sc-a | **PENDING** | 拓扑加边；1 条 `reasoning_necessity` |
+| cn-sc-a | **PENDING** | 最长前缀匹配；1 条 `reasoning_necessity` |
+| os-sc-a | **PENDING** | 银行家算法；1 条 `reasoning_necessity` |
+| ds-co-a | **PENDING** | 排序稳定性；p4 使用 `0.5 + 0.5` 分 |
+| co-co-a | SELF_CHECK_FAILED | 作者响应不是 `candidate` / `material_gaps` |
+| cn-co-a | MODEL_UNAVAILABLE | `plan` 持续 `transport_error`；自动重试 1 次后仍失败 |
+| os-co-a | MODEL_UNAVAILABLE | `reader` 240 秒 `response_timeout` |
+
+- **PENDING 5/8**（目标 ≥5，通过）
+- **技术完成 6/8**（5 道 `GENERATED` + 1 道 `SELF_CHECK_FAILED`；目标 ≥7，未过）
+- 实际 **26 次逻辑 / 28 次底层 HTTP 调用**（2 次自动重试），OpenCode Go 额度 **0.08572176 美元等值**（上限 0.25），余额扣费 0。
+- `MODEL_UNAVAILABLE` 2，`NEEDS_MATERIAL` 0，`HARNESS_ERROR` 0。
+
+本轮自动重试在真实流量中出现 2 次：至少一次重试后成功；`cn-co-a` 的 `plan` 重试后仍失败。超时、`length`、无效内容和大小上限均未重试。
+
+### 五道 PENDING 独立复算
+
+实验专用脚本 `smoke-v3-final-2026-11-12/run/verification.json` 全部 `all_matched: true`：
+
+- `ds-sc-a`：枚举 6 个活动全部拓扑序，新增 `v3→v4` 是唯一保持 DAG 且强制 `v3` 先于 `v4` 的选项。
+- `co-sc-a`：`0x7F+0x01 → 0x80, C=0, V=1`；`0xFF+0x01 → 0x00, C=1, V=0`。
+- `cn-sc-a`：最长前缀匹配结果与题目逐地址一致，`192.168.0.1` 在 A 中丢弃、B 中走默认项。
+- `os-sc-a`：甲方案安全（可完成 P1→P3→P4→P2→P0），乙方案 Work=(3,0,2) 无进程可完成。
+- `ds-co-a`：直接插入终态 `[1,2a,2b,3a,3b]`；选择排序 S 终态 `[1,2b,2a,3a,3b]`，首次失稳在第 1 趟；T 终态 `[1,2a,2b,3a,3b]`，不推翻 S 的反例；p4 评分为 `0.5 + 0.5 = 1`。
+
+五题均未发现错答案、多解歧义或伪造引文硬伤；软警告只有 `reasoning_necessity`。
+
+### 三轮槽位覆盖
+
+| 槽位 | v1 | v2 | v3 | 已有合格 PENDING |
+| --- | --- | --- | --- | --- |
+| ds-sc-a | 拒绝 | PENDING | PENDING | 是 |
+| co-sc-a | PENDING | PENDING | PENDING | 是 |
+| os-sc-a | PENDING | 失败 | PENDING | 是 |
+| cn-sc-a | 失败 | PENDING | PENDING | 是 |
+| ds-co-a | 缺料 | 失败 | PENDING | 是 |
+| co-co-a | 失败 | 失败 | 拒绝 | **否** |
+| os-co-a | 失败 | 失败 | 失败 | **否** |
+| cn-co-a | PENDING | 拒绝 | 失败 | 是 |
+
+**唯一槽位覆盖 6/8。** 未覆盖的是 `co-co-a` 与 `os-co-a`；`cn-co-a` 在 v1 已有 PENDING，但 v3 未产出。
+
+### 阶段结项
+
+**通用命题生成与自检链路调优阶段正式结项。** 产出题包均按版本进入 `PENDING` 待审队列，后续工作转入审校模块联调与真人审校（当前 `human_review: UNVERIFIED`）。本轮 8 题跑完后已停止所有外部付费调用，不再发起后续付费模型实验。剩余两个未覆盖槽位作为下一阶段审校联调的候选缺口记录，不用重复付费试跑掩盖。
