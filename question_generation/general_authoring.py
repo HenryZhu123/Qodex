@@ -5,14 +5,15 @@ judgments remain fallible model judgments; successful artifacts stay PENDING.
 """
 from __future__ import annotations
 
-from copy import deepcopy
 import hashlib
 import json
+from copy import deepcopy
 from random import Random
+from typing import Any, cast
 
 from . import scenario_binding
 from .curriculum import read_scope
-from .general_contract import text, texts, validate_candidate, design_diagnostics
+from .general_contract import design_diagnostics, text, texts, validate_candidate
 from .generation import failure_result
 from .model_client import complete_stage
 
@@ -174,12 +175,13 @@ def apply_replacements(previous, replacements):
                 or any(type(key) not in (str, int) for key in path)
                 or any(old[:len(path)] == path or path[:len(old)] == old for old in paths)):
             raise ValueError("修订路径无效、重复或重叠。")
+        parent: Any = candidate
         node = candidate
         for key in path:
             if not ((isinstance(node, dict) and isinstance(key, str) and key in node)
                     or (isinstance(node, list) and type(key) is int and 0 <= key < len(node))):
                 raise ValueError("修订只能替换旧题已有字段。")
-            parent, node = node, node[key]
+            parent, node = node, cast(Any, node)[key]
         parent[path[-1]] = deepcopy(item["value"])
         paths.append(path)
     return candidate
@@ -225,7 +227,8 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     if authored.keys() != {field}:
         return rejected("创作响应结构", f"模型响应须只包含{field}或material_gaps。")
     try:
-        candidate = apply_replacements(repair["previous"], authored[field]) if patch_repair else authored[field]
+        candidate = (apply_replacements(repair["previous"], authored[field])
+                     if repair is not None and not scenario_kind else authored[field])
         if scenario_kind:
             candidate, verification = scenario_binding.bind(candidate, scenario_kind, request.metadata["question_type"])
         evidence_ids = validate_candidate(candidate, request, payload["evidence"])
@@ -245,7 +248,8 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     choice = request.metadata["question_type"] == "single_choice"
     if choice:
         Random(request.seed).shuffle(student["options"])
-        for label, option in zip("ABCD", student["options"]):
+        for index, option in enumerate(student["options"]):
+            label = "ABCD"[index]
             mapping[label] = option["id"]
             option["id"] = label
     # Author context can silently repair an underspecified student question.
@@ -265,8 +269,8 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
         solutions = review.get("part_solutions")
         if (answer != "OPEN" or not isinstance(solutions, list) or len(solutions) != len(student["parts"])
                 or any(not isinstance(s, dict) or s.keys() != {"part_id", "solution"}
-                       or s["part_id"] != p["id"] or not text(s["solution"])
-                       for s, p in zip(solutions, student["parts"]))):
+                       or s["part_id"] != student["parts"][index]["id"] or not text(s["solution"])
+                       for index, s in enumerate(solutions))):
             return rejected("独立小问解答不完整", review)
     diagnostics = design_diagnostics(candidate["design"], candidate["student_view"])
     audit_context = {**context, "evidence": audit_evidence(context["evidence"]),
