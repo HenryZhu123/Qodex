@@ -109,6 +109,7 @@ nonliteral_givens列出未逐字匹配学生题面的设计条件。逐条检查
 逐项核对教师解析的断言，即使正确选项与独立答案一致。综合题核对评分是否只要求题面所问，
 并接受达到同一结果的合法方法，处理前问错误延续。
 数值见证只证明所给输入对应输出，必须检查和题面一致且未遗漏关键计算。无见证不等于已程序验证。
+错项排除捷径：题面本身给出判定规则（算法定义、方向、端点、阈值、先后关系）时，逐项核对每个错项写明的理由是否与该规则直接矛盾。若据此即可排除全部错项、只剩正确项，即使仍需少量算术核对，也判reasoning_necessity失败并引用具体错项分句；靠领域常识或惯例才能排除的不算捷径。
 输出 {"valid":true或false,"issues":[],"adversarial_case":"实际尝试的反例/替代读法和检验结果",
 "checks":{"answer_agreement":{"passed":true,"reason":"..."},"grounding":同结构,
 "scope":同结构,"requirements":同结构,"reasoning_necessity":同结构,"counterfactual":同结构,
