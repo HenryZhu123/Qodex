@@ -105,7 +105,13 @@ class JsonModel:
         except HTTPError as error:
             raise ModelError(f"模型服务返回 HTTP {error.code}，本次未生成题目。",
                              code="http_error", http_status=error.code) from None
-        except (URLError, TimeoutError, OSError, HTTPException):
+        except TimeoutError:
+            raise ModelError("模型调用超时，本次不交付题目。", code="response_timeout") from None
+        except URLError as error:
+            if isinstance(error.reason, TimeoutError):
+                raise ModelError("模型调用超时，本次不交付题目。", code="response_timeout") from None
+            raise ModelError("模型服务连接失败，本次未生成题目。", code="transport_error") from None
+        except (OSError, HTTPException):
             raise ModelError("模型服务连接失败或超时，本次未生成题目。", code="transport_error") from None
         try:
             result = json.loads(b"".join(chunks))

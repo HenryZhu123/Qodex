@@ -16,7 +16,7 @@ from question_generation.authoring import generate_authored, read_authoring
 from question_generation.batch import generate_batch
 from question_generation.comprehensive import generate_comprehensive
 from question_generation.curriculum import AREAS, coverage_report
-from question_generation.general_authoring import AUTHOR_PROMPT, AUTHOR_VIEWS, READER_PROMPT, AUDIT_PROMPT, CHECKS
+from question_generation.general_authoring import AUTHOR_PROMPT, AUTHOR_VIEWS, READER_PROMPT, AUDIT_PROMPT, CHECKS, audit_evidence
 from question_generation.general_contract import contains_span, contains_given_span
 from question_generation.generation import generate_question
 from question_generation.knowledge import with_knowledge
@@ -107,6 +107,69 @@ class GeneralContractTests(TestCase):
             self.assertNotIn('instructor_view', blind)
             self.assertNotIn('design', blind)
             self.assertEqual(result['status'], 'GENERATED')
+
+    def test_audit_omits_only_identical_summary_without_changing_author_sources(self):
+        sources = [
+            {'id': 'same', 'source': 'book', 'anchor': 'page 1', 'summary': '原文', 'excerpt': '原文'},
+            {'id': 'different', 'summary': '摘要', 'excerpt': '完整原文'},
+            {'id': 'summary-only', 'summary': '唯一正文'},
+        ]
+        original = deepcopy(sources)
+        compact = audit_evidence(sources)
+        self.assertEqual(sources, original)
+        self.assertEqual(compact[0], {k: v for k, v in original[0].items() if k != 'summary'})
+        self.assertEqual(compact[1:], original[1:])
+        case = deepcopy(CASES[0])
+        case['request']['evidence'][0]['excerpt'] = case['request']['evidence'][0]['summary']
+        result, model = self.run_case(case)
+        self.assertEqual(result['status'], 'GENERATED')
+        self.assertEqual(model.calls[0][1]['evidence'], case['request']['evidence'])
+        self.assertNotIn('summary', model.calls[2][1]['evidence'][0])
+        self.assertEqual(model.calls[2][1]['evidence'][0]['excerpt'], case['request']['evidence'][0]['summary'])
+
+    def test_short_evidenced_audit_rejection_cannot_deliver_a_question(self):
+        report = {'valid': False, 'issues': ['Two readings give opposite answers.'],
+                  'adversarial_case': 'Concrete alternative reading.',
+                  'checks': {'ambiguity': {'passed': False, 'reason': 'A required condition is absent.'}}}
+        class ShortRejection(Replay):
+            def complete(self, system, payload):
+                result = super().complete(system, payload)
+                return report if system == AUDIT_PROMPT else result
+        result, _ = self.run_case(CASES[0], ShortRejection(CASES[0]['candidate']))
+        self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
+        self.assertEqual(result['questions'], [])
+        self.assertEqual(result['authoring_report']['details'], report)
+
+    def test_partial_or_inconsistent_audit_never_passes_with_valid_true(self):
+        class PartialApproval(Replay):
+            def complete(self, system, payload):
+                result = super().complete(system, payload)
+                if system == AUDIT_PROMPT:
+                    result['checks'].pop(self.omitted)
+                return result
+        for omitted in CHECKS:
+            model = PartialApproval(CASES[0]['candidate'])
+            model.omitted = omitted
+            result, _ = self.run_case(CASES[0], model)
+            self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
+            self.assertEqual(result['questions'], [])
+
+    def test_explicit_transport_timeouts_retain_stage_without_a_question(self):
+        from urllib.error import URLError
+        for error, code in ((TimeoutError('private details'), 'response_timeout'),
+                            (URLError(TimeoutError('private details')), 'response_timeout'),
+                            (URLError('private timed out text'), 'transport_error'),
+                            (ConnectionRefusedError('private details'), 'transport_error')):
+            model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+            with patch('question_generation.model_client.build_opener') as opener:
+                opener.return_value.open.side_effect = error
+                result, _ = self.run_case(CASES[0], model)
+            self.assertEqual(result['status'], 'MODEL_UNAVAILABLE')
+            self.assertEqual(result['questions'], [])
+            self.assertEqual(result['authoring_report']['model_failure'], {'stage': 'author', 'code': code})
+            self.assertEqual(result['authoring_report']['usage'], [])
+            self.assertNotIn('private', json.dumps(result))
+            self.assertEqual(opener.return_value.open.call_count, 1)
 
     def test_student_cannot_use_material_or_author_intent_to_fill_hidden_conditions(self):
         case = deepcopy(CASES[0])
