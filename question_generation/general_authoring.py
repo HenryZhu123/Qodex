@@ -39,7 +39,8 @@ design字段：
 "counterfactual":{"given_id":"g1","replacement":"将该条件改成什么",
 "effect":"按修改后的题面重新求得的答案或可答性","reason":"由该改动引起变化的机制"}}。
 概念1至8项、依据和题设各1至12项、推导2至12项、结论1至6项。节点ID唯一，uses只引用已有节点。
-只列真实依赖。引文必须连续逐字摘录，允许排版空白差异。反事实只替换指定条件，按其余题设核对新结论。
+conclusions只引用推导节点，最终结论的依赖链须包含材料知识依据。只列真实依赖。
+引文必须连续逐字摘录，允许排版空白差异。反事实只替换指定条件，按其余题设核对新结论。
 calculations是可选见证，不能用见证代替解答，不输出程序代码。每项形如{"kind":"类型","inputs":{},"result":{}}。
 支持paging: inputs={page_size,address,page_table:{虚页字符串:页框}}，result={page,offset,frame,physical_address};
 cache: inputs={cache_size,block_size,address},result={tag,index,offset};

@@ -277,7 +277,7 @@ DeepSeek 每次调用默认使用 16,384 个输出 token。部署时可通过 `Q
 
 正文 JSON 语法错误时，`model_failure` 可附 `content_decode_position` 和 `content_length`，分别为解码器报告的从零开始的字符偏移及正文字符总数。两个字段仅含数字。无精确位置的解码异常仍沿用 `content_decode`。
 
-本地模型配置可将 `DEEPSEEK_BASE_URL` 指向 OpenCode Go 的 `https://opencode.ai/inference/go/openai/v1`，并用服务商提供的模型 ID 和密钥填写原有环境变量。此入口会携带 Qodex 客户端标识和每个模型客户端实例内稳定的会话 ID。可得的 Go 用量回执在 `usage` 中保留 `cost`、`response_model` 和 `opencode` 的 `billing_source`、`list_cost`、`allowance`。订阅额度消耗与余额扣款分别计量，跨服务商的结果须注明实际模型版本。Go 真实接入与命题质量仍需独立验证。 [Go 接口](https://opencode.ai/docs/console/go/) · [用量字段](https://opencode.ai/docs/console/api/inference/)
+本地模型配置可将 `DEEPSEEK_BASE_URL` 指向 OpenCode Go 的 `https://opencode.ai/inference/go/openai/v1`，并用服务商提供的模型 ID 和密钥填写原有环境变量。此入口会携带 Qodex 客户端标识和每个模型客户端实例内稳定的会话 ID。可得的 Go 用量回执在 `usage` 中保留 `cost`、`response_model` 和 `opencode` 的 `billing_source`、`list_cost`、`allowance`。订阅额度消耗与余额扣款分别计量，跨服务商的结果须注明实际模型版本。Go 的 DeepSeek Flash JSON、high 推理及用量回执已在真实调用验证；完整质量验收尚未完成。 [Go 接口](https://opencode.ai/docs/console/go/) · [用量字段](https://opencode.ai/docs/console/api/inference/)
 
 失败时返回 `INVALID_REQUEST`、`UNSUPPORTED_REQUEST`、`NEEDS_MATERIAL` 或 `SELF_CHECK_FAILED`，附原因及空题目列表。材料不足时列出缺失的规则。未知请求字段视为无效，避免忽略约束。
 
