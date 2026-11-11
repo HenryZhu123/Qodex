@@ -2,11 +2,11 @@
 
 No result here measures a model's authoring or judgment quality.
 """
-from copy import deepcopy
 import ipaddress
 import itertools
-from io import BytesIO
 import json
+from copy import deepcopy
+from io import BytesIO
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
@@ -14,10 +14,22 @@ from unittest.mock import patch
 
 from question_generation.authoring import generate_authored, read_authoring
 from question_generation.batch import generate_batch
+from question_generation.brief_authoring import PLAN_PROMPT
 from question_generation.comprehensive import generate_comprehensive
 from question_generation.curriculum import AREAS, coverage_report
-from question_generation.general_authoring import AUTHOR_PROMPT, AUTHOR_VIEWS, READER_PROMPT, AUDIT_PROMPT, CHECKS, audit_evidence
-from question_generation.general_contract import contains_span, contains_given_span
+from question_generation.general_authoring import (
+    ADVISORY_CHECKS,
+    AUDIT_PROMPT,
+    AUTHOR_PROMPT,
+    AUTHOR_VIEWS,
+    BLOCKING_CHECKS,
+    CHECKS,
+    READER_PROMPT,
+    audit_evidence,
+    audit_passed,
+    audit_warnings,
+)
+from question_generation.general_contract import contains_given_span, contains_span
 from question_generation.generation import generate_question
 from question_generation.knowledge import with_knowledge
 from question_generation.model_client import JsonModel
@@ -142,6 +154,7 @@ class GeneralContractTests(TestCase):
 
     def test_partial_or_inconsistent_audit_never_passes_with_valid_true(self):
         class PartialApproval(Replay):
+            omitted: str
             def complete(self, system, payload):
                 result = super().complete(system, payload)
                 if system == AUDIT_PROMPT:
@@ -258,10 +271,49 @@ class GeneralContractTests(TestCase):
             self.assertEqual(result['status'], 'SELF_CHECK_FAILED', result)
             self.assertEqual(len(model.calls), 1)
 
-    def test_every_failed_semantic_audit_check_blocks_despite_valid_flag(self):
-        for key in CHECKS:
+    def test_only_hard_audit_checks_block_despite_valid_flag(self):
+        for key in BLOCKING_CHECKS:
             result, _ = self.run_case(CASES[0], Replay(CASES[0]['candidate'], bad_audit=key))
             self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
+
+    def test_advisory_audit_failures_deliver_as_review_warnings(self):
+        for key in ADVISORY_CHECKS:
+            with self.subTest(check=key):
+                case = deepcopy(CASES[0])
+                case['request']['request_id'] += '-' + key
+                result, _ = self.run_case(case, Replay(case['candidate'], bad_audit=key))
+                self.assertEqual(result['status'], 'GENERATED', result)
+                question, = result['questions']
+                self.assertEqual(question['review_status'], 'PENDING')
+                self.assertEqual(question['self_check']['status'], 'PASSED')
+                self.assertEqual(question['self_check']['review_warnings'],
+                                 [{'check': key, 'reason': 'Protocol fixture only.'}])
+
+    def test_audit_passed_ignores_advisory_verdict_and_requires_all_hard_checks(self):
+        def audit(**failed):
+            checks = {k: {'passed': True, 'reason': 'Checked.'} for k in CHECKS}
+            for key in failed:
+                checks[key]['passed'] = False
+                checks[key]['reason'] = f'{key} failed.'
+            return {'valid': not failed, 'issues': ['advisory issue'] if failed else [],
+                    'adversarial_case': 'Concrete alternative reading.', 'checks': checks}
+        soft = audit(reasoning_necessity=True, requirements=True)
+        self.assertTrue(audit_passed(soft))
+        self.assertEqual([w['check'] for w in audit_warnings(soft)],
+                         ['reasoning_necessity', 'requirements'])
+        for key in BLOCKING_CHECKS:
+            with self.subTest(check=key):
+                self.assertFalse(audit_passed(audit(**{key: True})))
+        self.assertEqual(audit_warnings(audit()), [])
+        inconsistent = audit()
+        inconsistent['valid'] = False
+        self.assertFalse(audit_passed(inconsistent))
+
+    def test_single_choice_plan_and_audit_prompts_do_not_require_written_steps(self):
+        self.assertIn('单选题', PLAN_PROMPT)
+        self.assertIn('不得要求列出中间步骤', PLAN_PROMPT)
+        self.assertIn('不得因题面未要求学生列出或写出中间过程', AUDIT_PROMPT)
+        self.assertNotIn('即使仍需少量算术核对', AUDIT_PROMPT)
 
     def test_missing_material_and_lookup_before_provider(self):
         case = deepcopy(CASES[0]); evidence = case['request'].pop('evidence')

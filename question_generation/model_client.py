@@ -3,13 +3,13 @@ from __future__ import annotations
 
 import json
 import math
-from http.client import HTTPException
 import os
 import time
-from uuid import uuid4
+from http.client import HTTPException
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
-from urllib.request import Request, build_opener, HTTPRedirectHandler
+from urllib.request import HTTPRedirectHandler, Request, build_opener
+from uuid import uuid4
 
 
 class ModelError(Exception):
@@ -55,6 +55,67 @@ AUDIT_OUTPUT_TOKENS = 32768
 AUDIT_TIMEOUT_SECONDS = 420
 AUTHOR_TIMEOUT_SECONDS = 300
 INVALID_JSON_MESSAGE = "模型返回无效或空 JSON，本次未生成题目。"
+
+
+def _stream_result(raw: bytes) -> dict:
+    """Fold an SSE response into the same envelope used by non-streaming calls."""
+    try:
+        content = raw.decode("utf-8")
+    except UnicodeDecodeError:
+        raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="stream_decode") from None
+    parts, usage, finish_reason, response_model, events = [], {}, None, None, 0
+    saw_delta = False
+    for line in content.splitlines():
+        line = line.strip()
+        if not line or line.startswith(":") or not line.startswith("data:"):
+            continue
+        data = line[5:].strip()
+        if data == "[DONE]":
+            break
+        try:
+            event = json.loads(data)
+        except (ValueError, RecursionError):
+            raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="stream_decode") from None
+        if not isinstance(event, dict):
+            continue
+        events += 1
+        if event.get("error") is not None:
+            raise ModelError("模型服务返回流式错误，本次未生成题目。", code="provider_error")
+        if isinstance(event.get("usage"), dict):
+            usage = event["usage"]
+        if isinstance(event.get("model"), str):
+            response_model = event["model"]
+        choices = event.get("choices")
+        if not isinstance(choices, list) or not choices or not isinstance(choices[0], dict):
+            continue
+        choice = choices[0]
+        if choice.get("finish_reason") is not None:
+            finish_reason = choice["finish_reason"]
+        delta = choice.get("delta")
+        delta_content = delta.get("content") if isinstance(delta, dict) else None
+        message = choice.get("message")
+        if isinstance(delta_content, str):
+            parts.append(delta_content)
+            saw_delta = True
+        elif isinstance(message, dict) and isinstance(message.get("content"), str) and not saw_delta:
+            parts.append(message["content"])
+    if not events:
+        raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="envelope_decode")
+    result = {"choices": [{"finish_reason": finish_reason or "unknown", "message": {"content": "".join(parts)}}],
+              "usage": usage}
+    if response_model is not None:
+        result["model"] = response_model
+    return result
+
+
+def _decode_body(raw: bytes) -> dict:
+    head = raw.lstrip()[:16]
+    if head.startswith((b"data:", b"event:", b":")):
+        return _stream_result(raw)
+    try:
+        return json.loads(raw)
+    except (ValueError, RecursionError):
+        raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="envelope_decode") from None
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -107,7 +168,8 @@ class JsonModel:
             {"role": "system", "content": system},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ], "response_format": {"type": "json_object"}, "max_tokens": self.max_output_tokens,
-            "thinking": {"type": "enabled"}, "reasoning_effort": self.reasoning_effort}, ensure_ascii=False).encode()
+            "thinking": {"type": "enabled"}, "reasoning_effort": self.reasoning_effort,
+            "stream": True, "stream_options": {"include_usage": True}}, ensure_ascii=False).encode()
         if len(body) > 100_000:
             raise ModelError("命题材料超过单次调用预算。", code="request_size_limit")
         headers = {
@@ -115,7 +177,8 @@ class JsonModel:
         }
         if self.opencode_go:
             headers.update({"User-Agent": "Qodex-question-generation/0.5", "x-opencode-session": self.session_id})
-        request = Request(self.base_url + "/chat/completions", data=body, headers=headers)
+        # base_url is validated as HTTPS in __init__ and redirects are disabled.
+        request = Request(self.base_url + "/chat/completions", data=body, headers=headers)  # noqa: S310
         start = time.monotonic()
         try:
             with build_opener(NoRedirect()).open(request, timeout=self.timeout) as response:
@@ -141,10 +204,7 @@ class JsonModel:
             raise ModelError("模型服务连接失败，本次未生成题目。", code="transport_error") from None
         except (OSError, HTTPException):
             raise ModelError("模型服务连接失败或超时，本次未生成题目。", code="transport_error") from None
-        try:
-            result = json.loads(b"".join(chunks))
-        except (ValueError, RecursionError):
-            raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="envelope_decode") from None
+        result = _decode_body(b"".join(chunks))
         if not isinstance(result, dict):
             raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="envelope_shape")
         usage = result.get("usage", {})

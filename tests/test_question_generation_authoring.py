@@ -1,19 +1,28 @@
 """Contract, failure injection, cost and correctness tests; not quality evidence."""
-from copy import deepcopy
-from concurrent.futures import ThreadPoolExecutor
 import itertools
 import json
-from pathlib import Path
 import sqlite3
+from concurrent.futures import ThreadPoolExecutor
+from copy import deepcopy
+from hashlib import sha256
+from http.client import IncompleteRead
+from io import BytesIO
+from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest.mock import patch
 
-from question_generation.authoring import generate_authored, VERSION, AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT
+from question_generation.authoring import (
+    AUDIT_PROMPT,
+    AUTHOR_PROMPT,
+    READER_PROMPT,
+    VERSION,
+    generate_authored,
+)
 from question_generation.batch import generate_batch
 from question_generation.generation import generate_question
 from question_generation.knowledge import with_knowledge
-from question_generation.model_client import ModelError
+from question_generation.model_client import JsonModel, ModelError, complete_stage
 from question_generation.verification import solve, verify_witnesses
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -99,8 +108,6 @@ class AuthoringTests(TestCase):
         self.assertEqual(len(model.calls), 3)
 
     def test_high_effort_does_not_reuse_historical_low_effort_cache(self):
-        from hashlib import sha256
-
         model = FakeModel()
         model.reasoning_effort = 'high'
         payload = request()
@@ -178,8 +185,6 @@ class AuthoringTests(TestCase):
             self.assertEqual(self.run_model(model, payload)['status'], 'INVALID_REQUEST')
 
     def test_provider_response_issue_reaches_authoring_report(self):
-        from io import BytesIO
-        from question_generation.model_client import JsonModel
         model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
         with patch('question_generation.model_client.build_opener') as opener:
             opener.return_value.open.return_value = BytesIO(
@@ -261,8 +266,6 @@ class WitnessTests(TestCase):
 
 class TransportTests(TestCase):
     def test_explicit_output_budget_is_sent_to_provider(self):
-        from io import BytesIO
-        from question_generation.model_client import JsonModel
         with patch.dict('os.environ', {'DEEPSEEK_BASE_URL': 'https://fixture.invalid',
                                       'DEEPSEEK_MODEL': 'test', 'DEEPSEEK_API_KEY': 'fixture',
                                       'QUESTION_GENERATION_MAX_OUTPUT_TOKENS': '32768'}):
@@ -281,8 +284,6 @@ class TransportTests(TestCase):
                     JsonModel.from_env()
 
     def test_audit_stage_uses_its_own_output_budget_and_timeout(self):
-        from io import BytesIO
-        from question_generation.model_client import JsonModel, complete_stage
         with patch.dict('os.environ', {'DEEPSEEK_BASE_URL': 'https://fixture.invalid',
                                        'DEEPSEEK_MODEL': 'test', 'DEEPSEEK_API_KEY': 'fixture'}):
             model = JsonModel.from_env()
@@ -308,9 +309,32 @@ class TransportTests(TestCase):
                 with self.assertRaises(ModelError):
                     JsonModel.from_env()
 
+    def test_streamed_sse_response_is_folded_into_the_json_envelope(self):
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        raw = (b'data: {"choices":[{"delta":{"reasoning_content":"thinking"},"finish_reason":null}]}\n\n'
+               b'data: {"choices":[{"delta":{"content":"{\\"a\\":"},"finish_reason":null}]}\n\n'
+               b'data: {"choices":[{"delta":{"content":" 1}"},"finish_reason":"stop"}]}\n\n'
+               b'data: {"choices":[],"usage":{"prompt_tokens":5,"completion_tokens":9}}\n\n'
+               b'data: [DONE]\n\n')
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(raw)
+            self.assertEqual(model.complete('json', {}), {'a': 1})
+            request = json.loads(opener.return_value.open.call_args.args[0].data)
+            self.assertIs(request['stream'], True)
+            self.assertEqual(request['stream_options'], {'include_usage': True})
+        self.assertEqual((model.usage[0]['prompt_tokens'], model.usage[0]['completion_tokens']), (5, 9))
+
+    def test_stream_without_finish_reason_is_not_a_success(self):
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        raw = b'data: {"choices":[{"delta":{"content":"{}"},"finish_reason":null}]}\n\n'
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(raw)
+            with self.assertRaises(ModelError) as error:
+                model.complete('json', {})
+        self.assertEqual(error.exception.diagnostics.get('code'), 'incomplete_output')
+        self.assertEqual(error.exception.diagnostics.get('finish_reason'), 'unknown')
+
     def test_truncated_or_malformed_responses_are_not_successes(self):
-        from io import BytesIO
-        from question_generation.model_client import JsonModel
         cases: list = [(b'[]', 'invalid_response', None, 'envelope_shape'),
                  (b'not json', 'invalid_response', None, 'envelope_decode'),
                  (b'{"choices":[]}', 'invalid_response', None, 'envelope_shape')]
@@ -349,9 +373,6 @@ class TransportTests(TestCase):
                         self.assertEqual(model.usage[0]['reasoning_tokens'], 75)
 
     def test_interrupted_chunked_response_fails_without_retry_or_partial_output(self):
-        from http.client import IncompleteRead
-        from io import BytesIO
-        from question_generation.model_client import JsonModel
         class BrokenResponse(BytesIO):
             def read1(self, size=None):
                 raise IncompleteRead(b'partial private response')
@@ -366,8 +387,6 @@ class TransportTests(TestCase):
             self.assertEqual(model.usage, [])
 
     def test_opencode_go_session_and_billing_survive_incomplete_output(self):
-        from io import BytesIO
-        from question_generation.model_client import JsonModel
         model = JsonModel(base_url='https://opencode.ai/inference/go/openai/v1',
                           model='deepseek-v4.1-flash', api_key='fixture')
         receipts = []
@@ -396,8 +415,6 @@ class TransportTests(TestCase):
             self.assertEqual(usage['opencode'], {'billing_source': 'go', 'allowance': 0.001, 'list_cost': 0.002})
 
     def test_transport_bounds_tokens_and_ignores_provider_reasoning_text(self):
-        from io import BytesIO
-        from question_generation.model_client import JsonModel
         model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
         raw = json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': '{"ok":true}',
                                                                          'reasoning_content': 'not an artifact'}}],

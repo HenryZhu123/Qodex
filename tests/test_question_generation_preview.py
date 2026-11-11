@@ -3,14 +3,36 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest.mock import patch
 
-from question_generation.brief_authoring import generate_from_brief
-from question_generation.preview import planning_format, unfinished_draft
-from question_generation.ui import preview_result
 from test_question_generation_brief import BriefReplay
 from test_question_generation_general import CASES
 
+from question_generation.brief_authoring import generate_from_brief
+from question_generation.preview import PreviewTrace, planning_format, unfinished_draft
+from question_generation.ui import preview_result
+
 
 class WorkbenchTests(TestCase):
+    def test_workbench_wrapper_applies_stage_budgets_to_the_inner_client(self):
+        from io import BytesIO
+
+        from question_generation.model_client import JsonModel, complete_stage
+        with patch.dict('os.environ', {'DEEPSEEK_BASE_URL': 'https://fixture.invalid',
+                                       'DEEPSEEK_MODEL': 'test', 'DEEPSEEK_API_KEY': 'fixture'}):
+            model = JsonModel.from_env()
+        trace = PreviewTrace(model)
+        envelope = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
+        expected = {'plan': (16384, 120), 'author': (16384, 300),
+                    'reader': (16384, 120), 'audit': (32768, 420)}
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(envelope)
+            for stage, (tokens, timeout) in expected.items():
+                with self.subTest(stage=stage):
+                    complete_stage(trace, stage, 'json', {})
+                    call = opener.return_value.open.call_args
+                    self.assertIn(b'"max_tokens": %d' % tokens, call.args[0].data)
+                    self.assertEqual(call.kwargs['timeout'], timeout)
+                    self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
+
     def test_automatic_material_plan_allows_optional_queries_without_existing_selection(self):
         payload = {'scope': [{'id': 'os.memory', 'subject': 'operating_systems'}],
                    'evidence': [{'material': {'id': 'source-1'}}], 'fixed': {'subject': 'operating_systems'}}

@@ -82,7 +82,10 @@ function renderResult(result, history) {
   byId("author-json").textContent = JSON.stringify(result, null, 2);
   byId("author-raw").hidden = false;
   if (question && result.status === "GENERATED") {
-    setStatus(history ? "历史实测 · 待审" : "生成完成 · 待审", "success",
+    let label = "生成完成 · 待审";
+    if (history) label = "历史实测 · 待审";
+    else if (question.self_check?.review_warnings?.length) label = "生成完成 · 待审（含软警告）";
+    setStatus(label, "success",
       history ? "来自此前真实模型实验。本次仅回看已保存的题包。" : "题包通过命题自检，可展开查看答案与依据。");
     renderQuestion(question, false);
   } else {
@@ -106,6 +109,12 @@ function renderResult(result, history) {
     diagnostics.append(element("h3", "材料出处"), sources);
   }
   if (question?.self_check?.checks?.length) diagnostics.append(element("p", `自检 · ${question.self_check.checks.join(" / ")}`));
+  if (Array.isArray(question?.self_check?.review_warnings) && question.self_check.review_warnings.length) {
+    diagnostics.append(element("h3", "待审警告"));
+    for (const warning of question.self_check.review_warnings) {
+      diagnostics.append(element("p", `${warning.check}：${warning.reason}`, "prose review-warning"));
+    }
+  }
   if (report?.details) diagnostics.append(element("p", typeof report.details === "string"
     ? report.details : JSON.stringify(report.details, null, 2), "prose"));
   if (preview?.model) diagnostics.append(element("p", `${preview.model} · 本次调用 ${preview.calls} 次`));

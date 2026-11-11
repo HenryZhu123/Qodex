@@ -76,6 +76,7 @@ textarea { display: block; resize: vertical; width: 100%; border: 1px solid #b5c
 .question-parts { margin-top: 10px; padding-left: 23px; }
 .question-parts li { margin-bottom: 7px; padding: 7px 8px; border-radius: 5px; background: #f3f7f9; }
 .prose { white-space: pre-wrap; overflow-wrap: anywhere; }
+.review-warning { color: #7a4a00; background: #fff2dc; border-radius: 7px; padding: 6px 9px; }
 .author-workspace h3 { margin: 8px 0 3px; font-size: .92rem; }
 .author-workspace details p { margin: 4px 0 9px; }
 .rubric li { margin-bottom: 6px; }

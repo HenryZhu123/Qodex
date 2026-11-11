@@ -4,11 +4,17 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest.mock import patch
 
+from test_question_generation_general import CASES, Replay
+
 from question_generation.authoring import generate_authored
 from question_generation.comprehensive import revise_comprehensive
-from question_generation.general_authoring import AUDIT_PROMPT, READER_PROMPT, REPAIR_PROMPT, apply_replacements
+from question_generation.general_authoring import (
+    AUDIT_PROMPT,
+    READER_PROMPT,
+    REPAIR_PROMPT,
+    apply_replacements,
+)
 from question_generation.general_revision import revise_authored
-from test_question_generation_general import CASES, Replay
 
 
 class RepairReplay(Replay):
@@ -93,10 +99,23 @@ class GeneralRevisionTests(TestCase):
         self.assertEqual(len(model.calls), 1)
         candidate = deepcopy(case['candidate'])
         candidate['student_view']['stem'] += '\n按上述规则。'
-        model = RepairReplay(candidate, bad_audit='requirements')
+        model = RepairReplay(candidate, bad_audit='ambiguity')
         result = revise_authored(payload, client=model, cache_path=self.cache)
         self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
         self.assertEqual(result['questions'], [])
+        self.assertEqual(len(model.calls), 3)
+
+    def test_advisory_revision_warning_delivers_but_is_recorded(self):
+        case = CASES[0]
+        payload = self.make_revision(case)
+        candidate = deepcopy(case['candidate'])
+        candidate['student_view']['stem'] += '\n按上述规则。'
+        model = RepairReplay(candidate, bad_audit='requirements')
+        result = revise_authored(payload, client=model, cache_path=self.cache)
+        self.assertEqual(result['status'], 'REVISED', result)
+        question, = result['questions']
+        self.assertEqual(question['self_check']['review_warnings'],
+                         [{'check': 'requirements', 'reason': 'Protocol fixture only.'}])
         self.assertEqual(len(model.calls), 3)
 
     def test_replacements_preserve_unmodified_fields_and_reject_ambiguous_paths(self):

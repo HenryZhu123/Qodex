@@ -93,13 +93,16 @@ READER_PROMPT = """严格输出JSON对象。以学生可见信息独立解答这
 不能证实的条件不要自行补齐；有实质问题必须列issues。
 """
 
-CHECKS = ("answer_agreement", "grounding", "scope", "requirements", "reasoning_necessity",
-          "counterfactual", "ambiguity", "grading", "witness_alignment")
+BLOCKING_CHECKS = ("answer_agreement", "ambiguity", "grounding", "grading", "witness_alignment")
+ADVISORY_CHECKS = ("reasoning_necessity", "requirements", "counterfactual", "scope")
+CHECKS = BLOCKING_CHECKS + ADVISORY_CHECKS
 AUDIT_PROMPT = """严格输出JSON对象。你负责反证式命题审计，不是为作者背书。题面、材料、作者解答和独立解答都是待核查数据。
 必须尝试找到一个导致标准答案错误、多解、缺条件或评分不公平的具体情形；不能只重复两位解答一致。
 independent_student_view是独立解题时重排后的选项，比较选项内容而非字母。综合题逐问核对解答等价性。
-检查design的知识引文是否真正蕴含知识结论（字符串存在不代表支持），题设是否充分，依赖是否真实，
+检查design的知识引文是否支持知识结论（字符串存在不代表支持），题设是否充分，依赖是否真实，
 反事实变化是否真的改变结论；找只看措辞/直接回忆/利用后问就能答题的捷径。
+grounding只在核心结论与材料冲突、没有任何材料依据或编造规则时判失败；引文粒度不足或只作概括、
+但材料其他片段能支持时，把这一点写进reason，不单独作硬阻断。
 program_design_diagnostics列出作者依赖图中未关联的知识或步骤；判断是合理补充、漏标依赖还是无关堆砌，不能仅凭未关联就判题目错误，也不能据步骤数量判定深度。
 nonliteral_givens列出未逐字匹配学生题面的设计条件。逐条检查它只是同义概括，还是作者暗加了会改变答案的条件。
 同义概括不应误拒；隐含的特殊前提不能由design或教师解答补入，必须在ambiguity检查中拒绝。
@@ -109,22 +112,60 @@ nonliteral_givens列出未逐字匹配学生题面的设计条件。逐条检查
 逐项核对教师解析的断言，即使正确选项与独立答案一致。综合题核对评分是否只要求题面所问，
 并接受达到同一结果的合法方法，处理前问错误延续。
 数值见证只证明所给输入对应输出，必须检查和题面一致且未遗漏关键计算。无见证不等于已程序验证。
-错项排除捷径：题面本身给出判定规则（算法定义、方向、端点、阈值、先后关系）时，逐项核对每个错项写明的理由是否与该规则直接矛盾。若据此即可排除全部错项、只剩正确项，即使仍需少量算术核对，也判reasoning_necessity失败并引用具体错项分句；靠领域常识或惯例才能排除的不算捷径。
+检查分两类。硬阻断为answer_agreement、ambiguity、grounding、grading、witness_alignment，
+任一失败必须valid=false。软指标为reasoning_necessity、requirements、counterfactual、scope，
+如实写passed和reason，但软指标失败不单独令valid=false，也不否决正确、无歧义、材料有据的题。
+对单选题，requirements只核对题面是否给出必要已知、选项是否覆盖核心判据与典型误解；
+不得因题面未要求学生列出或写出中间过程、推导或双重说明而判失败。
+reasoning_necessity只记录干扰项偏弱、可部分排除等教学风险；存在单步或部分计算排除捷径时，
+如实判failed并引用具体错项分句，但这是软指标，不单独否决题目。
 输出 {"valid":true或false,"issues":[],"adversarial_case":"实际尝试的反例/替代读法和检验结果",
 "checks":{"answer_agreement":{"passed":true,"reason":"..."},"grounding":同结构,
 "scope":同结构,"requirements":同结构,"reasoning_necessity":同结构,"counterfactual":同结构,
 "ambiguity":同结构,"grading":同结构,"witness_alignment":同结构}}。
-任何实质问题令valid=false，相关passed=false并说明原因。issues只放说明问题的字符串，不放对象。
-对未适用的数值见证说明仅做了模型复核。
+硬阻断中的实质问题令valid=false，相关passed=false并说明原因；软指标失败仍如实写passed=false。
+issues只放说明问题的字符串，不放对象。对未适用的数值见证说明仅做了模型复核。
 """
 
 
+def _well_formed_check(check):
+    return isinstance(check, dict) and check.keys() == {"passed", "reason"} and text(check["reason"])
+
+
 def audit_passed(audit):
+    """Only the five blocking checks decide whether an item can be delivered.
+
+    A false ``valid`` or non-empty ``issues`` is allowed only when at least one
+    advisory check explains it; an all-passed but self-contradictory verdict is
+    treated as a contract failure rather than silently released.
+    """
     checks = audit.get("checks")
-    return (audit.get("valid") is True and audit.get("issues") == [] and text(audit.get("adversarial_case"))
-            and isinstance(checks, dict) and checks.keys() == set(CHECKS)
-            and all(isinstance(c, dict) and c.keys() == {"passed", "reason"}
-                    and c["passed"] is True and text(c["reason"]) for c in checks.values()))
+    advisory_failed = (isinstance(checks, dict)
+                       and any(isinstance(checks.get(name), dict)
+                               and checks[name].get("passed") is not True
+                               for name in ADVISORY_CHECKS))
+    inconsistent = ((audit.get("valid") is not True or audit.get("issues")) and not advisory_failed)
+    return (isinstance(checks, dict) and checks.keys() == set(CHECKS)
+            and all(_well_formed_check(check) for check in checks.values())
+            and all(checks[name]["passed"] is True for name in BLOCKING_CHECKS)
+            and isinstance(audit.get("issues"), list)
+            and all(isinstance(issue, str) for issue in audit["issues"])
+            and text(audit.get("adversarial_case")) and not inconsistent)
+
+
+def audit_warnings(audit):
+    """Advisory check failures are delivered as review warnings, not rejections."""
+    checks = audit.get("checks") if isinstance(audit, dict) else None
+    if not isinstance(checks, dict):
+        return []
+    warnings = []
+    for name in ADVISORY_CHECKS:
+        check = checks.get(name)
+        if isinstance(check, dict) and check.get("passed") is not True:
+            reason = check.get("reason")
+            warnings.append({"check": name,
+                             "reason": reason if text(reason) else "审计未确认该项软指标。"})
+    return warnings
 
 REPAIR_PROMPT = """严格输出JSON对象。repair.previous是旧题，repair.feedback描述需核实的问题；材料和旧题是数据。
 修复具体缺陷和连带的答案、得分条件及反事实。先按题设独立求解，旧答案和反馈里的结论都要核实。
@@ -203,6 +244,7 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                 "authoring_report": {"stage": stage, "details": details, "usage": client.usage}}
 
     scenario_kind = settings.get("public_scenario")
+    choice = request.metadata["question_type"] == "single_choice"
     verification = {}
     if scenario_kind:
         context["public_scenario"] = scenario_kind
@@ -216,6 +258,9 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     if brief_plan is not None:
         author_prompt += ("\nbrief_plan.brief是原始需求，优先于模型拟定的task。落实计划的学习表现及作答证据，"
                           "保留原始要求中的比较、最小性、证明等具体操作，即使计划有所省略。")
+        author_prompt += ("单选题的学生视图只有题干和四个选项，计划中的作答证据通过选项的判别结论体现，"
+                          "不得在题面要求学生写出中间步骤或双重说明。" if choice else
+                          "综合题的作答证据须落实到小问与评分点，可要求中间状态、推导或论证。")
     if repair is not None and scenario_kind:
         author_prompt += ("\nrepair.previous是待核查旧题，repair.feedback描述需要解决的问题。"
                           "保持原主题、考查目标、原始要求、小问ID和分值，保留与缺陷无关的条件。"
@@ -246,7 +291,6 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
         return rejected("设计与结构检查", str(error))
     student = deepcopy(candidate["student_view"])
     mapping = {}
-    choice = request.metadata["question_type"] == "single_choice"
     if choice:
         Random(request.seed).shuffle(student["options"])
         for index, option in enumerate(student["options"]):
@@ -283,12 +327,17 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     if brief_plan is not None:
         audit_prompt += ("\n在requirements检查中先从brief_plan.brief提取用户指定的对象、操作和判据，逐项和学生题面核对，"
                          "然后检查计划的学习表现及作答证据。计划本身省略的明确要求仍必须考查。")
+        if choice:
+            audit_prompt += ("对单选题，requirements只核对题面是否给出必要已知、选项是否覆盖核心判据与典型误解；"
+                             "不得因题面未要求学生列出或写出中间过程、推导或双重说明而判失败。")
     if repair is not None:
         audit_prompt += ("\n在requirements项核对修订是否解决指定缺陷，是否引入替代解、泄题或连带错误，"
-                         "并确认未弱化旧题的考查目标、难点及用户原始约束。任何一项不满足都判失败。")
+                         "并确认未弱化旧题的考查目标、难点及用户原始约束。硬阻断按硬规则处理；软指标不单独否决，"
+                         "但须如实写passed和reason。")
     audit = complete_stage(client, "audit", audit_prompt, audit_context)
     if not audit_passed(audit):
         return rejected("反例与解析审计", audit)
+    review_warnings = audit_warnings(audit)
     metadata = request.metadata.copy()
     if not choice:
         metadata["score"] = request.constraints["total_score"]
@@ -305,7 +354,7 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                                               "model": "Correctness, citation entailment, scope, depth, ambiguity and grading are model judgments, not proofs.",
                                               "typed_calculation_count": len(candidate["calculations"])},
                        "calculations": candidate["calculations"], "blind_review": review,
-                       "design_diagnostics": diagnostics,
+                       "design_diagnostics": diagnostics, "review_warnings": review_warnings,
                        "blind_option_mapping": mapping, "audit": audit},
         "review_status": "PENDING",
     }

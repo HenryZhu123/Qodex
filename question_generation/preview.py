@@ -25,7 +25,7 @@ def planning_format(payload, *, allow_queries=False):
                 "required": list(fields), "additionalProperties": False}
 
     prose = {"type": "string"}
-    fields = {k: prose for k in ("topic", "target", "task", "student_evidence")}
+    fields: dict[str, dict] = dict.fromkeys(("topic", "target", "task", "student_evidence"), prose)
     fields.update(subject=choices(dict.fromkeys(item["subject"] for item in payload["scope"])),
                   syllabus_areas=array(choices(item["id"] for item in payload["scope"]), 4),
                   question_type=choices(QUESTION_TYPES), objective=choices(sorted(OBJECTIVES)),
@@ -33,7 +33,7 @@ def planning_format(payload, *, allow_queries=False):
     for key in payload["fixed"]:
         fields.pop(key)
     if allow_queries:
-        fields["evidence_ids"]["minItems"] = 0
+        fields["evidence_ids"] = {**fields["evidence_ids"], "minItems": 0}
         query = record({"area": choices(item["id"] for item in payload["scope"]), "query": prose})
         plan = record(fields, material_queries=array(query, 3))
     else:
@@ -128,6 +128,33 @@ class PreviewTrace:
         self.usage = client.usage
         self.stage, self.draft, self.proposed_plan = None, None, None
         self.calls = 0
+
+    # complete_stage() applies per-stage budgets to the object it receives.
+    # The workbench wraps the real client, so these attributes must reach the
+    # inner client or the stage budgets silently fall back to the defaults.
+    @property
+    def max_output_tokens(self):
+        return getattr(self.client, "max_output_tokens", None)
+
+    @max_output_tokens.setter
+    def max_output_tokens(self, value):
+        self.client.max_output_tokens = value
+
+    @property
+    def timeout(self):
+        return getattr(self.client, "timeout", None)
+
+    @timeout.setter
+    def timeout(self, value):
+        self.client.timeout = value
+
+    @property
+    def stage_output_tokens(self):
+        return getattr(self.client, "stage_output_tokens", {})
+
+    @property
+    def stage_timeout_seconds(self):
+        return getattr(self.client, "stage_timeout_seconds", {})
 
     def complete(self, system, payload):
         self.stage = self.stages[self.calls]
