@@ -601,3 +601,45 @@ Qwen 本机重放中，正确的局部置换题被误拒。缺少置换范围的
 另由开发助手对历史排序题做了可执行对照。旧题允许任取并列最小记录，穷举得到 36 种序列；固定选未排序区最靠前者后，得到唯一序列 `r4,r2,r6,r3,r5,r1`。按明示的半开区间折半插入，相同长度的 `AAA` 与 `BBA` 分别比较 2 和 3 次，推翻旧评分的固定比较次数断言。手工字段替换保留题干、p1、p3 及原分值，重建后通过结构和引用检查。这是复算与修订契约样例。真实 PostgreSQL 版本替换使用脚本模型验证。
 
 原始输入、可见输出、回归脚本及复算见忽略目录 `.local/question-generation/generalization/scout-repair/`。本阶段付费调用为零。该阶段尚未用扩大后的本机预算重放截断案例。生产模型的显式材料分层对照见上文。
+
+## 前置工程修复与两轮 8 题冒烟（2026-11-12）
+
+这一阶段不再调整审计硬/软判据，只修复进入审计前的本地工程拦截，并用两组独立 8 题批次验证。两轮都保留完整分母，人工审校一律 `UNVERIFIED`。
+
+### 前置修复（0 外部调用，提交 `2d2bba1`）
+
+- **SSE 大小上限**：原始 HTTP/SSE 字节流上限由 1 MB 放宽到 16 MB；拼接后的 `message.content` 仍保留 1 MB 上限。累计式 `delta.content` 以已有内容为前缀时替换而不是重复追加；`response_size_limit` 诊断记录 `content_length`。
+- **盲解结构归一**：若顶层缺 `quality`、而 `condition_test` 内含 `quality`，复制并弹出该字段到顶层；随后仍按原 `student_quality` 和 `condition_test.keys() == {change, effect}` 校验，不降低其余检查。
+- **材料查询回退**：每条 `material_queries` 先按 `exact_anchor=True` 检索，未命中自动回退 `exact_anchor=False, related_notes=True`；只要已选材料非空，单条补充查询未命中不再中止，缺口记录到 `authoring_report.material_query_gaps`。
+- **瞬态重试**：仅对 `transport_error`（连接重置、`IncompleteRead`、非超时的 `URLError`/`OSError`/`HTTPException`）和 HTTP 502/503/504 最多自动重试 1 次，退避 1.75 秒；`response_timeout`、`incomplete_output`、`invalid_content`、`response_size_limit` 不重试。
+
+173 项单测在 Python 3.9.6 与 3.12.14 通过。离线重放 `smoke-followup-replay/result.json` 0 调用通过：`ds-sc-a` 的冻结盲解在归一后通过质量检查；`ds-co-a` 的冻结计划经真实知识库召回第 4 条插入排序材料（严蔚敏《数据结构》p. 239–240），4 条材料全部保留，`gaps` 为空。
+
+### smoke-v1（门禁未过，历史）
+
+8 题全部尝试，23 次调用，OpenCode Go 额度 0.07703354 美元等值，余额扣费 0。PENDING 3/8（`co-sc-a`、`os-sc-a`、`cn-co-a`）；严格技术完成 4/8，把 `NEEDS_MATERIAL` 计入为 5/8。失败为 2 次传输错误、1 次 SSE 原始响应超过 1 MB、1 次盲解 `quality` 嵌套、1 次补充材料缺口。3 道 PENDING 题独立复算正确；`co-sc-a` 带 2 条软警告。记录见 `.local/question-generation/smoke-hardsoft-2026-11-12/RESULT.md`。
+
+### smoke-v2（门禁仍未过）
+
+同一 8 题冻结清单，新目录 `smoke-v2-2026-11-12`，并发 2，32 逻辑调用 / 36 原始 HTTP 调用上限，额度上限 0.20 美元等值。实际 **25 次 HTTP 调用**（本轮没有触发自动重试），额度 **0.08134 美元等值**，余额扣费 0。PENDING **3/8**（`ds-sc-a`、`co-sc-a`、`cn-sc-a`）；技术完成 **4/8**（3 道 `GENERATED` + 1 道 `SELF_CHECK_FAILED`）；`MODEL_UNAVAILABLE` 4/8；`NEEDS_MATERIAL` 0；`HARNESS_ERROR` 0。
+
+| 任务 | 终态 | 说明 |
+| --- | --- | --- |
+| ds-sc-a | **GENERATED/PENDING** | 前置盲解结构归一后通过；1 条 `reasoning_necessity` 软警告 |
+| co-sc-a | **GENERATED/PENDING** | 4 位补码；1 条 `reasoning_necessity` 软警告 |
+| cn-sc-a | **GENERATED/PENDING** | 最长前缀匹配；1 条 `reasoning_necessity` 软警告 |
+| os-sc-a | MODEL_UNAVAILABLE | 作者 `incomplete_output`（`length`，182.5 秒） |
+| ds-co-a | MODEL_UNAVAILABLE | 材料回退修复生效，作者完成；reader `response_timeout`（120.1 秒） |
+| co-co-a | MODEL_UNAVAILABLE | 作者完成；reader `response_timeout`（120.0 秒） |
+| os-co-a | MODEL_UNAVAILABLE | 16 MB 修复生效，作者完成（242.5 秒）；reader `response_timeout`（120.0 秒） |
+| cn-co-a | SELF_CHECK_FAILED | 作者评分点结构无效，在设计与结构检查拒绝 |
+
+三个前置修复均在真实流量中生效：`ds-sc-a` 从盲解结构失败转为待审；`ds-co-a` 从 `NEEDS_MATERIAL` 转为通过计划/作者；`os-co-a` 从作者 1 MB 失败转为通过作者。当前主因变为 **reader 120 秒超时**（3 题）以及作者 `length`/评分点结构错误（2 题）。自动重试本轮未被触发，因此只有单测证据，尚无真实传输重试样本。
+
+3 道 PENDING 题用实验专用脚本 `run/verification.json` 独立复算：拓扑加边唯一解为 A；4 位补码两式结果为 `1000/C_out=0/V=1` 与 `0000/C_out=1/V=0`；最长前缀匹配仅 `10.1.2.3` 在两表不同。三题均无错答案、多解歧义或伪造引文硬伤；软警告只有 `reasoning_necessity`。
+
+### 结论与边界
+
+- 审计 5 硬/4 软分层在两轮中均未误拦到达审计的正确题；本轮问题集中在进入审计前的 reader 超时和作者输出结构。
+- 两轮 PENDING 均为 3/8，均未达到 ≥5/8；技术完成均未达到 ≥7/8。不构成题目质量验收结论。
+- 下一轮应单独冻结 reader 超时预算（120 秒对综合题不足）与作者结构化输出（`length`、评分点）对照，不应继续用同一 8 题重复试跑；人工审校始终 `UNVERIFIED`。

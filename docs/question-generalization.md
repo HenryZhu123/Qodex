@@ -131,7 +131,7 @@ Pi 可用 `question_generation` 的 `author` 操作把原始需求直接交给�
 
 固定科目、题型和唯一章节由服务填入。模型只能选择可用范围内的章节和确实提供的材料。原始需求与计划进入创作和审计，学生盲解仍只收到 `student_view` 和题型。成功题包仍为 `PENDING`，教师侧的 `generator.parameters.brief_plan` 和返回的 `authoring_report.plan` 可回看实际采用的计划。通常最多四次模型调用，成功结果按请求、材料快照和模型配置缓存。组卷补题及既有结构化入口沿用原契约。见[粗需求验证](question-generalization-evaluation.md#粗需求优化器与材料发现)。
 
-自动取材路径使用 `general-authoring-v0.5-brief-v2`。初筛可用释义正文中的连续字词匹配补进至多一条相邻释义，原查询标签仍可直接命中。计划可在所选章节内请求至多三个 `material_queries`，每条定位一个机制。原选材料与查询合计至多四项，二次检索无额外模型调用。服务用返回的真实材料填入计划，查不到会在创作前报告具体查询。显式材料仍走原路径。[取材对照](question-generalization-evaluation.md#自然语言取材与定向修订)
+自动取材路径使用 `general-authoring-v0.5-brief-v2`。初筛可用释义正文中的连续字词匹配补进至多一条相邻释义，原查询标签仍可直接命中。计划可在所选章节内请求至多三个 `material_queries`，每条定位一个机制。原选材料与查询合计至多四项，二次检索无额外模型调用。每条补充查询先按精确锚点检索，未命中时回退到 related-notes 检索；若回退后仍未命中，只要已选材料非空就保留已选材料继续创作，并把缺口记录到 `authoring_report.material_query_gaps`，只有完全没有可用材料时才返回 `NEEDS_MATERIAL`。显式材料仍走原路径。[取材对照](question-generalization-evaluation.md#自然语言取材与定向修订)
 
 ## 定向修订
 
