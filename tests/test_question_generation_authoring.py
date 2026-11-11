@@ -42,6 +42,8 @@ def candidate():
 class FakeModel:
     """Scripted transport only, deliberately not a pedagogical evaluator."""
     model, base_url = 'test-double', 'https://fixture.invalid'
+    reasoning_effort: str = 'high'
+    max_output_tokens: int = 16384
 
     def __init__(self, mutate=None, bad_reader=False, bad_audit=False):
         self.usage, self.calls = [], []
@@ -278,10 +280,36 @@ class TransportTests(TestCase):
                 with self.assertRaises(ModelError):
                     JsonModel.from_env()
 
+    def test_audit_stage_uses_its_own_output_budget_and_timeout(self):
+        from io import BytesIO
+        from question_generation.model_client import JsonModel, complete_stage
+        with patch.dict('os.environ', {'DEEPSEEK_BASE_URL': 'https://fixture.invalid',
+                                       'DEEPSEEK_MODEL': 'test', 'DEEPSEEK_API_KEY': 'fixture'}):
+            model = JsonModel.from_env()
+        self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
+        self.assertEqual(model.stage_output_tokens, {'audit': 32768})
+        self.assertEqual(model.stage_timeout_seconds, {'audit': 420})
+        body = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(body)
+            complete_stage(model, 'author', 'json', {})
+            self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 16384)
+            complete_stage(model, 'audit', 'json', {})
+            self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 32768)
+            self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
+        for name, value in (('QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS', 'bad'),
+                            ('QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS', '0'),
+                            ('QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS', '0')):
+            with self.subTest(name=name, value=value), patch.dict('os.environ', {
+                    'DEEPSEEK_BASE_URL': 'https://fixture.invalid', 'DEEPSEEK_MODEL': 'test',
+                    'DEEPSEEK_API_KEY': 'fixture', name: value}):
+                with self.assertRaises(ModelError):
+                    JsonModel.from_env()
+
     def test_truncated_or_malformed_responses_are_not_successes(self):
         from io import BytesIO
         from question_generation.model_client import JsonModel
-        cases = [(b'[]', 'invalid_response', None, 'envelope_shape'),
+        cases: list = [(b'[]', 'invalid_response', None, 'envelope_shape'),
                  (b'not json', 'invalid_response', None, 'envelope_decode'),
                  (b'{"choices":[]}', 'invalid_response', None, 'envelope_shape')]
         for reason, message, code, safe_reason, issue in (
@@ -323,7 +351,7 @@ class TransportTests(TestCase):
         from io import BytesIO
         from question_generation.model_client import JsonModel
         class BrokenResponse(BytesIO):
-            def read1(self, size):
+            def read1(self, size=None):
                 raise IncompleteRead(b'partial private response')
         model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
         with patch('question_generation.model_client.build_opener') as opener:

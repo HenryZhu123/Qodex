@@ -275,6 +275,8 @@ TCP 使用 `computer_networks` 和 `tcp_message_boundaries`。可选约束 `scen
 
 DeepSeek 每次调用默认使用 16,384 个输出 token。部署时可通过 `QUESTION_GENERATION_MAX_OUTPUT_TOKENS` 设置正整数，选择时考虑服务商的模型窗口和输出能力、延迟及成本。变更额度后使用独立缓存，原默认配置的缓存仍可回读。评测可以只改变作者阶段的额度，以便和盲解、审计的配置分开比较。
 
+审计阶段单独使用更大的预算：默认 32,768 输出、420 秒，可用 `QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS` 和 `QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS` 覆盖；作者与盲解阶段仍为 16,384 输出、120 秒。冻结对照显示，16,384 输出下七份审计输入只有四份拿到结论，32,768/420 秒下七份全部拿到，且必扣留与正例结论不变。审计单次最长可接近七分钟，调用方需容忍长请求（Pi 工具默认 600 秒）。该配置只解决“拿不到结论”，不改变审计结论本身可能不稳定的问题。
+
 正文 JSON 语法错误时，`model_failure` 可附 `content_decode_position` 和 `content_length`，分别为解码器报告的从零开始的字符偏移及正文字符总数。两个字段仅含数字。无精确位置的解码异常仍沿用 `content_decode`。
 
 直接捕获的 `TimeoutError` 或 `URLError.reason` 中的同类异常使用 `response_timeout`，普通连接错误仍为 `transport_error`。分类依据异常类型，不从错误文案推断网络阶段，也不改写历史回执。审计输入只删除与 `excerpt` 逐字相同的 `summary`，原文和出处仍完整保留。审计发现具体阻断时可直接返回拒绝：拒绝只要求 `valid=false`、非空 `issues`、具体反例，以及至少一项已知检查失败并给出依据。放行仍须九项完整检查全部有据通过（`audit_passed` 未改）。提示中保留一条经对照验证的 `reasoning_necessity` 判据：题面明确给出判定规则、而错项写明的理由与该规则直接矛盾、据此可排除全部错项时，判该检查失败；靠领域常识或惯例才能排除的不算捷径。曾试行的“有据即提前结束”与“严格边界等式”两段，均因未通过冻结门禁而未保留。被拒绝的题仍不生成题包。

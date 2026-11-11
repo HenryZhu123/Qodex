@@ -26,18 +26,33 @@ class ModelError(Exception):
 
 
 def complete_stage(client, stage: str, system: str, payload: dict) -> dict:
-    """Attach the calling stage without replacing the provider diagnostics."""
+    """Attach the calling stage and apply any frozen per-stage budget without changing the client."""
+    budgets = getattr(client, "stage_output_tokens", {})
+    timeouts = getattr(client, "stage_timeout_seconds", {})
+    previous_budget = getattr(client, "max_output_tokens", None)
+    previous_timeout = getattr(client, "timeout", None)
     try:
+        if stage in budgets:
+            client.max_output_tokens = budgets[stage]
+        if stage in timeouts:
+            client.timeout = timeouts[stage]
         return client.complete(system, payload)
     except ModelError as error:
         error.diagnostics["stage"] = stage
         raise
+    finally:
+        if previous_budget is not None:
+            client.max_output_tokens = previous_budget
+        if previous_timeout is not None:
+            client.timeout = previous_timeout
 
 
 FINISH_REASONS = (
     "stop", "length", "content_filter", "tool_calls", "insufficient_system_resource", "aborted",
 )
 DEFAULT_OUTPUT_TOKENS = 16384
+AUDIT_OUTPUT_TOKENS = 32768
+AUDIT_TIMEOUT_SECONDS = 420
 INVALID_JSON_MESSAGE = "模型返回无效或空 JSON，本次未生成题目。"
 
 
@@ -60,6 +75,8 @@ class JsonModel:
             raise ModelError("模型输出 token 预算须为正整数。")
         self.base_url, self.model, self.api_key, self.timeout = base_url.rstrip("/"), model, api_key, timeout
         self.max_output_tokens = max_output_tokens
+        self.stage_output_tokens: dict[str, int] = {}
+        self.stage_timeout_seconds: dict[str, int] = {}
         self.usage = []
         self.session_id = uuid4().hex
         self.opencode_go = parsed.hostname == "opencode.ai" and parsed.path.rstrip("/") == "/inference/go/openai/v1"
@@ -68,11 +85,19 @@ class JsonModel:
     def from_env(cls):
         try:
             output_tokens = int(os.environ.get("QUESTION_GENERATION_MAX_OUTPUT_TOKENS", str(DEFAULT_OUTPUT_TOKENS)))
+            audit_tokens = int(os.environ.get("QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS", str(AUDIT_OUTPUT_TOKENS)))
+            audit_timeout = int(os.environ.get("QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS", str(AUDIT_TIMEOUT_SECONDS)))
         except ValueError:
             raise ModelError("模型输出 token 预算须为正整数。") from None
-        return cls(base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
-                   model=os.environ.get("DEEPSEEK_MODEL", ""), api_key=os.environ.get("DEEPSEEK_API_KEY", ""),
-                   max_output_tokens=output_tokens)
+        if audit_tokens < 1 or audit_timeout < 1:
+            raise ModelError("模型输出 token 预算须为正整数。")
+        client = cls(base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+                     model=os.environ.get("DEEPSEEK_MODEL", ""), api_key=os.environ.get("DEEPSEEK_API_KEY", ""),
+                     max_output_tokens=output_tokens)
+        # Audit stage: 16384 exhausted reasoning on comprehensive items; 32768/420s produced verdicts in the frozen run.
+        client.stage_output_tokens = {"audit": audit_tokens}
+        client.stage_timeout_seconds = {"audit": audit_timeout}
+        return client
 
     def complete(self, system: str, payload: dict) -> dict:
         body = json.dumps({"model": self.model, "messages": [
@@ -141,7 +166,7 @@ class JsonModel:
                 if source in ("free", "balance", "go", "go-plus", "go-teams", "byok"):
                     tokens["opencode"]["billing_source"] = source
             cost = usage.get("cost")
-            if type(cost) in (int, float) and math.isfinite(cost) and cost >= 0:
+            if isinstance(cost, (int, float)) and not isinstance(cost, bool) and math.isfinite(cost) and cost >= 0:
                 tokens["cost"] = cost
             response_model = result.get("model")
             if isinstance(response_model, str) and 0 < len(response_model) <= 200:
