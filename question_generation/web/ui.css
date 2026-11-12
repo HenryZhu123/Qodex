@@ -785,3 +785,15 @@ textarea { display: block; resize: vertical; width: 100%; border: 1px solid #b5c
 .stage-output { min-width: 0; }
 .stage-card { min-width: 0; overflow: hidden; }
 .stage-output-preview { flex: 1 1 0; }
+
+/* The hidden attribute must win over component display rules. */
+.author-page [hidden] { display: none !important; }
+
+/* Keep the hero headline on a comfortable line at common desktop widths. */
+.author-page .hero-copy { max-width: 900px; }
+.author-page .author-hero h1 { font-size: clamp(2rem, 4.2vw, 3rem); }
+
+/* On shorter laptop screens a tall sticky form can trap its lower controls. */
+@media (max-height: 820px) and (min-width: 861px) {
+  .author-page .controls { position: static; }
+}
