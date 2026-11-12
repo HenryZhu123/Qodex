@@ -566,6 +566,22 @@ class TransportTests(TestCase):
             self.assertEqual(usage['response_model'], 'deepseek-v4.1-flash')
             self.assertEqual(usage['opencode'], {'billing_source': 'go', 'allowance': 0.001, 'list_cost': 0.002})
 
+    def test_raw_control_character_inside_a_json_string_is_still_parsed(self):
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        content = '{"stem":"first line\nsecond line","n":2}'
+        raw = json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': content}}]}).encode()
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(raw)
+            self.assertEqual(model.complete('json', {}), {'stem': 'first line\nsecond line', 'n': 2})
+        for broken in ('{"stem":"a",', '{"stem":"a\\q"}', '{"stem":"a"} trailing'):
+            with self.subTest(broken=broken):
+                raw = json.dumps({'choices': [{'finish_reason': 'stop',
+                                               'message': {'content': broken}}]}).encode()
+                with patch('question_generation.model_client.build_opener') as opener:
+                    opener.return_value.open.return_value = BytesIO(raw)
+                    with self.assertRaises(ModelError):
+                        model.complete('json', {})
+
     def test_transport_bounds_tokens_and_ignores_provider_reasoning_text(self):
         model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
         raw = json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': '{"ok":true}',

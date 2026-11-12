@@ -362,7 +362,11 @@ class JsonModel:
             raise ModelError("模型响应正文超过大小上限。", code="response_size_limit",
                              content_length=len(content), response_issue="decoded_content")
         try:
-            value = json.loads(content)
+            # Some gateways emit a raw control character (usually a newline) inside a
+            # JSON string even in json_object mode. Accepting it does not relax any
+            # structural check applied afterwards; invalid escapes and truncation
+            # still fail below.
+            value = json.loads(content, strict=False)
         except json.JSONDecodeError as error:
             raise ModelError(INVALID_JSON_MESSAGE, code="invalid_content", finish_reason=finish_reason,
                              response_issue="content_decode", content_decode_position=error.pos,

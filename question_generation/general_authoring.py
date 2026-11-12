@@ -164,7 +164,8 @@ nonliteral_givens列出未逐字匹配学生题面的设计条件。逐条检查
 逐项核对教师解析的断言，即使正确选项与独立答案一致。综合题核对评分是否只要求题面所问，
 并接受达到同一结果的合法方法，处理前问错误延续。
 grading 仅在下列情形判 passed=false：标准答案或评分点 expected 的期望值本身错误、评分标准泄露答案，
-或拒绝声明了接受条件的合法等价解法。分值分布或评分点粒度不合适只写进 issues 作为建议，不得否决题目。
+或拒绝声明了接受条件的合法等价解法。分值分布或评分点粒度的意见写进 grading 的 reason 作为建议，
+不要放进 issues：issues 只允许写会阻断交付的问题，写了就必须相应判 passed=false。
 数值见证只证明所给输入对应输出，必须检查和题面一致且未遗漏关键计算。无见证不等于已程序验证。
 检查分两类。硬阻断为answer_agreement、ambiguity、grounding、grading、witness_alignment，
 任一失败必须valid=false。软指标为reasoning_necessity、requirements、counterfactual、scope，

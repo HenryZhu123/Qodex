@@ -96,7 +96,10 @@ class GeneralContractTests(TestCase):
         for reason in ('标准答案或评分点 expected 的期望值本身错误', '评分标准泄露答案',
                        '拒绝声明了接受条件的合法等价解法'):
             self.assertIn(reason, AUDIT_PROMPT)
-        self.assertIn('不得否决题目', AUDIT_PROMPT)
+        # The prompt may not invite suggestions into issues: audit_passed treats a
+        # non-empty issues list without a failed check as a contract contradiction.
+        self.assertIn('不要放进 issues', AUDIT_PROMPT)
+        self.assertIn('issues 只允许写会阻断交付的问题', AUDIT_PROMPT)
 
     def setUp(self):
         directory = TemporaryDirectory()
