@@ -8,12 +8,14 @@ export function RuntimeStatus() {
 	const ready = readiness?.state === "ready";
 	const label =
 		status === "running"
-			? "Working"
+			? "执行中"
 			: readiness && !ready
-				? "Setup needed"
+				? "需配置模型"
 				: status === "failed"
-					? "Error"
-					: "Connected";
+					? "会话异常"
+					: ready
+						? "模型已就绪"
+						: "Pi 已连接";
 
 	return (
 		<div className="flex h-7 items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--panel-subtle)] px-2.5 text-[11px]">

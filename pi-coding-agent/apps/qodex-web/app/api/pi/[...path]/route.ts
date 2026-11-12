@@ -1,10 +1,5 @@
+import type { PiClient, PiHostUiResponse, PiSendMessageInput, PiThinkingLevel } from "@assistant-ui/react-pi";
 import type { NextRequest } from "next/server";
-import type {
-	PiClient,
-	PiHostUiResponse,
-	PiSendMessageInput,
-	PiThinkingLevel,
-} from "@assistant-ui/react-pi";
 import { getPiClient, workspacePath } from "@/lib/pi-server";
 
 export const runtime = "nodejs";
@@ -104,10 +99,10 @@ export function POST(request: NextRequest, context: RouteContext): Promise<Respo
 	return guarded(request, context, async (path) => {
 		const piClient = await getPiClient();
 		if (path.length === 1 && path[0] === "threads") {
-			const body = (await request.json().catch(() => ({}))) as NonNullable<
-				Parameters<PiClient["createThread"]>[0]
-			>;
-			return Response.json(await piClient.createThread({ ...body, workspacePath: body.workspacePath ?? workspacePath }));
+			const body = (await request.json().catch(() => ({}))) as NonNullable<Parameters<PiClient["createThread"]>[0]>;
+			return Response.json(
+				await piClient.createThread({ ...body, workspacePath: body.workspacePath ?? workspacePath }),
+			);
 		}
 		if (path.length < 3 || path[0] !== "threads") return notFound();
 
@@ -196,11 +191,9 @@ function createEventStream(request: NextRequest, threadId: string, piClient: PiC
 	write(": connected\n\n");
 	heartbeat = setInterval(() => write(": ping\n\n"), 20_000);
 	heartbeat.unref?.();
-	unsubscribe = piClient.subscribe(
-		threadId,
-		(event) => write(`data: ${JSON.stringify(event)}\n\n`),
-		{ includeSnapshot: request.nextUrl.searchParams.get("snapshot") !== "false" },
-	);
+	unsubscribe = piClient.subscribe(threadId, (event) => write(`data: ${JSON.stringify(event)}\n\n`), {
+		includeSnapshot: request.nextUrl.searchParams.get("snapshot") !== "false",
+	});
 	request.signal.addEventListener("abort", close, { once: true });
 	if (request.signal.aborted) close();
 

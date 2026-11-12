@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">Qodex</title><desc id="desc">以原始徽章为参考重绘的透明底矢量标志：蓝金色Q形徽章、黄色吉祥物与QODEX字标。</desc>
+<defs>
+ <linearGradient id="gold" x2=".85" y2="1"><stop stop-color="#fff4ce"/><stop offset=".38" stop-color="#e8bf72"/><stop offset=".7" stop-color="#b58135"/><stop offset="1" stop-color="#f8de99"/></linearGradient>
+ <linearGradient id="blue" x2="1" y2="1"><stop stop-color="#0b5687"/><stop offset=".45" stop-color="#07365b"/><stop offset="1" stop-color="#0c628e"/></linearGradient>
+ <linearGradient id="teal" x2="1" y2="1"><stop stop-color="#15bec9"/><stop offset="1" stop-color="#0286a4"/></linearGradient>
+ <linearGradient id="yellow" x2=".7" y2="1"><stop stop-color="#ffe79a"/><stop offset="1" stop-color="#f3cb66"/></linearGradient>
+ <linearGradient id="orange" x2=".7" y2="1"><stop stop-color="#ffcb4b"/><stop offset="1" stop-color="#f5a511"/></linearGradient>
+ <filter id="bevel" x="-15%" y="-15%" width="130%" height="130%"><feDropShadow dx="0" dy="2" stdDeviation="1.4" flood-color="#553b1a" flood-opacity=".2"/></filter>
+</defs>
+<g stroke-linejoin="round" filter="url(#bevel)">
+ <path d="M257 26C132 26 30 120 30 247S128 472 252 472c37 0 70-8 101-24l51 42c25 20 66 0 65-33 0-12-4-22-14-32l-42-42 24-36-20-24 29-30-26-35 28-32C436 111 360 26 257 26Z" fill="url(#gold)" stroke="#a7834f" stroke-width="3"/>
+ <path d="M251 40C141 40 53 123 45 220h35c14-75 67-126 118-150l-10 31C130 132 103 173 95 220h37c14-46 39-77 75-97l26-81Z" fill="url(#blue)" stroke="#f6dd9f" stroke-width="6"/>
+ <path d="m250 42-30 88 55 24 43-92c-22-10-44-17-68-20Z" fill="url(#teal)" stroke="#f6dd9f" stroke-width="6"/>
+ <path d="m333 70-43 94 31 58h37c-8-31-20-57-37-80l18-16c23 27 39 60 48 96h38C412 153 379 103 333 70Z" fill="url(#teal)" stroke="#f6dd9f" stroke-width="6"/>
+ <path d="M48 318c22 82 99 140 197 140v-36c-74-1-123-42-146-104Z" fill="url(#blue)" stroke="#f6dd9f" stroke-width="6"/>
+ <path d="m263 421-1 37c29-1 57-8 82-18l-35-27Z" fill="url(#orange)" stroke="#f6dd9f" stroke-width="6"/>
+ <path d="m353 319-26 57 82 96c10 13 35 5 33-12 0-5-3-10-7-15l-69-76 20-50Z" fill="url(#orange)" stroke="#f6dd9f" stroke-width="6"/>
+ <path d="m404 319-19 42 27 25 27-67Z" fill="url(#orange)" stroke="#f6dd9f" stroke-width="6"/>
+ <rect x="180" y="72" width="31" height="33" rx="5" fill="url(#yellow)" stroke="#b98f4a" stroke-width="3"/>
+ <rect x="277" y="82" width="23" height="25" rx="4" fill="url(#yellow)" stroke="#b98f4a" stroke-width="3"/>
+ <path d="M161 329q-42 25-46 43 7 17 46 14" fill="url(#yellow)" stroke="#af8848" stroke-width="4"/>
+ <path d="M208 388v38q0 16 28 15 22 0 21-13v-20m37-18v34q8 12 26 7 11-3 8-15l-4-35" fill="url(#yellow)" stroke="#af8848" stroke-width="4"/>
+ <path d="M158 242c2-40 13-104 53-119 34-14 71 0 81 28 12 32 4 62 24 101 30 59 26 112-11 143-23 20-68 23-104 13-61-16-67-67-43-166Z" fill="url(#yellow)" stroke="#af8848" stroke-width="4"/>
+ <ellipse cx="227" cy="168" rx="19" ry="20" fill="#fff9e6" stroke="#c9a060" stroke-width="3"/><ellipse cx="291" cy="160" rx="16" ry="18" fill="#fff9e6" stroke="#c9a060" stroke-width="3"/>
+ <ellipse cx="231" cy="169" rx="8" ry="10" fill="#07517b"/><ellipse cx="294" cy="161" rx="7" ry="9" fill="#07517b"/>
+ <path d="M249 195q23 9 39-4" fill="none" stroke="#ac8545" stroke-width="5" stroke-linecap="round"/><path d="M249 193q23 9 39-4" fill="none" stroke="#ffedb3" stroke-width="2" stroke-linecap="round"/>
+ <g fill="url(#blue)" stroke="#f4d991" stroke-width="7" paint-order="stroke fill" aria-label="QODEX">
+  <path fill-rule="evenodd" d="M72 232q-21 0-21 21v38q0 20 21 20h30l12 11 12-13-13-12q4-6 4-16v-28q0-21-22-21Zm2 18h20q5 0 5 6v28l-8-8-11 11 9 8H74q-5 0-5-6v-33q0-6 5-6Z"/>
+  <path fill-rule="evenodd" d="M151 232q-22 0-22 22v35q0 22 22 22h27q22 0 22-22v-35q0-22-22-22Zm2 18h23q6 0 6 6v31q0 6-6 6h-23q-6 0-6-6v-31q0-6 6-6Z"/>
+  <path fill-rule="evenodd" d="M215 232v79h35q33 0 33-39t-33-40Zm18 18h15q17 0 17 22t-17 21h-15Z"/>
+  <path d="M296 232v79h59v-18h-41v-13h34v-17h-34v-13h41v-18Z"/>
+  <path d="m367 232 24 38-27 41h23l16-25 16 25h23l-27-41 25-38h-22l-15 23-14-23Z"/>
+ </g>
+ <path d="M271 271q14-17 29-6l13 8q14 9 30-7-4 21-22 25-19 2-31-10l-19 1" fill="url(#yellow)" stroke="#b28a47" stroke-width="3"/>
+ <path d="M279 293q-31 27-80 13" fill="none" stroke="#b38b48" stroke-width="4" stroke-linecap="round"/>
+</g></svg>

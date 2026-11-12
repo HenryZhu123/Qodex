@@ -14,6 +14,8 @@ Qodex 面向计算机考研 408，围绕知识库、命题、单题审校和组�
 
 ## 设计、接口与验收
 
+- [完整前端工作台与 Windows 本地验收](LOCAL_WEB_TEST.zh-CN.md)
+
 - [AI 审校 Agent 实现方案](AI审校Agent实现方案.md)
 - [自主命题模块](question-generation.md)
 - [组卷接口契约](ASSEMBLY_CONTRACT.zh-CN.md)

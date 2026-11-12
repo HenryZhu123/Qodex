@@ -10,12 +10,12 @@ import {
 	MessagePrimitive,
 	QueueItemPrimitive,
 	ThreadPrimitive,
+	type ToolCallMessagePartComponent,
 	useAui,
 	useAuiState,
-	type ToolCallMessagePartComponent,
 } from "@assistant-ui/react";
 import { MarkdownTextPrimitive } from "@assistant-ui/react-markdown";
-import { usePiRuntimeExtras, usePiThreadState } from "@assistant-ui/react-pi";
+import { type PiModelInfo, usePiRuntimeExtras, usePiThreadState } from "@assistant-ui/react-pi";
 import {
 	ArrowDownIcon,
 	ArrowUpIcon,
@@ -29,15 +29,14 @@ import {
 	Trash2Icon,
 	WrenchIcon,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import Image from "next/image";
+import { type ReactNode, useEffect, useState } from "react";
 
 const SUGGESTIONS = [
-	"Inspect this workspace",
-	"Explain the architecture",
-	"Find a bug",
-	"Run the tests",
-	"Plan a refactor",
-	"Review recent changes",
+	"查询已审校题库中的数据结构题目",
+	"先和我确认需求，再帮我智能组卷",
+	"介绍单题、批量和综合题的命题功能",
+	"告诉我怎样审校试卷和修订题目",
 ];
 
 export function QodexThread() {
@@ -87,13 +86,13 @@ function Welcome() {
 	return (
 		<div className="text-center">
 			<div className="mx-auto mb-5 flex size-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--panel-subtle)] text-[var(--text)] shadow-sm">
-				<SparklesIcon className="size-[18px]" />
+				<Image src="/qodex-logo.svg" width="58" height="58" alt="Qodex" />
 			</div>
 			<h1 className="m-0 text-[32px] font-semibold tracking-[-0.045em] text-[var(--text)] sm:text-[36px]">
-				How can I help you today?
+				把好题，组成一份好试卷。
 			</h1>
 			<p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[var(--muted)]">
-				Ask Qodex to understand your codebase, run tools, or work through a change with you.
+				从命题、审校到组卷，让每一次教学准备更从容。左侧可直接配置组卷与查看历史。
 			</p>
 		</div>
 	);
@@ -245,7 +244,9 @@ function ComposerQueue() {
 	return (
 		<div className="mb-2 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--panel-subtle)]">
 			<div className="flex items-center border-b border-[var(--border)] px-3 py-2 text-xs text-[var(--muted)]">
-				<span>{queueSize} queued message{queueSize === 1 ? "" : "s"}</span>
+				<span>
+					{queueSize} queued message{queueSize === 1 ? "" : "s"}
+				</span>
 				<button
 					type="button"
 					onClick={() => void clearQueue()}
@@ -274,7 +275,7 @@ function Composer() {
 	return (
 		<ComposerPrimitive.Root className="rounded-[20px] border border-[var(--border-strong)] bg-white p-2 shadow-[0_10px_35px_rgba(20,20,15,0.07)] transition focus-within:border-[#b8b8b2] focus-within:shadow-[0_12px_40px_rgba(20,20,15,0.09)]">
 			<ComposerPrimitive.Input
-				placeholder="Send a message…"
+				placeholder="描述你的需求，或让 Qodex 帮你调用命题、审校与组卷工具…"
 				rows={1}
 				className="max-h-40 min-h-[58px] w-full resize-none border-0 bg-transparent px-3 py-2 text-[15px] leading-6 text-[var(--text)] outline-none placeholder:text-[#9b9b96]"
 			/>
@@ -309,8 +310,18 @@ function Composer() {
 function ModelPicker() {
 	const { metadata, setModel, status } = usePiRuntimeExtras();
 	const modelId = metadata.config?.modelId ?? "deepseek-flash";
-	const provider = metadata.config?.provider ?? "talkweb";
+	const provider = metadata.config?.provider ?? "deepseek";
 	const value = `${provider}/${modelId}`;
+	const [models, setModels] = useState<PiModelInfo[]>([]);
+	useEffect(() => {
+		const abort = new AbortController();
+		fetch("/api/pi/models", { signal: abort.signal })
+			.then(async (r) => {
+				if (r.ok) setModels((await r.json()) as PiModelInfo[]);
+			})
+			.catch(() => {});
+		return () => abort.abort();
+	}, []);
 
 	return (
 		<label className="relative flex h-8 items-center gap-1.5 rounded-lg px-2 text-xs font-medium text-[var(--muted-strong)] transition hover:bg-[var(--hover)]">
@@ -325,8 +336,16 @@ function ModelPicker() {
 				}}
 				className="appearance-none border-0 bg-transparent pr-4 text-xs font-medium text-[var(--muted-strong)] outline-none disabled:opacity-50"
 			>
-				<option value="talkweb/deepseek-flash">DeepSeek Flash</option>
-				<option value="talkweb/gpu-qwen3.8-27b">Qwen 3.8 27B</option>
+				{!models.some((m) => `${m.provider}/${m.modelId}` === value) && (
+					<option value={value}>
+						{provider} / {modelId}
+					</option>
+				)}
+				{models.map((m) => (
+					<option key={`${m.provider}/${m.modelId}`} value={`${m.provider}/${m.modelId}`}>
+						{m.name || m.modelId} · {m.provider}
+					</option>
+				))}
 			</select>
 			<ChevronDownIcon className="pointer-events-none absolute right-1.5 size-3 text-[var(--muted)]" />
 		</label>
