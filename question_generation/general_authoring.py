@@ -185,7 +185,14 @@ issues只放说明问题的字符串，不放对象。对未适用的数值见�
 
 
 def _well_formed_check(check):
-    return isinstance(check, dict) and check.keys() == {"passed", "reason"} and text(check["reason"])
+    """A check needs a boolean verdict and a reason; extra annotations are allowed.
+
+    Audits sometimes attach a second explanatory field such as
+    ``{"passed": true, "reason": "...", "reasoning": "..."}``. That is the same
+    verdict with more prose, so only the two required fields are enforced.
+    """
+    return (isinstance(check, dict) and {"passed", "reason"} <= check.keys()
+            and check["passed"] in (True, False) and text(check["reason"]))
 
 
 def audit_passed(audit):

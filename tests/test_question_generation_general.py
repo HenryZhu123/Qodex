@@ -409,6 +409,18 @@ class GeneralContractTests(TestCase):
         inconsistent['valid'] = False
         self.assertFalse(audit_passed(inconsistent))
 
+    def test_checks_tolerate_extra_explanatory_keys_but_require_the_verdict(self):
+        checks = {k: {'passed': True, 'reason': 'Checked.'} for k in CHECKS}
+        checks['grading'] = {'passed': True, 'reason': 'Checked.',
+                             'reasoning': '分值粒度未涉及。'}
+        audit = {'valid': True, 'issues': [], 'adversarial_case': 'Concrete reading.', 'checks': checks}
+        self.assertTrue(audit_passed(audit))
+        for broken in ({'passed': True}, {'reason': 'no verdict'},
+                       {'passed': 'true', 'reason': 'string verdict'},
+                       {'passed': True, 'reason': '  '}):
+            with self.subTest(broken=broken):
+                self.assertFalse(audit_passed({**audit, 'checks': {**checks, 'grading': broken}}))
+
     def test_non_blocking_issues_are_advisory_notes_not_rejections(self):
         # baseline-16 co-co-1: valid=true, all nine checks passed, three suggestions
         # in issues, and the old contract dropped the item as self-contradictory.
