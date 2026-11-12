@@ -297,6 +297,9 @@ class BriefAuthoringTests(TestCase):
         self.assertEqual(explicit_total_score('共 30 分'), 30)
         self.assertIsNone(explicit_total_score('共 40 分'))
         self.assertIsNone(explicit_total_score('每问 2 分'))
+        self.assertIsNone(explicit_total_score('共 3 小问，每问 2 分'))
+        self.assertEqual(explicit_total_score('排序 稳定性 复杂度，出一道12分的综合题'), 12)
+        self.assertEqual(explicit_total_score('算法分析 递归 复杂度递推，出一道8分的综合题'), 8)
         self.assertIsNone(explicit_total_score(None, ['总分 1 分']))
         self.assertEqual(explicit_total_score('无分值说明', ['总分 12 分']), 12)
 

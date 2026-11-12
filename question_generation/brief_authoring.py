@@ -36,7 +36,9 @@ CHAPTER_QUERIES = {
     "cn.transport": "TCP 确认 序号 拥塞窗口", "cn.application": "DNS 缓存 HTTP",
 }
 
-SCORE_HINT = re.compile(r"(?:总分|满分|共)\s*(\d{1,2})\s*分")
+# "总分8分", "满分12分", "共10分" or "出一道8分的综合题" all state the same
+# total. A bare "每问2分" is not a total and stays unmatched.
+SCORE_HINT = re.compile(r"(?:总分|满分|共|一道)\s*(\d{1,2})\s*分")
 DEFAULT_TOTAL_SCORE = 10
 SCORE_GUIDANCE = "若设计综合题，各小问总分默认按10分设计。"
 SCORE_REQUIREMENT = "若设计综合题，各小问分值之和必须严格等于该总分（{total}分），不得改用其他总分。"
