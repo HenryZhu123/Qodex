@@ -16,6 +16,7 @@ Qodex 面向计算机考研 408，围绕知识库、命题、单题审校和组�
 - [AI 审校 Agent 实现方案](AI审校Agent实现方案.md)
 - [自主命题模块](question-generation.md)
 - [组卷接口契约](ASSEMBLY_CONTRACT.zh-CN.md)
+- [组卷历史表与查询下载接口](ASSEMBLY_HISTORY.zh-CN.md)
 - [PostgreSQL 与服务接入](POSTGRES_INTEGRATION.zh-CN.md)
 - [相似题复核](SIMILARITY_REVIEW.zh-CN.md)
 - [模型目录说明](MODEL_CATALOG.zh-CN.md)

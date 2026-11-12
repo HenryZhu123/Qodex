@@ -65,7 +65,7 @@ def convert(entry, state, request):
 
 
 async def assemble(request, repository: QuestionBankRepository, output_root: Path, *, pdf=False, public_request=None,
-                   similarity_decisions=None):
+                   similarity_decisions=None, history=None):
     errors = validate_request(request)
     if request.get("question_type") != "single_choice":
         errors.append("目前仅支持四选项 single_choice；多题型不能静默转换")
@@ -139,6 +139,10 @@ async def assemble(request, repository: QuestionBankRepository, output_root: Pat
     request_path.write_text(json.dumps(public_request if public_request is not None else request,
                                        ensure_ascii=False, indent=2), encoding="utf-8")
     report_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    if history is not None:
+        result["history"] = await history.save(public_request if public_request is not None else request, result)
+    else:
+        result["history"] = {"status": "DISABLED"}
     # Teacher answers stay in separate artifacts; tool response contains paths and validation.
     return {key: value for key, value in result.items() if key not in (
         "student_exam", "answer_key", "similarity_review_packet", "similarity_decisions_template")}
