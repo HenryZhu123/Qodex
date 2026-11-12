@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
@@ -12,7 +13,7 @@ from question_generation.ui import preview_result
 
 
 class WorkbenchTests(TestCase):
-    def test_workbench_wrapper_applies_stage_budgets_to_the_inner_client(self):
+    def test_workbench_wrapper_applies_stage_budgets_and_efforts_to_the_inner_client(self):
         from io import BytesIO
 
         from question_generation.model_client import JsonModel, complete_stage
@@ -21,17 +22,22 @@ class WorkbenchTests(TestCase):
             model = JsonModel.from_env()
         trace = PreviewTrace(model)
         envelope = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
-        expected = {'plan': (16384, 120), 'author': (32768, 300),
-                    'reader': (16384, 240), 'audit': (32768, 420)}
+        expected = {'plan': (32768, 240, 'low'), 'author': (32768, 600, 'high'),
+                    'reader': (32768, 600, 'low'), 'audit': (32768, 600, 'low')}
         with patch('question_generation.model_client.build_opener') as opener:
             opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(envelope)
-            for stage, (tokens, timeout) in expected.items():
+            for stage, (tokens, timeout, effort) in expected.items():
                 with self.subTest(stage=stage):
                     complete_stage(trace, stage, 'json', {})
                     call = opener.return_value.open.call_args
-                    self.assertIn(b'"max_tokens": %d' % tokens, call.args[0].data)
-                    self.assertEqual(call.kwargs['timeout'], timeout)
-                    self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
+                    sent = json.loads(call.args[0].data)
+                    self.assertEqual(sent['max_tokens'], tokens)
+                    self.assertEqual(sent['reasoning_effort'], effort)
+                    self.assertEqual(call.kwargs['timeout'], min(timeout, 90))
+                    self.assertEqual((model.max_output_tokens, model.timeout, model.reasoning_effort),
+                                     (16384, 120, 'high'))
+        self.assertEqual(dict(trace.stage_efforts), {'需求细化': 'low', '题目创作': 'high',
+                                                    '独立解答': 'low', '反例与解析审计': 'low'})
 
     def test_automatic_material_plan_allows_optional_queries_without_existing_selection(self):
         payload = {'scope': [{'id': 'os.memory', 'subject': 'operating_systems'}],

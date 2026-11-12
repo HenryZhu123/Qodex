@@ -4,7 +4,9 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest.mock import patch
 
-from question_generation.brief_authoring import CHAPTER_QUERIES, PLAN_PROMPT, SCOUT_PROMPT, generate_from_brief
+from question_generation.brief_authoring import (
+    CHAPTER_QUERIES, PLAN_PROMPT, SCOUT_PROMPT, explicit_total_score, generate_from_brief,
+)
 from question_generation.curriculum import AREAS
 from question_generation.general_authoring import AUTHOR_PROMPT, AUTHOR_VIEWS, AUDIT_PROMPT, READER_PROMPT
 from question_generation.model_client import ModelError
@@ -222,3 +224,119 @@ class BriefAuthoringTests(TestCase):
             result = generate_from_brief({**payload, 'evidence': case['request']['evidence']},
                                          client=model, cache_path=self.cache)
         self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
+
+    def test_comprehensive_total_follows_a_self_consistent_design_when_not_pinned(self):
+        case = next(c for c in CASES if c['request']['question_type'] == 'comprehensive')
+        request = case['request']
+        design = deepcopy(case['candidate'])
+        design['student_view']['parts'][1]['score'] = 6
+        design['instructor_view']['parts'][1]['scoring_points'].append(
+            {'id': 's9', 'points': 2, 'criterion': '补充判据。', 'expected': '补充期望。'})
+        model = BriefReplay({**case, 'candidate': design})
+        payload = {k: request[k] for k in ('schema_version', 'request_id', 'evidence', 'subject')}
+        payload.update(question_type='comprehensive', brief='比较两种方案并说明翻转阈值。')
+        result = generate_from_brief(payload, client=model, cache_path=self.cache)
+        self.assertEqual(result['status'], 'GENERATED', result)
+        question, = result['questions']
+        self.assertEqual(question['metadata']['score'], 12)
+        self.assertEqual(question['generator']['parameters']['constraints']['total_score'], 12)
+        self.assertEqual([p['score'] for p in question['student_view']['parts']], [3, 6, 3])
+
+    def test_caller_pinned_total_still_rejects_a_different_design_total(self):
+        case = next(c for c in CASES if c['request']['question_type'] == 'comprehensive')
+        request = case['request']
+        design = deepcopy(case['candidate'])
+        design['student_view']['parts'][1]['score'] = 6
+        design['instructor_view']['parts'][1]['scoring_points'].append(
+            {'id': 's9', 'points': 2, 'criterion': '补充判据。', 'expected': '补充期望。'})
+        for pinned in (10, 14):
+            with self.subTest(pinned=pinned):
+                model = BriefReplay({**case, 'candidate': design})
+                payload = {k: request[k] for k in ('schema_version', 'request_id', 'evidence')}
+                payload.update(question_type='comprehensive', brief='比较两种方案。', total_score=pinned)
+                result = generate_from_brief(payload, client=model, cache_path=self.cache)
+                self.assertEqual(result['status'], 'SELF_CHECK_FAILED', result)
+                self.assertIn('综合题总分与请求不符', str(result['authoring_report']['details']))
+
+    def test_prose_total_score_is_forwarded_to_plan_but_only_when_unambiguous(self):
+        case = next(c for c in CASES if c['request']['question_type'] == 'comprehensive')
+        request = case['request']
+        base = {k: request[k] for k in ('schema_version', 'request_id', 'evidence')}
+        model = BriefReplay(case)
+        hinted = generate_from_brief({**base, 'brief': '想练 CPU 时间这块，帮我出一道总分12分的综合题。'},
+                                     client=model, cache_path=self.cache)
+        self.assertEqual(hinted['status'], 'GENERATED', hinted)
+        plan_input = model.calls[0][1]['constraints']
+        self.assertEqual((plan_input['total_score'], plan_input['question_type']), (12, 'comprehensive'))
+        self.assertNotIn('score_guidance', plan_input)
+        model = BriefReplay(case)
+        unpinned = generate_from_brief({**base, 'brief': '比较两种方案对执行时间的影响。'},
+                                       client=model, cache_path=self.cache)
+        self.assertEqual(unpinned['status'], 'GENERATED', unpinned)
+        plan_input = model.calls[0][1]['constraints']
+        self.assertNotIn('total_score', plan_input)
+        self.assertIn('默认按10分', plan_input['score_guidance'])
+        self.assertEqual(unpinned['questions'][0]['metadata']['score'], 10)
+
+    def test_prose_score_parser_ignores_impossible_totals(self):
+        self.assertEqual(explicit_total_score('出一道满分 8 分的综合题'), 8)
+        self.assertEqual(explicit_total_score('共 30 分'), 30)
+        self.assertIsNone(explicit_total_score('共 40 分'))
+        self.assertIsNone(explicit_total_score('每问 2 分'))
+        self.assertIsNone(explicit_total_score(None, ['总分 1 分']))
+        self.assertEqual(explicit_total_score('无分值说明', ['总分 12 分']), 12)
+
+    def test_author_response_without_the_candidate_envelope_is_accepted(self):
+        case = CASES[0]
+        request = case['request']
+        payload = {k: request[k] for k in ('schema_version', 'request_id', 'evidence', 'question_type')}
+        model = BriefReplay(case)
+        complete = model.complete
+
+        def unwrapped(system, inputs):
+            result = complete(system, inputs)
+            return result['candidate'] if system.startswith(AUTHOR_PROMPT) else result
+
+        with patch.object(model, 'complete', side_effect=unwrapped) as invoke:
+            result = generate_from_brief(payload, client=model, cache_path=self.cache)
+        self.assertEqual(result['status'], 'GENERATED', result)
+        self.assertEqual(result['questions'][0]['student_view'], case['candidate']['student_view'])
+        self.assertEqual(invoke.call_count, 4)
+
+    def test_envelope_normalization_never_swallows_incomplete_bodies(self):
+        case = CASES[0]
+        request = case['request']
+        payload = {k: request[k] for k in ('schema_version', 'request_id', 'evidence', 'question_type')}
+        for drifted in ({'student_view': {}, 'instructor_view': {}, 'design': {}},
+                        {'student_view': {}, 'instructor_view': {}, 'design': {}, 'calculations': [], 'extra': 1}):
+            with self.subTest(keys=sorted(drifted)):
+                model = BriefReplay(case)
+                complete = model.complete
+
+                def partial(system, inputs, value=drifted):
+                    if system.startswith(AUTHOR_PROMPT):
+                        return value
+                    return complete(system, inputs)
+
+                with patch.object(model, 'complete', side_effect=partial) as invoke:
+                    result = generate_from_brief(payload, client=model, cache_path=self.cache)
+                self.assertEqual(result['status'], 'SELF_CHECK_FAILED', result)
+                self.assertEqual(invoke.call_count, 2)
+
+    def test_stage_reasoning_effort_variants_never_share_cached_questions(self):
+        case = CASES[0]
+        request = case['request']
+        payload = {k: request[k] for k in ('schema_version', 'request_id', 'evidence', 'question_type')}
+        model = BriefReplay(case)
+        first = generate_from_brief(payload, client=model, cache_path=self.cache)
+        self.assertEqual(first['status'], 'GENERATED', first)
+        self.assertEqual(len(model.calls), 4)
+        model.stage_reasoning_effort = {'plan': 'low', 'author': 'high', 'reader': 'low', 'audit': 'low'}
+        second = generate_from_brief(payload, client=model, cache_path=self.cache)
+        self.assertEqual(second['status'], 'GENERATED', second)
+        self.assertEqual(len(model.calls), 8)
+        # The stage effort is restored, not left behind on the client.
+        self.assertFalse(hasattr(model, 'reasoning_effort'))
+        self.assertEqual(generate_from_brief(payload, client=model, cache_path=self.cache), second)
+        self.assertEqual(len(model.calls), 8)
+

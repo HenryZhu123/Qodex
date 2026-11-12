@@ -200,7 +200,8 @@ def validate_candidate(candidate, request, evidence):
                 and all(text(v) for v in m.values()) for m in methods), "须说明等价答案的接受条件。")
             seen.add(part["id"])
             total += part["score"]
-        require(total == request.constraints["total_score"], "综合题总分与请求不符。")
+        requested = request.constraints["total_score"]
+        require(total == requested, f"综合题总分与请求不符：设计 {total} 分，请求 {requested} 分。")
     evidence_ids = validate_design(candidate["design"], evidence, student)
     witnesses = candidate["calculations"]
     require(isinstance(witnesses, list) and len(witnesses) <= 16, "计算见证须为最多16项的数组。")

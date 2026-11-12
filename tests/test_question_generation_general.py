@@ -77,6 +77,27 @@ class GeneralContractTests(TestCase):
         for prompt in (AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT):
             self.assertIn('json', prompt.lower())
 
+    def test_single_choice_prompts_forbid_self_defeating_options_and_stem_spoilers(self):
+        rules = ('严禁在选项文本中附带', '不得在四选项中唯一', '不得直接写出本应由学生推导的中间结论')
+        for prompt in (PLAN_PROMPT, AUTHOR_VIEWS['single_choice']):
+            with self.subTest(prompt=prompt[:24]):
+                for rule in rules:
+                    self.assertIn(rule, prompt)
+        self.assertIn('错因分析只写在教师视图', PLAN_PROMPT)
+        self.assertIn('所有错因分析只准写在 instructor_view', AUTHOR_VIEWS['single_choice'])
+
+    def test_comprehensive_view_binds_part_scores_to_scoring_points(self):
+        self.assertIn('part.score 必须严格等于该问 scoring_points 的 points 之和',
+                      AUTHOR_VIEWS['comprehensive'])
+        self.assertIn('2至30分内', AUTHOR_VIEWS['comprehensive'])
+
+    def test_audit_grading_rejects_only_wrong_answers_leaks_or_rejected_equivalents(self):
+        self.assertIn('grading 仅在下列情形判 passed=false', AUDIT_PROMPT)
+        for reason in ('标准答案或评分点 expected 的期望值本身错误', '评分标准泄露答案',
+                       '拒绝声明了接受条件的合法等价解法'):
+            self.assertIn(reason, AUDIT_PROMPT)
+        self.assertIn('不得否决题目', AUDIT_PROMPT)
+
     def setUp(self):
         directory = TemporaryDirectory()
         self.addCleanup(directory.cleanup)

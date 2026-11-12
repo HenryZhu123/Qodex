@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import socket
 import time
 from http.client import HTTPException
 from urllib.error import HTTPError, URLError
@@ -25,37 +26,72 @@ class ModelError(Exception):
         ) if value is not None}
 
 
+def _restore(client, name, previous):
+    """Undo a per-stage override, including an attribute this call introduced."""
+    if previous is not None:
+        setattr(client, name, previous)
+    elif name in vars(client):
+        delattr(client, name)
+
+
 def complete_stage(client, stage: str, system: str, payload: dict) -> dict:
-    """Attach the calling stage and apply any frozen per-stage budget without changing the client."""
+    """Attach the calling stage and apply its frozen budget/effort without changing the client."""
     budgets = getattr(client, "stage_output_tokens", {})
     timeouts = getattr(client, "stage_timeout_seconds", {})
+    efforts = getattr(client, "stage_reasoning_effort", {})
     previous_budget = getattr(client, "max_output_tokens", None)
     previous_timeout = getattr(client, "timeout", None)
+    previous_effort = getattr(client, "reasoning_effort", None)
     try:
         if stage in budgets:
             client.max_output_tokens = budgets[stage]
         if stage in timeouts:
             client.timeout = timeouts[stage]
+        if stage in efforts:
+            client.reasoning_effort = efforts[stage]
         return client.complete(system, payload)
     except ModelError as error:
         error.diagnostics["stage"] = stage
+        if stage in efforts:
+            error.diagnostics["reasoning_effort"] = efforts[stage]
         raise
     finally:
-        if previous_budget is not None:
-            client.max_output_tokens = previous_budget
-        if previous_timeout is not None:
-            client.timeout = previous_timeout
+        _restore(client, "max_output_tokens", previous_budget)
+        _restore(client, "timeout", previous_timeout)
+        _restore(client, "reasoning_effort", previous_effort)
 
 
 FINISH_REASONS = (
     "stop", "length", "content_filter", "tool_calls", "insufficient_system_resource", "aborted",
 )
+# The provider exposes exactly these thinking levels (there is no "medium").
+REASONING_EFFORTS = ("off", "low", "high", "max")
+STAGES = ("plan", "author", "reader", "audit")
 DEFAULT_OUTPUT_TOKENS = 16384
+PLAN_OUTPUT_TOKENS = 32768
 AUTHOR_OUTPUT_TOKENS = 32768
+READER_OUTPUT_TOKENS = 32768
 AUDIT_OUTPUT_TOKENS = 32768
-AUDIT_TIMEOUT_SECONDS = 420
-AUTHOR_TIMEOUT_SECONDS = 300
-READER_TIMEOUT_SECONDS = 240
+PLAN_TIMEOUT_SECONDS = 240
+AUTHOR_TIMEOUT_SECONDS = 600
+READER_TIMEOUT_SECONDS = 600
+AUDIT_TIMEOUT_SECONDS = 600
+STAGE_OUTPUT_TOKENS = {"plan": PLAN_OUTPUT_TOKENS, "author": AUTHOR_OUTPUT_TOKENS,
+                       "reader": READER_OUTPUT_TOKENS, "audit": AUDIT_OUTPUT_TOKENS}
+STAGE_TIMEOUT_SECONDS = {"plan": PLAN_TIMEOUT_SECONDS, "author": AUTHOR_TIMEOUT_SECONDS,
+                         "reader": READER_TIMEOUT_SECONDS, "audit": AUDIT_TIMEOUT_SECONDS}
+# Deep thinking only pays off where the model must design or verify an item.
+STAGE_REASONING_EFFORT = {"plan": "low", "author": "high", "reader": "low", "audit": "low"}
+# A silent SSE stream means a dead connection; total time is still bounded by self.timeout.
+IDLE_TIMEOUT_SECONDS = 90
+# Python 3.9 keeps socket.timeout distinct from TimeoutError; 3.10+ aliases them.
+TIMEOUT_ERRORS = (TimeoutError, socket.timeout)
+
+
+class _IdleTimeout(Exception):
+    """Internal marker: the provider stopped sending chunks for the idle window."""
+
+
 INVALID_JSON_MESSAGE = "模型返回无效或空 JSON，本次未生成题目。"
 RAW_RESPONSE_LIMIT = 16_000_000
 CONTENT_LIMIT = 1_000_000
@@ -158,41 +194,57 @@ class JsonModel:
         self.max_retries, self.retry_delay, self.attempt_hook = max_retries, retry_delay, attempt_hook
         self.stage_output_tokens: dict[str, int] = {}
         self.stage_timeout_seconds: dict[str, int] = {}
+        self.stage_reasoning_effort: dict[str, str] = {}
         self.usage = []
         self.session_id = uuid4().hex
         self.opencode_go = parsed.hostname == "opencode.ai" and parsed.path.rstrip("/") == "/inference/go/openai/v1"
 
     @classmethod
     def from_env(cls):
-        try:
-            output_tokens = int(os.environ.get("QUESTION_GENERATION_MAX_OUTPUT_TOKENS", str(DEFAULT_OUTPUT_TOKENS)))
-            author_tokens = int(os.environ.get("QUESTION_GENERATION_AUTHOR_MAX_OUTPUT_TOKENS",
-                                              str(AUTHOR_OUTPUT_TOKENS)))
-            audit_tokens = int(os.environ.get("QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS", str(AUDIT_OUTPUT_TOKENS)))
-            audit_timeout = int(os.environ.get("QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS", str(AUDIT_TIMEOUT_SECONDS)))
-            author_timeout = int(os.environ.get("QUESTION_GENERATION_AUTHOR_TIMEOUT_SECONDS", str(AUTHOR_TIMEOUT_SECONDS)))
-            reader_timeout = int(os.environ.get("QUESTION_GENERATION_READER_TIMEOUT_SECONDS", str(READER_TIMEOUT_SECONDS)))
-        except ValueError:
-            raise ModelError("模型输出 token 预算须为正整数。") from None
-        if min(author_tokens, audit_tokens, audit_timeout, author_timeout, reader_timeout) < 1:
-            raise ModelError("模型输出 token 预算须为正整数。")
+        def env_int(name, default):
+            try:
+                value = int(os.environ.get(name, str(default)))
+            except ValueError:
+                raise ModelError("模型输出 token 预算须为正整数。") from None
+            if value < 1:
+                raise ModelError("模型输出 token 预算须为正整数。")
+            return value
+
+        def env_effort(stage):
+            name = f"QUESTION_GENERATION_{stage.upper()}_REASONING_EFFORT"
+            value = os.environ.get(name, STAGE_REASONING_EFFORT[stage]).strip().lower()
+            if value not in REASONING_EFFORTS:
+                raise ModelError(f"{name} 须为 {'、'.join(REASONING_EFFORTS)} 之一。")
+            return value
+
+        output_tokens = env_int("QUESTION_GENERATION_MAX_OUTPUT_TOKENS", DEFAULT_OUTPUT_TOKENS)
+        stages = {stage: {"tokens": env_int(f"QUESTION_GENERATION_{stage.upper()}_MAX_OUTPUT_TOKENS",
+                                            STAGE_OUTPUT_TOKENS[stage]),
+                          "timeout": env_int(f"QUESTION_GENERATION_{stage.upper()}_TIMEOUT_SECONDS",
+                                             STAGE_TIMEOUT_SECONDS[stage]),
+                          "effort": env_effort(stage)} for stage in STAGES}
         client = cls(base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
                      model=os.environ.get("DEEPSEEK_MODEL", ""), api_key=os.environ.get("DEEPSEEK_API_KEY", ""),
                      max_output_tokens=output_tokens)
-        # Author stage: 16384 exhausted reasoning on comprehensive items; 32768 keeps the 300 s timeout.
-        # Audit stage: 16384 exhausted reasoning; 32768/420 s produced verdicts in the frozen run.
-        client.stage_output_tokens = {"author": author_tokens, "audit": audit_tokens}
-        # Reader stage: the original 120 s cut off three comprehensive blind solves; output stays 16384.
-        client.stage_timeout_seconds = {"author": author_timeout, "reader": reader_timeout,
-                                        "audit": audit_timeout}
+        # Author must design the whole item; audit must re-derive it. Planning and
+        # the blind solve are short, so deep thinking there only added latency.
+        # Budgets stay wide (32768 tokens) so a long item never hits "length".
+        client.stage_output_tokens = {stage: settings["tokens"] for stage, settings in stages.items()}
+        client.stage_timeout_seconds = {stage: settings["timeout"] for stage, settings in stages.items()}
+        client.stage_reasoning_effort = {stage: settings["effort"] for stage, settings in stages.items()}
         return client
 
     def complete(self, system: str, payload: dict) -> dict:
+        effort = getattr(self, "reasoning_effort", "high")
+        if effort not in REASONING_EFFORTS:
+            raise ModelError(f"推理档位须为 {'、'.join(REASONING_EFFORTS)} 之一。", code="invalid_config")
+        thinking = {"thinking": {"type": "disabled"}} if effort == "off" else {
+            "thinking": {"type": "enabled"}, "reasoning_effort": effort}
         body = json.dumps({"model": self.model, "messages": [
             {"role": "system", "content": system},
             {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
         ], "response_format": {"type": "json_object"}, "max_tokens": self.max_output_tokens,
-            "thinking": {"type": "enabled"}, "reasoning_effort": self.reasoning_effort,
+            **thinking,
             "stream": True, "stream_options": {"include_usage": True}}, ensure_ascii=False).encode()
         if len(body) > 100_000:
             raise ModelError("命题材料超过单次调用预算。", code="request_size_limit")
@@ -204,18 +256,23 @@ class JsonModel:
         # base_url is validated as HTTPS in __init__ and redirects are disabled.
         request = Request(self.base_url + "/chat/completions", data=body, headers=headers)  # noqa: S310
         started = time.monotonic()
+        idle = min(self.timeout, IDLE_TIMEOUT_SECONDS)
         chunks: list[bytes] = []
         for attempt in range(self.max_retries + 1):
             if self.attempt_hook is not None:
                 self.attempt_hook()
-            attempt_start = time.monotonic()
             try:
-                with build_opener(NoRedirect()).open(request, timeout=self.timeout) as response:
+                # Only a silence window bounds a single read; a stream that keeps
+                # producing output may legitimately run until self.timeout.
+                with build_opener(NoRedirect()).open(request, timeout=idle) as response:
                     chunks, size = [], 0
                     while True:
-                        if time.monotonic() - attempt_start > self.timeout:
+                        if time.monotonic() - started > self.timeout:
                             raise ModelError("模型响应超过总时限，本次不交付题目。", code="response_timeout")
-                        chunk = response.read1(min(65536, RAW_RESPONSE_LIMIT + 1 - size))
+                        try:
+                            chunk = response.read1(min(65536, RAW_RESPONSE_LIMIT + 1 - size))
+                        except TIMEOUT_ERRORS:
+                            raise _IdleTimeout from None
                         if not chunk:
                             break
                         chunks.append(chunk)
@@ -224,13 +281,19 @@ class JsonModel:
                             raise ModelError("模型响应超过大小上限。", code="response_size_limit",
                                              content_length=size, response_issue="raw_stream")
                 break
+            except _IdleTimeout:
+                if attempt < self.max_retries and time.monotonic() - started < self.timeout:
+                    time.sleep(self.retry_delay)
+                    continue
+                raise ModelError(f"模型流式响应连续 {idle:.0f} 秒无数据，本次不交付题目。",
+                                 code="response_timeout", response_issue="idle_timeout") from None
             except HTTPError as error:
                 if error.code in {502, 503, 504} and attempt < self.max_retries:
                     time.sleep(self.retry_delay)
                     continue
                 raise ModelError(f"模型服务返回 HTTP {error.code}，本次未生成题目。",
                                  code="http_error", http_status=error.code) from None
-            except TimeoutError:
+            except TIMEOUT_ERRORS:
                 raise ModelError("模型调用超时，本次不交付题目。", code="response_timeout") from None
             except URLError as error:
                 if isinstance(error.reason, TimeoutError):

@@ -8,6 +8,7 @@ from __future__ import annotations
 import hashlib
 import json
 from copy import deepcopy
+from dataclasses import replace
 from random import Random
 from typing import Any, cast
 
@@ -21,6 +22,47 @@ VERSION = "general-authoring-v0.5"
 BRIEF_VERSION = VERSION + "-brief-v1"
 SCOUTED_BRIEF_VERSION = VERSION + "-brief-v2"
 REVISION_VERSION = VERSION + "-repair-v1"
+CANDIDATE_FIELDS = {"student_view", "instructor_view", "design", "calculations"}
+
+
+def designed_total_score(candidate):
+    """The candidate's own total when every part and rubric add up consistently."""
+    if not isinstance(candidate, dict):
+        return None
+    student, teacher = candidate.get("student_view"), candidate.get("instructor_view")
+    parts = student.get("parts") if isinstance(student, dict) else None
+    solutions = teacher.get("parts") if isinstance(teacher, dict) else None
+    if not isinstance(parts, list) or not isinstance(solutions, list) or not parts or len(parts) != len(solutions):
+        return None
+    total = 0
+    for index, part in enumerate(parts):
+        solution = solutions[index]
+        if not isinstance(part, dict) or not isinstance(solution, dict):
+            return None
+        score, points = part.get("score"), solution.get("scoring_points")
+        if type(score) is not int or score < 1 or not isinstance(points, list) or not points:
+            return None
+        if any(not isinstance(p, dict) for p in points):
+            return None
+        values = [p.get("points") for p in points]
+        if any(type(v) not in (int, float) or isinstance(v, bool) for v in values):
+            return None
+        if round(sum(values) * 2) != score * 2:
+            return None
+        total += score
+    return total if 2 <= total <= 30 else None
+
+
+def sync_designed_total_score(request, candidate):
+    """Adopt a self-consistent design total when the caller never pinned one.
+
+    Only the default or prose-hinted score may be replaced: a caller-supplied
+    total_score stays authoritative and a mismatch still fails validation.
+    """
+    total = designed_total_score(candidate)
+    if total is None or total == request.constraints.get("total_score"):
+        return request
+    return replace(request, constraints={**request.constraints, "total_score": total})
 
 
 AUTHOR_PROMPT = """只返回一个JSON对象。你是408命题教师，按输入的范围、意图、约束和材料出一道需要实质推理的题。
@@ -64,6 +106,13 @@ instructor_view={"correct_option_id":"A","explanation":"完整推导",
 "option_explanations":{"A":"成立依据","B":"不成立的依据","C":"不成立的依据","D":"不成立的依据"},
 "misconceptions":{"B":"错误机制与纠正","C":"错误机制与纠正","D":"错误机制与纠正"}}。
 四项互异且唯一正确，错项源自真实误解，避免长度或措辞泄题。逐项解释写判别依据，错因写误解及纠正，均不复述完整推导。
+三条硬约束：（1）纯结果同构选项：options[].text 只能写同构的计算数值、状态序列、表项映射或具体操作，
+严禁在选项文本中附带「因为……」「由于……」「只要……就……」等解释性理由或因果论证；
+所有错因分析只准写在 instructor_view.option_explanations 和 misconceptions 中。
+（2）防单步秒排：若考多子项或多步结果（如两个请求、多个地址、两个标志），正确项的第一子项数值
+不得在四选项中唯一，至少须有一个错项共享第一子项的正确值。
+（3）题干反剧透：stem 只给初始结构、参数、表项或代码，不得直接写出本应由学生推导的中间结论
+（例如不得直接告知「某两点不可比」「当前状态安全」）。
 """,
     "comprehensive": """综合题只填以下视图。示例只展示一个小问的结构。
 student_view={"stem":"共同情境","parts":[{"id":"p1","prompt":"问题","score":2}]}。
@@ -72,7 +121,10 @@ instructor_view={"grading_policy":"错误延续与避免重复扣分规则","par
 "scoring_points":[{"id":"s1","points":2,"criterion":"可观察的得分条件","expected":"应有结果或论证"}],
 "equivalent_methods":[{"id":"m1","acceptance":"其他合法方法及接受条件"}]}]}。
 2至6问，考查相关但不同的能力，后问不泄露前问。小问分数合计等于constraints.total_score。
-depends_on只引用前问ID，每问评分点points优先使用正整数（必要时可用0.5分），合计等于该问分数。评分点只写判分所需内容，完整论证放在solution。
+depends_on只引用前问ID，每问评分点points优先使用正整数（必要时可用0.5分），合计等于该问分数。
+每问 part.score 必须严格等于该问 scoring_points 的 points 之和；只要小问分值自洽且总分在2至30分内，
+题内自拟的总分会被采纳，不要为了凑一个外部默认值而改动小问分值。
+评分点只写判分所需内容，完整论证放在solution。
 算法题说明正确性、复杂度和边界输入。
 """,
 }
@@ -111,6 +163,8 @@ nonliteral_givens列出未逐字匹配学生题面的设计条件。逐条检查
 不能用design或教师解答中的补充条件替学生题面消除歧义；独立解答仅使用学生可见内容。
 逐项核对教师解析的断言，即使正确选项与独立答案一致。综合题核对评分是否只要求题面所问，
 并接受达到同一结果的合法方法，处理前问错误延续。
+grading 仅在下列情形判 passed=false：标准答案或评分点 expected 的期望值本身错误、评分标准泄露答案，
+或拒绝声明了接受条件的合法等价解法。分值分布或评分点粒度不合适只写进 issues 作为建议，不得否决题目。
 数值见证只证明所给输入对应输出，必须检查和题面一致且未遗漏关键计算。无见证不等于已程序验证。
 检查分两类。硬阻断为answer_agreement、ambiguity、grounding、grading、witness_alignment，
 任一失败必须valid=false。软指标为reasoning_necessity、requirements、counterfactual、scope，
@@ -246,7 +300,7 @@ def apply_replacements(previous, replacements):
     return candidate
 
 
-def run(payload, client, request, settings, *, brief_plan=None, version=None, repair=None):
+def run(payload, client, request, settings, *, brief_plan=None, version=None, repair=None, score_pinned=True):
 
     context = {"metadata": request.metadata, "scope": read_scope(request.metadata["subject"], settings["syllabus_areas"]),
                "objective": settings["objective"], "focus": settings.get("focus", ""),
@@ -284,6 +338,10 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                           "只改动解决缺陷及其连带影响所需的题面、解析、评分和设计。"
                           "重新求解并检查所有受影响的选项或得分点。旧答案和反馈里的结论都需要独立核实。")
     authored = complete_stage(client, "author", author_prompt, context)
+    if not patch_repair and "candidate" not in authored and set(authored) == CANDIDATE_FIELDS:
+        # Models occasionally return the candidate body without its envelope; the
+        # content is still the same artifact, so accept it instead of re-rolling.
+        authored = {"candidate": authored}
     if authored.keys() == {"material_gaps"} and texts(authored["material_gaps"]):
         return rejected("材料不足", authored["material_gaps"], "NEEDS_MATERIAL")
     field = "replacements" if patch_repair else "candidate"
@@ -294,6 +352,8 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                      if repair is not None and not scenario_kind else authored[field])
         if scenario_kind:
             candidate, verification = scenario_binding.bind(candidate, scenario_kind, request.metadata["question_type"])
+        if not patch_repair and not score_pinned and not choice:
+            request = sync_designed_total_score(request, candidate)
         evidence_ids = validate_candidate(candidate, request, payload["evidence"])
         if repair is not None:
             old = repair["previous"]

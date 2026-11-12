@@ -291,7 +291,8 @@ def cached_authoring(payload, version, run, *, client=None, cache_path=None):
             cache_path = os.environ.get("QUESTION_GENERATION_AUTHORING_CACHE", ".local/question-generation/authoring-cache.sqlite")
         path = Path(cache_path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        cache_key = [version, model.base_url, model.model, getattr(model, "reasoning_effort", None), payload]
+        cache_key = [version, model.base_url, model.model, getattr(model, "reasoning_effort", None),
+                     getattr(model, "stage_reasoning_effort", {}), payload]
         output_tokens = getattr(model, "max_output_tokens", DEFAULT_OUTPUT_TOKENS)
         if output_tokens != DEFAULT_OUTPUT_TOKENS:
             cache_key.append(output_tokens)

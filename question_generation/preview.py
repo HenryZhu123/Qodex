@@ -124,10 +124,10 @@ class PreviewTrace:
     def __init__(self, client):
         self.client = client
         self.base_url, self.model = client.base_url, client.model
-        self.reasoning_effort = getattr(client, "reasoning_effort", None)
         self.usage = client.usage
         self.stage, self.draft, self.proposed_plan = None, None, None
         self.calls = 0
+        self.stage_efforts: list[tuple[str, str | None]] = []
 
     # complete_stage() applies per-stage budgets to the object it receives.
     # The workbench wraps the real client, so these attributes must reach the
@@ -149,6 +149,18 @@ class PreviewTrace:
         self.client.timeout = value
 
     @property
+    def reasoning_effort(self):
+        return getattr(self.client, "reasoning_effort", None)
+
+    @reasoning_effort.setter
+    def reasoning_effort(self, value):
+        self.client.reasoning_effort = value
+
+    @property
+    def stage_reasoning_effort(self):
+        return getattr(self.client, "stage_reasoning_effort", {})
+
+    @property
     def stage_output_tokens(self):
         return getattr(self.client, "stage_output_tokens", {})
 
@@ -159,6 +171,7 @@ class PreviewTrace:
     def complete(self, system, payload):
         self.stage = self.stages[self.calls]
         self.calls += 1
+        self.stage_efforts.append((self.stage, self.reasoning_effort))
         try:
             result = self.client.complete(system, payload)
         except ModelError:
@@ -167,6 +180,10 @@ class PreviewTrace:
             raise
         if self.calls == 1 and isinstance(result.get("plan"), dict):
             self.proposed_plan = result["plan"]
+        fields = {"student_view", "instructor_view", "design", "calculations"}
+        if self.calls == 2 and "candidate" not in result and set(result) == fields:
+            # The author may omit the outer envelope; keep the draft for preview.
+            result = {"candidate": result}
         if self.calls == 2 and isinstance(result.get("candidate"), dict):
             candidate = result["candidate"]
             if isinstance(candidate.get("student_view"), dict):

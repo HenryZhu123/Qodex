@@ -285,44 +285,99 @@ class TransportTests(TestCase):
                 with self.assertRaises(ModelError):
                     JsonModel.from_env()
 
-    def test_author_reader_and_audit_stage_budgets(self):
+    def test_stage_budgets_and_reasoning_efforts(self):
         with patch.dict('os.environ', {'DEEPSEEK_BASE_URL': 'https://fixture.invalid',
                                        'DEEPSEEK_MODEL': 'test', 'DEEPSEEK_API_KEY': 'fixture'}):
             model = JsonModel.from_env()
         self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
-        self.assertEqual(model.stage_output_tokens, {'author': 32768, 'audit': 32768})
-        self.assertEqual(model.stage_timeout_seconds, {'author': 300, 'reader': 240, 'audit': 420})
+        self.assertEqual(model.stage_output_tokens,
+                         {'plan': 32768, 'author': 32768, 'reader': 32768, 'audit': 32768})
+        self.assertEqual(model.stage_timeout_seconds,
+                         {'plan': 240, 'author': 600, 'reader': 600, 'audit': 600})
+        self.assertEqual(model.stage_reasoning_effort,
+                         {'plan': 'low', 'author': 'high', 'reader': 'low', 'audit': 'low'})
         body = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
         with patch('question_generation.model_client.build_opener') as opener:
             opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(body)
-            complete_stage(model, 'author', 'json', {})
-            self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 32768)
-            self.assertEqual(opener.return_value.open.call_args.kwargs['timeout'], 300)
-            complete_stage(model, 'reader', 'json', {})
-            self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 16384)
-            self.assertEqual(opener.return_value.open.call_args.kwargs['timeout'], 240)
-            complete_stage(model, 'audit', 'json', {})
-            self.assertEqual(json.loads(opener.return_value.open.call_args.args[0].data)['max_tokens'], 32768)
-            self.assertEqual(opener.return_value.open.call_args.kwargs['timeout'], 420)
-            self.assertEqual((model.max_output_tokens, model.timeout), (16384, 120))
+            for stage in ('plan', 'author', 'reader', 'audit'):
+                with self.subTest(stage=stage):
+                    complete_stage(model, stage, 'json', {})
+                    call = opener.return_value.open.call_args
+                    sent = json.loads(call.args[0].data)
+                    self.assertEqual(sent['max_tokens'], 32768)
+                    self.assertEqual(sent['reasoning_effort'], model.stage_reasoning_effort[stage])
+                    self.assertEqual(sent['thinking'], {'type': 'enabled'})
+                    # Only an idle window bounds one read; the stage total stays wider.
+                    self.assertEqual(call.kwargs['timeout'], min(model.stage_timeout_seconds[stage], 90))
+            self.assertEqual((model.max_output_tokens, model.timeout, model.reasoning_effort),
+                             (16384, 120, 'high'))
         with patch.dict('os.environ', {'DEEPSEEK_BASE_URL': 'https://fixture.invalid',
                                        'DEEPSEEK_MODEL': 'test', 'DEEPSEEK_API_KEY': 'fixture',
                                        'QUESTION_GENERATION_AUTHOR_MAX_OUTPUT_TOKENS': '25000',
-                                       'QUESTION_GENERATION_READER_TIMEOUT_SECONDS': '200'}):
+                                       'QUESTION_GENERATION_READER_TIMEOUT_SECONDS': '200',
+                                       'QUESTION_GENERATION_AUDIT_REASONING_EFFORT': 'max'}):
             overridden = JsonModel.from_env()
-        self.assertEqual(overridden.stage_output_tokens, {'author': 25000, 'audit': 32768})
-        self.assertEqual(overridden.stage_timeout_seconds, {'author': 300, 'reader': 200, 'audit': 420})
+        self.assertEqual(overridden.stage_output_tokens['author'], 25000)
+        self.assertEqual(overridden.stage_timeout_seconds['reader'], 200)
+        self.assertEqual(overridden.stage_reasoning_effort['audit'], 'max')
         for name, value in (('QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS', 'bad'),
                             ('QUESTION_GENERATION_AUDIT_MAX_OUTPUT_TOKENS', '0'),
                             ('QUESTION_GENERATION_AUDIT_TIMEOUT_SECONDS', '0'),
                             ('QUESTION_GENERATION_AUTHOR_TIMEOUT_SECONDS', '0'),
                             ('QUESTION_GENERATION_AUTHOR_MAX_OUTPUT_TOKENS', '0'),
-                            ('QUESTION_GENERATION_READER_TIMEOUT_SECONDS', '0')):
+                            ('QUESTION_GENERATION_READER_TIMEOUT_SECONDS', '0'),
+                            ('QUESTION_GENERATION_PLAN_TIMEOUT_SECONDS', '0'),
+                            ('QUESTION_GENERATION_PLAN_REASONING_EFFORT', 'medium'),
+                            ('QUESTION_GENERATION_AUDIT_REASONING_EFFORT', '')):
             with self.subTest(name=name, value=value), patch.dict('os.environ', {
                     'DEEPSEEK_BASE_URL': 'https://fixture.invalid', 'DEEPSEEK_MODEL': 'test',
                     'DEEPSEEK_API_KEY': 'fixture', name: value}):
                 with self.assertRaises(ModelError):
                     JsonModel.from_env()
+
+    def test_off_effort_disables_thinking_and_omits_reasoning_effort(self):
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        model.stage_reasoning_effort = {'plan': 'off'}
+        body = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.return_value = BytesIO(body)
+            complete_stage(model, 'plan', 'json', {})
+            sent = json.loads(opener.return_value.open.call_args.args[0].data)
+        self.assertEqual(sent['thinking'], {'type': 'disabled'})
+        self.assertNotIn('reasoning_effort', sent)
+        self.assertEqual(model.reasoning_effort, 'high')
+
+    def test_medium_effort_is_rejected_without_sending_a_request(self):
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
+        model.reasoning_effort = 'medium'
+        with patch('question_generation.model_client.build_opener') as opener:
+            with self.assertRaises(ModelError) as error:
+                model.complete('json', {})
+        self.assertEqual(error.exception.diagnostics['code'], 'invalid_config')
+        opener.assert_not_called()
+
+    def test_silent_stream_trips_idle_timeout_and_retries_transport(self):
+        import socket
+        model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture',
+                          timeout=600, max_retries=1, retry_delay=0)
+
+        class Stalled:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read1(self, _size):
+                raise socket.timeout('idle')
+
+        body = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
+        with patch('question_generation.model_client.build_opener') as opener, patch(
+                'question_generation.model_client.time.sleep'):
+            opener.return_value.open.side_effect = [Stalled(), BytesIO(body)]
+            self.assertEqual(model.complete('json', {}), {})
+        self.assertEqual(opener.return_value.open.call_count, 2)
+        self.assertEqual(opener.return_value.open.call_args.kwargs['timeout'], 90)
 
     def test_streamed_sse_response_is_folded_into_the_json_envelope(self):
         model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
