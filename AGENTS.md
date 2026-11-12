@@ -10,7 +10,7 @@ Qodex main 已合并四个业务模块：
 | --- | --- | --- |
 | 自主命题 | `question_generation/` | HTTP 8093；Pi 工具 `question_generation` |
 | AI 审校与题库 | `pi-coding-agent/services/exam-checker/` | HTTP 8091；Pi 工具 `exam_checker`、`question_bank` |
-| 智能组卷 | `exam_assembly_agent/`、`pi-coding-agent/services/exam-assembly/` | HTTP 8092；Pi 工具 `exam_assembly` |
+| 智能组卷 | `exam_assembly_agent/`、`pi-coding-agent/services/exam-assembly/` | HTTP 8092；Pi 工具 `exam_assembly`；PostgreSQL 组卷历史 |
 | Pi Agent | `pi-coding-agent/packages/coding-agent/` | 统一注册和调用业务工具 |
 
 知识库检索已经接入 exam-checker 专项审校。自主命题已支持单题、批量槽位、综合题和按反馈修订，并把自检通过的版本写入 `question_generation.pending_questions`。
@@ -23,7 +23,7 @@ Qodex main 已合并四个业务模块：
 | --- | --- |
 | `npm run demo:setup` | 首次创建 Python 环境、安装 Pi 依赖并生成本地环境模板 |
 | `npm run demo` | 准备数据库、启动三个服务、健康检查后进入 Pi |
-| `npm run demo:db` | 只准备 PostgreSQL、Alembic 迁移和命题待审表 |
+| `npm run demo:db` | 只准备 PostgreSQL、审校/组卷历史 Alembic 迁移和命题待审表 |
 | `npm run demo:services` | 只启动三个 Python 服务，不进入 Pi |
 | `npm run demo:status` | 检查 8091、8092、8093 健康状态 |
 | `scripts/demo.sh` | NPM 演示命令的 Bash 编排实现 |
@@ -41,9 +41,13 @@ Qodex main 已合并四个业务模块：
 - `question_versions`：审校侧不可变题目版本。
 - `question_reviews`：每次审校的追加记录。
 - `question_bank`：仅保存绑定 PASS 审校和同一内容版本的正式题目。
+- `assembled_exams`：每次组卷尝试的不可变请求、报告和 HTML 快照。
+- `assembled_exam_items`：按题目顺序保存来源版本、学生题面和教师答案快照。
 - `research-assets/`：历史研究资料，不是运行时事实来源；复用前核验来源、许可、质量和当前接口。
 
 题目修订不得覆盖旧版本。取题时可以选择最新版本，但开始审校后必须固定具体版本；入库前再次确认 PASS 审校、来源版本和题目快照完全一致。
+
+组卷历史不得在查询时重新读取最新题库来重建；必须返回组卷当时保存的快照。学生接口不得返回答案、解析或原始教师报告。当前历史接口没有身份鉴权，只允许用于本机教师演示；公开部署前必须增加认证和角色授权。`request_id` 目前不是幂等键，调用方不得在超时后无界自动重试。
 
 ## 开发与验证
 

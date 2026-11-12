@@ -9,7 +9,7 @@ Qodex 是面向计算机考研 408 的 AI 试题工作流，当前仓库已经�
 | 自主命题 | 单选题、批量槽位命题、综合应用题、按反馈修订、确定性自检、待审版本入队 | `question_generation` | `http://127.0.0.1:8093` |
 | AI 审校 | PDF/DOC/DOCX 解析、整卷/单题审校、九类专项检查、知识库检索、题目版本修订 | `exam_checker` | `http://127.0.0.1:8091` |
 | 正式题库 | 查询审校通过题目，按学科、题型、难度、知识点和关键词检索 | `question_bank` | 复用 8091 |
-| 智能组卷 | 从正式题库选题、约束校验、缺题报告、相似题复核、HTML/PDF 导出 | `exam_assembly` | `http://127.0.0.1:8092` |
+| 智能组卷 | 从正式题库选题、约束校验、缺题报告、相似题复核、HTML/PDF 导出、PostgreSQL 历史快照与下载 | `exam_assembly` | `http://127.0.0.1:8092` |
 | Pi Agent | 注册上述内置工具并组织调用 | — | 终端交互 |
 
 当前边界：命题服务已经能把自检通过的题目写入 PostgreSQL 待审队列，但 exam-checker 还没有自动消费该队列。现阶段仍需增加“待审题登记 → 绑定题目版本 → 审校 → PASS 入正式题库”的接入层，才能形成全自动闭环。
@@ -32,7 +32,7 @@ npm run demo:setup
 npm run demo
 ```
 
-该命令会依次启动 PostgreSQL、执行 Alembic 迁移、创建命题待审表、并行启动 8091/8092/8093 三个服务，再启动内嵌完整 Pi Agent 的 Assistant UI。浏览器访问 `http://127.0.0.1:3000` 即可演示。按 `Ctrl+C` 会关闭本次命令启动的网页和 Python 服务；PostgreSQL 容器和数据卷会保留，便于下次快速启动。
+该命令会依次启动 PostgreSQL、执行 Alembic 迁移（包括组卷历史表）、创建命题待审表、并行启动 8091/8092/8093 三个服务，再启动内嵌完整 Pi Agent 的 Assistant UI。浏览器访问 `http://127.0.0.1:3000` 即可演示。按 `Ctrl+C` 会关闭本次命令启动的网页和 Python 服务；PostgreSQL 容器和数据卷会保留，便于下次快速启动。
 
 辅助命令：
 
@@ -158,7 +158,19 @@ source .venv/bin/activate
 ./scripts/start-exam-assembly.sh
 ```
 
-组卷服务默认通过 `http://127.0.0.1:8091` 查询正式题库，可用 `QUESTION_BANK_SERVICE_URL` 覆盖。
+组卷服务默认通过 `http://127.0.0.1:8091` 查询正式题库，可用 `QUESTION_BANK_SERVICE_URL` 覆盖。`npm run demo` 会把 `EXAM_ASSEMBLY_DATABASE_URL` 指向同一 PostgreSQL；手工启动时也可以设置该变量，未设置时回退到 `EXAM_CHECKER_DATABASE_URL`。两者均未设置时仍可组卷，但不会保存历史。
+
+组卷成功后，服务会把请求、报告、题目来源、学生题面、教师答案以及两份 HTML 保存为不可变快照。历史接口包括：
+
+```text
+GET /v1/exam-assembly/history
+GET /v1/exam-assembly/history/{exam_id}
+GET /v1/exam-assembly/history/{exam_id}/answers
+GET /v1/exam-assembly/history/{exam_id}/student.html
+GET /v1/exam-assembly/history/{exam_id}/answer.html
+```
+
+这些接口目前没有登录和角色鉴权，只用于监听 `127.0.0.1` 的本机教师演示。不要把 8092 公开到网络，也不要把答案接口直接提供给学生端。详细契约和限制见 [组卷历史说明](docs/ASSEMBLY_HISTORY.zh-CN.md)。
 
 ## 4. 启动 Pi
 
@@ -181,7 +193,7 @@ npm run hydrate:model-data:release
 - `question_generation`：`single`、`batch`、`comprehensive`、`revise`
 - `exam_checker`：`review_file`、`review_document`、`review_question`、`revise_question`、`get_question_state`
 - `question_bank`：`get_question`、`search_questions`
-- `exam_assembly`：提交组卷请求并返回试卷或缺题结果
+- `exam_assembly`：提交组卷请求并返回试卷、缺题结果和历史记录 ID；历史查询目前通过 HTTP 接口完成
 
 ## 启动 Assistant UI 前端
 

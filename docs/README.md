@@ -6,10 +6,11 @@ Qodex 面向计算机考研 408，围绕知识库、命题、单题审校和组�
 
 | 模块 | 当前入口 |
 | --- | --- |
-| 自主命题 | [模块说明与本地验证台](question-generation.md#浏览器验证台)。可生成并自检一道单级页表地址转换题 |
+| 自主命题 | [模块说明与本地验证台](question-generation.md#浏览器验证台)。支持单题、批量槽位、综合题、修订、自检和待审入队 |
 | Pi 运行与工具集成 | [Pi 源码说明](../pi-coding-agent/README.md) |
 | 单题审校与题库 | [exam-checker 服务](../pi-coding-agent/services/exam-checker/README.md) |
-| 知识库、组卷 | 远程有独立开发分支。对接时核对目标分支的实际接口 |
+| 知识库 | 已接入 exam-checker 专项审校；运行时索引与历史研究资产分开管理 |
+| 智能组卷 | [组卷接口契约](ASSEMBLY_CONTRACT.zh-CN.md) 与 [PostgreSQL 历史接口](ASSEMBLY_HISTORY.zh-CN.md) |
 
 ## 设计、接口与验收
 
@@ -24,7 +25,7 @@ Qodex 面向计算机考研 408，围绕知识库、命题、单题审校和组�
 - [GitHub 提交说明](GITHUB_SUBMISSION.zh-CN.md)
 - [课程项目指南](COMP7608B_LLM_Project_Guideline.pdf)
 
-本地开发从同步后的 `main` 建任务分支。自主命题分支为 `feat/question-generation`。开发、调研、验收与提交规则见 [AGENTS.md](../AGENTS.md)。
+本地开发从同步后的 `main` 建任务分支，不再从旧功能分支复制接口。开发、调研、验收与提交规则见 [AGENTS.md](../AGENTS.md)。
 
 ## 本地开发环境
 

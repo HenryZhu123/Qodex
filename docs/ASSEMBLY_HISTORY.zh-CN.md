@@ -1,6 +1,6 @@
 # 组卷历史：数据库迁移、接口与验收
 
-本功能基于2026-11-11整合版main（ae52d53）开发，保存每次组卷的结果快照。本地开发目录为postgres-integration，当前直接使用原exam-assembly分支；未提交或推送。没有新建或替换question_bank，不会修改正式题目和审校结果。
+本功能由提交 `3268bf6c` 合入 main，保存每次组卷的结果快照。它没有新建或替换 `question_bank`，不会修改正式题目和审校结果。
 
 ## 数据表
 
@@ -62,4 +62,4 @@ python -m uvicorn exam_assembly_service.app:app --host 127.0.0.1 --port 8092
 - 独立5545 PostgreSQL数据库中执行完整迁移，并核对Alembic metadata无差异；验证真实SQL写入、主子表事务回滚、历史查询下载，原question_bank仍为空。
 - 本机5433 qodex已应用新增迁移，使用原有三道真实PASS/STORED题目生成一条三题六分历史，exam_id为f0f088e6-7b46-4dc2-a458-853f91d4f062。重启测试服务后可查询和下载；四张原文档/题目版本/审校/正式题库表逐项哈希与数量完全未变。
 - 本次不调用付费模型。运行证据在本机.local/history-live，默认不提交。未完成网页按钮和多用户权限验收。
-- 最新整合版npm run check通过；没有提交或推送，后续由用户自行执行Git操作。
+- 原功能分支验收时最新整合版 `npm run check` 通过；合入 main 后仍应按仓库根目录 `AGENTS.md` 运行对应检查。

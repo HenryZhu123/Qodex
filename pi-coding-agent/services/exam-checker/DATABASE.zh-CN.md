@@ -162,6 +162,7 @@ erDiagram
     question_versions ||--o{ question_reviews : reviewed_as
     question_versions ||--o{ question_bank : stored_as
     question_reviews ||--o| question_bank : approves
+    assembled_exams ||--o{ assembled_exam_items : snapshots
 ```
 
 ### 7.1 `exam_documents`
@@ -228,7 +229,39 @@ erDiagram
 
 `document_id + question_id` 具有唯一约束，防止同一来源题目重复入库。
 
-### 7.5 `alembic_version`
+### 7.5 `assembled_exams`
+
+保存每次组卷尝试的不可变快照。成功、缺题、待复核、业务配额错误以及能够被服务捕获的上游或导出失败都可以形成记录。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `exam_id` | UUID, PK | 每次组卷执行的独立 ID |
+| `created_at` | timestamp | 创建时间 |
+| `request_id` | text | 调用方追踪 ID，目前不是幂等键 |
+| `subject` | text | 学科 |
+| `status` | text | 当次组卷结果状态 |
+| `request_json` | JSONB | 完整组卷请求 |
+| `report_json` | JSONB | 完整教师报告和验证结果 |
+| `student_html` | text | 学生卷 HTML 快照，未形成完整试卷时为空 |
+| `answer_html` | text | 教师答案 HTML 快照，未形成完整试卷时为空 |
+
+HTML 以文本内容而不是本地文件路径保存，因此清理输出目录后仍可下载历史试卷。
+
+### 7.6 `assembled_exam_items`
+
+按试卷顺序保存组卷当时的题目内容与答案，不在历史查询时重新读取最新题库。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `exam_id` | UUID, PK/FK | 所属组卷历史，删除父记录时级联删除 |
+| `position` | integer, PK | 从 1 开始的题目顺序 |
+| `source_json` | JSONB | 题库记录、来源题目和来源版本快照 |
+| `student_json` | JSONB | 不含答案的学生题面快照 |
+| `answer_json` | JSONB | 教师答案与解析快照 |
+
+`exam_id + position` 是复合主键。`source_json` 刻意不外键绑定 `question_bank`：历史必须在题库记录清理或修订后仍可还原；来源 ID 和版本只用于追溯。
+
+### 7.7 `alembic_version`
 
 Alembic 用该表记录当前数据库迁移版本，不应手动修改。
 
@@ -239,7 +272,12 @@ exam_documents
   -> question_versions（初始版本及后续修改版本）
   -> question_reviews（每次审校追加一条记录）
   -> question_bank（审校通过的题目）
+
+assembled_exams
+  -> assembled_exam_items（组卷时的有序题目与答案快照）
 ```
 
 题目修改不会覆盖旧版本；`parent_version_id` 和 `version_number` 保存完整版本链，
 `source_review_id` 和 `source_version_id` 可以追溯题库记录的来源。
+
+组卷历史与题库是“快照来源”关系而不是数据库外键关系。`assembled_exam_items.source_json` 保存当时使用的 `record_id` 和 `source_version_id`，但历史展示和下载只读取已保存快照，避免源题后续变化影响已生成试卷。
