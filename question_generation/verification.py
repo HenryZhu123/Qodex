@@ -6,9 +6,31 @@ The blind reader separately checks that correspondence.
 from __future__ import annotations
 
 import ipaddress
+import re
+
+# Model-authored witnesses often write addresses as text ("0x0B7C", "0B7CH", "2940").
+INTEGER_TEXT = re.compile(r"^[+-]?(?:0[xX][0-9a-fA-F]+|[0-9a-fA-F]+[hH]|[0-9]+)$")
+
+
+def _text_integer(value):
+    text = value.strip()
+    if not INTEGER_TEXT.fullmatch(text):
+        raise ValueError("数值见证的整数超出允许范围。")
+    sign = -1 if text[0] == "-" else 1
+    body = text.lstrip("+-")
+    if body[:2].lower() == "0x":
+        return sign * int(body[2:], 16)
+    if body[-1] in "hH":
+        return sign * int(body[:-1], 16)
+    return sign * int(body)
 
 
 def integer(value, low, high):
+    """Accept ints and exact integer strings (decimal or hexadecimal)."""
+    if isinstance(value, bool):
+        raise ValueError("数值见证的整数超出允许范围。")
+    if isinstance(value, str):
+        value = _text_integer(value)
     if type(value) is not int or not low <= value <= high:
         raise ValueError("数值见证的整数超出允许范围。")
     return value

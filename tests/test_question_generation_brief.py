@@ -258,17 +258,31 @@ class BriefAuthoringTests(TestCase):
                 self.assertEqual(result['status'], 'SELF_CHECK_FAILED', result)
                 self.assertIn('综合题总分与请求不符', str(result['authoring_report']['details']))
 
-    def test_prose_total_score_is_forwarded_to_plan_but_only_when_unambiguous(self):
+    def test_prose_total_score_is_pinned_and_scaled_or_rejected(self):
         case = next(c for c in CASES if c['request']['question_type'] == 'comprehensive')
         request = case['request']
         base = {k: request[k] for k in ('schema_version', 'request_id', 'evidence')}
+        # The fixture designs 3+4+3=10; a prose total of 20 doubles cleanly.
         model = BriefReplay(case)
-        hinted = generate_from_brief({**base, 'brief': '想练 CPU 时间这块，帮我出一道总分12分的综合题。'},
+        hinted = generate_from_brief({**base, 'brief': '想练 CPU 时间这块，帮我出一道总分20分的综合题。'},
                                      client=model, cache_path=self.cache)
         self.assertEqual(hinted['status'], 'GENERATED', hinted)
         plan_input = model.calls[0][1]['constraints']
-        self.assertEqual((plan_input['total_score'], plan_input['question_type']), (12, 'comprehensive'))
+        self.assertEqual((plan_input['total_score'], plan_input['question_type']), (20, 'comprehensive'))
+        self.assertIn('严格等于该总分（20分）', plan_input['score_requirement'])
         self.assertNotIn('score_guidance', plan_input)
+        question, = hinted['questions']
+        self.assertEqual(question['metadata']['score'], 20)
+        self.assertEqual([p['score'] for p in question['student_view']['parts']], [6, 8, 6])
+        self.assertEqual([[p['points'] for p in s['scoring_points']]
+                          for s in question['instructor_view']['parts']], [[4, 2], [6, 2], [4, 2]])
+        self.assertIn('严格等于请求总分 20 分', model.calls[1][0])
+        # A prose total that cannot be reached by exact scaling is rejected, not overridden.
+        model = BriefReplay(case)
+        rejected = generate_from_brief({**base, 'brief': '帮我出一道总分12分的综合题。'},
+                                       client=model, cache_path=self.cache)
+        self.assertEqual(rejected['status'], 'SELF_CHECK_FAILED', rejected)
+        self.assertIn('综合题总分与请求不符', str(rejected['authoring_report']['details']))
         model = BriefReplay(case)
         unpinned = generate_from_brief({**base, 'brief': '比较两种方案对执行时间的影响。'},
                                        client=model, cache_path=self.cache)

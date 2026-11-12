@@ -1,0 +1,382 @@
+{
+  "case_id": "cn.transport-co",
+  "source": {
+    "plan_call": "run/calls/*-cn.transport-co-plan.json",
+    "author_call": "run/calls/*-cn.transport-co-author.json"
+  },
+  "reason": "recorded candidate was rejected by a mechanical local check (quote punctuation/page noise or hexadecimal witness)",
+  "payload": {
+    "schema_version": "0.1",
+    "request_id": "phase-c-cn.transport-co",
+    "seed": 4003099588,
+    "subject": "computer_networks",
+    "topic": "TCP慢启动、拥塞避免与快速恢复中cwnd/ssthresh演化及Tahoe与Reno恢复策略比较",
+    "question_type": "comprehensive",
+    "constraints": {
+      "requirements": [
+        "推导给定丢包序列下拥塞窗口的变化，并比较两种恢复策略。"
+      ],
+      "total_score": 10
+    },
+    "evidence": [
+      {
+        "id": "kb:222dae65456b011b773bfb492b80d934454a4e55a58ab67a23ea123e7ede518a",
+        "source": "Kurose、Ross《计算机网络：自顶向下方法》",
+        "version": "原书第7版 · source sha256:fa84d8dce3dc1dbe92c2b4108565abcd79d5ec5e87beb073bc5d7eb5b18a6800 · chunk sha256:df091601d13823eda24b671722bb24663c074455b598cebffbd95a1beff1d8b2 · discovery: source-pinned; not chunk-curated",
+        "anchor": "第3章 · p. 198–199 · chunk 2367b64d37e4dadb:00318",
+        "rules": []
+      }
+    ]
+  },
+  "settings": {
+    "syllabus_areas": [
+      "cn.transport"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "kb:222dae65456b011b773bfb492b80d934454a4e55a58ab67a23ea123e7ede518a",
+      "source": "Kurose、Ross《计算机网络：自顶向下方法》",
+      "version": "原书第7版 · source sha256:fa84d8dce3dc1dbe92c2b4108565abcd79d5ec5e87beb073bc5d7eb5b18a6800 · chunk sha256:df091601d13823eda24b671722bb24663c074455b598cebffbd95a1beff1d8b2 · discovery: source-pinned; not chunk-curated",
+      "anchor": "第3章 · p. 198–199 · chunk 2367b64d37e4dadb:00318",
+      "summary": "MSS, 并且ssthresh 的值设置为cwnd 值的一半。\n快速恢复是TCP 推荐的而非必需的构件\n[ RFC 5681\n] 。有趣的是，\n一种称为TC P\nTahoe 的TCP 早期版本，不管是发生超时指示的丢包事件，还是发生3 个冗余ACK 指示\n的丢包事件，都无条件地将其拥塞窗口减至\nl 个MSS, 并进入慢启动阶段。\nTCP 的较新版\n本TCP Reno , 则综合了快速恢复。\n.\n\n运输屋\n/81\n图3 -52 图示了Reno 版TCP 与Tahoe 版TCP 的拥塞控制窗口的演化情况。在该图中，\n阙值初始等于8 个MSS\n: 在前8 个传输回\n16\n合，\nTahoe 和\nReno 采取了相同的动作。\n拥嗟窗口在慢启动阶段以指数速度快速爬\n升．在第4 轮传输时到达了阔值。然后拥\n塞窗口以线性速度爬升｀直到在第8 轮传\n输后出现3 个冗余AC凡注意到当该丢包\n事件发生时，拥塞窗口值为\n1 2 x MSS 。\n于\n是ssthresh 的值被设置为0. 5 x <'wnd = 6 x\nMSS ~ 在TC P Reno 下，拥塞窗口被设置\n为\nc\\,,.nd = 9 M SS 、\n然后线性地增长：：\n在\nTCP Tahoe 下拥塞窗口被设置为\n1\n个\n图3 会52\nTCP 拥塞窟口的演化\n( Tahoe 和Reno)\nMS~, 然后呈指数增长，直至到达ssth resh 值为止，在这个点它开始线性增长。\n图3 - 51 表示了TCP 拥塞控制算法（即慢启动、拥塞避免和快速恢复）\n的完整FSM 描\n述户该图也指示了新报文段的传输或重传的报文段可能出现的位置。尽管区分TCP 差错控\n制／重传与TCP 拥塞控制非常重要，但是注意到TC P 这两个方面交织链接的方式也很\n重要。\n4. TCP 拥塞控制：\n回顾\n在深入了解慢启动、拥塞避免和快速恢复的细节后，\n现在有必要退回来回顾一下全\n局。忽略一条连接开始时初始的慢启动阶段，假定丢包由3 个冗余的ACK 而不是超时指\n示，\nTCP 的拥塞控制是：每个RTT 内cwnd 线性（加性）增加lMSS ,\n然后出现3 个冗余\nCK 事件时cwnd 减半（乘性减）。\n因此，\nTCP 拥塞控制常常被称为加性增、乘性减\n(Additive- Increase. Multiplicative- Decreasf' ~ A IMO) 拥",
+      "excerpt": "MSS, 并且ssthresh 的值设置为cwnd 值的一半。\n快速恢复是TCP 推荐的而非必需的构件\n[ RFC 5681\n] 。有趣的是，\n一种称为TC P\nTahoe 的TCP 早期版本，不管是发生超时指示的丢包事件，还是发生3 个冗余ACK 指示\n的丢包事件，都无条件地将其拥塞窗口减至\nl 个MSS, 并进入慢启动阶段。\nTCP 的较新版\n本TCP Reno , 则综合了快速恢复。\n.\n\n运输屋\n/81\n图3 -52 图示了Reno 版TCP 与Tahoe 版TCP 的拥塞控制窗口的演化情况。在该图中，\n阙值初始等于8 个MSS\n: 在前8 个传输回\n16\n合，\nTahoe 和\nReno 采取了相同的动作。\n拥嗟窗口在慢启动阶段以指数速度快速爬\n升．在第4 轮传输时到达了阔值。然后拥\n塞窗口以线性速度爬升｀直到在第8 轮传\n输后出现3 个冗余AC凡注意到当该丢包\n事件发生时，拥塞窗口值为\n1 2 x MSS 。\n于\n是ssthresh 的值被设置为0. 5 x <'wnd = 6 x\nMSS ~ 在TC P Reno 下，拥塞窗口被设置\n为\nc\\,,.nd = 9 M SS 、\n然后线性地增长：：\n在\nTCP Tahoe 下拥塞窗口被设置为\n1\n个\n图3 会52\nTCP 拥塞窟口的演化\n( Tahoe 和Reno)\nMS~, 然后呈指数增长，直至到达ssth resh 值为止，在这个点它开始线性增长。\n图3 - 51 表示了TCP 拥塞控制算法（即慢启动、拥塞避免和快速恢复）\n的完整FSM 描\n述户该图也指示了新报文段的传输或重传的报文段可能出现的位置。尽管区分TCP 差错控\n制／重传与TCP 拥塞控制非常重要，但是注意到TC P 这两个方面交织链接的方式也很\n重要。\n4. TCP 拥塞控制：\n回顾\n在深入了解慢启动、拥塞避免和快速恢复的细节后，\n现在有必要退回来回顾一下全\n局。忽略一条连接开始时初始的慢启动阶段，假定丢包由3 个冗余的ACK 而不是超时指\n示，\nTCP 的拥塞控制是：每个RTT 内cwnd 线性（加性）增加lMSS ,\n然后出现3 个冗余\nCK 事件时cwnd 减半（乘性减）。\n因此，\nTCP 拥塞控制常常被称为加性增、乘性减\n(Additive- Increase. Multiplicative- Decreasf' ~ A IMO) 拥塞控制方式。\nA IMD 拥塞控制引发了\n在图3 -5 3 中所示的＂锯齿“行为、\n这也\n很好地图示了我们前而TCP 检测带宽时\n的直觉，即TCP 线性地增加它的拥塞窗\n口\n门长度（因此增加其传输速率），直到出\n尽16K\n现3 个冗余ACK 事件C 然后以2 个因子\n军\n来减少它的拥塞窗口长度\n，\n然后又开始了\n线性增长，探测是否还有另外的可用\n带宽。\n如前所述．许多TCP 实现采用了Re-",
+      "rules": []
+    }
+  ],
+  "author_response": {
+    "candidate": {
+      "student_view": {
+        "stem": "在一条TCP连接中，以MSS为窗口单位。连接开始时cwnd=1 MSS、ssthresh=8 MSS，且没有其他丢包。定义第n轮的cwnd为该轮发送数据时使用的拥塞窗口值（第1轮为1 MSS）；每轮结束后按TCP拥塞控制规则调整，作为下一轮开始值。慢启动中cwnd按每RTT加倍增长，达到ssthresh后转入拥塞避免（每RTT增加1 MSS）。该连接先经历慢启动和拥塞避免；第8轮结束后出现一次由3个冗余ACK指示的丢包事件，事件发生时cwnd=12 MSS（与材料中的例子一致）。此后无新的丢包，链路不限制窗口。Tahoe和Reno的初始条件完全相同。Reno在快速恢复期间cwnd=ssthresh+3；收到恢复丢失段的新ACK后退出快速恢复，cwnd=ssthresh并进入拥塞避免。除上述规则和标准Tahoe/Reno事件处理外，不考虑其他调整。",
+        "parts": [
+          {
+            "id": "p1",
+            "prompt": "列出第1至第8轮各轮发送时使用的cwnd值，并指出从哪一轮之后（或哪一轮结束时）由慢启动转入拥塞避免；说明判断依据。",
+            "score": 2
+          },
+          {
+            "id": "p2",
+            "prompt": "对Tahoe和Reno，分别求该3个冗余ACK事件后的ssthresh、事件后立即（进入相应恢复/慢启动时）的cwnd，并说明各自处于什么阶段。",
+            "score": 3
+          },
+          {
+            "id": "p3",
+            "prompt": "接p2，分别给出事件后第1至第4轮发送时使用的cwnd值（若某版本在某一轮退出快速恢复，请明确该轮取值），并标明每轮所处阶段。",
+            "score": 3
+          },
+          {
+            "id": "p4",
+            "prompt": "比较Tahoe和Reno在该事件后的恢复策略：ssthresh是否相同、cwnd是否降到1、后续增长方式有何不同；并解释为什么这种快速恢复差异只适用于3个冗余ACK指示的丢包，而不应无条件用于超时指示的丢包。",
+            "score": 2
+          }
+        ]
+      },
+      "instructor_view": {
+        "grading_policy": "同一错误在后续小问中若未纠正只扣一次；若后续正确使用前问错误值进行一致推导，不因前问已扣而重复扣。各小问独立评分点分别判分；阶段名与数值冲突时以数值和机制判断，数值正确但阶段名错误只扣对应阶段分。",
+        "parts": [
+          {
+            "part_id": "p1",
+            "solution": "第1—8轮发送时使用的cwnd依次为1,2,4,8,9,10,11,12 MSS。初始ssthresh=8 MSS。慢启动阶段：第1轮1，第2轮2，第3轮4，第3轮结束后cwnd达到8，等于ssthresh。按规则从第4轮起转入拥塞避免，每RTT增加1 MSS：第4轮8，第5轮9，第6轮10，第7轮11，第8轮12。第8轮结束后出现3个冗余ACK，事件时cwnd=12 MSS，与材料例子一致。",
+            "depends_on": [],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 1,
+                "criterion": "第1—8轮窗口序列及转阶段位置正确",
+                "expected": "1,2,4,8,9,10,11,12 MSS；第3轮结束达到阈值，第4轮起拥塞避免"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明阈值8与每RTT加1的机制依据",
+                "expected": "cwnd达到ssthresh=8后不再翻倍，转为每轮+1"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "将第4轮标为“到达阈值边界”或“拥塞避免第一轮”，只要数值序列和后续每轮+1正确即可"
+              }
+            ]
+          },
+          {
+            "part_id": "p2",
+            "solution": "事件时cwnd=12 MSS，两个版本均按ssthresh=cwnd/2更新，故ssthresh=6 MSS。Tahoe：不管3个冗余ACK还是超时，均把cwnd置为1 MSS并进入慢启动，因此事件后立即cwnd=1 MSS，ssthresh=6 MSS。Reno：进入快速恢复，cwnd=ssthresh+3=9 MSS；收到恢复丢失段的新ACK后退出快速恢复，cwnd=ssthresh=6 MSS并进入拥塞避免。",
+            "depends_on": [
+              "p1"
+            ],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 1,
+                "criterion": "两版本ssthresh更新相同且数值正确",
+                "expected": "ssthresh=12/2=6 MSS"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "Tahoe事件后即时窗口与阶段正确",
+                "expected": "cwnd=1 MSS，进入慢启动"
+              },
+              {
+                "id": "s3",
+                "points": 1,
+                "criterion": "Reno快速恢复窗口及退出基准正确",
+                "expected": "即时cwnd=9 MSS，快速恢复；退出后cwnd=6 MSS，拥塞避免"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "先写Reno退出后cwnd=6再写即时快速恢复窗口9，只要两个值分别标明时点即可"
+              }
+            ]
+          },
+          {
+            "part_id": "p3",
+            "solution": "Tahoe事件后：第1轮cwnd=1 MSS（慢启动），第2轮2 MSS（慢启动），第3轮4 MSS（慢启动），第4轮6 MSS（达到ssthresh=6，转入拥塞避免；第3轮结束理论翻倍为8，但受阈值限制取6）。Reno事件后：第1轮cwnd=9 MSS（快速恢复，重传丢失段并等待新ACK）；收到新ACK后退出快速恢复，cwnd=6 MSS；第2轮6 MSS（拥塞避免），第3轮7 MSS（拥塞避免），第4轮8 MSS（拥塞避免）。",
+            "depends_on": [
+              "p2"
+            ],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 1.5,
+                "criterion": "Tahoe事件后1—4轮数值及阶段正确",
+                "expected": "1,2,4,6 MSS；前三轮慢启动，第4轮达到阈值转拥塞避免"
+              },
+              {
+                "id": "s2",
+                "points": 1.5,
+                "criterion": "Reno事件后1—4轮数值及退出时点正确",
+                "expected": "9,6,7,8 MSS；第1轮快速恢复，第2—4轮拥塞避免"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "Tahoe第4轮若标为“慢启动最后一轮/阈值边界”，只要值6且之后线性增长可接受"
+              },
+              {
+                "id": "m2",
+                "acceptance": "Reno若把退出新ACK放在第1轮结束时说明，序列9,6,7,8可接受"
+              }
+            ]
+          },
+          {
+            "part_id": "p4",
+            "solution": "相同点：两个版本在同一事件发生时都把ssthresh设为6 MSS，均执行乘性减。不同点：Tahoe无条件把cwnd降到1 MSS并进入慢启动，之后指数增长到ssthresh=6后再线性增长；Reno不降到1，而是置cwnd=ssthresh+3=9 MSS进入快速恢复，收到恢复丢失段的新ACK后cwnd=ssthresh=6并进入拥塞避免，随后线性增长。3个冗余ACK说明接收端仍能收到后续报文，只是个别段丢失，网络尚未严重拥塞，故Reno可用快速恢复避免把窗口降到1；超时指示更严重的拥塞或ACK缺失，Reno也不进入快速恢复，而像Tahoe一样把cwnd降到1并慢启动。因此快速恢复只对应3个冗余ACK这一事件边界，不能无条件用于所有丢包事件。",
+            "depends_on": [
+              "p2",
+              "p3"
+            ],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 1,
+                "criterion": "正确比较ssthresh相同、即时cwnd和后续增长方式不同",
+                "expected": "ssthresh同为6；Tahoe降1慢启动，Reno置9快速恢复、退出后从6线性增长"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "正确解释3冗余ACK与超时的事件边界",
+                "expected": "3冗余ACK表示个别丢失，可快速恢复；超时按慢启动处理，Reno也不走快速恢复"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "若强调快速恢复为推荐而非必需构件，只要最终事件边界解释正确可接受"
+              }
+            ]
+          }
+        ]
+      },
+      "design": {
+        "target": "能依据ssthresh=cwnd/2和3个冗余ACK触发规则，推导给定丢包序列下Tahoe与Reno的cwnd/ssthresh轨迹，并解释快速恢复只适用于3冗余ACK而非超时。",
+        "concepts": [
+          "TCP慢启动的指数增长与ssthresh边界",
+          "拥塞避免的每RTT加性增长",
+          "3个冗余ACK触发快速恢复与乘性减",
+          "Tahoe：丢包后cwnd=1并进入慢启动",
+          "Reno：快速恢复窗口ssthresh+3及新ACK退出",
+          "ssthresh=cwnd/2的阈值更新规则",
+          "超时与3冗余ACK的事件边界",
+          "Tahoe与Reno恢复轨迹比较"
+        ],
+        "claims": [
+          {
+            "id": "k1",
+            "statement": "丢包事件发生时ssthresh设置为当前cwnd的一半。",
+            "evidence_id": "kb:222dae65456b011b773bfb492b80d934454a4e55a58ab67a23ea123e7ede518a",
+            "quote": "MSS, 并且ssthresh 的值设置为cwnd 值的一半。"
+          },
+          {
+            "id": "k2",
+            "statement": "Tahoe对超时和3个冗余ACK指示的丢包事件都无条件把cwnd减至1个MSS并进入慢启动。",
+            "evidence_id": "kb:222dae65456b011b773bfb492b80d934454a4e55a58ab67a23ea123e7ede518a",
+            "quote": "一种称为TC P Tahoe 的TCP 早期版本，不管是发生超时指示的丢包事件，还是发生3 个冗余ACK 指示的丢包事件，都无条件地将其拥塞窗口减至 l 个MSS, 并进入慢启动阶段。"
+          },
+          {
+            "id": "k3",
+            "statement": "材料例子中事件时cwnd=12 MSS，更新后ssthresh=6 MSS，Reno快速恢复窗口为9 MSS。",
+            "evidence_id": "kb:222dae65456b011b773bfb492b80d934454a4e55a58ab67a23ea123e7ede518a",
+            "quote": "于是ssthresh 的值被设置为0. 5 x <'wnd = 6 x MSS ~ 在TC P Reno 下，拥塞窗口被设置 为 c\\,.nd = 9 M SS"
+          },
+          {
+            "id": "k4",
+            "statement": "材料例子给出初始阈值8 MSS，第4轮到达阈值，之后线性增长，第8轮后3个冗余ACK时cwnd=12 MSS。",
+            "evidence_id": "kb:222dae65456b011b773bfb492b80d934454a4e55a58ab67a23ea123e7ede518a",
+            "quote": "阙值初始等于8 个MSS : 在前8 个传输回 16 合， Tahoe 和 Reno 采取了相同的动作。 拥嗟窗口在慢启动阶段以指数速度快速爬 升．在第4 轮传输时到达了阔值。然后拥 塞窗口以线性速度爬升｀直到在第8 轮传 输后出现3 个冗余AC凡注意到当该丢包 事件发生时，拥塞窗口值为 1 2 x MSS 。"
+          },
+          {
+            "id": "k5",
+            "statement": "忽略初始慢启动，3个冗余ACK事件使窗口乘性减半，之后每RTT线性加1 MSS，形成AIMD。",
+            "evidence_id": "kb:222dae65456b011b773bfb492b80d934454a4e55a58ab67a23ea123e7ede518a",
+            "quote": "TCP 的拥塞控制是：每个RTT 内cwnd 线性（加性）增加lMSS , 然后出现3 个冗余 CK 事件时cwnd 减半（乘性减）。"
+          },
+          {
+            "id": "k6",
+            "statement": "快速恢复是TCP推荐而非必需构件，因此其触发需受事件类型约束。",
+            "evidence_id": "kb:222dae65456b011b773bfb492b80d934454a4e55a58ab67a23ea123e7ede518a",
+            "quote": "快速恢复是TCP 推荐的而非必需的构件 [ RFC 5681 ] 。"
+          }
+        ],
+        "givens": [
+          {
+            "id": "g1",
+            "text": "连接开始时cwnd=1 MSS、ssthresh=8 MSS"
+          },
+          {
+            "id": "g2",
+            "text": "第8轮结束后出现一次由3个冗余ACK指示的丢包事件"
+          },
+          {
+            "id": "g3",
+            "text": "事件发生时cwnd=12 MSS"
+          },
+          {
+            "id": "g4",
+            "text": "第n轮的cwnd为该轮发送数据时使用的拥塞窗口值"
+          },
+          {
+            "id": "g5",
+            "text": "慢启动中cwnd按每RTT加倍增长，达到ssthresh后转入拥塞避免（每RTT增加1 MSS）"
+          },
+          {
+            "id": "g6",
+            "text": "Reno在快速恢复期间cwnd=ssthresh+3；收到恢复丢失段的新ACK后退出快速恢复，cwnd=ssthresh并进入拥塞避免"
+          },
+          {
+            "id": "g7",
+            "text": "此后无新的丢包，链路不限制窗口"
+          },
+          {
+            "id": "g8",
+            "text": "Tahoe和Reno的初始条件完全相同"
+          },
+          {
+            "id": "g9",
+            "text": "每轮结束后按TCP拥塞控制规则调整，作为下一轮开始值"
+          },
+          {
+            "id": "g10",
+            "text": "以MSS为窗口单位"
+          }
+        ],
+        "derivation": [
+          {
+            "id": "d1",
+            "uses": [
+              "g1",
+              "g4",
+              "g5",
+              "k4",
+              "g9"
+            ],
+            "result": "第1—8轮发送窗口依次为1,2,4,8,9,10,11,12 MSS；第3轮结束达到8，第4轮起按拥塞避免每轮+1。"
+          },
+          {
+            "id": "d2",
+            "uses": [
+              "d1",
+              "g2",
+              "g3",
+              "k1",
+              "k4"
+            ],
+            "result": "事件时cwnd=12 MSS，ssthresh=0.5×12=6 MSS，Tahoe与Reno相同。"
+          },
+          {
+            "id": "d3",
+            "uses": [
+              "d2",
+              "k2",
+              "g7"
+            ],
+            "result": "Tahoe事件后cwnd=1 MSS，进入慢启动；ssthresh=6 MSS。"
+          },
+          {
+            "id": "d4",
+            "uses": [
+              "d2",
+              "k3",
+              "g6"
+            ],
+            "result": "Reno事件后cwnd=ssthresh+3=9 MSS，进入快速恢复；收到新ACK后退出为cwnd=6 MSS并进入拥塞避免。"
+          },
+          {
+            "id": "d5",
+            "uses": [
+              "d3",
+              "g5"
+            ],
+            "result": "Tahoe事件后第1—4轮为1,2,4,6 MSS；第1—3轮慢启动，第4轮达到阈值并转拥塞避免。"
+          },
+          {
+            "id": "d6",
+            "uses": [
+              "d4",
+              "g6"
+            ],
+            "result": "Reno事件后第1轮为9 MSS快速恢复；退出后第2—4轮为6,7,8 MSS拥塞避免。"
+          },
+          {
+            "id": "d7",
+            "uses": [
+              "d2",
+              "d3",
+              "d4",
+              "d5",
+              "d6"
+            ],
+            "result": "两版本ssthresh同为6 MSS；Tahoe立即降至1并慢启动，Reno先以9快速恢复、退出后从6线性增长。"
+          },
+          {
+            "id": "d8",
+            "uses": [
+              "k2",
+              "k6",
+              "g2"
+            ],
+            "result": "3个冗余ACK时Reno可快速恢复，Tahoe仍降1；超时事件不适用快速恢复，Reno也降1慢启动。"
+          }
+        ],
+        "conclusions": [
+          "d5",
+          "d6",
+          "d7",
+          "d8"
+        ],
+        "counterfactual": {
+          "given_id": "g2",
+          "replacement": "第8轮结束后发生一次超时指示的丢包事件",
+          "effect": "ssthresh仍为6 MSS；Tahoe与Reno均将cwnd置为1 MSS并进入慢启动，Reno不进入快速恢复。事件后第1—4轮均为1,2,4,6 MSS，第4轮达到阈值后转拥塞避免。",
+          "reason": "快速恢复只在3个冗余ACK指示的个别丢失时触发；超时指示更严重的拥塞或ACK缺失，按标准Reno也执行慢启动而非快速恢复。"
+        }
+      },
+      "calculations": []
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "case_id": "cn.architecture-sc",
+  "source": {
+    "reader_call": "run/calls/*-cn.architecture-sc-reader.json"
+  },
+  "reason": "recorded reader review was rejected only because quality.depth == 1",
+  "reader_response": {
+    "solution": "TCP/IP协议栈自顶向下封装时：传输层在应用数据前加入TCP首部；网络层再加入IP首部；数据链路层最后加入以太网帧首部。因此首部加入顺序为：TCP首部 → IP首部 → 以太网帧首部。选项D正确。",
+    "answer": "D",
+    "part_solutions": [],
+    "issues": [],
+    "depth_evidence": "必须掌握TCP位于传输层、IP位于网络层、以太网帧首部位于数据链路层，并理解封装是发送端自顶向下逐层添加首部，因此顺序不能写成IP首部先于TCP首部或以太网帧首部先于IP首部。",
+    "condition_test": {
+      "change": "若题目把“使用TCP发送”改为“使用UDP发送”，其余封装层次不变。",
+      "effect": "传输层首部应改为UDP首部，加入顺序变为UDP首部 → IP首部 → 以太网帧首部，对应选项B而非D。"
+    },
+    "quality": {
+      "answerability": 2,
+      "depth": 1,
+      "distractors": 2,
+      "clarity": 2
+    }
+  }
+}

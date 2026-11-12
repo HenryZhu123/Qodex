@@ -1,6 +1,7 @@
 """Material-grounded task designs; structural checks are not semantic proofs."""
 from __future__ import annotations
 
+import re
 from unicodedata import normalize
 from math import isfinite
 
@@ -28,15 +29,56 @@ def positive_half_step(value):
             and isfinite(value) and value > 0 and round(value * 2) == value * 2)
 
 
-def contains_span(quote, source):
-    # PDF line wraps, full-width glyphs and ligatures are layout differences,
-    # not missing evidence. Never use fuzzy similarity or delete punctuation.
+# Letters, digits and CJK only: PDF line wraps, full-width glyphs, ligatures,
+# commas and OCR punctuation are layout noise, never missing evidence.
+SKELETON_NOISE = re.compile(r"[^0-9a-zA-Z\u4e00-\u9fff]+")
+# A running page header can split a sentence across a page break (e.g. 较 + 输入/ + 近).
+MAX_PAGE_NOISE_GAP = 6
+
+
+def _skeleton(value):
+    return SKELETON_NOISE.sub("", normalize("NFKC", value)).lower()
+
+
+def _split_match(quote, source):
+    """Accept a quote split by at most MAX_PAGE_NOISE_GAP inserted characters."""
+    for cut in range(6, len(quote) - 5):
+        left, right = quote[:cut], quote[cut:]
+        start = source.find(left)
+        while start != -1:
+            gap = source[start + len(left):].find(right)
+            if 0 <= gap <= MAX_PAGE_NOISE_GAP:
+                return True
+            start = source.find(left, start + 1)
+    return False
+
+
+def _layout_span(quote, source):
+    """Exact text modulo layout whitespace and NFKC forms."""
     compact = lambda s: "".join(normalize("NFKC", s).split())
     return compact(quote) in compact(source)
 
 
+def contains_span(quote, source):
+    # Fast path: exact text modulo layout whitespace and NFKC forms.
+    if _layout_span(quote, source):
+        return True
+    # Second path: punctuation-insensitive (comma, hyphen, OCR noise). This stays
+    # a literal containment check - no edit distance, no similarity threshold.
+    skeleton, body = _skeleton(quote), _skeleton(source)
+    if len(skeleton) < 6:
+        return False
+    if skeleton in body:
+        return True
+    # Third path: a short page header/footer split a long quote into two halves.
+    return len(skeleton) >= 16 and _split_match(skeleton, body)
+
+
 def contains_given_span(quote, source):
-    if contains_span(quote, source):
+    # Givens quote the student-visible wording, so they stay literal: only a
+    # sentence-ending colon relaxation applies. OCR/punctuation tolerance is for
+    # textbook excerpts (claims), where "1.5" vs "15" must not be conflated.
+    if _layout_span(quote, source):
         return True
     # An extracted sentence may end with a period while the visible sentence
     # introduces code with a colon. Do not normalize internal punctuation or
@@ -44,7 +86,7 @@ def contains_given_span(quote, source):
     stripped = quote.rstrip()
     endings = "。.;；:："
     return bool(stripped and stripped[-1] in endings and any(
-        contains_span(stripped[:-1] + ending, source) for ending in endings))
+        _layout_span(stripped[:-1] + ending, source) for ending in endings))
 
 
 def visible_text(student):

@@ -77,6 +77,12 @@ class GeneralContractTests(TestCase):
         for prompt in (AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT):
             self.assertIn('json', prompt.lower())
 
+    def test_prompts_forbid_unseen_tables_and_mathematically_impossible_inversions(self):
+        self.assertIn('必须将该表所需的数据或公式完整写入student_view', AUTHOR_PROMPT)
+        self.assertIn('不得让题面引用学生看不见的图表', AUTHOR_PROMPT)
+        self.assertIn('不得要求数学上不成立的翻转', PLAN_PROMPT)
+        self.assertIn('HRRN', PLAN_PROMPT)
+
     def test_single_choice_prompts_forbid_self_defeating_options_and_stem_spoilers(self):
         rules = ('严禁在选项文本中附带', '不得在四选项中唯一', '不得直接写出本应由学生推导的中间结论')
         for prompt in (PLAN_PROMPT, AUTHOR_VIEWS['single_choice']):
@@ -526,7 +532,8 @@ class GeneralContractTests(TestCase):
 
     def test_given_sentence_terminator_can_introduce_code_without_fuzzy_matching(self):
         self.assertTrue(contains_given_span('Each x++ counts once.', 'Each x++ counts once: C1: x++;'))
-        self.assertFalse(contains_span('Each x++ counts once.', 'Each x++ counts once: C1: x++;'))
+        # Claim quotes tolerate punctuation differences; givens stay literal.
+        self.assertTrue(contains_span('Each x++ counts once.', 'Each x++ counts once: C1: x++;'))
         self.assertFalse(contains_given_span('Each x++ counts twice.', 'Each x++ counts once: C1: x++;'))
         self.assertFalse(contains_given_span('x=1.5.', 'x=15.'))
 

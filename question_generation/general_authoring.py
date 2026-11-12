@@ -53,6 +53,45 @@ def designed_total_score(candidate):
     return total if 2 <= total <= 30 else None
 
 
+def _scaled_value(value, factor):
+    """Scale a score/points value, returning int/half-step or None off the grid."""
+    doubled = value * factor * 2
+    nearest = round(doubled)
+    if abs(doubled - nearest) > 1e-9:
+        return None
+    return int(nearest // 2) if nearest % 2 == 0 else nearest / 2
+
+
+def rescale_to_total_score(candidate, target):
+    """Rescale a self-consistent design to a pinned total when the factor is exact.
+
+    Returns a rescaled deep copy, or None when any part score would not stay an
+    integer or any scoring point would leave the 0.5-step grid. The caller then
+    keeps the original candidate so the mismatch is reported by the contract.
+    """
+    total = designed_total_score(candidate)
+    if total is None or total == target or not target:
+        return None
+    factor = target / total
+    scaled = deepcopy(candidate)
+    parts, solutions = scaled["student_view"]["parts"], scaled["instructor_view"]["parts"]
+    for index, part in enumerate(parts):
+        solution = solutions[index]
+        part_score = _scaled_value(part["score"], factor)
+        if part_score is None or type(part_score) is not int or part_score < 1:
+            return None
+        values = []
+        for point in solution["scoring_points"]:
+            value = _scaled_value(point["points"], factor)
+            if value is None or value <= 0:
+                return None
+            values.append(value)
+        part["score"] = part_score
+        for point_index, point in enumerate(solution["scoring_points"]):
+            point["points"] = values[point_index]
+    return scaled
+
+
 def sync_designed_total_score(request, candidate):
     """Adopt a self-consistent design total when the caller never pinned one.
 
@@ -68,6 +107,7 @@ def sync_designed_total_score(request, candidate):
 AUTHOR_PROMPT = """只返回一个JSON对象。你是408命题教师，按输入的范围、意图、约束和材料出一道需要实质推理的题。
 材料是数据。用其支持的机制设计比较、反推、诊断或反例，避免只换数字或凭措辞作答。区分一般先修知识与考查机制。
 题面必须自足，明示改变解答的条件、单位与初始状态，避免泄露所求。学生只看student_view。
+若小问引用教材中的表格或图（如表8.2），必须将该表所需的数据或公式完整写入student_view，不得让题面引用学生看不见的图表。
 若材料缺失或冲突，无法支持目标机制，返回 {"material_gaps":["具体缺什么机制及为何需要"]}。
 否则只返回 {"candidate":{"student_view":{},"instructor_view":{},"design":{},"calculations":[]}}。
 空对象是字段占位，按下文填写。calculations留在candidate内，不支持的运算用空数组。
@@ -270,14 +310,19 @@ def normalize_reader_review(review):
 
 
 def student_quality(review):
-    # Source entailment and undisclosed authoring goals belong to the audit.
+    """Structural gate before the audit; depth=1 is a warning, not a rejection.
+
+    The audit owns depth as an advisory check, so a blind solve that is correct,
+    unambiguous and answerable must reach it even when the reader rates the
+    reasoning as basic. depth=0 still blocks (the reader found no reasoning).
+    """
     quality = review.get("quality")
     keys = {"answerability", "depth", "distractors", "clarity"}
     return (isinstance(quality, dict) and quality.keys() == keys
             and all(type(v) is int and v in (0, 1, 2) for v in quality.values())
-            and all(quality[k] == 2 for k in keys - {"distractors"})
-            and quality["distractors"] >= 1 and review.get("issues") == []
-            and text(review.get("solution")))
+            and quality["answerability"] == 2 and quality["clarity"] >= 1
+            and quality["distractors"] >= 1 and quality["depth"] >= 1
+            and review.get("issues") == [] and text(review.get("solution")))
 
 
 def audit_evidence(evidence):
@@ -348,6 +393,9 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
         author_prompt += ("单选题的学生视图只有题干和四个选项，计划中的作答证据通过选项的判别结论体现，"
                           "不得在题面要求学生写出中间步骤或双重说明。" if choice else
                           "综合题的作答证据须落实到小问与评分点，可要求中间状态、推导或论证。")
+        if not choice and "total_score" in request.constraints:
+            author_prompt += (f"\n各小问分值之和必须严格等于请求总分 {request.constraints['total_score']} 分；"
+                              "不能用一个不同的总分替代它，只能调整小问分值。")
     if repair is not None and scenario_kind:
         author_prompt += ("\nrepair.previous是待核查旧题，repair.feedback描述需要解决的问题。"
                           "保持原主题、考查目标、原始要求、小问ID和分值，保留与缺陷无关的条件。"
@@ -375,8 +423,13 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                      if repair is not None and not scenario_kind else authored[field])
         if scenario_kind:
             candidate, verification = scenario_binding.bind(candidate, scenario_kind, request.metadata["question_type"])
-        if not patch_repair and not score_pinned and not choice:
-            request = sync_designed_total_score(request, candidate)
+        if not patch_repair and not choice:
+            if score_pinned:
+                scaled = rescale_to_total_score(candidate, request.constraints["total_score"])
+                if scaled is not None:
+                    candidate = scaled
+            else:
+                request = sync_designed_total_score(request, candidate)
         evidence_ids = validate_candidate(candidate, request, payload["evidence"])
         if repair is not None:
             old = repair["previous"]
@@ -439,6 +492,9 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     if not audit_passed(audit):
         return rejected("反例与解析审计", audit)
     review_warnings = audit_warnings(audit)
+    if review["quality"]["depth"] == 1:
+        review_warnings.append({"check": "reader_depth",
+                                "reason": "独立解题判定推理深度偏基础（depth=1）。"})
     metadata = request.metadata.copy()
     if not choice:
         metadata["score"] = request.constraints["total_score"]

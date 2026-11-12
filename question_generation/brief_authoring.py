@@ -39,6 +39,7 @@ CHAPTER_QUERIES = {
 SCORE_HINT = re.compile(r"(?:总分|满分|共)\s*(\d{1,2})\s*分")
 DEFAULT_TOTAL_SCORE = 10
 SCORE_GUIDANCE = "若设计综合题，各小问总分默认按10分设计。"
+SCORE_REQUIREMENT = "若设计综合题，各小问分值之和必须严格等于该总分（{total}分），不得改用其他总分。"
 
 
 def explicit_total_score(*texts_):
@@ -61,6 +62,8 @@ student_evidence须与题型相符：单选题只有题干和ABCD选项，写学
 若brief指定要比较、优化或证明的对象，task和student_evidence必须保留该操作及其判据。例如要求最少改动，
 须让学生给出改动和最小性依据，只判断改动前是否满足条件不够。材料不足时指出缺口，不另换一个容易的任务。
 题型未指定时，只有一项关键判断且能设计可信错项用单选；需要评价相互关联的推导、方案或边界用综合题。
+拟定比较或反例任务时，不得要求数学上不成立的翻转（如不得要求构造非抢占式HRRN平均周转时间劣于同到达批处理FCFS的反例；
+可比较不同到达时刻下FCFS、SJF与HRRN的等待时间与响应比变化）。
 输出 {"plan":{"subject":"主科目ID","syllabus_areas":["章节ID"],"topic":"具体考查内容",
 "question_type":"single_choice或comprehensive","objective":"analyze、diagnose、transfer或design",
 "target":"可观察学习表现","task":"具体要设计的推理任务","student_evidence":"学生必须给出的作答证据",
@@ -235,8 +238,10 @@ def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None
     if not score_pinned and payload.get("question_type") != "single_choice":
         hinted = explicit_total_score(payload.get("brief"), *payload.get("requirements", []))
         if hinted is not None:
+            # A total the user wrote in prose is as binding as total_score in JSON.
             constraints["total_score"] = hinted
             constraints["question_type"] = "comprehensive"
+            score_pinned = True
     scope = [{"id": a, "label": AREAS[AREA_SUBJECTS[a]][a], "subject": AREA_SUBJECTS[a]} for a in areas]
     sources = {item["material"]["id"]: item for item in materials}
     fixed = {k: constraints[k] for k in ("subject", "question_type") if k in constraints}
@@ -245,7 +250,9 @@ def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None
 
     def author(_, model):
         plan_constraints = dict(constraints)
-        if not score_pinned and "total_score" not in plan_constraints:
+        if "total_score" in plan_constraints:
+            plan_constraints["score_requirement"] = SCORE_REQUIREMENT.format(total=plan_constraints["total_score"])
+        elif not score_pinned:
             plan_constraints["score_guidance"] = SCORE_GUIDANCE
         planning = complete_stage(model, "plan", SCOUT_PROMPT if auto_material else PLAN_PROMPT,
                                   {"brief": brief, "scope": scope, "constraints": plan_constraints,
