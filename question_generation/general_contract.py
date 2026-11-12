@@ -114,7 +114,16 @@ def validate_design(design, evidence, student):
         require(all(text(v, 2000) for v in claim.values()), "知识依据须为非空文本。")
         require(claim["id"] not in nodes and claim["evidence_id"] in sources, "知识依据ID重复或来源不存在。")
         source = sources[claim["evidence_id"]]
-        require(contains_span(claim["quote"], source.get("excerpt", source["summary"])), "知识依据引文未出现在所选原文或摘要中。")
+        if not contains_span(claim["quote"], source.get("excerpt", source["summary"])):
+            # Models occasionally point a verbatim quote at the neighbouring chunk
+            # of the same chapter. If another material supplied to this item does
+            # contain the quote, rebind instead of rejecting; a quote no supplied
+            # material contains still fails, so fabrication stays rejected.
+            rebind = next((other_id for other_id, other in sources.items()
+                           if other_id != claim["evidence_id"]
+                           and contains_span(claim["quote"], other.get("excerpt", other["summary"]))), None)
+            require(rebind is not None, "知识依据引文未出现在所选原文或摘要中。")
+            claim["evidence_id"] = rebind
         nodes.add(claim["id"])
         claims.add(claim["id"])
     givens = design["givens"]

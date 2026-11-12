@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import socket
 import time
 from http.client import HTTPException
@@ -95,6 +96,60 @@ class _IdleTimeout(Exception):
 INVALID_JSON_MESSAGE = "模型返回无效或空 JSON，本次未生成题目。"
 RAW_RESPONSE_LIMIT = 16_000_000
 CONTENT_LIMIT = 1_000_000
+JSON_FENCE = re.compile(r"^\s*```[A-Za-z0-9_-]*\s*(.*?)\s*```\s*$", re.S)
+INVALID_ESCAPE = re.compile(r'\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4})')
+
+
+def _strip_fence(content):
+    """Drop a ```json wrapper some gateways add despite json_object mode."""
+    match = JSON_FENCE.match(content)
+    return match.group(1) if match else content
+
+
+def _escape_invalid_backslashes(content):
+    r"""Double LaTeX-style single backslashes (\alpha, \le, \times) that JSON rejects."""
+    return INVALID_ESCAPE.sub(r"\\\\", content)
+
+
+def _close_braces(content):
+    """Append up to two missing closing braces; deeper truncation is not repaired."""
+    missing = content.count("{") - content.count("}")
+    if not 0 < missing <= 2:
+        return None
+    return content.rstrip() + "}" * missing
+
+
+def _parse_json_content(content: str, report: dict | None = None) -> dict:
+    """Decode a model JSON body, repairing only bounded formatting slips.
+
+    Repair order: fenced code block, unescaped backslashes, missing closing
+    braces. Repairs never invent content: an unterminated string, a wrong value
+    or trailing text still fails. ``report["repair"]`` names what was applied.
+    """
+    bases = [(content, "none")]
+    fenced = _strip_fence(content)
+    if fenced != content:
+        bases.append((fenced, "fence"))
+    for base, label in list(bases):
+        escaped = _escape_invalid_backslashes(base)
+        if escaped != base:
+            bases.append((escaped, label.replace("none", "") + "backslash"
+                          if label != "none" else "backslash"))
+    for base, label in list(bases):
+        filled = _close_braces(base)
+        if filled is not None:
+            bases.append((filled, label + "+brace" if label != "none" else "brace"))
+    error = None
+    for text, repair in bases:
+        try:
+            value = json.loads(text, strict=False)
+        except (json.JSONDecodeError, RecursionError) as exc:
+            error = exc
+            continue
+        if report is not None:
+            report["repair"] = repair
+        return value
+    raise error
 
 
 def _stream_result(raw: bytes) -> dict:
@@ -257,15 +312,15 @@ class JsonModel:
         request = Request(self.base_url + "/chat/completions", data=body, headers=headers)  # noqa: S310
         started = time.monotonic()
         idle = min(self.timeout, IDLE_TIMEOUT_SECONDS)
-        chunks: list[bytes] = []
-        for attempt in range(self.max_retries + 1):
+        attempts = 0
+        while True:
             if self.attempt_hook is not None:
                 self.attempt_hook()
             try:
+                chunks, size = [], 0
                 # Only a silence window bounds a single read; a stream that keeps
                 # producing output may legitimately run until self.timeout.
                 with build_opener(NoRedirect()).open(request, timeout=idle) as response:
-                    chunks, size = [], 0
                     while True:
                         if time.monotonic() - started > self.timeout:
                             raise ModelError("模型响应超过总时限，本次不交付题目。", code="response_timeout")
@@ -280,15 +335,16 @@ class JsonModel:
                         if size > RAW_RESPONSE_LIMIT:
                             raise ModelError("模型响应超过大小上限。", code="response_size_limit",
                                              content_length=size, response_issue="raw_stream")
-                break
             except _IdleTimeout:
-                if attempt < self.max_retries and time.monotonic() - started < self.timeout:
+                if attempts < self.max_retries and time.monotonic() - started < self.timeout:
+                    attempts += 1
                     time.sleep(self.retry_delay)
                     continue
                 raise ModelError(f"模型流式响应连续 {idle:.0f} 秒无数据，本次不交付题目。",
                                  code="response_timeout", response_issue="idle_timeout") from None
             except HTTPError as error:
-                if error.code in {502, 503, 504} and attempt < self.max_retries:
+                if error.code in {502, 503, 504} and attempts < self.max_retries:
+                    attempts += 1
                     time.sleep(self.retry_delay)
                     continue
                 raise ModelError(f"模型服务返回 HTTP {error.code}，本次未生成题目。",
@@ -296,18 +352,35 @@ class JsonModel:
             except TIMEOUT_ERRORS:
                 raise ModelError("模型调用超时，本次不交付题目。", code="response_timeout") from None
             except URLError as error:
-                if isinstance(error.reason, TimeoutError):
+                if isinstance(error.reason, TIMEOUT_ERRORS):
                     raise ModelError("模型调用超时，本次不交付题目。", code="response_timeout") from None
-                if attempt < self.max_retries:
+                if attempts < self.max_retries:
+                    attempts += 1
                     time.sleep(self.retry_delay)
                     continue
                 raise ModelError("模型服务连接失败，本次未生成题目。", code="transport_error") from None
             except (OSError, HTTPException):
-                if attempt < self.max_retries:
+                if attempts < self.max_retries:
+                    attempts += 1
                     time.sleep(self.retry_delay)
                     continue
                 raise ModelError("模型服务连接失败或超时，本次未生成题目。", code="transport_error") from None
-        result = _decode_body(b"".join(chunks))
+            try:
+                return self._finish_response(b"".join(chunks), started)
+            except ModelError as error:
+                # Only a body that failed to decode (or came back empty) is re-rolled.
+                # Contract failures such as "not an object" are deterministic, and the
+                # re-roll shares the transport retry budget instead of stacking on it.
+                decodable = (error.diagnostics.get("code") == "empty_content"
+                             or error.diagnostics.get("response_issue") == "content_decode")
+                if decodable and attempts < self.max_retries and time.monotonic() - started < self.timeout:
+                    attempts += 1
+                    time.sleep(self.retry_delay)
+                    continue
+                raise
+
+    def _finish_response(self, raw: bytes, started: float) -> dict:
+        result = _decode_body(raw)
         if not isinstance(result, dict):
             raise ModelError(INVALID_JSON_MESSAGE, code="invalid_response", response_issue="envelope_shape")
         usage = result.get("usage", {})
@@ -361,12 +434,12 @@ class JsonModel:
         if len(content) > CONTENT_LIMIT:
             raise ModelError("模型响应正文超过大小上限。", code="response_size_limit",
                              content_length=len(content), response_issue="decoded_content")
+        report = {}
         try:
-            # Some gateways emit a raw control character (usually a newline) inside a
-            # JSON string even in json_object mode. Accepting it does not relax any
-            # structural check applied afterwards; invalid escapes and truncation
-            # still fail below.
-            value = json.loads(content, strict=False)
+            # Tolerates raw control characters inside strings plus the bounded
+            # formatting slips described in _parse_json_content. No structural
+            # check below is relaxed by a repair.
+            value = _parse_json_content(content, report)
         except json.JSONDecodeError as error:
             raise ModelError(INVALID_JSON_MESSAGE, code="invalid_content", finish_reason=finish_reason,
                              response_issue="content_decode", content_decode_position=error.pos,
@@ -374,6 +447,9 @@ class JsonModel:
         except (ValueError, RecursionError):
             raise ModelError(INVALID_JSON_MESSAGE, code="invalid_content", finish_reason=finish_reason,
                              response_issue="content_decode") from None
+        repair = report.get("repair")
+        if repair and repair != "none":
+            self.usage[-1]["content_repair"] = repair
         if not isinstance(value, dict):
             raise ModelError(INVALID_JSON_MESSAGE, code="invalid_content", finish_reason=finish_reason,
                              response_issue="content_not_object")

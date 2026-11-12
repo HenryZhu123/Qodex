@@ -508,7 +508,8 @@ class TransportTests(TestCase):
             with self.subTest(raw=raw):
                 model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')
                 with patch('question_generation.model_client.build_opener') as opener:
-                    opener.return_value.open.return_value = BytesIO(raw)
+                    # A fresh body per HTTP attempt: decodable failures get one re-roll.
+                    opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(raw)
                     with self.assertRaises(ModelError) as error:
                         model.complete('json', {})
                     self.assertEqual(error.exception.diagnostics.get('code'), code)
@@ -573,14 +574,47 @@ class TransportTests(TestCase):
         with patch('question_generation.model_client.build_opener') as opener:
             opener.return_value.open.return_value = BytesIO(raw)
             self.assertEqual(model.complete('json', {}), {'stem': 'first line\nsecond line', 'n': 2})
-        for broken in ('{"stem":"a",', '{"stem":"a\\q"}', '{"stem":"a"} trailing'):
+        # Unescaped LaTeX-style backslashes are repaired into literal text.
+        latex = '{"stem":"$\\alpha \\le \\gamma$"}'
+        raw = json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': latex}}]}).encode()
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(raw)
+            self.assertEqual(model.complete('json', {}), {'stem': '$\\alpha \\le \\gamma$'})
+        self.assertEqual(model.usage[-1]['content_repair'], 'backslash')
+        # A LaTeX command whose second character is itself a valid JSON escape
+        # (\\b, \\f, \\n, \\r, \\t, \\u) parses "successfully" into a control
+        # character and is deliberately NOT rewritten: the ambiguity with real
+        # text escapes cannot be resolved safely here.
+        ambiguous = '{"stem":"\\beta"}'
+        raw = json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': ambiguous}}]}).encode()
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(raw)
+            self.assertEqual(model.complete('json', {}), {'stem': '\beta'})
+        self.assertNotIn('content_repair', model.usage[-1])
+        tail_missing = '{"stem":{"text":"a"}'
+        raw = json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': tail_missing}}]}).encode()
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(raw)
+            self.assertEqual(model.complete('json', {}), {'stem': {'text': 'a'}})
+        self.assertEqual(model.usage[-1]['content_repair'], 'brace')
+        fenced = '```json\n{"ok": true}\n```'
+        raw = json.dumps({'choices': [{'finish_reason': 'stop', 'message': {'content': fenced}}]}).encode()
+        with patch('question_generation.model_client.build_opener') as opener:
+            opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(raw)
+            self.assertEqual(model.complete('json', {}), {'ok': True})
+        self.assertEqual(model.usage[-1]['content_repair'], 'fence')
+        # Unrepairable bodies fail closed after consuming the single re-roll.
+        for broken in ('{"stem":"a",', '{"stem":"a"} trailing', '{"stem":"open'):
             with self.subTest(broken=broken):
                 raw = json.dumps({'choices': [{'finish_reason': 'stop',
                                                'message': {'content': broken}}]}).encode()
-                with patch('question_generation.model_client.build_opener') as opener:
-                    opener.return_value.open.return_value = BytesIO(raw)
-                    with self.assertRaises(ModelError):
+                with patch('question_generation.model_client.build_opener') as opener, patch(
+                        'question_generation.model_client.time.sleep'):
+                    opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(raw)
+                    with self.assertRaises(ModelError) as error:
                         model.complete('json', {})
+                self.assertEqual(error.exception.diagnostics['response_issue'], 'content_decode')
+                self.assertEqual(opener.return_value.open.call_count, 2)
 
     def test_transport_bounds_tokens_and_ignores_provider_reasoning_text(self):
         model = JsonModel(base_url='https://fixture.invalid', model='test', api_key='fixture')

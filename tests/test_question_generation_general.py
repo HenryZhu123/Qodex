@@ -85,6 +85,7 @@ class GeneralContractTests(TestCase):
                     self.assertIn(rule, prompt)
         self.assertIn('错因分析只写在教师视图', PLAN_PROMPT)
         self.assertIn('所有错因分析只准写在 instructor_view', AUTHOR_VIEWS['single_choice'])
+        self.assertIn('禁止设成完全同构的冗余子项', AUTHOR_VIEWS['single_choice'])
 
     def test_comprehensive_view_binds_part_scores_to_scoring_points(self):
         self.assertIn('part.score 必须严格等于该问 scoring_points 的 points 之和',
@@ -221,12 +222,12 @@ class GeneralContractTests(TestCase):
         self.assertIn('HIDDEN_SOURCE_SENTINEL', audit)
         self.assertIn('HIDDEN_INTENT_SENTINEL', audit)
 
-    def test_completed_model_response_with_wrong_envelope_is_a_contract_failure(self):
+    def test_sibling_calculations_with_a_non_object_candidate_are_a_contract_failure(self):
         class WrongEnvelope(Replay):
             def complete(self, system, payload):
                 result = super().complete(system, payload)
                 if system.startswith(AUTHOR_PROMPT):
-                    result['calculations'] = []
+                    return {'candidate': [], 'calculations': []}
                 return result
         result, model = self.run_case(CASES[0], WrongEnvelope(CASES[0]['candidate']))
         self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
@@ -237,9 +238,12 @@ class GeneralContractTests(TestCase):
         content = '{"private题":'
         envelope = {'choices': [{'finish_reason': 'stop', 'message': {'content': content}}],
                     'usage': {'completion_tokens': 20}}
-        with patch('question_generation.model_client.build_opener') as opener:
-            opener.return_value.open.return_value = BytesIO(json.dumps(envelope).encode())
+        with patch('question_generation.model_client.build_opener') as opener, patch(
+                'question_generation.model_client.time.sleep'):
+            # Fresh body per attempt: the decode failure consumes one re-roll.
+            opener.return_value.open.side_effect = lambda *args, **kwargs: BytesIO(json.dumps(envelope).encode())
             result, _ = self.run_case(CASES[0], model)
+        self.assertEqual(opener.return_value.open.call_count, 2)
         self.assertEqual(result['status'], 'MODEL_UNAVAILABLE')
         self.assertEqual(result['questions'], [])
         self.assertEqual(result['authoring_report']['model_failure'], {
@@ -249,7 +253,7 @@ class GeneralContractTests(TestCase):
         })
         self.assertEqual(result['authoring_report']['usage'][0]['completion_tokens'], 20)
         self.assertNotIn('private', json.dumps(result))
-        self.assertEqual(opener.return_value.open.call_count, 1)
+        self.assertEqual(opener.return_value.open.call_count, 2)
 
     def test_student_issue_blocks_before_material_aware_audit(self):
         class Unanswerable(Replay):
@@ -332,6 +336,59 @@ class GeneralContractTests(TestCase):
                 self.assertEqual(question['self_check']['review_warnings'],
                                  [{'check': key, 'reason': 'Protocol fixture only.'}])
 
+    def test_quote_found_in_another_supplied_material_is_rebound(self):
+        case = deepcopy(CASES[0])
+        request = case['request']
+        original = deepcopy(request['evidence'][0])
+        decoy = {**deepcopy(original), 'id': 'note-decoy', 'summary': '与本条引文无关的另一段材料。'}
+        request['evidence'] = [decoy, original]
+        case['candidate']['design']['claims'][0]['evidence_id'] = decoy['id']
+        result, _ = self.run_case(case)
+        self.assertEqual(result['status'], 'GENERATED', result)
+        question, = result['questions']
+        self.assertEqual(question['pedagogy']['claims'][0]['evidence_id'], original['id'])
+        self.assertIn(original['id'], [ref['id'] for ref in question['evidence_refs']])
+        self.assertNotIn(decoy['id'], [ref['id'] for ref in question['evidence_refs']])
+
+    def test_quote_absent_from_every_supplied_material_is_still_rejected(self):
+        case = deepcopy(CASES[0])
+        request = case['request']
+        original = deepcopy(request['evidence'][0])
+        request['evidence'] = [{**deepcopy(original), 'id': 'note-decoy', 'summary': '无关材料。'}, original]
+        case['candidate']['design']['claims'][0]['quote'] = '材料中并不存在的伪造引文。'
+        result, _ = self.run_case(case)
+        self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
+        self.assertIn('知识依据引文未出现在所选原文或摘要中', str(result['authoring_report']['details']))
+
+    def test_calculations_beside_the_candidate_envelope_are_accepted(self):
+        class SiblingCalculations(Replay):
+            def complete(self, system, payload):
+                result = super().complete(system, payload)
+                if system.startswith(AUTHOR_PROMPT):
+                    candidate = result['candidate']
+                    return {'candidate': {k: v for k, v in candidate.items() if k != 'calculations'},
+                            'calculations': candidate['calculations']}
+                return result
+        result, _ = self.run_case(CASES[0], SiblingCalculations(CASES[0]['candidate']))
+        self.assertEqual(result['status'], 'GENERATED', result)
+        question, = result['questions']
+        self.assertEqual(question['self_check']['calculations'], CASES[0]['candidate']['calculations'])
+
+    def test_unknown_sibling_keys_beside_the_candidate_are_still_rejected(self):
+        for extra in ({'design': {}}, {'calc': []}):
+            with self.subTest(extra=sorted(extra)):
+                class DriftedEnvelope(Replay):
+                    def complete(self, system, payload, value=extra):
+                        result = super().complete(system, payload)
+                        if system.startswith(AUTHOR_PROMPT):
+                            candidate = result['candidate']
+                            return {'candidate': {k: v for k, v in candidate.items() if k != 'calculations'},
+                                    **value}
+                        return result
+                result, _ = self.run_case(CASES[0], DriftedEnvelope(CASES[0]['candidate']))
+                self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
+                self.assertIn('创作响应结构', str(result['authoring_report']['stage']))
+
     def test_audit_passed_ignores_advisory_verdict_and_requires_all_hard_checks(self):
         def audit(**failed):
             checks = {k: {'passed': True, 'reason': 'Checked.'} for k in CHECKS}
@@ -351,6 +408,26 @@ class GeneralContractTests(TestCase):
         inconsistent = audit()
         inconsistent['valid'] = False
         self.assertFalse(audit_passed(inconsistent))
+
+    def test_non_blocking_issues_are_advisory_notes_not_rejections(self):
+        # baseline-16 co-co-1: valid=true, all nine checks passed, three suggestions
+        # in issues, and the old contract dropped the item as self-contradictory.
+        checks = {k: {'passed': True, 'reason': 'Checked.'} for k in CHECKS}
+        audit = {'valid': True, 'issues': ['p1 未定义“指令间隔”。', 'p2 分值粒度过粗。'],
+                 'adversarial_case': 'Concrete alternative reading.', 'checks': checks}
+        self.assertTrue(audit_passed(audit))
+        warnings = audit_warnings(audit)
+        self.assertEqual([w['check'] for w in warnings], ['advisory_note', 'advisory_note'])
+        self.assertEqual([w['reason'] for w in warnings], audit['issues'])
+        # Blocking failures still veto regardless of issues.
+        for key in BLOCKING_CHECKS:
+            failed = {'valid': True, 'issues': ['still an issue'], 'adversarial_case': 'x',
+                      'checks': {**checks, key: {'passed': False, 'reason': 'failed.'}}}
+            with self.subTest(check=key):
+                self.assertFalse(audit_passed(failed))
+        # A false valid with no advisory explanation stays a contract failure.
+        self.assertFalse(audit_passed({**audit, 'valid': False}))
+        self.assertEqual(audit_warnings({**audit, 'valid': False, 'issues': []}), [])
 
     def test_single_choice_plan_and_audit_prompts_do_not_require_written_steps(self):
         self.assertIn('单选题', PLAN_PROMPT)
