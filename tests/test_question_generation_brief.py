@@ -57,7 +57,14 @@ class BriefAuthoringTests(TestCase):
                 self.assertTrue(author_prompt.startswith(author + '\nbrief_plan.brief'))
                 question, = result['questions']
                 self.assertEqual(question['review_status'], 'PENDING')
-                self.assertEqual(question['student_view'], case['candidate']['student_view'])
+                if request['question_type'] == 'single_choice':
+                    author_options = {o['id']: o['text'] for o in case['candidate']['student_view']['options']}
+                    mapping = question['self_check']['delivered_option_mapping']
+                    self.assertEqual({o['id']: o['text'] for o in question['student_view']['options']},
+                                     {label: author_options[author_id]
+                                      for label, author_id in mapping.items()})
+                else:
+                    self.assertEqual(question['student_view'], case['candidate']['student_view'])
                 self.assertEqual(question['metadata']['question_type'], request['question_type'])
                 self.assertEqual(set(model.calls[2][1]), {'question_type', 'student_view'})
                 self.assertEqual(model.calls[3][1]['brief_plan'], result['authoring_report']['plan'])
@@ -317,7 +324,12 @@ class BriefAuthoringTests(TestCase):
         with patch.object(model, 'complete', side_effect=unwrapped) as invoke:
             result = generate_from_brief(payload, client=model, cache_path=self.cache)
         self.assertEqual(result['status'], 'GENERATED', result)
-        self.assertEqual(result['questions'][0]['student_view'], case['candidate']['student_view'])
+        question, = result['questions']
+        author_options = {o['id']: o['text'] for o in case['candidate']['student_view']['options']}
+        delivered = {o['id']: o['text'] for o in question['student_view']['options']}
+        self.assertEqual(sorted(delivered.values()), sorted(author_options.values()))
+        self.assertEqual(delivered[question['instructor_view']['correct_option_id']],
+                         author_options[case['candidate']['instructor_view']['correct_option_id']])
         self.assertEqual(invoke.call_count, 4)
 
     def test_envelope_normalization_never_swallows_incomplete_bodies(self):

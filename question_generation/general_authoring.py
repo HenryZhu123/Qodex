@@ -14,7 +14,7 @@ from typing import Any, cast
 
 from . import scenario_binding
 from .curriculum import read_scope
-from .general_contract import design_diagnostics, text, texts, validate_candidate
+from .general_contract import content_warnings, design_diagnostics, text, texts, validate_candidate
 from .generation import failure_result
 from .model_client import complete_stage
 
@@ -140,7 +140,7 @@ all/any/count分别表示所有/至少一个/多少个合法状态满足查询�
 """
 
 AUTHOR_VIEWS = {
-    "single_choice": """单选题只填以下视图，示例中A为正确项，实际以解答为准。
+    "single_choice": """单选题只填以下视图。示例只展示结构，正确项位置由系统重排。
 student_view={"stem":"题干","options":[{"id":"A","text":"选项"},{"id":"B","text":"选项"},{"id":"C","text":"选项"},{"id":"D","text":"选项"}]}。
 instructor_view={"correct_option_id":"A","explanation":"完整推导",
 "option_explanations":{"A":"成立依据","B":"不成立的依据","C":"不成立的依据","D":"不成立的依据"},
@@ -161,10 +161,11 @@ instructor_view={"grading_policy":"错误延续与避免重复扣分规则","par
 {"part_id":"p1","solution":"完整解答","depends_on":[],
 "scoring_points":[{"id":"s1","points":2,"criterion":"可观察的得分条件","expected":"应有结果或论证"}],
 "equivalent_methods":[{"id":"m1","acceptance":"其他合法方法及接受条件"}]}]}。
-2至6问，考查相关但不同的能力，后问不泄露前问。小问分数合计等于constraints.total_score。
+2至6问，考查相关但不同的能力，后问不泄露前问。
+若请求固定了总分（constraints.total_score），各小问分数合计必须严格等于该总分；
+若未固定，可自行确定一个自洽总分，只需总分在2至30分内。
 depends_on只引用前问ID，每问评分点points优先使用正整数（必要时可用0.5分），合计等于该问分数。
-每问 part.score 必须严格等于该问 scoring_points 的 points 之和；只要小问分值自洽且总分在2至30分内，
-题内自拟的总分会被采纳，不要为了凑一个外部默认值而改动小问分值。
+每问 part.score 必须严格等于该问 scoring_points 的 points 之和。
 评分点只写判分所需内容，完整论证放在solution。
 算法题说明正确性、复杂度和边界输入。
 """,
@@ -216,11 +217,14 @@ grading 仅在下列情形判 passed=false：标准答案或评分点 expected �
 reasoning_necessity只记录干扰项偏弱、可部分排除等教学风险；存在单步或部分计算排除捷径时，
 如实判failed并引用具体错项分句，但这是软指标，不单独否决题目。
 输出 {"valid":true或false,"issues":[],"adversarial_case":"实际尝试的反例/替代读法和检验结果",
-"checks":{"answer_agreement":{"passed":true,"reason":"..."},"grounding":同结构,
-"scope":同结构,"requirements":同结构,"reasoning_necessity":同结构,"counterfactual":同结构,
-"ambiguity":同结构,"grading":同结构,"witness_alignment":同结构}}。
+"checks":{"answer_agreement":{"passed":true,"reason":"..."},
+"grounding":{"passed":true,"reason":"..."},"scope":{"passed":true,"reason":"..."},
+"requirements":{"passed":true,"reason":"..."},"reasoning_necessity":{"passed":true,"reason":"..."},
+"counterfactual":{"passed":true,"reason":"..."},"ambiguity":{"passed":true,"reason":"..."},
+"grading":{"passed":true,"reason":"..."},"witness_alignment":{"passed":true,"reason":"..."}}}。
 硬阻断中的实质问题令valid=false，相关passed=false并说明原因；软指标失败仍如实写passed=false。
-issues只放说明问题的字符串，不放对象。对未适用的数值见证说明仅做了模型复核。
+issues只放说明阻断问题的字符串，不放对象；评分粒度、覆盖建议等非阻断意见写进对应check的reason，不写issues。
+对未适用的数值见证说明仅做了模型复核。
 """
 
 
@@ -288,6 +292,13 @@ path按repair.previous的层级写，数组下标从0开始；只能替换已有
 """
 
 
+def prompt_fingerprint():
+    """Stable hash of every prompt that can affect a general candidate."""
+    parts = [VERSION, AUTHOR_PROMPT, READER_PROMPT, AUDIT_PROMPT, REPAIR_PROMPT]
+    parts.extend(AUTHOR_VIEWS[key] for key in sorted(AUTHOR_VIEWS))
+    return hashlib.sha256("\n---\n".join(parts).encode("utf-8")).hexdigest()
+
+
 def engine_version(settings):
     return VERSION + "-public-v1" if "public_scenario" in settings else VERSION
 
@@ -315,11 +326,13 @@ def student_quality(review):
     The audit owns depth as an advisory check, so a blind solve that is correct,
     unambiguous and answerable must reach it even when the reader rates the
     reasoning as basic. depth=0 still blocks (the reader found no reasoning).
+    Extra quality annotations are prose, so only the four required verdicts are
+    typed and bounded.
     """
     quality = review.get("quality")
-    keys = {"answerability", "depth", "distractors", "clarity"}
-    return (isinstance(quality, dict) and quality.keys() == keys
-            and all(type(v) is int and v in (0, 1, 2) for v in quality.values())
+    keys = ("answerability", "depth", "distractors", "clarity")
+    return (isinstance(quality, dict) and set(keys) <= quality.keys()
+            and all(type(quality[key]) is int and quality[key] in (0, 1, 2) for key in keys)
             and quality["answerability"] == 2 and quality["clarity"] >= 1
             and quality["distractors"] >= 1 and quality["depth"] >= 1
             and review.get("issues") == [] and text(review.get("solution")))
@@ -361,6 +374,30 @@ def apply_replacements(previous, replacements):
     return candidate
 
 
+def delivered_choice_views(candidate, seed):
+    """Shuffle and relabel single-choice options for delivery.
+
+    Returns ``(student_view, instructor_view, mapping)``. ``mapping`` keeps its
+    original meaning (delivered label -> author option id), so the blind-review
+    audit trail and the delivered question can be reconciled after relabeling.
+    The teacher view is relabeled with the same inverse mapping; its values are
+    copied, never rewritten.
+    """
+    student = deepcopy(candidate["student_view"])
+    Random(seed).shuffle(student["options"])
+    mapping = {}
+    for index, option in enumerate(student["options"]):
+        label = "ABCD"[index]
+        mapping[label] = option["id"]
+        option["id"] = label
+    inverse = {author_id: label for label, author_id in mapping.items()}
+    teacher = deepcopy(candidate["instructor_view"])
+    teacher["correct_option_id"] = inverse[teacher["correct_option_id"]]
+    for field in ("option_explanations", "misconceptions"):
+        teacher[field] = {inverse[key]: value for key, value in teacher[field].items()}
+    return student, teacher, mapping
+
+
 def run(payload, client, request, settings, *, brief_plan=None, version=None, repair=None, score_pinned=True):
 
     context = {"metadata": request.metadata, "scope": read_scope(request.metadata["subject"], settings["syllabus_areas"]),
@@ -394,24 +431,38 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                           "不得在题面要求学生写出中间步骤或双重说明。" if choice else
                           "综合题的作答证据须落实到小问与评分点，可要求中间状态、推导或论证。")
         if not choice and "total_score" in request.constraints:
-            author_prompt += (f"\n各小问分值之和必须严格等于请求总分 {request.constraints['total_score']} 分；"
-                              "不能用一个不同的总分替代它，只能调整小问分值。")
+            if score_pinned:
+                author_prompt += (f"\n各小问分值之和必须严格等于请求总分 {request.constraints['total_score']} 分；"
+                                  "不能用一个不同的总分替代它，只能调整小问分值。")
+            else:
+                author_prompt += (f"\n本次未固定总分；constraints.total_score={request.constraints['total_score']} "
+                                  "只是默认值。若你按自洽的小问分值设计出不同的总分（2至30分），系统会采纳题内总分；"
+                                  "不要为了凑默认值破坏小问分值的自洽性。")
     if repair is not None and scenario_kind:
         author_prompt += ("\nrepair.previous是待核查旧题，repair.feedback描述需要解决的问题。"
                           "保持原主题、考查目标、原始要求、小问ID和分值，保留与缺陷无关的条件。"
                           "只改动解决缺陷及其连带影响所需的题面、解析、评分和设计。"
                           "重新求解并检查所有受影响的选项或得分点。旧答案和反馈里的结论都需要独立核实。")
     authored = complete_stage(client, "author", author_prompt, context)
+    ignored_keys = []
     if not patch_repair and "candidate" not in authored and set(authored) == CANDIDATE_FIELDS:
         # Models occasionally return the candidate body without its envelope; the
         # content is still the same artifact, so accept it instead of re-rolling.
         authored = {"candidate": authored}
-    elif (not patch_repair and set(authored) == {"candidate", "calculations"}
-            and isinstance(authored["candidate"], dict)):
-        # Some models put the optional witness list next to the envelope instead of
-        # inside it. Move it in without overwriting an inner list that already exists.
+    elif (not patch_repair and isinstance(authored.get("candidate"), dict)
+            and "material_gaps" not in authored):
+        # Some models attach a scalar annotation beside the envelope (for example
+        # "type" or "schema_version"). It carries no task content, so ignore it and
+        # keep the diagnostic. Structured extras can be a second candidate body or
+        # a misplaced witness list and still fail the envelope contract.
+        extra = sorted(key for key in authored if key not in ("candidate", "calculations"))
+        if any(isinstance(authored[key], (dict, list)) for key in extra):
+            return rejected("创作响应结构", "模型响应在candidate之外包含结构化字段：" + "、".join(extra) + "。")
+        ignored_keys = extra
+        # A sibling witness list is optional; keep an inner list if one exists.
         candidate = authored["candidate"]
-        candidate.setdefault("calculations", authored["calculations"])
+        if "calculations" not in candidate and isinstance(authored.get("calculations"), list):
+            candidate["calculations"] = authored["calculations"]
         authored = {"candidate": candidate}
     if authored.keys() == {"material_gaps"} and texts(authored["material_gaps"]):
         return rejected("材料不足", authored["material_gaps"], "NEEDS_MATERIAL")
@@ -430,7 +481,11 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                     candidate = scaled
             else:
                 request = sync_designed_total_score(request, candidate)
+                # The audit must see the constraints that now govern delivery,
+                # not the stale pre-sync object the author stage received.
+                context["constraints"] = request.constraints
         evidence_ids = validate_candidate(candidate, request, payload["evidence"])
+        content_notes = content_warnings(candidate, request.metadata["question_type"])
         if repair is not None:
             old = repair["previous"]
             student = candidate["student_view"]
@@ -443,18 +498,15 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     except (ValueError, TypeError, KeyError) as error:
         return rejected("设计与结构检查", str(error))
     student = deepcopy(candidate["student_view"])
+    instructor = candidate["instructor_view"]
     mapping = {}
     if choice:
-        Random(request.seed).shuffle(student["options"])
-        for index, option in enumerate(student["options"]):
-            label = "ABCD"[index]
-            mapping[label] = option["id"]
-            option["id"] = label
+        student, instructor, mapping = delivered_choice_views(candidate, request.seed)
     # Author context can silently repair an underspecified student question.
     review = complete_stage(client, "reader", READER_PROMPT,
                             {"question_type": request.metadata["question_type"], "student_view": student})
     review = normalize_reader_review(review)
-    if not student_quality(review) or not text(review.get("depth_evidence")):
+    if not student_quality(review):
         return rejected("独立解答与质量检查", review)
     perturbation = review.get("condition_test")
     if not isinstance(perturbation, dict) or perturbation.keys() != {"change", "effect"} or not all(text(v) for v in perturbation.values()):
@@ -495,13 +547,19 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     if review["quality"]["depth"] == 1:
         review_warnings.append({"check": "reader_depth",
                                 "reason": "独立解题判定推理深度偏基础（depth=1）。"})
+    if not text(review.get("depth_evidence")):
+        review_warnings.append({"check": "reader_depth_evidence",
+                                "reason": "独立解题未说明不可省略的关系推理；只记录为警告。"})
+    review_warnings.extend(content_notes)
     metadata = request.metadata.copy()
     if not choice:
         metadata["score"] = request.constraints["total_score"]
+    metadata["syllabus_areas"] = list(settings.get("syllabus_areas", []))
+    metadata["knowledge_points"] = list(candidate["design"]["concepts"][:8])
     version = version or (BRIEF_VERSION if brief_plan is not None else engine_version(settings))
     question = {
-        "version": 1, "metadata": metadata, "student_view": candidate["student_view"],
-        "instructor_view": candidate["instructor_view"], "pedagogy": candidate["design"],
+        "version": 1, "metadata": metadata, "student_view": student,
+        "instructor_view": instructor, "pedagogy": candidate["design"],
         "evidence_refs": [e for e in request.evidence_refs if e["id"] in evidence_ids],
         "generator": {"version": version, "model": client.model, "seed": request.seed,
                       "parameters": {"constraints": request.constraints, "authoring": settings}},
@@ -512,6 +570,9 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                                               "typed_calculation_count": len(candidate["calculations"])},
                        "calculations": candidate["calculations"], "blind_review": review,
                        "design_diagnostics": diagnostics, "review_warnings": review_warnings,
+                       "delivered_option_mapping": mapping,
+                       "delivered_correct_option_author_id": (
+                           candidate["instructor_view"]["correct_option_id"] if choice else None),
                        "blind_option_mapping": mapping, "audit": audit},
         "review_status": "PENDING",
     }
@@ -527,5 +588,8 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
         )
     digest = hashlib.sha256(json.dumps([request.request_id, question], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
     question["question_id"] = "authored-" + digest[:24]
+    report = {"candidate_count": 1, "usage": client.usage, "engine": version}
+    if ignored_keys:
+        report["ignored_author_keys"] = ignored_keys
     return {"schema_version": "0.1", "request_id": request.request_id, "status": "GENERATED", "questions": [question],
-            "authoring_report": {"candidate_count": 1, "usage": client.usage, "engine": version}}
+            "authoring_report": report}

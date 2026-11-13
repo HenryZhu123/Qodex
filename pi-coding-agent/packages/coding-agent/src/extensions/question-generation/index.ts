@@ -15,6 +15,47 @@ const parameters = Type.Object({
 	}),
 });
 
+const DETAIL_LIMIT = 500;
+
+function detailText(value: unknown): string {
+	if (typeof value === "string") return value;
+	try {
+		return JSON.stringify(value) ?? String(value);
+	} catch {
+		return String(value);
+	}
+}
+
+function truncateDetail(value: unknown): string {
+	const text = detailText(value);
+	return text.length > DETAIL_LIMIT ? `${text.slice(0, DETAIL_LIMIT - 1)}…` : text;
+}
+
+function describeHttpFailure(status: number, body: unknown, raw: string): string {
+	const parts = [`HTTP ${status}`];
+	if (typeof body === "object" && body !== null) {
+		const record = body as Record<string, unknown>;
+		for (const key of ["status", "detail", "message"]) {
+			if (key in record) parts.push(`${key}: ${truncateDetail(record[key])}`);
+		}
+	}
+	if (parts.length === 1 && raw.trim()) parts.push(truncateDetail(raw.trim()));
+	return `INVALID_QUESTION_GENERATION_RESPONSE (${parts.join("; ")})`;
+}
+
+function isQuestionGenerationResult(
+	value: unknown,
+): value is { status: string; questions: unknown[] } & Record<string, unknown> {
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		"status" in value &&
+		typeof (value as Record<string, unknown>).status === "string" &&
+		"questions" in value &&
+		Array.isArray((value as Record<string, unknown>).questions)
+	);
+}
+
 export default function questionGenerationExtension(pi: ExtensionAPI): void {
 	pi.registerTool({
 		name: "question_generation",
@@ -34,9 +75,10 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 		parameters,
 		async execute(_id, { operation, request }, signal) {
 			const base = (process.env.QUESTION_GENERATION_SERVICE_URL || "http://127.0.0.1:8093").replace(/\/+$/, "");
+			const defaultTimeout = operation === "batch" || operation === "replenishment" ? 1_200_000 : 600_000;
 			let response: Response;
 			try {
-				const configuredTimeout = Number(process.env.QUESTION_GENERATION_TIMEOUT_MS || 600_000);
+				const configuredTimeout = Number(process.env.QUESTION_GENERATION_TIMEOUT_MS || defaultTimeout);
 				if (!Number.isInteger(configuredTimeout) || configuredTimeout < 1_000 || configuredTimeout > 1_800_000) {
 					throw new Error("INVALID_QUESTION_GENERATION_TIMEOUT");
 				}
@@ -51,21 +93,21 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 				if (signal?.aborted) throw error;
 				throw new Error("QUESTION_GENERATION_UNAVAILABLE");
 			}
-			let result: unknown;
+			let raw: string;
 			try {
-				result = await response.json();
+				raw = await response.text();
 			} catch (error) {
 				if (signal?.aborted) throw error;
 				throw new Error("INVALID_QUESTION_GENERATION_RESPONSE");
 			}
-			if (
-				typeof result !== "object" ||
-				result === null ||
-				!("status" in result) ||
-				typeof result.status !== "string" ||
-				!("questions" in result) ||
-				!Array.isArray(result.questions)
-			) {
+			let result: unknown;
+			try {
+				result = JSON.parse(raw);
+			} catch {
+				result = undefined;
+			}
+			if (!isQuestionGenerationResult(result)) {
+				if (!response.ok) throw new Error(describeHttpFailure(response.status, result, raw));
 				throw new Error(`INVALID_QUESTION_GENERATION_RESPONSE (${response.status})`);
 			}
 			return {

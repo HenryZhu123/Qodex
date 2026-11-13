@@ -7,7 +7,7 @@ import re
 from .authoring import cached_authoring, read_authoring
 from .comprehensive import read_revision, request_id, revised
 from .curriculum import AREAS
-from .general_authoring import BRIEF_VERSION, REVISION_VERSION, SCOUTED_BRIEF_VERSION, VERSION, run
+from .general_authoring import BRIEF_VERSION, REVISION_VERSION, SCOUTED_BRIEF_VERSION, VERSION, prompt_fingerprint, run
 from .general_contract import text, validate_candidate
 from .generation import RequestError, _evidence_refs, failure_result
 from .knowledge import KnowledgeUnavailable
@@ -104,4 +104,4 @@ def revise_authored(payload, *, knowledge=None, client=None, cache_path=None):
                 "authoring_report": result["authoring_report"]}
 
     return cached_authoring({**payload, "evidence": evidence}, REVISION_VERSION, repair,
-                            client=client, cache_path=cache_path)
+                            client=client, cache_path=cache_path, cache_salt=prompt_fingerprint())

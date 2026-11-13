@@ -70,6 +70,23 @@ class KnowledgeEvidence:
             seen.add(identity)
             self.entries.setdefault(topic, []).append(entry)
 
+    def sample(self) -> dict:
+        """Read up to three catalogued chunks for a shallow health probe.
+
+        Never raises: a broken index or missing database becomes an ``ok=False``
+        component so ``/health`` can report ``degraded`` instead of returning 500.
+        """
+        entries = [entry for group in self.entries.values() for entry in group][:3]
+        last_error = None
+        for entry in entries:
+            try:
+                item = self._read(self.root / SUBJECT_DIRS[entry["subject"]] / entry["database"], entry)
+                if item is not None:
+                    return {"ok": True, "id": item["id"]}
+            except Exception as error:  # noqa: BLE001 - health probes must not raise
+                last_error = f"{type(error).__name__}: {error}"[:300]
+        return {"ok": False, "reason": last_error or "没有可读取的知识库 chunk"}
+
     def discover(self, payload: dict) -> list[dict]:
         from .material_discovery import discover
         return discover(self, payload)

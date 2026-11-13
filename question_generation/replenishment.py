@@ -6,7 +6,7 @@ from collections.abc import Callable
 import hashlib
 import json
 
-from .batch import MAX_QUESTIONS, generate_batch
+from .batch import MAX_QUESTIONS, authored_question_count, generate_batch
 from .generation import SCHEMA_VERSION, failure_result
 
 SUBJECTS = {
@@ -85,6 +85,11 @@ def _batch_request(payload: dict) -> tuple[dict, dict[str, dict], tuple[str, ...
         }
     if sum(slot["count"] for slot in slots) != requested_count:
         raise ValueError("各联合槽位缺题数量之和须等于 suggested_additional_count。")
+    authored_count = authored_question_count(slots)
+    if authored_count > 2:
+        raise ValueError(
+            f"单批最多包含 2 道模型创作题，当前为 {authored_count} 道；"
+            "请按槽位拆分为多个补题请求（每个请求最多 2 道 authored 题）以控制调用预算。")
 
     # Keep request IDs in a separate namespace and include the slot contract so
     # different score or difficulty targets cannot collide in the pending queue.
@@ -101,13 +106,15 @@ def _batch_request(payload: dict) -> tuple[dict, dict[str, dict], tuple[str, ...
 
 
 def generate_replenishment(payload: dict, *, single_generator: Callable[[object], dict] | None = None) -> dict:
+    if not isinstance(payload, dict):
+        return failure_result("INVALID_REQUEST", "补题请求必须是JSON对象。")
     try:
         batch, sources, reserved_stems = _batch_request(payload)
     except ValueError as error:
         return failure_result("INVALID_REQUEST", str(error))
     result = generate_batch(batch, single_generator=single_generator, reserved_stems=reserved_stems)
-    for question in result["questions"]:
+    for question in result.get("questions", []):
         question["assembly_slot"] = {**sources[question["slot_id"]], "difficulty_status": "REVIEW_REQUIRED"}
-    for deficit in result["deficits"]:
+    for deficit in result.get("deficits", []):
         deficit["assembly_slot"] = sources[deficit["slot_id"]]
     return {**result, "assembly_request_id": sources["assembly-1"]["request_id"]}

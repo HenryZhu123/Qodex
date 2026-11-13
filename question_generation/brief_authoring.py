@@ -6,7 +6,7 @@ from hashlib import sha256
 
 from .authoring import OBJECTIVES, cached_authoring, read_authoring
 from .curriculum import AREAS, read_scope
-from .general_authoring import BRIEF_VERSION, SCOUTED_BRIEF_VERSION, run
+from .general_authoring import BRIEF_VERSION, SCOUTED_BRIEF_VERSION, prompt_fingerprint, run
 from .general_contract import text, texts
 from .generation import SCHEMA_VERSION, RequestError, _evidence_refs, failure_result
 from .knowledge import KnowledgeUnavailable
@@ -40,7 +40,7 @@ CHAPTER_QUERIES = {
 # total. A bare "每问2分" is not a total and stays unmatched.
 SCORE_HINT = re.compile(r"(?:总分|满分|共|一道)\s*(\d{1,2})\s*分")
 DEFAULT_TOTAL_SCORE = 10
-SCORE_GUIDANCE = "若设计综合题，各小问总分默认按10分设计。"
+SCORE_GUIDANCE = "若设计综合题，各小问总分默认按10分设计；若题内分值更自洽，可采用题内总分。"
 SCORE_REQUIREMENT = "若设计综合题，各小问分值之和必须严格等于该总分（{total}分），不得改用其他总分。"
 
 
@@ -297,4 +297,4 @@ def generate_from_brief(payload, *, knowledge=None, client=None, cache_path=None
 
     version = SCOUTED_BRIEF_VERSION if auto_material else BRIEF_VERSION
     return cached_authoring({**payload, "scouted_materials": materials, "scope": areas}, version, author,
-                            client=client, cache_path=cache_path)
+                            client=client, cache_path=cache_path, cache_salt=prompt_fingerprint())

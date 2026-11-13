@@ -1,6 +1,7 @@
 """Small, bounded JSON-completion adapter. Credentials never enter artifacts."""
 from __future__ import annotations
 
+from contextvars import ContextVar
 import json
 import math
 import os
@@ -12,6 +13,8 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 from uuid import uuid4
+
+from . import observability
 
 
 class ModelError(Exception):
@@ -35,11 +38,58 @@ def _restore(client, name, previous):
         delattr(client, name)
 
 
+# A pipeline-wide deadline shared by every stage of one authoring attempt. The
+# value is an absolute ``time.monotonic()`` instant, set by ``cached_authoring``.
+PIPELINE_DEADLINE: ContextVar[float | None] = ContextVar(
+    "question_generation_pipeline_deadline", default=None,
+)
+PIPELINE_TIMEOUT_SECONDS = 900
+PIPELINE_TIMEOUT_ENV = "QUESTION_GENERATION_PIPELINE_TIMEOUT_SECONDS"
+
+
+def pipeline_timeout_seconds() -> float:
+    """Read the total pipeline budget; invalid values fall back to the default."""
+    raw = os.environ.get(PIPELINE_TIMEOUT_ENV, str(PIPELINE_TIMEOUT_SECONDS))
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        return float(PIPELINE_TIMEOUT_SECONDS)
+    return value if value > 0 else float(PIPELINE_TIMEOUT_SECONDS)
+
+
+def _usage_since(client, start: int) -> dict | None:
+    usage = getattr(client, "usage", None)
+    if isinstance(usage, list) and len(usage) > start and isinstance(usage[-1], dict):
+        return usage[-1]
+    return None
+
+
 def complete_stage(client, stage: str, system: str, payload: dict) -> dict:
     """Attach the calling stage and apply its frozen budget/effort without changing the client."""
     budgets = getattr(client, "stage_output_tokens", {})
     timeouts = getattr(client, "stage_timeout_seconds", {})
     efforts = getattr(client, "stage_reasoning_effort", {})
+    deadline = PIPELINE_DEADLINE.get()
+    if deadline is not None and time.monotonic() >= deadline:
+        attempt = max(1, int(getattr(client, "attempt", 1) or 1))
+        observability.event("stage.start", stage=stage, attempt=attempt, elapsed_ms=0.0, usage=None)
+        observability.event(
+            "stage.end", stage=stage, attempt=attempt, elapsed_ms=0.0, usage=None,
+            status="deadline", code="response_timeout",
+        )
+        error = ModelError(
+            "命题流水线超过总时限，本次未交付题目。",
+            code="response_timeout", response_issue="pipeline_deadline",
+        )
+        error.diagnostics["stage"] = stage
+        if stage in efforts:
+            error.diagnostics["reasoning_effort"] = efforts[stage]
+        raise error
+    started = time.monotonic()
+    attempt = max(1, int(getattr(client, "attempt", 1) or 1))
+    usage = getattr(client, "usage", None)
+    usage_start = len(usage) if isinstance(usage, list) else 0
+    observability.event("stage.start", stage=stage, attempt=attempt, elapsed_ms=0.0, usage=None)
     previous_budget = getattr(client, "max_output_tokens", None)
     previous_timeout = getattr(client, "timeout", None)
     previous_effort = getattr(client, "reasoning_effort", None)
@@ -50,12 +100,24 @@ def complete_stage(client, stage: str, system: str, payload: dict) -> dict:
             client.timeout = timeouts[stage]
         if stage in efforts:
             client.reasoning_effort = efforts[stage]
-        return client.complete(system, payload)
+        result = client.complete(system, payload)
     except ModelError as error:
         error.diagnostics["stage"] = stage
         if stage in efforts:
             error.diagnostics["reasoning_effort"] = efforts[stage]
+        observability.event(
+            "stage.end", stage=stage, attempt=max(1, int(getattr(client, "attempt", attempt) or attempt)),
+            elapsed_ms=round((time.monotonic() - started) * 1000, 1), usage=_usage_since(client, usage_start),
+            status="error", code=error.diagnostics.get("code"),
+        )
         raise
+    else:
+        observability.event(
+            "stage.end", stage=stage, attempt=max(1, int(getattr(client, "attempt", attempt) or attempt)),
+            elapsed_ms=round((time.monotonic() - started) * 1000, 1), usage=_usage_since(client, usage_start),
+            status="ok",
+        )
+        return result
     finally:
         _restore(client, "max_output_tokens", previous_budget)
         _restore(client, "timeout", previous_timeout)
@@ -251,6 +313,7 @@ class JsonModel:
         self.stage_timeout_seconds: dict[str, int] = {}
         self.stage_reasoning_effort: dict[str, str] = {}
         self.usage = []
+        self.attempt = 1
         self.session_id = uuid4().hex
         self.opencode_go = parsed.hostname == "opencode.ai" and parsed.path.rstrip("/") == "/inference/go/openai/v1"
 
@@ -314,6 +377,7 @@ class JsonModel:
         idle = min(self.timeout, IDLE_TIMEOUT_SECONDS)
         attempts = 0
         while True:
+            self.attempt = attempts + 1
             if self.attempt_hook is not None:
                 self.attempt_hook()
             try:

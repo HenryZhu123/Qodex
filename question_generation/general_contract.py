@@ -32,6 +32,13 @@ def positive_half_step(value):
 # Letters, digits and CJK only: PDF line wraps, full-width glyphs, ligatures,
 # commas and OCR punctuation are layout noise, never missing evidence.
 SKELETON_NOISE = re.compile(r"[^0-9a-zA-Z\u4e00-\u9fff]+")
+# Options are results, not arguments. The author prompt already forbids causal
+# prose there; this makes the rule mechanical instead of model-enforced.
+CAUSAL_OPTION_TEXT = re.compile(r"因为|由于|只要|因此|所以|这说明")
+# A visible table/figure number is only a warning: the author may have inlined
+# the data, and the audit decides whether students can actually see it.
+VISUAL_REFERENCE = re.compile(r"表\s*\d|图\s*\d")
+WITNESS_KINDS = {"paging", "cache", "stack", "subnet"}
 # A running page header can split a sentence across a page break (e.g. 较 + 输入/ + 近).
 MAX_PAGE_NOISE_GAP = 6
 
@@ -202,10 +209,32 @@ def validate_design(design, evidence, student):
     return sorted({c["evidence_id"] for c in design["claims"]})
 
 
+def compact_text(value):
+    """NFKC and layout whitespace normalized, for duplicate/content comparisons."""
+    return "".join(normalize("NFKC", value).split())
+
+
+def validate_option_content(options):
+    """Hard content guard for the four single-choice options.
+
+    Distractors must state a result; a causal clause turns the option into a
+    free explanation and gives away part of the reasoning. NFKC comparison also
+    catches full-width or whitespace-padded duplicates that ``strip`` missed.
+    """
+    for option in options:
+        require(not CAUSAL_OPTION_TEXT.search(option["text"]),
+                "选项文本不得包含因果解释词（因为/由于/只要/因此/所以/这说明）；错因只写在教师视图。")
+    require(len({compact_text(option["text"]) for option in options}) == 4, "选项重复。")
+
+
 def validate_candidate(candidate, request, evidence):
-    require(isinstance(candidate, dict) and candidate.keys() == {
-        "student_view", "instructor_view", "design", "calculations"
-    }, "候选字段无效。")
+    # ``calculations`` is an optional witness list: a model that omits it still
+    # supplied the whole item. Every other field keeps its exact contract.
+    require(isinstance(candidate, dict)
+            and {"student_view", "instructor_view", "design"} <= candidate.keys()
+            and candidate.keys() - {"student_view", "instructor_view", "design", "calculations"} == set(),
+            "候选字段无效。")
+    candidate.setdefault("calculations", [])
     student, teacher = candidate["student_view"], candidate["instructor_view"]
     require(isinstance(student, dict) and text(student.get("stem")) and isinstance(teacher, dict), "题面或教师视图无效。")
     if request.metadata["question_type"] == "single_choice":
@@ -214,7 +243,7 @@ def validate_candidate(candidate, request, evidence):
         require(isinstance(options, list) and len(options) == 4 and all(
             isinstance(o, dict) and o.keys() == {"id", "text"} and text(o["text"], 2000) for o in options
         ) and [o["id"] for o in options] == list("ABCD"), "须给出ABCD四个选项。")
-        require(len({o["text"].strip() for o in options}) == 4, "选项重复。")
+        validate_option_content(options)
         require(teacher.keys() == {"correct_option_id", "explanation", "option_explanations", "misconceptions"}, "单选教师视图字段无效。")
         answer = teacher["correct_option_id"]
         require(isinstance(answer, str) and answer in list("ABCD") and text(teacher["explanation"]), "单选答案无效。")
@@ -261,3 +290,96 @@ def validate_candidate(candidate, request, evidence):
         import json
         require(json.dumps(solve(w["kind"], w["inputs"]), sort_keys=True) == json.dumps(w["result"], sort_keys=True), "数值见证与求解结果不一致。")
     return evidence_ids
+
+
+NUMERIC_TOKEN = re.compile(r"0[xX][0-9a-fA-F]+|\d+")
+IPV4_TOKEN = re.compile(r"\d{1,3}(?:\.\d{1,3}){3}")
+HEX_TOKEN = re.compile(r"(?<![0-9A-Za-z])0[xX]([0-9a-fA-F]+)"
+                       r"|(?<![0-9A-Za-z])([0-9A-Fa-f]{2,})[Hh](?![0-9A-Za-z])")
+DECIMAL_TOKEN = re.compile(r"(?<![\d.])\d+(?![\d.])")
+
+
+def _witness_values(value):
+    """Values a witness input pins: ints, or literal strings such as an IPv4."""
+    if isinstance(value, bool):
+        return []
+    if isinstance(value, int):
+        return [value]
+    if isinstance(value, str):
+        token = value.strip()
+        if not token:
+            return []
+        if NUMERIC_TOKEN.fullmatch(token):
+            return [int(token, 0)]
+        return [token]
+    if isinstance(value, list):
+        return [item for entry in value for item in _witness_values(entry)]
+    if isinstance(value, dict):
+        return [item for entry in value.values() for item in _witness_values(entry)]
+    return []
+
+
+def _visible_numbers(body):
+    """Numbers a student can read, extracted by value rather than substring.
+
+    Hex forms may carry an ``0x`` prefix, an ``H`` suffix, or neither. IPv4
+    literals are removed first so ``200.23.16.0`` cannot masquerade as the
+    numbers 200, 23 or 16.
+    """
+    body = IPV4_TOKEN.sub(" ", body)
+    numbers = {int(match.group(1) or match.group(2), 16) for match in HEX_TOKEN.finditer(body)}
+    body = HEX_TOKEN.sub(" ", body)
+    numbers.update(int(match.group(0)) for match in DECIMAL_TOKEN.finditer(body))
+    return numbers
+
+
+def content_warnings(candidate, question_type):
+    """Deterministic, non-blocking content observations.
+
+    These rules cannot decide whether a task is sound, so they never reject a
+    candidate. Each warning names the concrete risk for the reviewer.
+    """
+    warnings = []
+    if not isinstance(candidate, dict):
+        return warnings
+    student = candidate.get("student_view")
+    if not isinstance(student, dict) or not isinstance(student.get("stem"), str):
+        return warnings
+    prompts = [p.get("prompt") for p in student.get("parts", []) if isinstance(p, dict)]
+    problem = compact_text("\n".join([student["stem"], *(p for p in prompts if isinstance(p, str))]))
+    visual = VISUAL_REFERENCE.search(problem)
+    if visual:
+        warnings.append({
+            "check": "content_visual_reference",
+            "reason": f"题面出现「{visual.group(0)}」编号引用；须确认所需表格或图的数据已完整写入student_view。"})
+    if question_type == "comprehensive":
+        stem = compact_text(student["stem"])
+        teacher = candidate.get("instructor_view")
+        for part in teacher.get("parts", []) if isinstance(teacher, dict) else []:
+            if not isinstance(part, dict):
+                continue
+            for point in part.get("scoring_points") or []:
+                if not isinstance(point, dict):
+                    continue
+                expected = point.get("expected")
+                if isinstance(expected, str) and len(expected.strip()) >= 4 and compact_text(expected) in stem:
+                    warnings.append({
+                        "check": "content_free_scoring_point",
+                        "reason": f"评分点 {point.get('id')} 的期望值直接出现在题干，可能构成免费分。"})
+    visible = compact_text(visible_text(student))
+    visible_numbers = _visible_numbers(visible)
+    for witness in candidate.get("calculations") or []:
+        if not isinstance(witness, dict) or witness.get("kind") not in WITNESS_KINDS:
+            continue
+        inputs = witness.get("inputs")
+        values = _witness_values(inputs)
+        table = inputs.get("page_table") if isinstance(inputs, dict) else None
+        if isinstance(table, dict):
+            values.extend(item for key in table for item in _witness_values(key))
+        missing = sorted({str(value) for value in values
+                          if not (value in visible_numbers if isinstance(value, int) else value in visible)})
+        if missing:
+            warnings.append({
+                "check": "witness_inputs_not_visible",
+                "reason": f"{witness['kind']} 见证的输入 {missing} 未在学生视图中出现。"})
+    return warnings

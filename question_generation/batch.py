@@ -31,6 +31,12 @@ def _is_text(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def authored_question_count(slots: list[dict]) -> int:
+    """Number of paid model-authored items a batch would request."""
+    return sum(slot["count"] for slot in slots
+               if isinstance(slot.get("constraints"), dict) and "authoring" in slot["constraints"])
+
+
 def _validate(payload: object) -> None:
     if (
         not isinstance(payload, dict)
@@ -68,10 +74,11 @@ def _validate(payload: object) -> None:
         seen.add(slot["slot_id"])
         if any(type(slot[key]) is not int or slot[key] < 1 for key in ("count", "score_per_question")):
             raise ValueError("槽位题量和每题分值必须是正整数。")
-    authored_count = sum(slot["count"] for slot in slots
-                         if isinstance(slot.get("constraints"), dict) and "authoring" in slot["constraints"])
+    authored_count = authored_question_count(slots)
     if authored_count > 2:
-        raise ValueError("单批最多包含 2 道模型创作题；请拆分请求以控制调用预算。")
+        raise ValueError(
+            f"单批最多包含 2 道模型创作题，当前为 {authored_count} 道；"
+            "请按槽位拆分为多个请求（每个请求最多 2 道 authored 题）以控制调用预算。")
     if sum(slot["count"] for slot in slots) != count:
         raise ValueError("各槽位题量之和必须等于 question_count。")
     if sum(slot["count"] * slot["score_per_question"] for slot in slots) != score:

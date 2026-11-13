@@ -131,7 +131,16 @@ class GeneralContractTests(TestCase):
                 result, model = self.run_case(case)
                 self.assertEqual(result['status'], 'GENERATED', result)
                 q = result['questions'][0]
-                self.assertEqual(q['student_view'], case['candidate']['student_view'])
+                if q['metadata']['question_type'] == 'single_choice':
+                    # Delivered options are shuffled and relabeled; the mapping
+                    # keeps each delivered label tied to the author's option id.
+                    author_options = {o['id']: o['text'] for o in case['candidate']['student_view']['options']}
+                    mapping = q['self_check']['delivered_option_mapping']
+                    self.assertEqual({o['id']: o['text'] for o in q['student_view']['options']},
+                                     {label: author_options[author_id]
+                                      for label, author_id in mapping.items()})
+                else:
+                    self.assertEqual(q['student_view'], case['candidate']['student_view'])
                 self.assertEqual(q['review_status'], 'PENDING')
                 self.assertEqual(q['self_check']['verification_scope']['typed_calculation_count'], len(case['candidate']['calculations']))
                 self.assertEqual(len(model.calls), 3)

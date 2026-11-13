@@ -82,6 +82,8 @@ Pi 内置工具 `question_generation` 统一注册在 [question-generation/index
 
 ```bash
 python3 -m pip install -r question_generation/service-requirements.txt
+# 运行服务层并发/健康测试时再安装测试依赖（httpx）
+python3 -m pip install -r question_generation/service-test-requirements.txt
 psql "$QODEX_SCHEMA_ADMIN_DSN" -v ON_ERROR_STOP=1 -f question_generation/sql/001_pending_questions.sql
 ```
 
@@ -100,6 +102,8 @@ curl -fsS http://127.0.0.1:8093/v1/question-generation/single \
 ```
 
 服务只入队自检通过的题目包。返回 `queue_receipts` 表示已确认写入，`QUEUED` 是首次入队，`ALREADY_QUEUED` 是相同版本的重试。批量部分成功时保存其中实际合格的题。版本冲突返回 `QUEUE_VERSION_CONFLICT`，数据库不可用返回 `QUEUE_UNAVAILABLE`。同一次调用的写入在一个事务内。修订须传入与待审表一致的原始包，可使用前次调用返回的题目。旧版仍可追溯，当前取题视图只显示最新版本。原有命令行和验证台可继续用于本地预览。
+
+`GET /health` 返回 `{status, database, knowledge, cache, model}` 五项；依赖不可用时 `status="degraded"`，HTTP 仍为 200，便于演示时直接观察。服务并发受 `QUESTION_GENERATION_MAX_CONCURRENT` 限制（默认 2），满时返回 503 `SERVER_BUSY`；同一请求正在生成时返回 503 `AUTHORING_IN_PROGRESS`，调用方可稍后重试。单选交付选项按 seed 重排并重标号，`self_check.delivered_option_mapping` 记录交付标签到作者选项 ID 的映射，`delivered_correct_option_author_id` 保留作者答案 ID；`blind_option_mapping` 仍是盲解标签到作者 ID。通用题 `metadata` 增加 `syllabus_areas` 与 `knowledge_points`（后者来自设计概念，未校准）。
 
 审校同学使用以下查询取题，按 `question_id` 和 `version` 识别审校对象，`question_json` 内含学生题面、教师答案、评分点和证据来源。记录结果前重新按同一身份和版本核对视图，避免把旧版结论关联到新版。审校及通过后的落库由审校模块负责。
 
