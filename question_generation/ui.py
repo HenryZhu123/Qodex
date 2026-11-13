@@ -9,6 +9,7 @@ loopback-only behavior is unchanged.
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
@@ -158,6 +159,56 @@ def preview_result(payload, knowledge, provider, *, progress=None):
     return {**result, "preview": preview}
 
 
+_LOG_LOCK = threading.Lock()
+
+
+class RequestRecorder:
+    """Append one JSONL record per request, covering failures and full results."""
+
+    def __init__(self, path, handler, provider):
+        self.path = path
+        self.started = time.monotonic()
+        self.events = []
+        self.record = {
+            "started_at": datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds"),
+            "client": handler.headers.get("CF-Connecting-IP")
+            or handler.headers.get("X-Forwarded-For") or handler.client_address[0],
+            "user_agent": handler.headers.get("User-Agent"),
+            "host": handler.headers.get("Host"),
+            "path": handler.path,
+            "provider": provider,
+        }
+
+    def event(self, event) -> None:
+        if isinstance(event, dict):
+            self.events.append({
+                key: event[key] for key in ("type", "state", "index", "stage", "elapsed_seconds", "tokens", "error")
+                if key in event
+            })
+
+    def finish(self, *, result=None, error=None, payload=None) -> None:
+        if self.path is None:
+            return
+        record = {
+            **self.record,
+            "request": payload,
+            "events": self.events,
+            "elapsed_seconds": round(time.monotonic() - self.started, 2),
+            "finished_at": datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds"),
+            "status": result.get("status") if isinstance(result, dict) else None,
+            "error": error,
+            "result": result,
+        }
+        try:
+            line = json.dumps(record, ensure_ascii=False, default=str)
+            with _LOG_LOCK:
+                self.path.parent.mkdir(parents=True, exist_ok=True)
+                with self.path.open("a", encoding="utf-8") as handle:
+                    handle.write(line + "\n")
+        except (OSError, TypeError, ValueError):
+            pass
+
+
 class QuestionConsole(BaseHTTPRequestHandler):
     timeout = 5
 
@@ -222,11 +273,12 @@ class QuestionConsole(BaseHTTPRequestHandler):
         self.wfile.write(f"data: {data}\n\n".encode("utf-8", errors="backslashreplace"))
         self.wfile.flush()
 
-    def _stream_author(self) -> None:
+    def _stream_author(self, recorder) -> None:
         """Run one authoring request and stream stage events as server-sent events."""
         payload, error = self._read_json()
         if error is not None:
             self._send_json(error, HTTPStatus.BAD_REQUEST)
+            recorder.finish(result=error, error="invalid request body")
             return
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", "text/event-stream; charset=utf-8")
@@ -243,14 +295,17 @@ class QuestionConsole(BaseHTTPRequestHandler):
         events: queue.Queue = queue.Queue()
 
         def emit(event):
+            recorder.event(event)
             events.put(event)
 
         def work():
             try:
                 result = preview_result(payload, self.server.knowledge, self.server.provider,
                                         progress=emit)
+                recorder.finish(result=result, payload=payload)
                 emit({"type": "result", "result": result})
-            except Exception:
+            except Exception as error:
+                recorder.finish(error=f"{type(error).__name__}: {error}", payload=payload)
                 emit({"type": "error", "message": "命题过程出现未预期错误，本次未确认生成。"})
             finally:
                 emit({"type": "done"})
@@ -276,12 +331,14 @@ class QuestionConsole(BaseHTTPRequestHandler):
         if self.path not in {"/api/generate", "/api/author", "/api/author/stream"}:
             self.send_error(HTTPStatus.NOT_FOUND)
             return
+        recorder = RequestRecorder(getattr(self.server, "log_path", None), self, self.server.provider)
         if self.path == "/api/author/stream":
-            self._stream_author()
+            self._stream_author(recorder)
             return
 
         payload, error = self._read_json()
         if error is not None:
+            recorder.finish(result=error, error="invalid request body")
             self._send_json(error, HTTPStatus.BAD_REQUEST)
             return
         if self.path == "/api/author":
@@ -293,6 +350,7 @@ class QuestionConsole(BaseHTTPRequestHandler):
             else:
                 result = generate_question(payload)
 
+        recorder.finish(result=result, payload=payload)
         self._send_json(result)
 
     def _send_json(self, result, status=HTTPStatus.OK):
@@ -312,6 +370,11 @@ def main() -> None:
         default=os.environ.get("QUESTION_CONSOLE_PUBLIC_ORIGIN"),
         help="显式放行一个非本机来源（如临时隧道 https://… 域名），不设置时仅限本机访问。",
     )
+    parser.add_argument(
+        "--log-file",
+        default=os.environ.get("QUESTION_CONSOLE_LOG_FILE"),
+        help="把每次请求（含失败、阶段耗时与完整结果）追加写入该 JSONL 文件；不设置则不记录。",
+    )
     args = parser.parse_args()
     try:
         if bool(args.kb_root) != bool(args.kb_catalog):
@@ -326,16 +389,24 @@ def main() -> None:
             if parts.scheme not in {"https", "http"} or not parts.netloc or parts.path not in {"", "/"}:
                 raise ValueError("--public-origin 须为不含路径的绝对来源，如 https://example.trycloudflare.com")
             public_origin = f"{parts.scheme}://{parts.netloc}"
+        log_path = None
+        if args.log_file:
+            log_path = Path(args.log_file).expanduser()
+            if log_path.is_dir():
+                raise ValueError("--log-file 须为文件路径，不能是目录。")
         server = ThreadingHTTPServer((HOST, args.port), QuestionConsole)
     except (OSError, OverflowError, ValueError) as error:
         parser.exit(1, f"无法启动验证台：{error}\n")
 
     server.knowledge, server.provider, server.sample = knowledge, args.provider, sample
     server.public_origin = public_origin
+    server.log_path = log_path
     with server:
         print(f"408 自主命题验证台 http://{HOST}:{server.server_port}/", flush=True)
         if public_origin:
             print(f"已放行外部来源：{public_origin}", flush=True)
+        if log_path:
+            print(f"请求日志：{log_path}", flush=True)
         try:
             server.serve_forever()
         except KeyboardInterrupt:

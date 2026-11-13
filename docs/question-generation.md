@@ -227,7 +227,7 @@ python3 -m question_generation.ui \
   --kb-catalog .local/question-generation/team-kb/catalog.json
 ```
 
-默认连接本机 Ollama 的 `jun-e4b:latest`，需已安装且运行。知识库目录与清单可以一起省略，此时可粘贴材料或使用内置出处释义。`--history-example` 可指定一份此前成功生成的 JSON 题包，页面将其标为历史实测。若自行选择用已配置的 DeepSeek，可在启动时加 `--provider deepseek`，并在页面逐次确认请求。试题台仅监听本机，可用 `--port` 更换端口，按 Ctrl+C 停止。默认只接受本机来源；如需临时共享给组员演示，可加 `--public-origin https://…` 显式放行一个外部来源（例如临时隧道域名），不设置时行为不变。
+默认连接本机 Ollama 的 `jun-e4b:latest`，需已安装且运行。知识库目录与清单可以一起省略，此时可粘贴材料或使用内置出处释义。`--history-example` 可指定一份此前成功生成的 JSON 题包，页面将其标为历史实测。若自行选择用已配置的 DeepSeek，可在启动时加 `--provider deepseek`，并在页面逐次确认请求。试题台仅监听本机，可用 `--port` 更换端口，按 Ctrl+C 停止。默认只接受本机来源；如需临时共享给组员演示，可加 `--public-origin https://…` 显式放行一个外部来源（例如临时隧道域名），不设置时行为不变。共享试用时建议同时加 `--log-file <路径>`（或设置 `QUESTION_CONSOLE_LOG_FILE`），每次请求——包括失败——都会以一行 JSON 追加记录：时间、来源 IP、浏览器、请求内容、各阶段耗时与 token、状态码和完整结果，便于回收样本判断是能力缺陷还是正常失败。
 
 [规则题验证台](http://127.0.0.1:8765/rules) 保留原有参数和预设。
 
