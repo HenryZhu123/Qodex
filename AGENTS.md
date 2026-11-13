@@ -46,6 +46,11 @@ Qodex main 已合并四个业务模块：
 
 知识库检索已经接入 exam-checker 专项审校。自主命题已支持单题、批量槽位、综合题和按反馈修订，并把自检通过的版本写入 `question_generation.pending_questions`。
 
+教材知识库当前为 **2026.11.1**（2538 chunk / 2391 进 FTS），安装在 `.local/question-generation/team-kb/`；旧版归档在
+`.local/question-generation/team-kb-2026.11-frozen/`。换版后 chunk 编号已全部错位，**任何写死 chunk 编号的清单都必须按内容核对**，
+禁止按序号猜；细节、验收判据与未完成事项见 `team-kb/MIGRATION-2026.11.1.md`。注意 exam-checker 的教材检索默认关闭
+（`EXAM_CHECKER_KB_DIR` 为空），其 venv 未装 jieba，缺 jieba 时中文检索 0 命中。
+
 不要声称命题到审校已经全自动闭环：当前 exam-checker 尚未自动消费命题待审表。接入时必须保留 `(question_id, version)`，将审校结果绑定不可变题目版本，PASS 后才能写 `question_bank`。
 
 ## 开发原则
