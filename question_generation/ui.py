@@ -1,4 +1,10 @@
-"""Loopback-only browser console for the local question generator."""
+"""Loopback browser console for the local question generator.
+
+By default every request must come from the loopback interface. Starting the
+console with an explicit ``--public-origin`` (for example a temporary tunnel
+domain) additionally allows that single origin for shared demos; the default
+loopback-only behavior is unchanged.
+"""
 
 from __future__ import annotations
 
@@ -11,6 +17,7 @@ from pathlib import Path
 import queue
 import threading
 import time
+from urllib.parse import urlsplit
 
 from .brief_authoring import generate_from_brief
 from .generation import failure_result, generate_question
@@ -171,8 +178,12 @@ class QuestionConsole(BaseHTTPRequestHandler):
         port = self.server.server_address[1]
         host = self.headers.get("Host")
         origin = self.headers.get("Origin")
-        if host not in {f"{HOST}:{port}", f"localhost:{port}"} or (
-            origin is not None and origin != f"http://{host}"
+        public_origin = getattr(self.server, "public_origin", None)
+        allowed_hosts = {f"{HOST}:{port}", f"localhost:{port}"}
+        if public_origin is not None:
+            allowed_hosts.add(urlsplit(public_origin).netloc)
+        if host not in allowed_hosts or (
+            origin is not None and origin != f"http://{host}" and origin != public_origin
         ):
             self.send_error(HTTPStatus.FORBIDDEN)
             return False
@@ -296,6 +307,11 @@ def main() -> None:
     parser.add_argument("--kb-root", type=Path, default=os.environ.get("QUESTION_GENERATION_KB_ROOT"))
     parser.add_argument("--kb-catalog", type=Path, default=os.environ.get("QUESTION_GENERATION_KB_CATALOG"))
     parser.add_argument("--history-example", type=Path, help="用于只读展示的历史模型题包 JSON")
+    parser.add_argument(
+        "--public-origin",
+        default=os.environ.get("QUESTION_CONSOLE_PUBLIC_ORIGIN"),
+        help="显式放行一个非本机来源（如临时隧道 https://… 域名），不设置时仅限本机访问。",
+    )
     args = parser.parse_args()
     try:
         if bool(args.kb_root) != bool(args.kb_catalog):
@@ -304,13 +320,22 @@ def main() -> None:
         sample = json.loads(args.history_example.read_text(encoding="utf-8")) if args.history_example else None
         if sample is not None and (not isinstance(sample, dict) or sample.get("status") != "GENERATED" or not sample.get("questions")):
             raise ValueError("历史题包须为真实生成成功的结果。")
+        public_origin = None
+        if args.public_origin:
+            parts = urlsplit(args.public_origin)
+            if parts.scheme not in {"https", "http"} or not parts.netloc or parts.path not in {"", "/"}:
+                raise ValueError("--public-origin 须为不含路径的绝对来源，如 https://example.trycloudflare.com")
+            public_origin = f"{parts.scheme}://{parts.netloc}"
         server = ThreadingHTTPServer((HOST, args.port), QuestionConsole)
     except (OSError, OverflowError, ValueError) as error:
         parser.exit(1, f"无法启动验证台：{error}\n")
 
     server.knowledge, server.provider, server.sample = knowledge, args.provider, sample
+    server.public_origin = public_origin
     with server:
         print(f"408 自主命题验证台 http://{HOST}:{server.server_port}/", flush=True)
+        if public_origin:
+            print(f"已放行外部来源：{public_origin}", flush=True)
         try:
             server.serve_forever()
         except KeyboardInterrupt:
