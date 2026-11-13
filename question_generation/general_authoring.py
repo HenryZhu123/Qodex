@@ -261,6 +261,31 @@ def audit_passed(audit):
             and text(audit.get("adversarial_case")) and explained)
 
 
+def audit_incomplete(audit):
+    """A valid-looking audit must still contain exactly the nine checks."""
+    checks = audit.get("checks") if isinstance(audit, dict) else None
+    return isinstance(checks, dict) and set(checks) != set(CHECKS)
+
+
+def audit_contract_conflict(audit):
+    """A valid=true/empty-issues audit with a failed hard check is contradictory.
+
+    The audit prompt asks for ``valid=false`` when a blocking check fails. A
+    model occasionally returns ``valid=true`` and an empty issues list while
+    marking one blocking check false; retrying once is cheaper and safer than
+    treating the contradiction as a semantic rejection.
+    """
+    checks = audit.get("checks") if isinstance(audit, dict) else None
+    if not isinstance(checks, dict) or audit.get("valid") is not True or audit.get("issues") != []:
+        return False
+    failed = [checks.get(name) for name in BLOCKING_CHECKS
+              if isinstance(checks.get(name), dict) and checks.get(name).get("passed") is False]
+    if not failed:
+        return False
+    clear = ("未发现", "没有发现", "无歧义", "不存在", "无问题")
+    return all(any(token in str(check.get("reason", "")) for token in clear) for check in failed)
+
+
 def audit_warnings(audit):
     """Advisory check failures and non-blocking notes become review warnings."""
     checks = audit.get("checks") if isinstance(audit, dict) else None
@@ -541,6 +566,17 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
                          "并确认未弱化旧题的考查目标、难点及用户原始约束。硬阻断按硬规则处理；软指标不单独否决，"
                          "但须如实写passed和reason。")
     audit = complete_stage(client, "audit", audit_prompt, audit_context)
+    audit_retried = False
+    if ((audit.get("valid") is True and audit_incomplete(audit))
+            or audit_contract_conflict(audit)):
+        audit_retried = True
+        audit = complete_stage(
+            client, "audit", audit_prompt +
+            "\n上一次审计输出不完整或自相矛盾：必须逐项返回 answer_agreement、grounding、scope、"
+            "requirements、reasoning_necessity、counterfactual、ambiguity、grading、witness_alignment "
+            "共9项；valid=true 且 issues=[] 时不得有硬阻断 passed=false。请重新给出自洽、完整的结论。",
+            audit_context,
+        )
     if not audit_passed(audit):
         return rejected("反例与解析审计", audit)
     review_warnings = audit_warnings(audit)
@@ -589,6 +625,8 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     digest = hashlib.sha256(json.dumps([request.request_id, question], sort_keys=True, ensure_ascii=False).encode()).hexdigest()
     question["question_id"] = "authored-" + digest[:24]
     report = {"candidate_count": 1, "usage": client.usage, "engine": version}
+    if audit_retried:
+        report["audit_contract_retry"] = True
     if ignored_keys:
         report["ignored_author_keys"] = ignored_keys
     return {"schema_version": "0.1", "request_id": request.request_id, "status": "GENERATED", "questions": [question],

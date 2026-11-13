@@ -93,6 +93,22 @@ class OptionDeliveryTests(DeliveryTests):
         self.assertEqual(question['self_check']['blind_option_mapping'], {})
 
 
+class AuditContractTests(DeliveryTests):
+    def test_clear_reason_with_failed_hard_check_is_contradictory(self):
+        from question_generation.general_authoring import CHECKS, audit_contract_conflict
+        checks = {name: {'passed': True, 'reason': 'ok'} for name in CHECKS}
+        checks['ambiguity'] = {'passed': False, 'reason': '未发现影响答案的歧义。'}
+        audit = {'valid': True, 'issues': [], 'checks': checks}
+        self.assertTrue(audit_contract_conflict(audit))
+
+    def test_real_rejection_reason_is_not_treated_as_a_contradiction(self):
+        from question_generation.general_authoring import CHECKS, audit_contract_conflict
+        checks = {name: {'passed': True, 'reason': 'ok'} for name in CHECKS}
+        checks['ambiguity'] = {'passed': False, 'reason': '题干对初值有两种读法，答案不唯一。'}
+        audit = {'valid': True, 'issues': [], 'checks': checks}
+        self.assertFalse(audit_contract_conflict(audit))
+
+
 class EnvelopeToleranceTests(DeliveryTests):
     def test_scalar_annotation_beside_candidate_is_ignored_and_recorded(self):
         class TypedEnvelope(Replay):

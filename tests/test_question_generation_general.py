@@ -64,7 +64,7 @@ class Replay:
                     'part_solutions': parts, 'issues': [], 'depth_evidence': 'Protocol fixture only.',
                     'condition_test': {'change': 'Fixture perturbation', 'effect': 'Fixture consequence'},
                     'quality': dict.fromkeys(['answerability', 'depth', 'distractors', 'clarity'], 2)}
-        if system == AUDIT_PROMPT:
+        if system.startswith(AUDIT_PROMPT):
             checks = {k: {'passed': True, 'reason': 'Protocol fixture only.'} for k in CHECKS}
             if self.bad_audit:
                 checks[self.bad_audit]['passed'] = False
@@ -197,7 +197,7 @@ class GeneralContractTests(TestCase):
             omitted: str
             def complete(self, system, payload):
                 result = super().complete(system, payload)
-                if system == AUDIT_PROMPT:
+                if system.startswith(AUDIT_PROMPT):
                     result['checks'].pop(self.omitted)
                 return result
         for omitted in CHECKS:
