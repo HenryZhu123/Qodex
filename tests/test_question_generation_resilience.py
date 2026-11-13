@@ -25,6 +25,7 @@ from question_generation.authoring import cached_authoring
 from question_generation.knowledge import KnowledgeEvidence
 from question_generation.model_client import (
     PIPELINE_DEADLINE,
+    JsonModel,
     ModelError,
     complete_stage,
     pipeline_timeout_seconds,
@@ -455,6 +456,62 @@ class _FakeQueuePool:
 
     def acquire(self, timeout=None):
         return _FakeAcquire(self.connection)
+
+
+class ModelTransportTests(TestCase):
+    def client(self):
+        return JsonModel(base_url="https://api.deepseek.com", model="fixture", api_key="fixture")
+
+    def test_stream_body_requests_stream_usage(self):
+        body = json.loads(self.client()._request_body("sys", {"x": 1}, True))
+        self.assertIs(body["stream"], True)
+        self.assertEqual(body["stream_options"], {"include_usage": True})
+
+    def test_nonstream_body_omits_stream_options(self):
+        body = json.loads(self.client()._request_body("sys", {"x": 1}, False))
+        self.assertIs(body["stream"], False)
+        self.assertNotIn("stream_options", body)
+
+    def test_stream_can_be_disabled_from_env(self):
+        with patch.dict(os.environ, {
+            "DEEPSEEK_MODEL": "fixture", "DEEPSEEK_API_KEY": "fixture",
+            "QUESTION_GENERATION_STREAM": "0",
+        }, clear=False):
+            self.assertFalse(JsonModel.from_env().stream)
+
+    def test_official_deepseek_defaults_to_non_streaming(self):
+        with patch.dict(os.environ, {
+            "DEEPSEEK_MODEL": "deepseek-flash", "DEEPSEEK_API_KEY": "fixture",
+            "DEEPSEEK_BASE_URL": "https://api.deepseek.com",
+        }, clear=False):
+            os.environ.pop("QUESTION_GENERATION_STREAM", None)
+            self.assertFalse(JsonModel.from_env().stream)
+
+    def test_other_gateway_keeps_streaming_by_default(self):
+        with patch.dict(os.environ, {
+            "DEEPSEEK_MODEL": "fixture", "DEEPSEEK_API_KEY": "fixture",
+            "DEEPSEEK_BASE_URL": "https://gateway.example/v1",
+        }, clear=False):
+            os.environ.pop("QUESTION_GENERATION_STREAM", None)
+            self.assertTrue(JsonModel.from_env().stream)
+
+
+class StreamFallbackTests(TestCase):
+    def test_stalled_stream_falls_back_to_non_streaming_once(self):
+        from io import BytesIO
+        from unittest.mock import patch
+
+        class Stalled(BytesIO):
+            def read1(self, size=None):
+                raise TimeoutError("stream stalled")
+
+        valid = b'{"choices":[{"finish_reason":"stop","message":{"content":"{}"}}]}'
+        model = JsonModel(base_url="https://fixture.invalid", model="test", api_key="fixture",
+                          max_retries=0)
+        with patch("question_generation.model_client.build_opener") as opener:
+            opener.return_value.open.side_effect = [Stalled(b""), BytesIO(valid)]
+            self.assertEqual(model.complete("json", {}), {})
+            self.assertEqual(opener.return_value.open.call_count, 2)
 
 
 @skipUnless(question_service is not None, f"service dependencies unavailable: {SERVICE_IMPORT_ERROR}")

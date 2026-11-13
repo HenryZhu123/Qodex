@@ -308,6 +308,7 @@ class JsonModel:
             raise ModelError("模型重试等待须为非负数。")
         self.base_url, self.model, self.api_key, self.timeout = base_url.rstrip("/"), model, api_key, timeout
         self.max_output_tokens = max_output_tokens
+        self.stream = True
         self.max_retries, self.retry_delay, self.attempt_hook = max_retries, retry_delay, attempt_hook
         self.stage_output_tokens: dict[str, int] = {}
         self.stage_timeout_seconds: dict[str, int] = {}
@@ -341,9 +342,18 @@ class JsonModel:
                           "timeout": env_int(f"QUESTION_GENERATION_{stage.upper()}_TIMEOUT_SECONDS",
                                              STAGE_TIMEOUT_SECONDS[stage]),
                           "effort": env_effort(stage)} for stage in STAGES}
-        client = cls(base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+        base_url = os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+        # The official DeepSeek gateway can hold an SSE connection open without
+        # emitting bytes during a long reasoning phase. Non-streaming is the
+        # stable default there; other OpenAI-compatible gateways keep streaming.
+        default_stream = "0" if urlsplit(base_url).hostname == "api.deepseek.com" else "1"
+        stream = os.environ.get("QUESTION_GENERATION_STREAM", default_stream).strip().lower() not in {
+            "0", "false", "off", "no",
+        }
+        client = cls(base_url=base_url,
                      model=os.environ.get("DEEPSEEK_MODEL", ""), api_key=os.environ.get("DEEPSEEK_API_KEY", ""),
                      max_output_tokens=output_tokens)
+        client.stream = stream
         # Author must design the whole item; audit must re-derive it. Planning and
         # the blind solve are short, so deep thinking there only added latency.
         # Budgets stay wide (32768 tokens) so a long item never hits "length".
@@ -352,18 +362,29 @@ class JsonModel:
         client.stage_reasoning_effort = {stage: settings["effort"] for stage, settings in stages.items()}
         return client
 
-    def complete(self, system: str, payload: dict) -> dict:
+    def _request_body(self, system: str, payload: dict, stream: bool) -> bytes:
         effort = getattr(self, "reasoning_effort", "high")
         if effort not in REASONING_EFFORTS:
             raise ModelError(f"推理档位须为 {'、'.join(REASONING_EFFORTS)} 之一。", code="invalid_config")
         thinking = {"thinking": {"type": "disabled"}} if effort == "off" else {
             "thinking": {"type": "enabled"}, "reasoning_effort": effort}
-        body = json.dumps({"model": self.model, "messages": [
-            {"role": "system", "content": system},
-            {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
-        ], "response_format": {"type": "json_object"}, "max_tokens": self.max_output_tokens,
+        body = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
+            ],
+            "response_format": {"type": "json_object"},
+            "max_tokens": self.max_output_tokens,
             **thinking,
-            "stream": True, "stream_options": {"include_usage": True}}, ensure_ascii=False).encode()
+            "stream": bool(stream),
+        }
+        if stream:
+            body["stream_options"] = {"include_usage": True}
+        return json.dumps(body, ensure_ascii=False).encode()
+
+    def complete(self, system: str, payload: dict) -> dict:
+        body = self._request_body(system, payload, self.stream)
         if len(body) > 100_000:
             raise ModelError("命题材料超过单次调用预算。", code="request_size_limit")
         headers = {
@@ -371,40 +392,59 @@ class JsonModel:
         }
         if self.opencode_go:
             headers.update({"User-Agent": "Qodex-question-generation/0.5", "x-opencode-session": self.session_id})
-        # base_url is validated as HTTPS in __init__ and redirects are disabled.
-        request = Request(self.base_url + "/chat/completions", data=body, headers=headers)  # noqa: S310
         started = time.monotonic()
         idle = min(self.timeout, IDLE_TIMEOUT_SECONDS)
+        nonstream_timeout = self.timeout if not self.stream else idle
         attempts = 0
+        stream = self.stream
+        fallback_used = False
         while True:
             self.attempt = attempts + 1
             if self.attempt_hook is not None:
                 self.attempt_hook()
+            body = self._request_body(system, payload, stream)
+            # base_url is validated as HTTPS in __init__ and redirects are disabled.
+            request = Request(self.base_url + "/chat/completions", data=body, headers=headers)  # noqa: S310
             try:
-                chunks, size = [], 0
-                # Only a silence window bounds a single read; a stream that keeps
-                # producing output may legitimately run until self.timeout.
-                with build_opener(NoRedirect()).open(request, timeout=idle) as response:
-                    while True:
-                        if time.monotonic() - started > self.timeout:
-                            raise ModelError("模型响应超过总时限，本次不交付题目。", code="response_timeout")
-                        try:
-                            chunk = response.read1(min(65536, RAW_RESPONSE_LIMIT + 1 - size))
-                        except TIMEOUT_ERRORS:
-                            raise _IdleTimeout from None
-                        if not chunk:
-                            break
-                        chunks.append(chunk)
-                        size += len(chunk)
-                        if size > RAW_RESPONSE_LIMIT:
-                            raise ModelError("模型响应超过大小上限。", code="response_size_limit",
-                                             content_length=size, response_issue="raw_stream")
+                if stream:
+                    chunks, size = [], 0
+                    # Only a silence window bounds a single read; a stream that keeps
+                    # producing output may legitimately run until self.timeout.
+                    with build_opener(NoRedirect()).open(request, timeout=idle) as response:
+                        while True:
+                            if time.monotonic() - started > self.timeout:
+                                raise ModelError("模型响应超过总时限，本次不交付题目。", code="response_timeout")
+                            try:
+                                chunk = response.read1(min(65536, RAW_RESPONSE_LIMIT + 1 - size))
+                            except TIMEOUT_ERRORS:
+                                raise _IdleTimeout from None
+                            if not chunk:
+                                break
+                            chunks.append(chunk)
+                            size += len(chunk)
+                            if size > RAW_RESPONSE_LIMIT:
+                                raise ModelError("模型响应超过大小上限。", code="response_size_limit",
+                                                 content_length=size, response_issue="raw_stream")
+                    raw = b"".join(chunks)
+                else:
+                    with build_opener(NoRedirect()).open(request, timeout=max(1, nonstream_timeout)) as response:
+                        raw = response.read(RAW_RESPONSE_LIMIT + 1)
+                    if len(raw) > RAW_RESPONSE_LIMIT:
+                        raise ModelError("模型响应超过大小上限。", code="response_size_limit",
+                                         content_length=len(raw), response_issue="raw_stream")
             except _IdleTimeout:
+                if stream and not fallback_used:
+                    # Official DeepSeek Flash can hold an SSE connection open
+                    # without emitting bytes during a long reasoning phase. A
+                    # non-streaming retry avoids the chunked-read deadlock.
+                    stream, fallback_used = False, True
+                    attempts += 1
+                    continue
                 if attempts < self.max_retries and time.monotonic() - started < self.timeout:
                     attempts += 1
                     time.sleep(self.retry_delay)
                     continue
-                raise ModelError(f"模型流式响应连续 {idle:.0f} 秒无数据，本次不交付题目。",
+                raise ModelError(f"模型响应连续 {idle:.0f} 秒无数据，本次不交付题目。",
                                  code="response_timeout", response_issue="idle_timeout") from None
             except HTTPError as error:
                 if error.code in {502, 503, 504} and attempts < self.max_retries:
@@ -430,7 +470,7 @@ class JsonModel:
                     continue
                 raise ModelError("模型服务连接失败或超时，本次未生成题目。", code="transport_error") from None
             try:
-                return self._finish_response(b"".join(chunks), started)
+                return self._finish_response(raw, started)
             except ModelError as error:
                 # Only a body that failed to decode (or came back empty) is re-rolled.
                 # Contract failures such as "not an object" are deterministic, and the
