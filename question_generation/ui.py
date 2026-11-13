@@ -18,6 +18,7 @@ from pathlib import Path
 import queue
 import threading
 import time
+import traceback
 from urllib.parse import urlsplit
 
 from .brief_authoring import generate_from_brief
@@ -182,7 +183,8 @@ class RequestRecorder:
     def event(self, event) -> None:
         if isinstance(event, dict):
             self.events.append({
-                key: event[key] for key in ("type", "state", "index", "stage", "elapsed_seconds", "tokens", "error")
+                key: event[key] for key in ("type", "state", "index", "stage", "elapsed_seconds", "tokens",
+                                            "error", "diagnostics", "message")
                 if key in event
             })
 
@@ -305,7 +307,7 @@ class QuestionConsole(BaseHTTPRequestHandler):
                 recorder.finish(result=result, payload=payload)
                 emit({"type": "result", "result": result})
             except Exception as error:
-                recorder.finish(error=f"{type(error).__name__}: {error}", payload=payload)
+                recorder.finish(error=traceback.format_exc(), payload=payload)
                 emit({"type": "error", "message": "命题过程出现未预期错误，本次未确认生成。"})
             finally:
                 emit({"type": "done"})
