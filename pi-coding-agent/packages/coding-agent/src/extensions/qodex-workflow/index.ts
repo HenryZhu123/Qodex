@@ -255,13 +255,26 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 		if (ingestion && typeof ingestion.status === "string") artifact.ingestion = ingestion.status;
 		if (Object.keys(artifact).length > 0) observation.artifact = artifact;
 		if (!observation.ok) {
+			// The Pi tool returns a compact, flat review result; the raw HTTP payload nests
+			// the same evidence under review.summary. Accept both so the observation keeps
+			// working whichever shape reaches the hook.
 			const summary = nested(nested(payload, "review"), "summary");
-			const rawErrors = summary && Array.isArray(summary.errors) ? summary.errors : [];
+			const rawErrors =
+				summary && Array.isArray(summary.errors)
+					? summary.errors
+					: Array.isArray(payload?.errors)
+						? payload.errors
+						: [];
 			const types = rawErrors
 				.map((item) => (item && typeof item === "object" ? (item as Record<string, unknown>).error_type : undefined))
 				.filter((item): item is string => typeof item === "string");
 			if (types.length > 0) observation.errors = types.slice(0, 6);
-			const unresolved = summary && Array.isArray(summary.unresolved_checks) ? summary.unresolved_checks : [];
+			const unresolved =
+				summary && Array.isArray(summary.unresolved_checks)
+					? summary.unresolved_checks
+					: Array.isArray(payload?.unresolved_checks)
+						? payload.unresolved_checks
+						: [];
 			if (unresolved.length > 0) observation.detail = `unresolved_checks=${unresolved.length}`;
 		}
 		return observation;

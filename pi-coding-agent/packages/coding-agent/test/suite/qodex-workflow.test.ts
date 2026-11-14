@@ -88,6 +88,43 @@ it("turns each service payload into a routing observation", () => {
 		ok: false,
 		code: "INVALID_EXAM_CHECKER_INPUT",
 	});
+	// Real shape when the review model is misconfigured: HTTP 200, domain-level failure,
+	// every check FAILED with CONFIGURATION_ERROR and no ingestion record.
+	expect(
+		observe("exam_checker", {
+			status: "UNRESOLVED",
+			review: {
+				summary: { has_error: false, errors: [], unresolved_checks: ["typo_check", "logic_check"] },
+			},
+			ingestion: null,
+		}),
+	).toMatchObject({ ok: false, status: "UNRESOLVED", detail: "unresolved_checks=2" });
+	// Verbatim shapes recorded from a live run (deepseek-flash, 2026-11-15): the Pi tool
+	// flattens the review result, so the hook must read the flat form too.
+	expect(
+		observe("exam_checker", {
+			document_id: "pending-e2e-2",
+			question_id: "authored-a36e2635f154f385939404cf-v1",
+			question_number: "1",
+			question_version_id: "8ea0f9f7-5b9b-4444-904d-6809d4ad017e",
+			status: "PASS",
+			errors: [],
+			unresolved_checks: [],
+			ingestion: { status: "STORED", record_id: "f16e9f77-b813-49bf-a9c6-b49b49ce1797" },
+		}),
+	).toMatchObject({ ok: true, status: "PASS", artifact: { ingestion: "STORED" } });
+	expect(
+		observe("exam_checker", {
+			document_id: "pending-e2e-1",
+			question_id: "authored-a36e2635f154f385939404cf-v1",
+			question_number: "1",
+			status: "UNRESOLVED",
+			errors: [],
+			unresolved_checks: [
+				{ task_id: "typo_check", attempts: 1, error_code: "CONFIGURATION_ERROR", retryable: true },
+			],
+		}),
+	).toMatchObject({ ok: false, status: "UNRESOLVED", detail: "unresolved_checks=1" });
 });
 
 it("appends the policy without replacing the assembled system prompt", async () => {
