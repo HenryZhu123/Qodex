@@ -278,8 +278,8 @@ def audit_contract_conflict(audit):
     checks = audit.get("checks") if isinstance(audit, dict) else None
     if not isinstance(checks, dict) or audit.get("valid") is not True or audit.get("issues") != []:
         return False
-    failed = [checks.get(name) for name in BLOCKING_CHECKS
-              if isinstance(checks.get(name), dict) and checks.get(name).get("passed") is False]
+    failed = [checks[name] for name in BLOCKING_CHECKS
+              if isinstance(checks.get(name), dict) and checks[name].get("passed") is False]
     if not failed:
         return False
     clear = ("未发现", "没有发现", "无歧义", "不存在", "无问题")
@@ -423,6 +423,28 @@ def delivered_choice_views(candidate, seed):
     return student, teacher, mapping
 
 
+# Stable failure codes for callers that must decide what to do next. The Chinese stage
+# labels stay in ``authoring_report.stage`` for human readers; these codes are the
+# machine-readable contract. ``retry`` says whether repeating the same request can help
+# and ``needs`` names the missing resource when the caller cannot resolve it alone.
+FAILURE_STAGES = {
+    "创作响应结构": ("candidate_shape", "same_request", None),
+    "材料不足": ("material_gap", "new_request", "material"),
+    "设计与结构检查": ("design_invalid", "same_request", None),
+    "独立解答与质量检查": ("quality_gate", "new_request", None),
+    "独立条件扰动检查不完整": ("condition_test_incomplete", "same_request", None),
+    "独立答案分歧": ("blind_disagreement", "new_request", "human"),
+    "独立小问解答不完整": ("blind_incomplete", "same_request", None),
+    "反例与解析审计": ("audit_rejected", "new_request", "human"),
+}
+
+
+def failure_payload(stage: str, status: str) -> dict:
+    """Return the machine-readable failure block for one rejection stage."""
+    code, retry, needs = FAILURE_STAGES.get(stage, ("unspecified", "no", None))
+    return {"code": code, "status": status, "retry": retry, "needs": needs}
+
+
 def run(payload, client, request, settings, *, brief_plan=None, version=None, repair=None, score_pinned=True):
 
     context = {"metadata": request.metadata, "scope": read_scope(request.metadata["subject"], settings["syllabus_areas"]),
@@ -435,6 +457,7 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
 
     def rejected(stage, details, status="SELF_CHECK_FAILED"):
         return {**failure_result(status, "通用命题未交付：" + stage, request.request_id),
+                "failure": failure_payload(stage, status),
                 "authoring_report": {"stage": stage, "details": details, "usage": client.usage}}
 
     scenario_kind = settings.get("public_scenario")

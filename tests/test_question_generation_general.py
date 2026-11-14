@@ -534,6 +534,10 @@ class GeneralContractTests(TestCase):
         case['candidate']['instructor_view']['explanation'] += ' Only the teacher knows this condition'
         result, model = self.run_case(case, Replay(case['candidate'], bad_audit='ambiguity'))
         self.assertEqual(result['status'], 'SELF_CHECK_FAILED')
+        # Callers need a machine-readable route, not only a Chinese stage label.
+        self.assertEqual(result['failure']['code'], 'audit_rejected')
+        self.assertEqual(result['failure']['retry'], 'new_request')
+        self.assertEqual(result['failure']['needs'], 'human')
         self.assertEqual(len(model.calls), 3)
         diagnostic = model.calls[2][1]['program_design_diagnostics']['nonliteral_givens']
         self.assertEqual(diagnostic[0]['text'], 'Only the teacher knows this condition')
