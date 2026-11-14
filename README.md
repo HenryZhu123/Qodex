@@ -6,13 +6,18 @@ Qodex 是面向计算机考研 408 的 AI 试题工作流，当前仓库已经�
 
 | 模块 | 已实现能力 | Pi 工具 | 默认地址 |
 | --- | --- | --- | --- |
+| 工作流 | 政策（用户/动作/观察/停止）+ 护栏（预算、重复付费、失败可见、入库措辞、trace） | `qodex-workflow` 扩展 | — |
 | 自主命题 | 单选题、批量槽位命题、综合应用题、按反馈修订、确定性自检、待审版本入队 | `question_generation` | `http://127.0.0.1:8093` |
 | AI 审校 | PDF/DOC/DOCX 解析、整卷/单题审校、九类专项检查、知识库检索、题目版本修订 | `exam_checker` | `http://127.0.0.1:8091` |
 | 正式题库 | 查询审校通过题目，按学科、题型、难度、知识点和关键词检索 | `question_bank` | 复用 8091 |
 | 智能组卷 | 从正式题库选题、约束校验、缺题报告、相似题复核、HTML/PDF 导出 | `exam_assembly` | `http://127.0.0.1:8092` |
 | Pi Agent | 注册上述内置工具并组织调用 | — | 终端交互 |
 
-当前边界：命题服务已经能把自检通过的题目写入 PostgreSQL 待审队列，但 exam-checker 还没有自动消费该队列。现阶段仍需增加“待审题登记 → 绑定题目版本 → 审校 → PASS 入正式题库”的接入层，才能形成全自动闭环。
+当前边界：命题服务把自检通过的题目写入 PostgreSQL 待审队列；`question_generation/handoff.py` 把题包投影成审校侧 `QuestionView`，
+`POST /v1/exam-checker/documents/import` 把它登记成可审校的题目版本，之后 `review_question` 在 PASS 时自动 annotate 并写入正式题库，
+题库里的题目再由组卷接口成卷。这条链路已实测（见 [Agent 工作流](docs/agent-workflow.md)），由 Pi 的 `qodex-workflow` 扩展
+（政策 + 护栏）驱动。**仍未闭合的部分**：组卷只支持四选项单选、同题型单一分值，综合题、题组与带图题不支持；
+审校看不到答案与评分，因此 `PASS` 不证明答案正确。
 
 ## 一键演示
 
