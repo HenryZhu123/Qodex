@@ -177,8 +177,17 @@ def main(argv=None) -> int:
         print(json.dumps({"status": "HANDOFF_REFUSED", "code": error.code, "message": str(error)},
                          ensure_ascii=False))
         return 2
-    body = json.dumps({"document_id": views[0]["document_id"], "paper_title": views[0]["paper_title"],
-                       "questions": views}, ensure_ascii=False, indent=1)
+    body = json.dumps(
+        {
+            "document_id": views[0]["document_id"],
+            "paper_title": views[0]["paper_title"],
+            # The review service takes subject from the document, so it must travel here.
+            "subject": views[0]["subject"],
+            "questions": views,
+        },
+        ensure_ascii=False,
+        indent=1,
+    )
     if args.out is None:
         print(body)
     else:

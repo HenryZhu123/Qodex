@@ -125,6 +125,9 @@ class CommandLineTests(TestCase):
             body = json.loads(out.read_text(encoding="utf-8"))
             self.assertEqual(body["document_id"], "pending-authored-0123456789abcdef01234567")
             self.assertEqual(len(body["questions"]), 1)
+            # Without this the review service sees an empty subject and assembly rejects
+            # every question for a subject mismatch.
+            self.assertEqual(body["subject"], "数据结构")
 
             path.write_text(json.dumps(view(metadata={**PACKAGE["metadata"],
                                                       "question_type": "comprehensive"})), encoding="utf-8")

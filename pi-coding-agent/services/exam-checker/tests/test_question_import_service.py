@@ -114,3 +114,24 @@ async def test_identity_and_shape_errors_are_rejected_before_any_write() -> None
         )
     with pytest.raises(DocumentNotFoundError):
         await imports.store.get("pending-req-1")
+
+
+async def test_subject_falls_back_to_the_question_and_refuses_mixed_documents() -> None:
+    imports = service()
+    await imports.import_questions(
+        document_id="pending-subject-1",
+        questions=[question("q1", document_id="pending-subject-1")],
+    )
+    document = await imports.store.get("pending-subject-1")
+    # The review service derives every question's subject from the paper.
+    assert document.paper.subject == "数据结构"
+    assert imports.question_service.get_question(document, "q1").subject == "数据结构"
+
+    other = QuestionView(**{**question("q2", document_id="pending-subject-2").model_dump(),
+                            "subject": "操作系统"})
+    with pytest.raises(DocumentImportError) as caught:
+        await imports.import_questions(
+            document_id="pending-subject-2",
+            questions=[question("q1", document_id="pending-subject-2"), other],
+        )
+    assert "学科不一致" in str(caught.value)

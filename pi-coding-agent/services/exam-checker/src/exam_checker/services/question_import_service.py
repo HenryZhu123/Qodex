@@ -63,6 +63,15 @@ class QuestionImportService:
         identifiers = [question.question_id for question in questions]
         if len(set(identifiers)) != len(identifiers):
             raise DocumentImportError("同一文档内 question_id 必须唯一。")
+        subjects = {question.subject.strip() for question in questions if question.subject.strip()}
+        if len(subjects) > 1:
+            raise DocumentImportError(
+                f"同一文档的题目学科不一致：{sorted(subjects)}。"
+            )
+        # The review service reads subject from the paper, not from each question
+        # (question_service.get_question), so an explicit request label wins and the
+        # question subject is the fallback.
+        resolved_subject = (subject or "").strip() or (next(iter(subjects)) if subjects else "")
         for question in questions:
             if question.document_id != document_id:
                 raise DocumentImportError(
@@ -114,7 +123,7 @@ class QuestionImportService:
         document = ExamDocument.model_validate(
             {
                 "document_id": document_id,
-                "paper": PaperMetadata(title=paper_title or "导入题包", subject=subject),
+                "paper": PaperMetadata(title=paper_title or "导入题包", subject=resolved_subject),
                 "root_node_ids": [section_id],
                 "nodes": nodes,
                 "source": SourceMetadata(
