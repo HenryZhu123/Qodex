@@ -142,6 +142,28 @@ class QuestionView(StrictModel):
     reference: str
 
 
+class ImportDocumentRequest(StrictModel):
+    """Authored questions registered as one reviewable document."""
+
+    document_id: str
+    questions: list[QuestionView] = Field(min_length=1, max_length=200)
+    paper_title: str = ""
+    subject: str = ""
+    source_name: str = "qodex-pending"
+
+
+class ImportedQuestionRef(StrictModel):
+    question_id: str
+    question_number: str
+    question_version_id: str
+
+
+class ImportDocumentResult(StrictModel):
+    document_id: str
+    imported: int
+    questions: list[ImportedQuestionRef]
+
+
 class ReviewError(StrictModel):
     error_type: str
     position: str = ""

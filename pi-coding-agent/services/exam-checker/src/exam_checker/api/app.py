@@ -17,6 +17,8 @@ from ..database import (
 from ..domain.models import (
     CheckerPayload,
     ExamDocument,
+    ImportDocumentRequest,
+    ImportDocumentResult,
     IngestionResult,
     QuestionBankSearchResult,
     QuestionState,
@@ -68,6 +70,11 @@ from ..services.question_bank_service import (
     QuestionBankService,
     QuestionBankValidationError,
     ReviewNotPassedError,
+)
+from ..services.question_import_service import (
+    DocumentExistsError,
+    DocumentImportError,
+    QuestionImportService,
 )
 from ..services.question_service import QuestionNotFoundError, QuestionService
 from ..services.question_state_service import QuestionStateService
@@ -178,6 +185,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         review_repository=review_repository,
         question_bank_repository=question_bank_repository,
     )
+    question_import_service = QuestionImportService(
+        store=store,
+        version_repository=version_repository,
+        question_service=question_service,
+    )
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
@@ -219,6 +231,24 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
         finally:
             await file.close()
+
+    @application.post(
+        "/v1/exam-checker/documents/import", response_model=ImportDocumentResult
+    )
+    async def import_document(request: ImportDocumentRequest) -> ImportDocumentResult:
+        """Register already-authored questions so the normal review path can run."""
+        try:
+            return await question_import_service.import_questions(
+                document_id=request.document_id,
+                questions=request.questions,
+                paper_title=request.paper_title,
+                subject=request.subject,
+                source_name=request.source_name,
+            )
+        except DocumentExistsError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except DocumentImportError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     @application.get(
         "/v1/exam-checker/documents/{document_id}", response_model=ExamDocument
@@ -437,6 +467,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.state.question_workflow_service = question_workflow_service
     application.state.question_state_service = question_state_service
     application.state.version_repository = version_repository
+    application.state.question_import_service = question_import_service
     return application
 
 
