@@ -11,10 +11,11 @@ const examCheckerParameters = Type.Object({
 			Type.Literal("review_question"),
 			Type.Literal("revise_question"),
 			Type.Literal("get_question_state"),
+			Type.Literal("import_questions"),
 		],
 		{
 			description:
-				"Choose review_file for an original PDF/DOC/DOCX, review_document for every question in a parsed document, review_question for one parsed question, revise_question to modify and re-review one question, or get_question_state to read its latest version and workflow state.",
+				"Choose review_file for an original PDF/DOC/DOCX, import_questions to register already-authored question JSON as a reviewable document, review_document for every question in a parsed document, review_question for one parsed question, revise_question to modify and re-review one question, or get_question_state to read its latest version and workflow state.",
 		},
 	),
 	file_path: Type.Optional(
@@ -36,6 +37,18 @@ const examCheckerParameters = Type.Object({
 	),
 	user_instruction: Type.Optional(
 		Type.String({ description: "Optional user instruction for the question revision model." }),
+	),
+	questions: Type.Optional(
+		Type.Array(Type.Record(Type.String(), Type.Unknown()), {
+			description:
+				"Complete question views to register. Required only for import_questions. Each item needs document_id, question_id, question_number, question_type, question_text, options, answer_text, points, subject, paper_title, section_titles, numbering_path, numbering_description and reference.",
+		}),
+	),
+	paper_title: Type.Optional(
+		Type.String({ description: "Optional paper title for import_questions." }),
+	),
+	subject_label: Type.Optional(
+		Type.String({ description: "Optional subject label for import_questions." }),
 	),
 });
 
@@ -342,6 +355,8 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 			"Run the exam-checker workflow to parse and review exams, review or revise a question, or read a question's latest workflow state.",
 		promptSnippet: "Parse, review, revise, or inspect exam questions through the exam-checker workflow",
 		promptGuidelines: [
+			"Use import_questions to register authored question JSON (for example a pending package projected to question views) before reviewing it; review_question then runs the normal review, annotation and ingestion path.",
+			"Never reuse a document_id that already exists: the import refuses duplicates so an old question version cannot be reviewed in place of new content.",
 			"Use review_file for an original PDF, DOC, or DOCX; review_document for every question in a document_id; review_question for one document_id and question_id; get_question_state before revision when the latest version or status is unknown; revise_question only after a NEEDS_REVISION review, using the state result's question_version_id as base_version_id.",
 			"For revise_question, pass a complete user-edited question_json when the user supplied the replacement; otherwise pass the user's revision request as user_instruction so the service can apply the recorded review errors.",
 			"Treat exam_checker.status as the sole review decision: PASS is eligible for automatic ingestion; NEEDS_REVISION must be returned to the user with the reported errors; UNRESOLVED means review is incomplete.",
@@ -352,6 +367,35 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 		executionMode: "parallel",
 		async execute(_toolCallId, params, signal, _onUpdate, ctx) {
 			try {
+				if (params.operation === "import_questions") {
+					const documentId = requireOnly(params.document_id, [
+						params.file_path,
+						params.question_id,
+						params.base_version_id,
+						params.question_json,
+						params.user_instruction,
+					]);
+					if (!params.questions?.length) throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_INPUT");
+					const imported = await requestJson(`${serviceUrl()}/v1/exam-checker/documents/import`, {
+						method: "POST",
+						headers: { "content-type": "application/json" },
+						body: JSON.stringify({
+							document_id: documentId,
+							questions: params.questions,
+							...(params.paper_title ? { paper_title: params.paper_title } : {}),
+							...(params.subject_label ? { subject: params.subject_label } : {}),
+						}),
+						signal,
+					});
+					if (!isRecord(imported)) {
+						throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_RESPONSE");
+					}
+					return {
+						content: [{ type: "text", text: JSON.stringify(imported) }],
+						details: { imported },
+					};
+				}
+
 				if (params.operation === "get_question_state") {
 					const documentId = requireOnly(params.document_id, [
 						params.file_path,
