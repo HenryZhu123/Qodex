@@ -15,7 +15,55 @@
 | 组卷老师 | 出一份卷子 | 查题库 → 组卷 → 缺口补题 → 补的题再审校入库 → 重排一次 |
 | 考生 | 练某个考点 | 命题 → 只交付 `student_view` + 讲解，不给评分点与错因表 |
 
-## 2. 身份与接线
+## 2. 决策路径（一张图）
+
+```mermaid
+flowchart TD
+    IN([用户一句话]) --> ID{能判断身份与参数?<br/>命题 / 组卷 / 练题<br/>科目·章节·题量·分值·题型}
+    ID -- 缺 --> ASK[追问, 一次最多 3 个问题<br/>不替用户编参数] --> IN
+    ID -- 明确不支持 --> BOUND[说明边界 + 可替代方案<br/>综合题入卷/题组/图题/难度配额] --> END1([到此为止, 不硬做])
+    ID -- 命题老师 --> GEN[question_generation]
+    ID -- 组卷老师 --> ASM[question_bank 查池 → exam_assembly]
+    ID -- 考生 --> STU[出题后只给 student_view + 讲解] --> END2([交付, 不给评分点/错因])
+
+    GEN --> G{status / failure.code}
+    G -- GENERATED --> REV[exam_checker.review_question<br/>task_id + question_id + version]
+    G -- NEEDS_MATERIAL --> M1[换一次检索范围/检索词] --> M2{够了吗}
+    M2 -- 否 --> ASK
+    M2 -- 是 --> GEN
+    G -- SELF_CHECK_FAILED --> R{retry 字段}
+    R -- same_request --> GEN2[原样重来 1 次]
+    R -- new_request --> CHANGE[换考点/换写法, 或交回用户]
+    G -- MODEL_UNAVAILABLE / 其它 --> STOP1([如实报告失败 + 已完成部分])
+
+    REV --> V{review.status}
+    V -- PASS --> ING[(自动 annotate + 入库<br/>ingestion=STORED)]
+    V -- NEEDS_REVISION --> ONE[revise_question 修 1 轮] --> V2{还不过?}
+    V2 -- 是 --> STOP2([停下, 附审校理由])
+    V2 -- 否 --> ING
+    V -- UNRESOLVED --> STOP3([说明"审校不完整", 不写成通过])
+
+    ING --> ASM
+    ASM --> A{status}
+    A -- STRUCTURAL_PASS --> OUT([学生卷 + 答案卷 HTML<br/>+ 组卷历史])
+    A -- NEEDS_QUESTIONS --> SUP[读 deficits 补题] --> REV2[补的题必须再审校入库] --> ASM2[重排 1 次] --> A2{还缺?}
+    A2 -- 是 --> GAP([交回缺口报告, 不硬凑])
+    A2 -- 否 --> OUT
+    A -- UNRESOLVED --> STOP4([候选池不完整, 不能断言缺题])
+    A -- INVALID_REQUEST --> FIX[按 errors 修参数, 不支持的能力要说明]
+
+    subgraph GUARD[护栏: 不依赖模型自觉]
+        B1[tool_call: 预算 6/6/3 · 墙钟 45min · 同参数重复付费拦截 · 连续失败 3 次停]
+        B2[tool_result: 失败置 isError + 压成 observation<br/>ok/status/code/retry/needs/next/errors/artifact]
+        B3[message_end: 没有 STORED 就不许说"已入库"<br/>引号内文字不算断言 · 只在出题/审校后生效]
+        B4[trace: 输入→调用→观察→拦截 全部落盘]
+    end
+```
+
+**读法**：实线是"正常路径"；每个 `STOP` 都是**安全停止**（如实说明 + 交回用户），不是异常崩溃。
+图中任何一步都可能被右下角护栏打断，打断时给出可读理由（预算耗尽 / 重复调用 / 连续失败）。
+
+## 2-A. 身份与接线
 
 命题与审校用 `task_id + question_id + version` 对齐（详见 `docs/QUESTION_GENERATION_REVIEW_INTEGRATION.zh-CN.md`）：
 
