@@ -356,6 +356,20 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 		};
 		if (status) observation.status = status;
 		if (deficits.length > 0) observation.artifact = { deficits: String(deficits.length) };
+		// A short paper is often "short" because candidates were rejected (stale version,
+		// score mismatch). Without the reasons the agent can only guess why.
+		const rejectedRecords = Array.isArray(payload?.rejected_records) ? payload.rejected_records : [];
+		if (rejectedRecords.length > 0) {
+			const reasons = [
+				...new Set(
+					rejectedRecords
+						.map((item) => (item && typeof item === "object" ? (item as Record<string, unknown>).reason : undefined))
+						.filter((item): item is string => typeof item === "string" && item.length > 0),
+				),
+			].slice(0, 4);
+			observation.artifact = { ...observation.artifact, rejected: String(rejectedRecords.length) };
+			if (reasons.length > 0) observation.errors = reasons.map((reason) => `rejected: ${reason}`);
+		}
 		if (!observation.ok) {
 			const errors = payload && Array.isArray(payload.errors) ? payload.errors : [];
 			const first = errors.find((item) => typeof item === "string");

@@ -99,6 +99,22 @@ it("turns each service payload into a routing observation", () => {
 		ok: false,
 		artifact: { deficits: "2" },
 	});
+	// A short paper usually means candidates were thrown out; the reasons are the answer.
+	expect(
+		observe("exam_assembly", {
+			status: "NEEDS_QUESTIONS",
+			deficits: [{}],
+			rejected_records: [
+				{ record_id: "r-1", reason: "题目原始分值不匹配，不自动修改分值" },
+				{ record_id: "r-2", reason: "题目原始分值不匹配，不自动修改分值" },
+				{ record_id: "r-3", reason: "题目来源已发生变化或未通过版本核验" },
+			],
+		}),
+	).toMatchObject({
+		ok: false,
+		artifact: { deficits: "1", rejected: "3" },
+		errors: ["rejected: 题目原始分值不匹配，不自动修改分值", "rejected: 题目来源已发生变化或未通过版本核验"],
+	});
 	expect(observe("question_generation", { error: "INVALID_EXAM_CHECKER_INPUT" })).toMatchObject({
 		ok: false,
 		code: "INVALID_EXAM_CHECKER_INPUT",
