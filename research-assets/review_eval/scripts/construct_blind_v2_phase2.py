@@ -148,10 +148,10 @@ PUNC_OPS = [
 
 LEAK_FORMS = [
     ("题干提示正确项", "（本题正确选项为{ans}）"),
-    ("题干复述正确结论", "（正确选项的内容与教材结论一致）"),
-    ("题干给出解题步骤", "（提示：按公式逐项代入即可得到答案）"),
-    ("题干排除干扰项", "（选项A与B均可直接排除）"),
-    ("题干给出中间结果", "（提示：中间计算结果已经确定）"),
+    ("题干直接标注答案", "（答案：{ans}）"),
+    ("题干末尾公布答案", "（正确答案为{ans}）"),
+    ("题干排除全部干扰项", "（除选项{ans}外，其余选项均错误）"),
+    ("题干要求选择指定项", "（请选择选项{ans}）"),
 ]
 
 
@@ -179,6 +179,12 @@ def main() -> int:
         if not orig:
             rejected.append({"sample_id": src["sample_id"], "reason": "empty_original"})
             return
+        strict_eligible = etype != "missing_info"
+        validation = {
+            "strict_eval_eligible": strict_eligible,
+            "adjudication_status": "not_required" if strict_eligible else "pending",
+            "necessity_witnesses": [],
+        }
         out.append({
             "sample_id": src["sample_id"], "error_type": etype,
             "error_type_cn": TYPE_CN[etype], "error_detailed_type": subtype,
@@ -187,6 +193,7 @@ def main() -> int:
             "reference": src["reference"], "clean_text": clean, "error_text": err,
             "original_text": orig, "correction": corr, "anchor_text": orig,
             "rationale": why, "source_answer": src["source_answer"],
+            "validation": validation,
         })
         sub_count[etype][subtype] += 1
 

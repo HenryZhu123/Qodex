@@ -27,6 +27,7 @@ sys.path.insert(0, str(SCRIPTS_DIR))
 
 from agentic_reviewer import run_agentic_review  # noqa: E402
 from factual_pipeline_v2 import run_factual_pipeline_v2  # noqa: E402
+from evaluation_metrics import summarize  # noqa: E402
 
 DATASET_CSV = ROOT_DIR / "blind_test_set" / "dataset" / "blind_test_dataset.csv"
 OUT_DIR = ROOT_DIR / "blind_test_set" / "runs" / "factual_ab"
@@ -126,6 +127,7 @@ async def main() -> int:
                     "is_clean": is_clean,
                     "subject": subject,
                     "has_error": False,
+                    "status": "CLEAN",
                     "errors": [],
                     "reason": "",
                     "stage": "",
@@ -145,6 +147,11 @@ async def main() -> int:
                         )
                         rec.update(
                             has_error=res.has_error,
+                            status=(
+                                "DETECTED" if res.has_error
+                                else "UNRESOLVED" if res.error_msg
+                                else "CLEAN"
+                            ),
                             errors=res.errors,
                             reason=res.reason,
                             stage="agentic_tool_call",
@@ -164,21 +171,30 @@ async def main() -> int:
                         )
                         rec.update(
                             has_error=res2.has_error,
+                            status=res2.status,
                             errors=res2.errors,
                             reason=res2.reason,
                             stage=res2.stage,
                             llm_calls=res2.llm_calls,
                             claims=res2.claims,
+                            failures=res2.failures,
+                            error_msg=res2.error_msg,
                         )
                 except Exception as exc:  # noqa: BLE001
                     rec["reason"] = f"Exception: {type(exc).__name__}: {exc}"
+                    rec["status"] = "UNRESOLVED"
+                    rec["error_msg"] = rec["reason"]
 
                 rec["latency_ms"] = round((time.perf_counter() - t0) * 1000.0, 1)
                 records.append(rec)
 
                 done += 1
-                tag = "FP" if (is_clean and rec["has_error"]) else (
-                    "TN" if is_clean else ("TP" if rec["has_error"] else "FN")
+                tag = (
+                    "UNRESOLVED" if rec["status"] == "UNRESOLVED"
+                    else "FP" if (is_clean and rec["has_error"])
+                    else "TN" if is_clean
+                    else "TP" if rec["has_error"]
+                    else "FN"
                 )
                 out_fp.write(json.dumps(rec, ensure_ascii=False) + "\n")
                 out_fp.flush()
@@ -191,6 +207,12 @@ async def main() -> int:
         await asyncio.gather(*(one(r) for r in targets))
 
     out_fp.close()
+
+    three_state_summary = summarize(records)
+    out_file.with_name(out_file.stem + "_summary.json").write_text(
+        json.dumps(three_state_summary, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
 
     fact = [r for r in records if not r["is_clean"]]
     cln = [r for r in records if r["is_clean"]]

@@ -368,4 +368,3 @@ class BriefAuthoringTests(TestCase):
         self.assertFalse(hasattr(model, 'reasoning_effort'))
         self.assertEqual(generate_from_brief(payload, client=model, cache_path=self.cache), second)
         self.assertEqual(len(model.calls), 8)
-

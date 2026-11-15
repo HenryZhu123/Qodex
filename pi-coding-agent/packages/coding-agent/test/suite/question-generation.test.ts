@@ -131,9 +131,9 @@ it("preserves authoring constraints and allows the configured model timeout", as
 		await harness.session.prompt("Generate a diagnostic question.");
 		expect(timeout).toHaveBeenCalledWith(420000);
 		// The extension injects the task_id that ties every returned question together.
-	const submitted = JSON.parse(String(fetchStub.mock.calls[0]?.[1]?.body));
-	expect(submitted).toMatchObject(request);
-	expect(submitted.task_id).toMatch(/^[0-9a-f-]{36}$/);
+		const submitted = JSON.parse(String(fetchStub.mock.calls[0]?.[1]?.body));
+		expect(submitted).toMatchObject(request);
+		expect(submitted.task_id).toMatch(/^[0-9a-f-]{36}$/);
 		const result = harness.session.messages.find((message) => message.role === "toolResult");
 		expect(JSON.parse(getMessageText(result))).toEqual(response);
 	} finally {

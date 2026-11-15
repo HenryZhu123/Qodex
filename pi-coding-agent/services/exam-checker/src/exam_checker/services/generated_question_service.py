@@ -36,14 +36,11 @@ class GeneratedQuestionImportService:
         self, task_id: str, question_id: str, version: int | None
     ) -> StoredQuestionVersion:
         try:
+            generation_task_id = UUID(task_id)
+        except (TypeError, ValueError, AttributeError):
             if version is None:
                 return await self.version_repository.get_latest(task_id, question_id)
             return await self.version_repository.get(task_id, question_id, version)
-        except QuestionVersionNotFoundError:
-            # Not imported yet: fall through and import the immutable snapshot below.
-            pass
-
-        generation_task_id = UUID(task_id)
         task_id = str(generation_task_id)
         if version is None:
             async with self.sessions() as session:

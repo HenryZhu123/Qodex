@@ -217,21 +217,30 @@ Pi 扩展使用工具调用 ID 作为 `idempotency_key`，网页端使用 `crypt
 
 返回当前 `version`、完整题目、修订来源、审校状态和题库状态。
 
-### 4.4 修订并重新审校
+### 4.4 Agent 自主决定是否重新命题
 
 ```json
 {
-  "operation": "revise_question",
-  "task_id": "b4d4d9f0-5f57-4e52-8e1f-87f72551c7bd",
-  "question_id": "question_1",
-  "base_version": 1,
-  "user_instruction": "根据审校意见修正题干，但保持考点和难度不变"
+  "operation": "revise",
+  "request": {
+    "task_id": "b4d4d9f0-5f57-4e52-8e1f-87f72551c7bd",
+    "schema_version": "0.1",
+    "request_id": "paging-revise-001",
+    "current_question": "命题工具先前返回的完整 v1 题目包",
+    "feedback": {
+      "feedback_id": "exam_checker 返回的 review_id",
+      "question_id": "命题工具返回的 question_id",
+      "target_version": 1,
+      "part_id": "cross-page",
+      "action": "replace_next_frame",
+      "replacement_frame": 18,
+      "comment": "根据 exam_checker.errors 归纳出的修订原因"
+    }
+  }
 }
 ```
 
-服务只允许对当前版本进行修订，而且当前版本必须有 `NEEDS_REVISION` 审校记录。成功后创建 version 2，再执行完整审校。并发时如果 version 1 已经被别人更新，会返回 HTTP 409，而不是覆盖新版本。
-
-这条 `exam_checker.revise_question` 是审校服务内部的修订路径，新版本写入 `question_snapshots`，不会反向写回命题侧的 `pending_questions`。另一种路径是继续调用 `question_generation` 的 `revise`，沿用原 `task_id` 生成新的待审版本，再调用 `review_question` 审校。当前不要让两个服务同时为同一道题创建相同的下一个版本号；正式的三次自动重试编排需要统一选择其中一条修订路径。
+exam-checker 只返回 `NEEDS_REVISION`、`review_id` 和结构化错误，不调用命题服务，也不创建版本。Pi Agent 读取结果后自主判断是否调用 `question_generation.revise`。其中 `feedback_id` 使用真实的 `review_id`，用于追溯新版本依据的审校记录；`target_version` 必须等于被审校版本。命题工具沿用原 `task_id`，校验反馈目标版本并创建 version 2；Agent 随后再自主判断是否调用审校工具。工具提示要求同一题最多处理三个被拒绝版本，但没有后端把调用顺序写死。
 
 ## 5. HTTP 接口
 
@@ -249,7 +258,6 @@ AI 命题题目的审校：
 ```text
 GET  /v1/exam-checker/tasks/{task_id}/questions/{question_id}/state
 POST /v1/exam-checker/tasks/{task_id}/questions/{question_id}/review
-POST /v1/exam-checker/tasks/{task_id}/questions/{question_id}/revise
 ```
 
 审校请求体：
@@ -258,16 +266,6 @@ POST /v1/exam-checker/tasks/{task_id}/questions/{question_id}/revise
 {
   "version": 1,
   "idempotency_key": "调用方生成的唯一值"
-}
-```
-
-修订请求体：
-
-```json
-{
-  "base_version": 1,
-  "idempotency_key": "调用方生成的唯一值",
-  "user_instruction": "修订要求"
 }
 ```
 
@@ -318,12 +316,12 @@ npm run demo
 目前已经完成命题版本到审校版本的可靠连接，但仍有以下边界：
 
 1. 没有后台进程自动消费 `pending_questions`，必须由 Pi Agent 或调用方发起审校。
-2. “审校不通过后自动重新命题、最多三次”的循环已落到 Pi 侧的政策 + 护栏（`qodex-workflow`）：政策写明逐轮换改法，护栏拦同参数重复提交并记账；但它**不是独立编排服务**，也不由审校服务驱动，经其他入口调用时需自行遵守。见 [agent-workflow.md](agent-workflow.md) §4 和 §9。
+2. “审校不通过后是否重新命题”由 Pi Agent 根据结构化结果自主决定，不是后端状态机。Pi 侧的政策 + 护栏（`qodex-workflow`）要求逐轮换改法，拦截同参数重复提交并记账，最多审校 v1、v2、v3；但它不是独立编排服务，也不由审校服务驱动，经其他入口调用时需自行遵守。见 [agent-workflow.md](agent-workflow.md) §4 和 §9。
 3. 命题服务当前创建和保存任务，但尚未在所有题都审校完成后自动汇总更新任务最终状态。
-4. 命题侧 `revise` 和审校侧 `revise_question` 尚未由统一编排器分配版本号，不应并发创建同一道题的下一版本。
+4. 当前命题侧通用修订能力仍受具体题型生成器支持范围约束；不支持的反馈必须明确返回失败，不能让审校服务代为修改。
 5. 文档解析和 AI 命题共用审校快照模型，但来源外键不同，不应把 `document_id` 当成 AI 命题任务 ID。
 
-如果后续实现三次自主修订闭环，建议新增独立编排服务或复合 Pi 工具，持久化 `attempt`、当前版本、审校结果和终止原因，而不是只依赖 Prompt。
+演示 Agent 自主性时应保留 `question_generation → exam_checker → question_generation → exam_checker` 的独立工具轨迹，不新增隐藏这些决策的复合工具。
 
 ## 9. 主要代码位置
 
@@ -334,7 +332,7 @@ npm run demo
 | 审校数据库迁移 | `pi-coding-agent/services/exam-checker/migrations/versions/20261115_01_unified_question_tasks.py` 起 |
 | 命题版本导入审校 | `pi-coding-agent/services/exam-checker/src/exam_checker/services/generated_question_service.py` |
 | 审校任务接口 | `pi-coding-agent/services/exam-checker/src/exam_checker/api/app.py` |
-| 版本与修订工作流 | `pi-coding-agent/services/exam-checker/src/exam_checker/services/question_workflow_service.py` |
+| 固定版本审校工作流 | `pi-coding-agent/services/exam-checker/src/exam_checker/services/question_workflow_service.py` |
 | PASS 入库校验 | `pi-coding-agent/services/exam-checker/src/exam_checker/services/question_bank_service.py` |
 | Pi 命题工具 | `pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts` |
 | Pi 审校与题库工具 | `pi-coding-agent/packages/coding-agent/src/extensions/exam-checker/index.ts` |

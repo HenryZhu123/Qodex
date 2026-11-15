@@ -38,7 +38,7 @@ flowchart TD
 
     REV --> V{review.status}
     V -- PASS --> ING[(自动 annotate + 入库<br/>ingestion=STORED)]
-    V -- NEEDS_REVISION --> ONE[revise_question 最多 3 轮<br/>逐轮换改法: 定点修→换结构→换题] --> V2{3 轮仍不过?}
+    V -- NEEDS_REVISION --> ONE[question_generation.revise 至多生成 v3<br/>逐轮换改法: 定点修→换结构→换题] --> V2{v3 仍不过?}
     V2 -- 是 --> STOP2([停下, 附三轮审校理由])
     V2 -- 否 --> ING
     V -- UNRESOLVED --> STOP3([说明"审校不完整", 不写成通过])

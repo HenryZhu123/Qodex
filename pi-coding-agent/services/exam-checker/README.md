@@ -110,11 +110,9 @@ the pending queue uses a partial unique index for its single current version.
 - `GET /v1/exam-checker/documents/{document_id}/questions/{question_id}/checker-payload`
 - `POST /v1/exam-checker/documents/{document_id}/review`
 - `POST /v1/exam-checker/documents/{document_id}/questions/{question_id}/review`
-- `POST /v1/exam-checker/documents/{document_id}/questions/{question_id}/revise`
 - `POST /v1/exam-checker/documents/{document_id}/questions/{question_id}/ingest`
 - `GET /v1/exam-checker/tasks/{task_id}/questions/{question_id}/state`
 - `POST /v1/exam-checker/tasks/{task_id}/questions/{question_id}/review`
-- `POST /v1/exam-checker/tasks/{task_id}/questions/{question_id}/revise`
 - `GET /v1/question-bank/search`
 - `GET /v1/question-bank/{record_id}`
 
@@ -124,13 +122,9 @@ complete `question` JSON object, and `metadata` containing `difficulty` and a no
 `knowledge_points` string array. The normal review workflow performs this ingestion
 automatically after a passed review.
 
-The task revision endpoint requires integer `base_version` and an `idempotency_key`. It accepts either a complete user-edited
-`question_json` or `user_instruction`. The revision model receives the complete latest
-question JSON, the latest review's `errors`, and the user instruction without converting the
-question to another schema. It returns the complete revised question plus one natural-language
-`changes` record; the service builds the four-field `change_log`, creates a new version, and
-runs all nine checks again. A stale
-`base_version` returns HTTP 409 instead of overwriting a newer edit.
+Exam-checker has no revision endpoint and never creates a question version. A `NEEDS_REVISION`
+response exposes structured errors to Pi; Pi may independently call `question_generation`
+with `operation=revise`. Only question-generation may create and queue the next version.
 
 The MinerU Agent API accepts files up to 10 MB and PDFs up to 20 pages. It is IP-rate-limited and returns only Markdown.
 
@@ -198,12 +192,11 @@ The response separates whole-question state from per-task execution:
 
 ## Pi tool result
 
-Set `EXAM_CHECKER_SERVICE_URL` when the service is not available at `http://127.0.0.1:8091`. The built-in `exam_checker` tool exposes five operations:
+Set `EXAM_CHECKER_SERVICE_URL` when the service is not available at `http://127.0.0.1:8091`. The built-in `exam_checker` tool exposes four operations:
 
 - `review_file`: accepts `file_path`, parses the original PDF/DOC/DOCX once, then reviews every extracted question.
 - `review_document`: accepts `document_id` and reviews every question without repeating MinerU parsing.
 - `review_question`: accepts `task_id`, `question_id`, and optional exact integer `version`; it reviews only that immutable version. Pi supplies an idempotency key automatically.
-- `revise_question`: accepts `task_id`, `question_id`, integer `base_version`, and either a complete `question_json` or `user_instruction`; it creates a new version and re-reviews it.
 - `get_question_state`: accepts `task_id` and `question_id`; it returns the latest complete question version, its version-specific review result, change log, and question-bank state.
 
 The separate read-only `question_bank` tool exposes two operations:

@@ -51,7 +51,7 @@ Qodex main 已合并四个业务模块：
 禁止按序号猜；细节、验收判据与未完成事项见 `team-kb/MIGRATION-2026.11.1.md`。注意 exam-checker 的教材检索默认关闭
 （`EXAM_CHECKER_KB_DIR` 为空），其 venv 未装 jieba，缺 jieba 时中文检索 0 命中。
 
-命题与审校通过 `task_id + question_id + version` 对齐。exam-checker 的任务接口会按指定版本从命题待审表导入不可变快照，但它不是后台自动消费者；仍由 Pi Agent 显式调用命题和审校工具。PASS 后才能把同一版本写入 `question_bank`。
+命题与审校通过 `task_id + question_id + version` 对齐。exam-checker 的任务接口会按指定版本从命题待审表导入不可变快照，但它不是后台自动消费者；仍由 Pi Agent 显式调用命题和审校工具。只有 question-generation 可以创建新题目版本；exam-checker 只能审校不可变版本并记录建议。PASS 后才能把同一版本写入 `question_bank`。
 
 ## 开发原则
 

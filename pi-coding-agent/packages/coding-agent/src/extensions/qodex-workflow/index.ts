@@ -16,15 +16,12 @@
  * Anything that only degrades quality (which topic, which paper) stays in the policy.
  * Anything that would need a rollback lives here.
  */
-import { appendFile, mkdir } from "node:fs/promises";
+
 import { createHash } from "node:crypto";
+import { appendFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
-import type {
-	ExtensionAPI,
-	ToolCallEvent,
-	ToolResultEvent,
-} from "../../core/extensions/types.ts";
+import type { ExtensionAPI, ToolCallEvent, ToolResultEvent } from "../../core/extensions/types.ts";
 
 export const POLICY_MARKER = "<!-- qodex-workflow-policy -->";
 
@@ -93,7 +90,16 @@ const DEFAULT_LIMITS: WorkflowLimits = {
 const MAX_QUOTA = 40;
 
 const CHINESE_DIGITS: Record<string, number> = {
-	一: 1, 两: 2, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9,
+	一: 1,
+	两: 2,
+	二: 2,
+	三: 3,
+	四: 4,
+	五: 5,
+	六: 6,
+	七: 7,
+	八: 8,
+	九: 9,
 };
 
 function chineseNumber(token: string): number | undefined {
@@ -133,10 +139,7 @@ function positiveInteger(value: string | undefined, fallback: number): number {
  * five drafts plus rewrites. Explicit environment values always win, so an operator can
  * still clamp a run.
  */
-export function resolveLimits(
-	env: Record<string, string | undefined>,
-	quota: number | null = null,
-): WorkflowLimits {
+export function resolveLimits(env: Record<string, string | undefined>, quota: number | null = null): WorkflowLimits {
 	const scaled = quota
 		? {
 				generation: Math.min(quota * 2 + 2, 40),
@@ -149,10 +152,7 @@ export function resolveLimits(
 			env.QODEX_MAX_GENERATION_CALLS,
 			Math.max(DEFAULT_LIMITS.generation, scaled?.generation ?? 0),
 		),
-		review: positiveInteger(
-			env.QODEX_MAX_REVIEW_CALLS,
-			Math.max(DEFAULT_LIMITS.review, scaled?.review ?? 0),
-		),
+		review: positiveInteger(env.QODEX_MAX_REVIEW_CALLS, Math.max(DEFAULT_LIMITS.review, scaled?.review ?? 0)),
 		assembly: positiveInteger(env.QODEX_MAX_ASSEMBLY_CALLS, DEFAULT_LIMITS.assembly),
 		wallClockMs: positiveInteger(env.QODEX_MAX_WALL_CLOCK_MS, DEFAULT_LIMITS.wallClockMs),
 		failures: positiveInteger(env.QODEX_MAX_FAILED_CALLS, DEFAULT_LIMITS.failures),
@@ -187,7 +187,10 @@ function canonical(value: unknown): string {
 }
 
 export function callDigest(toolName: string, input: unknown): string {
-	return createHash("sha256").update(`${toolName}\n${canonical(input)}`).digest("hex").slice(0, 32);
+	return createHash("sha256")
+		.update(`${toolName}\n${canonical(input)}`)
+		.digest("hex")
+		.slice(0, 32);
 }
 
 export interface Observation {
@@ -320,13 +323,12 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 		}
 		if (!ok) {
 			const report = nested(payload, "authoring_report");
-			observation.detail = clip(payload && payload.message) ?? clip(report && report.stage);
+			observation.detail = clip(payload?.message) ?? clip(report?.stage);
 		}
 		return observation;
 	}
 	if (toolName === REVIEW_TOOL) {
-		const status =
-			stringField(payload, "status") ?? stringField(nested(payload, "review"), "status");
+		const status = stringField(payload, "status") ?? stringField(nested(payload, "review"), "status");
 		const ingestion = nested(payload, "ingestion");
 		const observation: Observation = {
 			ok: status === "PASS",
@@ -357,7 +359,9 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 						? payload.errors
 						: [];
 			const types = rawErrors
-				.map((item) => (item && typeof item === "object" ? (item as Record<string, unknown>).error_type : undefined))
+				.map((item) =>
+					item && typeof item === "object" ? (item as Record<string, unknown>).error_type : undefined,
+				)
 				.filter((item): item is string => typeof item === "string");
 			if (types.length > 0) observation.errors = types.slice(0, 6);
 			const unresolved =
@@ -386,7 +390,9 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 			const reasons = [
 				...new Set(
 					rejectedRecords
-						.map((item) => (item && typeof item === "object" ? (item as Record<string, unknown>).reason : undefined))
+						.map((item) =>
+							item && typeof item === "object" ? (item as Record<string, unknown>).reason : undefined,
+						)
 						.filter((item): item is string => typeof item === "string" && item.length > 0),
 				),
 			].slice(0, 4);
@@ -396,7 +402,7 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 		if (!observation.ok) {
 			const errors = payload && Array.isArray(payload.errors) ? payload.errors : [];
 			const first = errors.find((item) => typeof item === "string");
-			observation.detail = clip(first) ?? clip(payload && payload.message);
+			observation.detail = clip(first) ?? clip(payload?.message);
 		}
 		const artifacts = nested(payload, "artifacts");
 		if (artifacts) {
@@ -708,10 +714,12 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		description: "显示 Qodex 工作流的意图、目标账本、预算使用和 trace 位置",
 		handler: async (_args, ctx) => {
 			const limits = resolveLimits(process.env, quota);
-			const itemLines = [...items.entries()].slice(0, 8).map(
-				([questionId, item]) =>
-					`  · ${questionId.slice(0, 16)} ${item.status}${item.stored ? " / 已入库" : ""}（审校 ${item.reviews} 次）`,
-			);
+			const itemLines = [...items.entries()]
+				.slice(0, 8)
+				.map(
+					([questionId, item]) =>
+						`  · ${questionId.slice(0, 16)} ${item.status}${item.stored ? " / 已入库" : ""}（审校 ${item.reviews} 次）`,
+				);
 			const lines = [
 				"Qodex 工作流（先说清你是谁要什么，再动手）",
 				"1) 出题：'数据结构 图 单选 2 道进待审'",

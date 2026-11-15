@@ -202,7 +202,7 @@ npm run hydrate:model-data:release
 合并后的 main 会自动注册：
 
 - `question_generation`：`single`、`batch`、`comprehensive`、`revise`
-- `exam_checker`：`review_file`、`review_document`，以及使用 `task_id` 的 `review_question`、`revise_question`、`get_question_state`
+- `exam_checker`：`review_file`、`review_document`，以及使用 `task_id` 的 `review_question`、`get_question_state`；只审校不可变版本，不创建新版本
 - `question_bank`：`get_question`、`search_questions`
 - `exam_assembly`：提交组卷请求并返回试卷、缺题结果和历史记录 ID；历史查询目前通过 HTTP 接口完成
 

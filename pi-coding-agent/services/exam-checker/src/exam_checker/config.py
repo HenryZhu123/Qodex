@@ -101,7 +101,6 @@ class Settings:
     workflow_llm_model: str
     workflow_llm_timeout_seconds: float
     workflow_llm_max_concurrency: int
-    revision_prompt_root: str
     metadata_prompt_root: str
     knowledge_base_dir: str = ""
     prefer_embedded_pdf_text: bool = False
@@ -215,10 +214,6 @@ class Settings:
             workflow_llm_max_concurrency=_positive_int(
                 "EXAM_CHECKER_WORKFLOW_LLM_MAX_CONCURRENCY", 8
             ),
-            revision_prompt_root=os.getenv(
-                "EXAM_CHECKER_REVISION_PROMPT_ROOT",
-                str(default_prompt_root / "question-revision-prompt"),
-            ).strip(),
             metadata_prompt_root=os.getenv(
                 "EXAM_CHECKER_METADATA_PROMPT_ROOT",
                 str(default_prompt_root / "question-metadata-prompt"),

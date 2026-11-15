@@ -67,6 +67,8 @@ def backfill_dataset(dataset_dir: Path, refq_map: dict[str, dict], is_blind: boo
         ref_str = build_reference(q)
         r["reference"] = ref_str
         r["subject_cn"] = SUBJECT_CN.get(r.get("subject") or q.get("subject"), "计算机专业基础")
+        r["full_text"] = r.get("full_text") or r.get("error_text", "")
+        r["label"] = "clean" if r.get("error_type") == "none" else "error"
         updated_records.append(r)
 
     # 1. Write updated full JSONL

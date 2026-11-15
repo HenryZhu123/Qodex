@@ -20,14 +20,16 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import json
 import re
 import sqlite3
 from collections import Counter
 from pathlib import Path
 
-DEFAULT_REGISTRY = Path(r"D:\Code\hku\LLM\kb_review\registry.sqlite")
-KB_ROOT = Path(r"D:\Code\hku\LLM\kb_review\books")
+KB_HOME = Path(os.environ.get("KB_HOME", r"D:\Code\hku\LLM\kb_review"))
+DEFAULT_REGISTRY = Path(os.environ.get("KB_REGISTRY", KB_HOME / "registry.sqlite"))
+KB_ROOT = KB_HOME / "books"
 PAGE_MARKER = re.compile(r"\[\[PAGE:\d+\]\]")
 NON_CONTENT = re.compile(r"[^\u4e00-\u9fffA-Za-z0-9]+")
 

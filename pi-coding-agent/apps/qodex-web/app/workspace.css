@@ -788,3 +788,179 @@
 	border-radius: 8px;
 	margin: 10px 0;
 }
+
+/* Knowledge base: subject list and book intake */
+.qx-kb-panel {
+	display: grid;
+	gap: 26px;
+}
+.qx-kb-form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	align-items: flex-end;
+}
+.qx-kb-form label {
+	display: grid;
+	gap: 6px;
+	font-size: 11px;
+	color: #8a957c;
+}
+.qx-kb-form input {
+	min-width: 220px;
+}
+.qx-kb-wide {
+	flex: 1 1 420px;
+}
+.qx-kb-form input[type="text"],
+.qx-kb-form .qx-kb-wide input {
+	width: 100%;
+}
+.qx-kb-card {
+	border: 1px solid #e8eddf;
+	border-radius: 14px;
+	padding: 22px 24px;
+	background: #fff;
+	display: grid;
+	gap: 14px;
+}
+.qx-kb-card h2 {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+}
+.qx-table tr.is-selected td {
+	background: #f6f8f0;
+}
+.qx-page code {
+	font-size: 11px;
+	color: #6f7d5c;
+	background: #f4f6ee;
+	padding: 2px 6px;
+	border-radius: 5px;
+}
+
+/* Knowledge base grid: two cards per row, eight per page */
+.qx-kb-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+}
+.qx-kb-item {
+	border: 1px solid #e6ecdb;
+	border-radius: 12px;
+	padding: 16px 18px;
+	background: #fff;
+	display: grid;
+	gap: 6px;
+	cursor: pointer;
+	text-align: left;
+	font: inherit;
+	color: inherit;
+}
+.qx-kb-item:hover {
+	border-color: #c9d6b4;
+}
+.qx-kb-item.is-active {
+	border-color: #9cae88;
+	background: #f7f9f1;
+}
+.qx-kb-item strong {
+	font-size: 14px;
+	font-weight: 600;
+	color: #2f3a24;
+}
+.qx-kb-item .qx-kb-key {
+	font-size: 11px;
+	color: #8a957c;
+}
+.qx-kb-item .qx-kb-books {
+	font-size: 12px;
+	color: #6d7a5c;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.qx-kb-pager {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 16px;
+	font-size: 12px;
+	color: #8a957c;
+}
+.qx-kb-search {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex: 1 1 340px;
+	max-width: 460px;
+}
+.qx-kb-search input {
+	width: 100%;
+}
+.qx-kb-empty {
+	text-align: center;
+	padding: 42px 0 30px;
+	display: grid;
+	gap: 14px;
+	justify-items: center;
+	color: #8a957c;
+	font-size: 13px;
+}
+
+/* Toolbar: search centred under the page title */
+.qx-kb-toolbar {
+	display: flex;
+	justify-content: center;
+	margin: 4px 0 18px;
+}
+.qx-kb-toolbar .qx-btn {
+	white-space: nowrap;
+}
+.qx-kb-toolbar .qx-kb-search {
+	flex: 0 1 520px;
+	max-width: 520px;
+}
+
+/* Header: title on its own row, controls sharing the search row */
+.qx-kb-head {
+	display: block;
+	margin-bottom: 6px;
+}
+.qx-kb-head h1 {
+	margin: 0;
+}
+.qx-kb-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 0 0 18px;
+}
+.qx-kb-toolbar .qx-kb-search {
+	flex: 0 1 480px;
+	max-width: 480px;
+	margin-inline: auto;
+}
+.qx-kb-toolbar .qx-actions {
+	flex: 0 0 auto;
+}
+
+/* Page jump box inside the pager */
+.qx-kb-jump {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	white-space: nowrap;
+}
+.qx-kb-jump input {
+	width: 54px;
+	padding: 5px 6px;
+	text-align: center;
+	border: 1px solid #dfe5d5;
+	border-radius: 7px;
+	background: #fff;
+	font: inherit;
+}

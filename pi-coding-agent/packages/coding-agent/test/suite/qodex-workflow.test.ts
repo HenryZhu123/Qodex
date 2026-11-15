@@ -192,7 +192,9 @@ it("appends the policy without replacing the assembled system prompt", async () 
 	// The operator trace must show what the user typed, not only which tools ran.
 	const traceDirPath = process.env.QODEX_TRACE_DIR as string;
 	const { readdirSync, readFileSync } = await import("node:fs");
-	const log = readdirSync(traceDirPath).map((name) => readFileSync(`${traceDirPath}/${name}`, "utf8")).join("");
+	const log = readdirSync(traceDirPath)
+		.map((name) => readFileSync(`${traceDirPath}/${name}`, "utf8"))
+		.join("");
 	expect(log).toContain('"event":"user_prompt"');
 	expect(log).toContain("帮我出几道 408 题");
 	expect(harness.session.systemPrompt.length).toBeGreaterThan(before.length);
@@ -237,17 +239,25 @@ it("does not spend the generation budget on a rejected request", async () => {
 	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
 	const fetchStub = vi
 		.fn<typeof fetch>()
-		.mockResolvedValueOnce(Response.json({ status: "INVALID_REQUEST", questions: [], message: "requirements 须为数组" }))
+		.mockResolvedValueOnce(
+			Response.json({ status: "INVALID_REQUEST", questions: [], message: "requirements 须为数组" }),
+		)
 		.mockResolvedValueOnce(Response.json({ status: "GENERATED", questions: [] }));
 	vi.stubGlobal("fetch", fetchStub);
 	harness = await createHarness({ extensionFactories: workflowExtensions });
 	harness.setResponses([
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "bad" } }), {
-			stopReason: "toolUse",
-		}),
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "good" } }), {
-			stopReason: "toolUse",
-		}),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", { operation: "author", request: { request_id: "bad" } }),
+			{
+				stopReason: "toolUse",
+			},
+		),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", { operation: "author", request: { request_id: "good" } }),
+			{
+				stopReason: "toolUse",
+			},
+		),
 		fauxAssistantMessage("done"),
 	]);
 
@@ -296,6 +306,7 @@ it("counts a stored question as progress and records it in the ledger", async ()
 			question_id: "q-1",
 			question_number: "1",
 			version: 1,
+			review_id: "22222222-2222-4222-8222-222222222222",
 			review: { status: "PASS", summary: { errors: [] }, checks: [] },
 			ingestion: { status: "STORED" },
 		}),
@@ -337,7 +348,14 @@ it("lets the run continue once the user answers the hand-back", async () => {
 			stopReason: "toolUse",
 		}),
 	);
-	harness.setResponses([...first, fauxAssistantMessage("已停止"), fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "g" } }), { stopReason: "toolUse" }), fauxAssistantMessage("继续了")]);
+	harness.setResponses([
+		...first,
+		fauxAssistantMessage("已停止"),
+		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "g" } }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage("继续了"),
+	]);
 
 	await harness.session.prompt("出五道题");
 	await harness.session.prompt("材料放好了，继续");
@@ -374,9 +392,12 @@ it("keeps the question package next to the routing observation", async () => {
 	vi.stubGlobal("fetch", fetchStub);
 	harness = await createHarness({ extensionFactories: workflowExtensions });
 	harness.setResponses([
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "keep" } }), {
-			stopReason: "toolUse",
-		}),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", { operation: "author", request: { request_id: "keep" } }),
+			{
+				stopReason: "toolUse",
+			},
+		),
 		fauxAssistantMessage("done"),
 	]);
 
@@ -388,7 +409,11 @@ it("keeps the question package next to the routing observation", async () => {
 	expect(text).toContain("循环队列的队满条件是");
 	expect(text).toContain('"question_id":"authored-abc"');
 	const observation = JSON.parse(text.slice(text.indexOf("[qodex] ") + "[qodex] ".length));
-	expect(observation.observation.artifact).toMatchObject({ task_id: "t-9", question_id: "authored-abc", version: "1" });
+	expect(observation.observation.artifact).toMatchObject({
+		task_id: "t-9",
+		question_id: "authored-abc",
+		version: "1",
+	});
 });
 
 it("refuses to pay twice for the same call", async () => {
@@ -490,7 +515,7 @@ it("leaves a quoted policy rule alone even after a read-only tool call", async (
 		fauxAssistantMessage(fauxToolCall("question_bank", { operation: "search_questions", limit: 5 }), {
 			stopReason: "toolUse",
 		}),
-		fauxAssistantMessage('看到 ingestion.status=STORED 我才会说“已入库”。'),
+		fauxAssistantMessage("看到 ingestion.status=STORED 我才会说“已入库”。"),
 	]);
 
 	await harness.session.prompt("题库里有什么？");

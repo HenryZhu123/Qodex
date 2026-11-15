@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sqlite3
 import subprocess
@@ -29,8 +30,13 @@ sys.path.insert(0, str(SCRIPTS))
 
 from store import is_stub, strip_leading_heading  # noqa: E402
 
-KB_ROOT = Path(r"D:\Code\hku\LLM\kb_review\books")
-EVAL_DIR = Path(r"D:\Code\hku\LLM\hku_agent\research-assets\review_eval\retrieval_eval")
+KB_ROOT = Path(os.environ.get("KB_HOME", r"D:\Code\hku\LLM\kb_review\books"))
+EVAL_DIR = Path(
+    os.environ.get(
+        "KB_EVAL_DIR",
+        r"D:\Code\hku\LLM\hku_agent\research-assets\review_eval\retrieval_eval",
+    )
+)
 
 GOLDEN_CHUNKS = {
     ("data_structure", "kb.sqlite"): 411,
@@ -64,8 +70,8 @@ def bad_segment(segment: str) -> bool:
     return bool(BINARY.match(s) or NUMERIC_ONLY.match(s))
 
 
-def indexed_dbs() -> list[Path]:
-    return sorted(KB_ROOT.rglob("kb*.sqlite"))
+def indexed_dbs(root: Path | None = None) -> list[Path]:
+    return sorted((root or KB_ROOT).rglob("kb*.sqlite"))
 
 
 def gate_index_consistency(dbs: list[Path]) -> dict:
@@ -191,6 +197,7 @@ def gate_text_hygiene(dbs: list[Path]) -> dict:
 def gate_coverage(dbs: list[Path]) -> dict:
     counts: dict[str, int] = {}
     deviations: dict[str, float] = {}
+    unknown: list[str] = []
     ok = True
     for db in dbs:
         conn = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
@@ -203,17 +210,21 @@ def gate_coverage(dbs: list[Path]) -> dict:
         counts[label] = n
         golden = GOLDEN_CHUNKS.get(key)
         if golden is None:
+            # A book built by someone else has no golden value; say so instead of
+            # passing silently, so nobody reads the gate as coverage evidence.
+            unknown.append(label)
             continue
         delta = abs(n - golden) / golden
         deviations[label] = round(delta, 4)
         ok = ok and delta <= 0.05
-    return {"pass": ok, "counts": counts, "deviation": deviations}
+    return {"pass": ok, "counts": counts, "deviation": deviations, "no_golden": unknown}
 
 
-def gate_retrieval() -> dict:
+def gate_retrieval(eval_dir: Path | None = None) -> dict:
+    eval_dir = eval_dir or EVAL_DIR
     # Strict labels: every top-2 candidate was read and judged against the query.
     # The older metrics.json inferred relevance from rank, which overstates recall.
-    script = EVAL_DIR / "score_v3.py"
+    script = eval_dir / "score_v3.py"
     if not script.is_file():
         return {"pass": None, "reason": "strict evaluator not found"}
     proc = subprocess.run(
@@ -221,7 +232,7 @@ def gate_retrieval() -> dict:
     )
     if proc.returncode != 0:
         return {"pass": False, "reason": "evaluator failed", "stderr": proc.stderr[-300:]}
-    metrics = json.loads((EVAL_DIR / "metrics_v3.json").read_text(encoding="utf-8"))
+    metrics = json.loads((eval_dir / "metrics_v3.json").read_text(encoding="utf-8"))
     recall = metrics["recall@2"]
     return {
         "pass": recall >= RECALL_FLOOR,
@@ -235,9 +246,14 @@ def gate_retrieval() -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--skip-retrieval", action="store_true")
+    parser.add_argument("--eval-dir", help="directory holding score_v3.py and the labels")
+    parser.add_argument(
+        "--root",
+        help="directory holding the built indexes (default: KB_HOME or the project path)",
+    )
     args = parser.parse_args()
 
-    dbs = indexed_dbs()
+    dbs = indexed_dbs(Path(args.root) if args.root else None)
     if not dbs:
         print("no indexes found", file=sys.stderr)
         return 2
@@ -250,7 +266,7 @@ def main() -> int:
         "G5_coverage": gate_coverage(dbs),
     }
     if not args.skip_retrieval:
-        gates["G6_retrieval_quality"] = gate_retrieval()
+        gates["G6_retrieval_quality"] = gate_retrieval(Path(args.eval_dir) if args.eval_dir else None)
 
     failed = [name for name, result in gates.items() if result.get("pass") is False]
     print(json.dumps({"gates": gates, "failed": failed, "verdict": "PASS" if not failed else "FAIL"},

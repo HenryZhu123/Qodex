@@ -14,9 +14,7 @@ from .openai_streaming import (
 )
 from ..domain.models import (
     QuestionMetadata,
-    QuestionRevisionResult,
     QuestionView,
-    ReviewError,
 )
 from ..prompts.repositories import SinglePromptRepository
 
@@ -32,7 +30,6 @@ class OpenAICompatibleQuestionWorkflowModel:
         api_key: str,
         model: str,
         *,
-        revision_prompts: SinglePromptRepository,
         metadata_prompts: SinglePromptRepository,
         timeout_seconds: float = 180,
         max_concurrency: int = 8,
@@ -41,7 +38,6 @@ class OpenAICompatibleQuestionWorkflowModel:
         self.base_url = base_url.rstrip("/")
         self.api_key = api_key
         self.model = model
-        self.revision_prompts = revision_prompts
         self.metadata_prompts = metadata_prompts
         self._semaphore = asyncio.Semaphore(max(1, max_concurrency))
         self._owns_client = client is None
@@ -50,46 +46,6 @@ class OpenAICompatibleQuestionWorkflowModel:
     async def close(self) -> None:
         if self._owns_client:
             await self._client.aclose()
-
-    async def revise(
-        self,
-        question: QuestionView,
-        errors: list[ReviewError],
-        user_instruction: str,
-        proposed_question: QuestionView | None = None,
-    ) -> QuestionRevisionResult:
-        user_prompt = (
-            "【原题 JSON】\n"
-            f"{json.dumps(question.model_dump(mode='json'), ensure_ascii=False)}\n\n"
-            "【审校修改意见】\n"
-            f"{json.dumps([error.model_dump(mode='json') for error in errors], ensure_ascii=False)}\n\n"
-            "【用户补充修改意见】\n"
-            f"{user_instruction}"
-            + (
-                "\n\n【用户提交的修改后题目 JSON】\n"
-                f"{json.dumps(proposed_question.model_dump(mode='json'), ensure_ascii=False)}"
-                if proposed_question is not None
-                else ""
-            )
-        )
-        content = await self._complete(
-            self.revision_prompts.system_prompt(), user_prompt
-        )
-        try:
-            result = QuestionRevisionResult.model_validate_json(content)
-        except ValidationError as exc:
-            raise QuestionWorkflowModelError(
-                f"Revision response violates the result schema: {exc}"
-            ) from exc
-        if result.question.task_id != question.task_id:
-            raise QuestionWorkflowModelError("Revision changed task_id")
-        if result.question.question_id != question.question_id:
-            raise QuestionWorkflowModelError("Revision changed question_id")
-        if proposed_question is not None and result.question != proposed_question:
-            raise QuestionWorkflowModelError(
-                "Revision model changed the user-submitted question"
-            )
-        return result
 
     async def annotate(self, question: QuestionView) -> QuestionMetadata:
         user_prompt = json.dumps(question.model_dump(mode="json"), ensure_ascii=False)

@@ -1,7 +1,7 @@
 # 分支合并交接（feat/question-generation → 集成分支）
 
-> 给负责合并的人。合并方向：`origin/feat/question-generation`（本文提交 `e2dff23`，相对 `main` ahead 96、behind 0）
-> 合入 `origin/codex/generation-owns-versions` 建立的集成分支。
+> 状态：已按本文完成集成。源分支采用 `origin/feat/question-generation@2acd161`，并合入
+> `origin/codex/generation-owns-versions` 的版本所有权实现。
 > 计划本身见对方提供的《命题分支与版本权限分支合并方案》；本文只写**合并时容易做错的地方**与**必须保留的东西**。
 
 ## 1. 已按合并方案修好的四条
@@ -13,7 +13,7 @@
 | 4.5 三轮策略与服务能力不一致 | `e2dff23` | 通用创作题修订链放开到 **v1→v2→v3**，v3 之后再改返回 `REVISION_LIMIT`；`REVISION_VERSION` 自身产生的题包可再修订 |
 | 4.6 策略文字仍引用旧工具 | `e2dff23` | 提示改指 `question_generation.revise`（沿用 `task_id`、`feedback_id = review_id`、`target_version = 被审校版本`） |
 
-4.1 按方案采用我们的完整约束；4.2（删 exam-checker 修订入口）**故意留给你们做**，理由见第 4 节。
+4.1 已采用完整约束；4.2 已在集成时按版本所有权分支实现，结果见第 4 节。
 
 ## 2. 合并时必须从我们这边保留的能力
 
@@ -40,17 +40,17 @@
    `AGENTS.md`（我们的开发原则 + 你们的"只有命题创建版本"）。
 4. **不要删 `docs/samples/`**，它不参与冲突，但删了以后没人能对着真实字段排查。
 
-## 4. 4.2 为什么留给你们做，以及做之前要确认什么
+## 4. 4.2 集成结果
 
-我们分支里还有 `POST /v1/exam-checker/{documents,tasks}/.../revise` 与 Pi 的 `revise_question`。
-**保留它们不是要坚持这条路径**，而是因为删除需要一个前置条件：
+集成结果已经删除 `POST /v1/exam-checker/{documents,tasks}/.../revise`、Pi 的 `revise_question`、
+审校侧修订模型和版本创建仓储能力。新版本只能由 `question_generation.revise` 创建：
 
 - 通用创作题（`general-authoring-*`）：修订链已开放到 v3，删掉旧入口**没有影响**；
 - 综合题：`question_generation.revise` 已支持（`part_id`/`action` 级反馈）；
 - **旧确定性单选题**：目前没有通用反馈修订通道。删掉旧入口后，这类题的修订会返回 `UNSUPPORTED_REQUEST`。
 
-所以删除前需要确认：旧确定性题被要求修订时，Agent 能拿到 `UNSUPPORTED_REQUEST` 并向用户说明"该题不支持定向修订，需重新命题"。
-确认后再删两个 HTTP 入口、Pi 操作与审校侧修订代码，并补一条回归断言（OpenAPI 里不出现 `/revise`）。
+旧确定性题被要求修订时，Agent 必须处理 `UNSUPPORTED_REQUEST` 并说明“该题不支持定向修订，需重新命题”，
+不得回退到 exam-checker 修改版本。OpenAPI 回归测试保证审校服务不再出现 `/revise`。
 
 ## 5. 交接后我们这边还会做什么
 
