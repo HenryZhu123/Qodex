@@ -7,7 +7,7 @@ description: Use when ingesting PDF, Word, HTML, or plain-text documents into a 
 
 Turn a folder of user documents into a reproducible, anchor-preserving knowledge base. The skill separates **parsing**, **integrity sampling**, **chunk planning**, **chunking**, and **ingestion** so a bad PDF or a bad encoding decision cannot silently poison the index.
 
-All commands below assume the current directory is this skill directory (`hku_agent/skills/build-knowledge-base`). Scripts resolve their own imports, so `--input` and `--out` may be absolute paths. Replace `<file-or-dir>` and `<run-dir>` with real paths; do not paste the angle brackets into PowerShell.
+All commands below assume the current directory is **this skill directory** — the folder containing this `SKILL.md`, wherever the skill was installed (`research-assets/skills/build-knowledge-base` in the reference checkout). Scripts resolve their own imports, so `--input` and `--out` may be absolute paths. Replace `<file-or-dir>` and `<run-dir>` with real paths; do not paste the angle brackets into PowerShell.
 
 ## Required references
 
