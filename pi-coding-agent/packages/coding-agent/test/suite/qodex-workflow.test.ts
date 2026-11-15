@@ -336,6 +336,42 @@ it("lets the run continue once the user answers the hand-back", async () => {
 	expect(log).toContain('"event":"resume"');
 });
 
+it("keeps the question package next to the routing observation", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	const fetchStub = vi.fn<typeof fetch>().mockImplementation(async () =>
+		Response.json({
+			status: "GENERATED",
+			task_id: "t-9",
+			questions: [
+				{
+					question_id: "authored-abc",
+					version: 1,
+					student_view: { stem: "循环队列的队满条件是", options: [{ id: "A", text: "…" }] },
+					instructor_view: { correct_option_id: "C" },
+				},
+			],
+		}),
+	);
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	harness.setResponses([
+		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "keep" } }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("出一道题");
+
+	const text = getMessageText(harness.session.messages.find((message) => message.role === "toolResult"));
+	// Without the package the model cannot build a revise request; without the ids it
+	// cannot even call review, which is what sent it to raw SQL in a live session.
+	expect(text).toContain("循环队列的队满条件是");
+	expect(text).toContain('"question_id":"authored-abc"');
+	const observation = JSON.parse(text.slice(text.indexOf("[qodex] ") + "[qodex] ".length));
+	expect(observation.observation.artifact).toMatchObject({ task_id: "t-9", question_id: "authored-abc", version: "1" });
+});
+
 it("refuses to pay twice for the same call", async () => {
 	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
 	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json({ status: "GENERATED", questions: [] }));
@@ -418,9 +454,12 @@ it("reports a domain failure as an error observation instead of a success", asyn
 
 	const result = harness.session.messages.find((message) => message.role === "toolResult");
 	expect(result?.isError).toBe(true);
-	const body = JSON.parse(getMessageText(result));
-	expect(body.observation).toMatchObject({ ok: false, code: "audit_rejected", retry: "new_request" });
-	expect(body.observation.next.length).toBeGreaterThan(0);
+	const text = getMessageText(result);
+	// The service payload survives: it carries the ids and errors the next call needs.
+	expect(text).toContain('"retry":"new_request"');
+	const observation = JSON.parse(text.slice(text.indexOf("[qodex] ") + "[qodex] ".length));
+	expect(observation.observation).toMatchObject({ ok: false, code: "audit_rejected", retry: "new_request" });
+	expect(observation.observation.next.length).toBeGreaterThan(0);
 });
 
 it("leaves a quoted policy rule alone even after a read-only tool call", async () => {

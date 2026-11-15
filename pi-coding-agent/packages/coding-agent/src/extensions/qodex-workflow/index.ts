@@ -296,7 +296,18 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 			const needs = failure.needs;
 			observation.needs = typeof needs === "string" ? needs : null;
 		}
-		if (ok && questions > 0) observation.artifact = { questions: String(questions) };
+		if (ok) {
+			const artifact: Record<string, string> = { questions: String(questions) };
+			const taskId = stringField(payload, "task_id");
+			if (taskId) artifact.task_id = taskId;
+			const first = Array.isArray(payload?.questions) ? payload.questions[0] : undefined;
+			if (first && typeof first === "object") {
+				const record = first as Record<string, unknown>;
+				if (typeof record.question_id === "string") artifact.question_id = record.question_id;
+				if (typeof record.version === "number") artifact.version = String(record.version);
+			}
+			observation.artifact = artifact;
+		}
 		if (!ok) {
 			const report = nested(payload, "authoring_report");
 			observation.detail = clip(payload && payload.message) ?? clip(report && report.stage);
@@ -315,6 +326,8 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 		const artifact: Record<string, string> = {};
 		const taskId = stringField(payload, "task_id");
 		if (taskId) artifact.task_id = taskId;
+		const reviewId = stringField(payload, "review_id");
+		if (reviewId) artifact.review_id = reviewId;
 		const documentId = stringField(payload, "document_id");
 		if (documentId) artifact.document_id = documentId;
 		const questionId = stringField(payload, "question_id");
@@ -650,8 +663,12 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 			await stopRun(`NO_PROGRESS:${noProgress}`);
 		}
 		if (!payload) return undefined;
+		// The business payload IS the next step's input (question package, review_id, errors,
+		// ingestion receipt). Replacing it forced the model to go around the tool layer --
+		// live sessions were reading pending_questions over raw SQL to recover task_id.
+		// Keep the original result and append the compact routing summary next to it.
 		return {
-			content: [{ type: "text", text: JSON.stringify({ observation }) }],
+			content: [...event.content, { type: "text", text: `\n[qodex] ${JSON.stringify({ observation })}` }],
 			isError: !observation.ok,
 		};
 	});
