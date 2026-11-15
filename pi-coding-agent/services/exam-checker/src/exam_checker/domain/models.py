@@ -160,11 +160,6 @@ class QuestionChangeLog(StrictModel):
     model: str
 
 
-class QuestionRevisionResult(StrictModel):
-    question: QuestionView
-    changes: str = Field(min_length=1)
-
-
 class StoredQuestionVersion(StrictModel):
     task_id: str
     question_id: str
@@ -331,13 +326,6 @@ class ReviewedDocument(StrictModel):
 class QuestionMetadata(StrictModel):
     difficulty: Literal["easy", "medium", "hard"]
     knowledge_points: list[str] = Field(min_length=1, max_length=8)
-
-
-class ReviseQuestionRequest(StrictModel):
-    base_version: int = Field(ge=1)
-    idempotency_key: str = Field(min_length=1)
-    question_json: dict[str, Any] | None = None
-    user_instruction: str = ""
 
 
 class ReviewQuestionRequest(StrictModel):

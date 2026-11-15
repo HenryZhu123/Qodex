@@ -132,18 +132,11 @@ async def test_state_does_not_reuse_review_from_an_older_version() -> None:
         ),
     )
     await reviews.save(old_review)
-    await versions.create_revision(
+    await versions.import_generated(
         task_id="exam_1",
         question_id="question_1",
-        base_version=first.version,
-        revision_source="USER_EDIT",
+        version=first.version + 1,
         question=original.model_copy(update={"question_text": "修改后的题目"}),
-        change_log={
-            "user_instruction": "修改题干",
-            "review_feedback": [],
-            "changes": "将题干修改为“修改后的题目”。",
-            "model": "test-model",
-        },
     )
     service = QuestionStateService(
         version_repository=versions,

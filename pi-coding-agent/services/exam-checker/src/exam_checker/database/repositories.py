@@ -19,7 +19,6 @@ from ..services.document_store import DocumentNotFoundError
 from ..services.persistence import (
     QuestionBankEntryNotFoundError,
     ReviewNotFoundError,
-    QuestionVersionConflictError,
     QuestionVersionNotFoundError,
     StoredQuestionReview,
 )
@@ -340,49 +339,12 @@ class PostgresQuestionVersionRepository:
         )
         async with self.sessions.begin() as session:
             await session.execute(statement)
-        return await self.get(task_id, question_id, version)
-
-    async def create_revision(
-        self,
-        *,
-        task_id: str,
-        question_id: str,
-        base_version: int,
-        revision_source: str,
-        question: QuestionView,
-        change_log: QuestionChangeLog,
-    ) -> StoredQuestionVersion:
-        statement = (
-            select(QuestionSnapshotRow)
-            .where(
-                QuestionSnapshotRow.task_id == task_id,
-                QuestionSnapshotRow.question_id == question_id,
+        stored = await self.get(task_id, question_id, version)
+        if stored.question != question or stored.revision_source != "GENERATED":
+            raise ValueError(
+                "Generated version content conflicts with the imported snapshot"
             )
-            .order_by(QuestionSnapshotRow.version.desc())
-            .limit(1)
-            .with_for_update()
-        )
-        async with self.sessions.begin() as session:
-            latest = await session.scalar(statement)
-            if latest is None:
-                raise QuestionVersionNotFoundError((task_id, question_id))
-            if latest.version != base_version:
-                raise QuestionVersionConflictError(
-                    "The question changed after the requested base version"
-                )
-            row = QuestionSnapshotRow(
-                task_id=task_id,
-                question_id=question_id,
-                version=latest.version + 1,
-                generation_task_id=latest.generation_task_id,
-                source_document_id=latest.source_document_id,
-                revision_source=revision_source,
-                question_json=question.model_dump(mode="json"),
-                change_log=change_log.model_dump(mode="json"),
-            )
-            session.add(row)
-            await session.flush()
-            return self._to_domain(row)
+        return stored
 
     @staticmethod
     def _to_domain(row: QuestionSnapshotRow) -> StoredQuestionVersion:

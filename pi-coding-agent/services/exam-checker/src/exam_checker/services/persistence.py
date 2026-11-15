@@ -6,7 +6,6 @@ from uuid import UUID
 from uuid import uuid4
 
 from ..domain.models import (
-    QuestionChangeLog,
     QuestionView,
     ReviewedQuestion,
     StoredQuestionBankEntry,
@@ -27,10 +26,6 @@ class QuestionBankEntryNotFoundError(KeyError):
 
 
 class QuestionVersionNotFoundError(KeyError):
-    pass
-
-
-class QuestionVersionConflictError(ValueError):
     pass
 
 
@@ -101,18 +96,6 @@ class QuestionVersionRepository(Protocol):
     async def import_generated(
         self, *, task_id: str, question_id: str, version: int, question: QuestionView
     ) -> StoredQuestionVersion: ...
-
-    async def create_revision(
-        self,
-        *,
-        task_id: str,
-        question_id: str,
-        base_version: int,
-        revision_source: str,
-        question: QuestionView,
-        change_log: QuestionChangeLog,
-    ) -> StoredQuestionVersion: ...
-
 
 class InMemoryQuestionReviewRepository:
     def __init__(self) -> None:

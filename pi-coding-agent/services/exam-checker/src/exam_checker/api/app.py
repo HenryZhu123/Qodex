@@ -22,7 +22,6 @@ from ..domain.models import (
     QuestionState,
     QuestionView,
     ReviewQuestionRequest,
-    ReviseQuestionRequest,
     ReviewedDocument,
     ReviewedQuestion,
     StoredQuestionBankEntry,
@@ -37,10 +36,7 @@ from ..integrations.mineru_agent import (
 )
 from ..integrations.openrouter_decisions import OpenRouterJevClient
 from ..integrations.specialist_reviewer import OpenAICompatibleSpecialistReviewer
-from ..integrations.question_workflow_model import (
-    OpenAICompatibleQuestionWorkflowModel,
-    QuestionWorkflowModelError,
-)
+from ..integrations.question_workflow_model import OpenAICompatibleQuestionWorkflowModel
 from ..parsing.normalizer import ExamDocumentNormalizer, NormalizationError
 from ..parsing.structure_extractor import (
     OpenAICompatibleStructureExtractor,
@@ -62,7 +58,6 @@ from ..services.persistence import (
     InMemoryQuestionReviewRepository,
     QuestionAlreadyStoredError,
     QuestionBankEntryNotFoundError,
-    QuestionVersionConflictError,
     QuestionVersionNotFoundError,
     ReviewNotFoundError,
 )
@@ -77,7 +72,6 @@ from ..services.question_review_service import QuestionReviewService
 from ..services.question_version_store import InMemoryQuestionVersionRepository
 from ..services.question_workflow_service import (
     QuestionIdentityError,
-    QuestionRevisionNotAllowedError,
     QuestionWorkflowService,
 )
 
@@ -153,7 +147,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         resolved.workflow_llm_base_url,
         resolved.workflow_llm_api_key,
         resolved.workflow_llm_model,
-        revision_prompts=SinglePromptRepository(resolved.revision_prompt_root),
         metadata_prompts=SinglePromptRepository(resolved.metadata_prompt_root),
         timeout_seconds=resolved.workflow_llm_timeout_seconds,
         max_concurrency=resolved.workflow_llm_max_concurrency,
@@ -332,40 +325,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(status_code=404, detail="Question not found") from exc
 
     @application.post(
-        "/v1/exam-checker/documents/{document_id}/questions/{question_id}/revise",
-        response_model=ReviewedQuestion,
-    )
-    async def revise_question(
-        document_id: str,
-        question_id: str,
-        request: ReviseQuestionRequest,
-    ) -> ReviewedQuestion:
-        try:
-            await store.get(document_id)
-            return await application.state.question_workflow_service.revise_and_review(
-                task_id=document_id,
-                question_id=question_id,
-                base_version=request.base_version,
-                question_json=request.question_json,
-                user_instruction=request.user_instruction,
-                idempotency_key=request.idempotency_key,
-            )
-        except QuestionVersionConflictError as exc:
-            raise HTTPException(status_code=409, detail=str(exc)) from exc
-        except QuestionRevisionNotAllowedError as exc:
-            raise HTTPException(status_code=409, detail=str(exc)) from exc
-        except (DocumentNotFoundError, QuestionVersionNotFoundError) as exc:
-            raise HTTPException(status_code=404, detail="Question not found") from exc
-        except ReviewNotFoundError as exc:
-            raise HTTPException(
-                status_code=409, detail="Review the question before requesting AI revision"
-            ) from exc
-        except QuestionWorkflowModelError as exc:
-            raise HTTPException(status_code=502, detail=str(exc)) from exc
-        except (ValueError, QuestionIdentityError) as exc:
-            raise HTTPException(status_code=422, detail=str(exc)) from exc
-
-    @application.post(
         "/v1/exam-checker/documents/{document_id}/questions/{question_id}/ingest",
         response_model=IngestionResult,
     )
@@ -438,31 +397,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(status_code=409, detail=str(exc)) from exc
         except (QuestionVersionNotFoundError, ValueError) as exc:
             raise HTTPException(status_code=404, detail="Question not found") from exc
-
-    @application.post(
-        "/v1/exam-checker/tasks/{task_id}/questions/{question_id}/revise",
-        response_model=ReviewedQuestion,
-    )
-    async def revise_task_question(
-        task_id: str, question_id: str, revise_request: ReviseQuestionRequest
-    ) -> ReviewedQuestion:
-        try:
-            return await application.state.question_workflow_service.revise_and_review(
-                task_id=task_id,
-                question_id=question_id,
-                base_version=revise_request.base_version,
-                question_json=revise_request.question_json,
-                user_instruction=revise_request.user_instruction,
-                idempotency_key=revise_request.idempotency_key,
-            )
-        except (QuestionVersionConflictError, QuestionRevisionNotAllowedError) as exc:
-            raise HTTPException(status_code=409, detail=str(exc)) from exc
-        except (QuestionVersionNotFoundError, ReviewNotFoundError) as exc:
-            raise HTTPException(status_code=404, detail="Question not found") from exc
-        except QuestionWorkflowModelError as exc:
-            raise HTTPException(status_code=502, detail=str(exc)) from exc
-        except (ValueError, QuestionIdentityError) as exc:
-            raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     @application.get(
         "/v1/question-bank/search", response_model=QuestionBankSearchResult

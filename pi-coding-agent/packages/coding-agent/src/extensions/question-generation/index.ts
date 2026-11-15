@@ -18,11 +18,13 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 		name: "question_generation",
 		label: "Question generation",
 		description:
-			"Generate or revise 408 questions and submit the successfully generated versions to the pending review queue.",
+			"Generate or revise 408 questions and submit the successfully generated versions to the pending review queue. This is the only tool allowed to create a new question version.",
 		promptSnippet: "Generate or revise 408 questions and submit them for review",
 		promptGuidelines: [
 			"Use single for one single-choice question, batch for scored slots, comprehensive for one structured problem, and revise for version-specific feedback.",
 			"A new generation call receives one automatically generated task_id shared by every returned question. For revise, pass the existing task_id in request so the new version remains in the same task.",
+			"When exam_checker returns NEEDS_REVISION, inspect its structured errors and autonomously decide whether a revision is warranted. If so, call this tool with operation=revise, the same task_id, the exact current_question package, and feedback targeting that version; set feedback.feedback_id to exam_checker's review_id. Then independently decide whether to review the returned version. Do not ask exam_checker to edit a question.",
+			"Do not create an unbounded loop. Stop after at most three rejected generated versions for one question and report that the autonomous attempt failed.",
 			"Send the structured request unchanged. Use pre-verified evidence supplied for the topic. Report missing evidence and batch deficits.",
 			"Treat queued versions as pending independent review. The student_view is the student-facing content; keep instructor_view separate.",
 		],
