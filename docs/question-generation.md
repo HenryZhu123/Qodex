@@ -1,6 +1,13 @@
 # 自主命题模块
 
+> 状态（2026-11-15）：本页描述**当前实现**的接口与契约。
+> 当前任务与真实进度见工作区根目录 `TASK_STATE.md`；四模块接线与政策/护栏见 [Agent 工作流](agent-workflow.md)；
+> 通用创作的设计与验证边界见 [通用命题主线](question-generalization.md) 和 [实测记录](question-generalization-evaluation.md)。
+> 本页“历史”小节保留合并前的分支快照，仅供追溯，不代表当前状态。
+
 自主命题面向 408 专项练习和模拟卷补题。模块依据题型、考点和可追溯的资料生成题目、参考答案和解析，完成自检后交由独立审校。收到审校反馈时修订题目并重新自检。
+
+[材料驱动的模型创作](question-authoring.md)（旧五考点 v1.1，历史快照）通过 `constraints.authoring` 设计条件反推、错误诊断和方案选择题；[通用材料驱动创作](question-generalization.md)（当前主线）在此基础上支持 24 章节、单选与综合题、粗需求入口和一轮定向修订。旧请求保持确定性规则生成。三条路径并存，不要混用。
 
 | 职责 | 边界 |
 | --- | --- |
@@ -10,13 +17,31 @@
 | 组卷 | 提供缺题槽位及分值约束，管理整卷蓝图和整卷验证 |
 | Pi | 组织工具调用，传递材料和反馈，协调重试与交付 |
 
-现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。短期 S1–S3 已验收，L1 的单选题通过同一命令行入口和浏览器验证台生成。对接时以实际服务接口和经团队确认的契约为准。个人开发计划和调研过程放在 `.local/question-generation/`。
+现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。模块已覆盖四科五类单选、两类综合题、批量、补题和版本修订。命令行与浏览器验证台用于本地复验；Pi 通过命题服务把自检通过的版本写入待审表，再由审校按 `task_id + question_id + version` 取用。个人开发计划和调研过程放在 `.local/question-generation/`。
+
+## 接手开发
+
+先读仓库 [AGENTS.md](../AGENTS.md) 和本页。当前任务、真实进度与恢复方式见工作区根目录的 `TASK_STATE.md`；通用命题主线的设计、接续顺序与验证边界见 [通用命题主线](question-generalization.md)；四模块接线见 [Agent 工作流](agent-workflow.md)。`.local/question-generation/` 下的计划与交接记录属于个人开发笔记，可能停留在旧阶段。
+
+| 需要修改 | 代码入口 |
+| --- | --- |
+| 单题请求、题型和自检 | [generation.py](../question_generation/generation.py)，题型实现在同目录 |
+| 批量约束、题干去重和组卷补题 | [batch.py](../question_generation/batch.py)、[replenishment.py](../question_generation/replenishment.py) |
+| 综合题、评分点和版本修订 | [comprehensive.py](../question_generation/comprehensive.py) |
+| 通用创作、粗需求与审计 | [general_authoring.py](../question_generation/general_authoring.py)、[brief_authoring.py](../question_generation/brief_authoring.py) |
+| 已核验知识库证据、HTTP 和待审表 | [knowledge.py](../question_generation/knowledge.py)、[service.py](../question_generation/service.py)、[待审表迁移](../question_generation/sql/001_pending_questions.sql) |
+| 模型客户端、阶段预算与失败分类 | [model_client.py](../question_generation/model_client.py) |
+| Pi 工具 | [内置命题扩展](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts) |
+
+从仓库根目录运行 `python3 -m unittest discover -s tests` 验证生成模块。修改 Pi 时按 [Pi 开发纪律](../pi-coding-agent/AGENTS.md) 运行全仓检查和命题扩展测试。升级前先从新鲜的 `origin/main` 核对本地待合入提交，再用隔离 PostgreSQL 复验 Pi 各操作及待审题包回读。更新知识库快照时重新核对证据清单及指纹（见 `.local/question-generation/team-kb/MIGRATION-2026.11.1.md`）。
 
 ## 工作区与依赖分支
 
-从仓库根目录运行 `git status --short --branch` 可以确认当前分支。本地命题代码在 `feat/question-generation` 开发。`git fetch origin` 更新本地对远程分支的记录，当前分支和工作文件保持原样。`main` 是团队集成基线，`origin/main` 是最近一次获取的远程主分支记录。
+从仓库根目录运行 `git status --short --branch` 确认当前分支。本地命题代码在 `feat/question-generation` 开发，已合并 `origin/main`；四个业务模块现在同仓，不需要再从其他功能分支复制接口。开始新一轮开发前重新 `git fetch origin` 并核对接口。
 
-以下是 2026-11-08 核对的代码快照。开始联调前重新获取远程记录并核对接口。
+### 历史：2026-11-08 分支快照（合并前）
+
+下表是合并前核对的分支状态，**已过期，仅作追溯**；当前同仓代码以本页其余章节为准。
 
 | 分支和版本 | 已有能力 | 对命题的影响 |
 | --- | --- | --- |
@@ -47,7 +72,7 @@
 
 ### Pi 调用与待审表交接
 
-Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和原有 JSON `request`，支持 `single`、`batch`、`comprehensive`、`revise`。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。
+Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和 JSON `request`，支持 `single`、`batch`、`replenishment`、`comprehensive`、`revise`、`author`。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。工具侧超时按 operation 区分：`batch` 与 `replenishment` 默认 1200 秒，其余 600 秒；服务内部另有阶段与整条流水线时限（见「模型输出、超时与失败诊断」）。
 
 从仓库根目录，用 Python 3.11 或更新版本安装服务依赖。数据库管理员按文件名顺序执行 `question_generation/sql/*.sql`，再授权已创建的服务账号和审校只读账号。下面以 `qg_writer` 和 `qg_reviewer` 为示例角色。
 
@@ -81,6 +106,57 @@ FROM question_generation.current_pending_questions
 ORDER BY queued_at, task_id, question_id
 LIMIT 100;
 ```
+
+### 按考点从知识库取材
+
+可同时配置 `QUESTION_GENERATION_KB_ROOT` 和 `QUESTION_GENERATION_KB_CATALOG`。配置后，`single`、`comprehensive`、`batch` 和 `replenishment` 请求中省略 `evidence` 的题或槽位按 `subject` 和 `topic` 取材；显式材料数组照常校验，显式空数组返回缺材料。修订继续使用原题证据。命令行和本地验证台沿用原有显式材料契约。
+
+知识库根目录沿用 `operating_system`、`data_structure`、`computer_organization`、`computer_network` 四个科目子目录，每科可引用 `kb.sqlite` 或 `kb_*.sqlite`。命题以只读方式读取 `documents` 和 `chunks`，取材范围由已核验清单指定。
+
+清单是包含 `schema_version: "0.1"` 和 `entries` 数组的 JSON。每条记录包含下列字段。
+
+| 字段 | 含义 |
+| --- | --- |
+| `subject`、`topic` | 命题契约使用的科目和考点 |
+| `database`、`doc_id`、`chunk_id` | 科目目录下的文件名、文档和片段标识 |
+| `source`、`edition` | 审校可以追溯的来源和教材版次 |
+| `source_sha256`、`content_sha256` | 源文档 SHA-256 和 SQLite 片段正文 UTF-8 的 SHA-256，均为小写十六进制 |
+| `summary`、`rules` | 预核验的摘要与该片段实际支撑的命题规则数组 |
+| `section` | 可选。章节路径抽取混入正文或误标时填写核验后的章节名，保留索引页码和分块 ID |
+
+清单由取材方核验来源、使用许可和规则覆盖。服务核对文档和片段指纹，跳过缺定位、指纹不匹配、片段元数据标记有冲突或列在同科目录 `relations.json` 冲突组里的片段。冲突文件存在但无法解析时，该科取材报 `KNOWLEDGE_BASE_UNAVAILABLE`。规则不足时返回 `NEEDS_MATERIAL` 和缺失规则。配置的索引无法读取且没有可用证据时，返回 `KNOWLEDGE_BASE_UNAVAILABLE`。批量在对应槽位记录缺口并保留其他合格题。
+
+**当前教材包是 2026.11.1**（2538 chunk / 2391 进 FTS），安装在 `.local/question-generation/team-kb/`（`books/`、`MANIFEST.json`、`catalog.json`）；旧版归档在 `team-kb-2026.11-frozen/`。换版后 chunk 编号已全部错位，**清单和评测规格里的 chunk 编号必须按内容核对，禁止按序号猜**；`team-kb/build_catalog.py` 内置了“section 编号必须被该块自身正文/标题印证”的断言。细节与已知的预期中断见 `team-kb/MIGRATION-2026.11.1.md`。
+
+### 组卷联合缺口到待审
+
+在 Pi 中调用 `question_generation`，将 `operation` 设为 `replenishment`，在 `request` 中提供 `replenishment_request`（组卷原始计划）、整数 `seed` 和 `slot_profiles`。同一个 `request` 也可直接发给 `POST /v1/question-generation/replenishment`。适配器使用联合计划的 `deficits`，按原顺序分配 `assembly-1`、`assembly-2` 等槽位 ID，保留原科目、考点、题型、难度、分值和题量，并按槽位填充、过滤 `avoid_stems` 中的规范化题干。
+
+`slot_profiles` 由调用方为每个可命题槽位指定命题模块的 `topic`，可提供原有 `constraints` 和 `evidence`。配置了知识库时，省略材料的槽位也可按考点取材。未配置映射、题型不支持或材料不足的槽位会在结果中保留缺口。结果中的 `assembly_request_id` 对应组卷请求；入队题包和剩余缺口的 `assembly_slot` 都可追溯到原槽位。若保留题干命中，`reserved-stem-1` 等编号对应 `avoid_stems` 的位置。原样重试复用待审记录。
+
+请求示例（把组卷缺口计划与已有栈材料组合）：
+
+```bash
+python3 - /path/to/replenishment_request.json <<'PY' | \
+  curl -fsS http://127.0.0.1:8093/v1/question-generation/replenishment \
+    -H 'Content-Type: application/json' --data-binary @-
+import json
+from pathlib import Path
+import sys
+
+plan = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+sample = json.loads(Path("question_generation/examples/stack.json").read_text(encoding="utf-8"))
+print(json.dumps({
+    "replenishment_request": plan,
+    "seed": 42,
+    "slot_profiles": {
+        "assembly-1": {key: sample[key] for key in ("topic", "constraints", "evidence")}
+    },
+}, ensure_ascii=False))
+PY
+```
+
+> **确定性规则生成路径（v0.1，仍在用）。** 以下契约是模块最早的五题型族规则生成，仍在 `single`/`batch`/`comprehensive`/`revise` 中可用且可复算。新增命题能力走通用材料驱动路径（见 [通用命题主线](question-generalization.md)），不要继续扩展这套按考点手写的生成器。
 
 ## 本地命题契约 v0.1
 
@@ -119,7 +195,19 @@ python3 -m unittest discover -s tests
 
 ### 浏览器验证台
 
-在仓库根目录运行 `python3 -m question_generation.ui`，打开 [本地验证台](http://127.0.0.1:8765/)。验证台只在本机监听，可用 `--port` 更换端口。按 Ctrl+C 停止。
+在仓库根目录运行 `python3 -m question_generation.ui`，打开 [本地验证台](http://127.0.0.1:8765/)。验证台只在本机监听，可用 `--port` 更换端口，按 Ctrl+C 停止。
+
+试题台与 Pi 共用命题流程，可直接输入需求、粘贴材料或留空让模块选题：先看学生题面，再展开教师答案、评分、材料和考查计划；未过检查的模型题面独立标为“候选”，不进入待审。预览不需要 PostgreSQL。常用参数：
+
+| 参数 | 作用 |
+| --- | --- |
+| `--provider local\|deepseek` | 选择本机模型或 DeepSeek，默认 `local`；DeepSeek 需在页面逐次确认请求 |
+| `--kb-root` / `--kb-catalog` | 启用教材取材，必须同时提供；目录约定见上一节 |
+| `--history-example` | 只读展示一份历史题包，页面上标为历史实测 |
+| `--public-origin` | 显式放行一个非本机来源（如临时隧道域名），不设时仅限本机访问 |
+| `--log-file` | 把每次请求（含失败、阶段耗时与完整结果）追加写入 JSONL |
+
+[规则题验证台](http://127.0.0.1:8765/rules) 保留原有参数和预设。下表的预设属于规则题路径：
 
 | 预设 | 预期结果 |
 | --- | --- |
@@ -136,7 +224,7 @@ python3 -m unittest discover -s tests
 | IPv4 · 超出前缀范围 | 以 `/31` 发出请求，返回 `INVALID_REQUEST`，无题目 |
 | TCP · 未知场景 | 返回 `INVALID_REQUEST`，无题目 |
 
-从题型下拉框切换样例，可调整种子、该题型的参数和材料规则覆盖。验证台复用命令行入口的命题逻辑，题目保留待独立审校状态。Pi、真实知识库、独立审校、入库和组卷在后续接入阶段验收。
+从规则题下拉框切换样例，可调整种子、题型参数和材料规则覆盖。结果与本地命令行一致，题目保留待独立审校状态。通用创作入口、审校、入库和组卷已可用，接入方式见 [Agent 工作流](agent-workflow.md)。
 
 ### 请求
 
@@ -294,3 +382,40 @@ python3 -m question_generation --revise "$qodex_stack/revise.json" > "$qodex_sta
 ```
 
 v1 目标序列为 `4、5、3、2、1`，最小容量为 4。更换目标序列后，v2 的最小容量为 1。由于两问共用目标序列，`revision.affected_parts` 列出两问，评分点及参考轨迹都重新核对。题目、小问及评分点 ID 和总分保持稳定，审校状态回到 `PENDING`。不可达序列、重复元素、未改变题设的反馈和错版反馈均返回对应失败状态。
+
+## 通用路径：模型输出、超时与失败诊断
+
+通用创作（`author`、`constraints.authoring`）由模型完成需求细化、创作、盲解和审计四个阶段。下列默认值是**当前代码**的取值（`question_generation/model_client.py`），按阶段覆盖时用 `QUESTION_GENERATION_<STAGE>_*`。
+
+| 阶段 | 默认输出额度 | 默认时限 | 默认推理档 |
+| --- | --- | --- | --- |
+| `plan`（需求细化） | 32,768 | 240 s | `low` |
+| `author`（创作/修订） | 32,768 | 600 s | `high` |
+| `reader`（学生视角盲解） | 32,768 | 600 s | `low` |
+| `audit`（反例审计） | 32,768 | 600 s | `low` |
+
+- 覆盖环境变量：`QUESTION_GENERATION_<STAGE>_MAX_OUTPUT_TOKENS`、`QUESTION_GENERATION_<STAGE>_TIMEOUT_SECONDS`、`QUESTION_GENERATION_<STAGE>_REASONING_EFFORT`；客户端级输出默认仍为 16,384（`QUESTION_GENERATION_MAX_OUTPUT_TOKENS`），整条流水线另有总时限 900 s（`QUESTION_GENERATION_PIPELINE_TIMEOUT_SECONDS`）。
+- 推理档只允许 `off`、`low`、`high`、`max`（服务商没有 `medium` 档）；非法档位在配置阶段直接报错。计划与盲解降档只影响延迟与成本，不改变审计结论。
+- 传输：官方 `api.deepseek.com` 默认非流式（`QUESTION_GENERATION_STREAM=0`），其他兼容网关默认流式。流式下单次读取空闲超时为 90 s；连续 90 s 无数据先回退一次非流式，仍失败则以 `response_timeout` + `response_issue=idle_timeout` 结束。总时限内持续出字不会被误杀。
+- 重试：仅瞬态 `transport_error` 与 HTTP 502/503/504 自动重试，最多 1 次（默认退避 1.75 s，可配 `max_retries`）；正文为空或 `content_decode` 消耗同一次重试预算。`response_timeout`、`incomplete_output`、`response_size_limit` 与审计拒绝不自动重试。原始字节流上限 16,000,000，拼接后正文上限 1,000,000 字符。
+
+**失败诊断。** 模型调用失败返回 `MODEL_UNAVAILABLE`，`authoring_report.model_failure.stage` 标明阶段（`plan`/`author`/`reader`/`audit`）；`response_issue` 区分 `envelope_decode`、`envelope_shape`、`content_type`、`content_decode`、`content_not_object`、`idle_timeout`、`raw_stream` 等固定类别。诊断只记录类别与位置，不落响应正文、推理或截断内容。
+
+通用路径的失败另带 `failure.code`（追加字段，不改 `status/message`），每项配 `retry` 与 `needs`，供 Pi 的护栏按类处置（见 [workflow-target.md](workflow-target.md) §3）：
+
+| 阶段 | `failure.code` | `retry` | `needs` |
+| --- | --- | --- | --- |
+| 创作响应结构 | `candidate_shape` | `same_request` | — |
+| 材料不足 | `material_gap` | `new_request` | `material` |
+| 设计与结构检查 | `design_invalid` | `same_request` | — |
+| 独立解答与质量检查 | `quality_gate` | `new_request` | — |
+| 条件扰动检查不完整 | `condition_test_incomplete` | `same_request` | — |
+| 独立答案分歧 | `blind_disagreement` | `new_request` | `human` |
+| 独立小问解答不完整 | `blind_incomplete` | `same_request` | — |
+| 反例与解析审计 | `audit_rejected` | `new_request` | `human` |
+
+**正文解码的有限修复。** `_parse_json_content()` 按固定顺序尝试：剥掉最外层 json 代码围栏；把字符串内非法的单反斜杠（如 `\alpha`）加倍成字面反斜杠；左花括号比右花括号多 1–2 个时在末尾补齐。未闭合字符串、值错误和尾随文本仍然失败；修复成功时用量回执记 `content_repair`（`fence`/`backslash`/`brace` 及组合）。修复只处理格式滑落，不降低结构、引文、分值与见证校验。注意 `\beta`、`\times` 的第二个字符本身是合法 JSON 转义，与真实控制字符存在不可消解的歧义，程序不做猜测。
+
+**审计放行判据。** `answer_agreement`、`ambiguity`、`grounding`、`grading`、`witness_alignment` 是硬阻断，任一失败必须 `valid=false`；`reasoning_necessity`、`requirements`、`counterfactual`、`scope` 是软指标，未通过时照常交付 `PENDING`，检查名与原因写入 `self_check.review_warnings`。9 项全过但 `issues` 非空时，每条 issue 以 `advisory_note` 写入 `review_warnings`，供审校逐条查看；`valid=false` 却没有任何软指标失败解释，视为审计契约自相矛盾并拒绝。盲解质量门禁只要求 `answerability=2`、`clarity>=1`、`distractors>=1`、`depth>=1` 且 `issues` 为空；`depth=1` 追加 `reader_depth` 警告，`depth=0` 仍硬拒。综合题评分点允许 0.5 分步长，小问分值与整题总分为整数。
+
+以上规则只保证**内部自洽与流程可用**，不证明题目“像真题”。质量层（超纲、计算量、题型配比、图题/题组）仍未开工，见 `TASK_STATE.md` 的问题 1。

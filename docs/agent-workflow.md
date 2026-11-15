@@ -97,7 +97,8 @@ Pi Agent（qodex-workflow）
 
 | 护栏 | 行为 | 配置 |
 | --- | --- | --- |
-| 调用预算 | 超限 `tool_call` 直接 block，并给出"停止新调用 + 报告已完成部分" | `QODEX_MAX_GENERATION_CALLS`(6) / `QODEX_MAX_REVIEW_CALLS`(6) / `QODEX_MAX_ASSEMBLY_CALLS`(3) / `QODEX_MAX_WALL_CLOCK_MS`(45 min) |
+| 调用预算 | 超限 `tool_call` 直接 block，并给出"停止新调用 + 报告已完成部分"。默认按**目标题量**放大：读到 "N 道/N 题" 时命题 `2N+2`、审校 `3N+2`、总 `5N+8`；无题量时底值 12/12/4 | `QODEX_MAX_GENERATION_CALLS`(12) / `QODEX_MAX_REVIEW_CALLS`(12) / `QODEX_MAX_ASSEMBLY_CALLS`(4) / `QODEX_MAX_TOTAL_CALLS`(40) / `QODEX_MAX_WALL_CLOCK_MS`(90 min) |
+| 连续失败 / 无进展 | 同一 Item 连续 3 次失败，或连续 5 次"花钱但没推进"（无新题、无新版本审校、无 STORED、无组卷成功）即停；新用户消息可解封 | `QODEX_MAX_FAILED_CALLS`(3) / `QODEX_MAX_NO_PROGRESS_CALLS`(5) |
 | 重复付费 | 同 `(tool, 参数)` 摘要已成功执行 → block（失败不占用，允许重试） | — |
 | 失败可见 | 服务返回 `status=SELF_CHECK_FAILED/UNRESOLVED/…` 或 `{error}` 时置 `isError=true`，把结果压成 `{observation:{ok,status,code,retry,needs,next,detail,errors,artifact}}` | — |
 | 入库措辞 | 拿不到 `ingestion.status=STORED` 时，助手若写"已入库/已通过"，`message_end` 追加纠正 | — |

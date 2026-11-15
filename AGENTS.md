@@ -3,8 +3,8 @@
 本文件是仓库级 Agent 指令入口。用户使用与启动方式以 `README.md` 为准，设计、接口和验收资料从 `docs/README.md` 进入。进入子目录工作前继续读取该目录内更具体的 `AGENTS.md`；修改 Pi 时必须同时遵守 `pi-coding-agent/AGENTS.md`。
 
 本文件同时记录长期稳定的项目目标、架构约束与开发原则。**当前任务与进度写到工作区根目录 `TASK_STATE.md`，不写在这里。**
-模块接口见 `docs/question-generation.md`，当前主线见 `docs/question-generalization.md`，实测依据见
-`docs/question-generalization-evaluation.md`，历史阶段记录见 `docs/` 中标注为历史快照的页面。
+模块接口见 `docs/question-generation.md`，当前主线见 `docs/question-generalization.md`，四模块接线与政策/护栏见
+`docs/agent-workflow.md`，实测依据见 `docs/question-generalization-evaluation.md`，历史阶段记录见 `docs/` 中标注为历史快照的页面。
 文档与代码冲突时，以代码和可复现验证为准，并先修正文档。
 
 ## 项目目标与边界
