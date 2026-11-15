@@ -339,4 +339,3 @@ npm run demo
 | Pi 命题工具 | `pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts` |
 | Pi 审校与题库工具 | `pi-coding-agent/packages/coding-agent/src/extensions/exam-checker/index.ts` |
 | 完整数据库结构 | `pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md` |
-
