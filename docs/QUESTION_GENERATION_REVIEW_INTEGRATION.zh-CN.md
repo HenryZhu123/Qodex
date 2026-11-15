@@ -65,7 +65,7 @@ AI 审校服务 :8091
 
 - `task_id`：UUID 主键。
 - `request_id`：命题模块原有的请求追踪 ID，不是主键或幂等键。
-- `generation_mode`：`single`、`batch`、`comprehensive`、`revise` 或迁移产生的 `legacy`。
+- `generation_mode`：`single`、`batch`、`comprehensive`、`revise`、`author`、`replenishment` 或迁移产生的 `legacy`。
 - `question_count`：任务计划或首次生成的题量。
 - `request_json`：完整命题请求。
 - 模型、Prompt 版本、状态和时间字段。
