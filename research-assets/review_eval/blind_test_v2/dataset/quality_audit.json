@@ -1,0 +1,174 @@
+{
+  "records": 197,
+  "strict_eligible": 161,
+  "strict_eligible_rate": 0.817259,
+  "by_category": {
+    "ambiguity": 13,
+    "answer_leakage": 24,
+    "factual_logical": 6,
+    "missing_info": 17,
+    "none": 60,
+    "option_structure": 18,
+    "punctuation": 18,
+    "type_mismatch": 12,
+    "typo": 23,
+    "unsolvable": 6
+  },
+  "leakage_levels": {
+    "L0_hint": 14,
+    "L1_partial": 5,
+    "L2_direct": 5
+  },
+  "issue_counts": {
+    "MISSING_NECESSITY_WITNESSES": 17,
+    "PARTIAL_LEAKAGE_NEEDS_ADJUDICATION": 5,
+    "WEAK_LEAKAGE_LABEL": 14
+  },
+  "source_overlaps": {},
+  "issues": [
+    {
+      "sample_id": "v2-missing_info-refq-408-2021-20",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2020-31",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2024-12",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2022-03",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2021-21",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2020-32",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2024-13",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2022-04",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2021-23",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2024-15",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2022-05",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2021-24",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2020-34",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2025-12",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2022-06",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2021-25",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-missing_info-refq-408-2020-35",
+      "code": "MISSING_NECESSITY_WITNESSES"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2021-34",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2023-09",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2023-24",
+      "code": "PARTIAL_LEAKAGE_NEEDS_ADJUDICATION"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2021-35",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2023-25",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2021-36",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2024-02",
+      "code": "PARTIAL_LEAKAGE_NEEDS_ADJUDICATION"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2024-17",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2024-03",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2024-18",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2021-39",
+      "code": "PARTIAL_LEAKAGE_NEEDS_ADJUDICATION"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2024-04",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2022-28",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2024-05",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2024-22",
+      "code": "PARTIAL_LEAKAGE_NEEDS_ADJUDICATION"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2022-29",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2024-24",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2022-30",
+      "code": "WEAK_LEAKAGE_LABEL"
+    },
+    {
+      "sample_id": "v2-answer_leakage-refq-408-2024-07",
+      "code": "PARTIAL_LEAKAGE_NEEDS_ADJUDICATION"
+    }
+  ]
+}

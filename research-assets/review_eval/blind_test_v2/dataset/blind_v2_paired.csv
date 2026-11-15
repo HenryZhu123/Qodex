@@ -1,0 +1,2347 @@
+﻿sample_id,pair_id,variant,label,error_type,subject,source_record_id,full_text,reference
+v2-factual_logical-refq-408-2021-16::clean,v2-factual_logical-refq-408-2021-16,clean,clean,factual_logical,operating_system,refq-408-2021-16,"若计算机主存地址为32 位，按字节编址，Cache 数据区大小为32KB，主存块大小为32B，采用
+直接映射方式和回写（Write Back）策略，则Cache 行的位数至少是 。
+A. 275
+B. 274
+C. 258
+D. 257","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2021-16::mutated,v2-factual_logical-refq-408-2021-16,mutated,error,factual_logical,operating_system,refq-408-2021-16,"若计算机主存地址为4 位，按字节编址，Cache 数据区大小为32KB，主存块大小为32B，采用
+直接映射方式和回写（Write Back）策略，则Cache 行的位数至少是 。
+A. 275
+B. 274
+C. 258
+D. 257","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2023-12::clean,v2-factual_logical-refq-408-2023-12,clean,clean,factual_logical,computer_organization,refq-408-2023-12,"若机器M 的主频为1.5GHz，在M 上执行程序P 的指令条数为5×10
+5，P 的平均CPI 为1.2，则
+P 在M 上的指令执行速度和用户CPU 时间分别为 。
+A. 0.8GIPS，0.4ms
+B. 0.8GIPS，0.4μs
+C. 1.25GIPS，0.4ms
+D. 1.25GIPS，0.4μs","【学科】计算机组成原理
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2023-12::mutated,v2-factual_logical-refq-408-2023-12,mutated,error,factual_logical,computer_organization,refq-408-2023-12,"若机器M 的主频为1.5GHz，在M 上执行程序P 的指令条数为5×10
+5，P 的平均CPI 为0.5，且每条指令平均需要2 个时钟周期，则
+P 在M 上的指令执行速度和用户CPU 时间分别为 。
+A. 0.8GIPS，0.4ms
+B. 0.8GIPS，0.4μs
+C. 1.25GIPS，0.4ms
+D. 1.25GIPS，0.4μs","【学科】计算机组成原理
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2022-34::clean,v2-factual_logical-refq-408-2022-34,clean,clean,factual_logical,computer_network,refq-408-2022-34,"在一条带宽为200 kHz 的无噪声信道上，若采用4 个幅值的ASK 调制，则该信道的最大数据传
+输速率是 。
+A. 200kbps
+B. 400kbps
+C. 800kbps
+D. 1600kbps","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2022-34::mutated,v2-factual_logical-refq-408-2022-34,mutated,error,factual_logical,computer_network,refq-408-2022-34,"在一条带宽为200 kHz 的无噪声信道上，若采用4 个幅值的ASK 调制（每个符号携带3 个比特），则该信道的最大数据传
+输速率是 。
+A. 200kbps
+B. 400kbps
+C. 800kbps
+D. 1600kbps","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2022-38::clean,v2-factual_logical-refq-408-2022-38,clean,clean,factual_logical,computer_network,refq-408-2022-38,"假设主机甲和主机乙已建立一个TCP 连接，最大段长MSS = 1KB,甲一直有数据向乙发送，当甲
+的拥塞窗口为16KB 时，计时器发生了超时，则甲的拥塞窗口再次增长到16KB 所需要的时间至
+少是 。
+A. 4RTT
+B. 5RTT
+C. 11RTT
+D. 16RTT","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2022-38::mutated,v2-factual_logical-refq-408-2022-38,mutated,error,factual_logical,computer_network,refq-408-2022-38,"假设主机甲和主机乙已建立一个TCP 连接，最大段长MSS = 1KB,甲一直有数据向乙发送，当甲
+的拥塞窗口为16KB 时，计时器发生了超时，且超时后拥塞窗口与慢开始门限均保持不变，则甲的拥塞窗口再次增长到16KB 所需要的时间至
+少是 。
+A. 4RTT
+B. 5RTT
+C. 11RTT
+D. 16RTT","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2019-39::clean,v2-factual_logical-refq-408-2019-39,clean,clean,factual_logical,computer_network,refq-408-2019-39,"若主机甲主动发起一个与主机乙的TCP 连接，甲、乙选择的初始序列号分别为2018 和2046，则
+第三次握手TCP 段的确认序列号是 。
+A. 2018
+B. 2019
+C. 2046
+D. 2047","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2019-39::mutated,v2-factual_logical-refq-408-2019-39,mutated,error,factual_logical,computer_network,refq-408-2019-39,"若主机甲主动发起一个与主机乙的TCP 连接，甲、乙选择的初始序列号分别为2018 和2046，且SYN 段不占用序列号，则
+第三次握手TCP 段的确认序列号是 。
+A. 2018
+B. 2019
+C. 2046
+D. 2047","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2024-09::clean,v2-factual_logical-refq-408-2024-09,clean,clean,factual_logical,data_structure,refq-408-2024-09,"已知关键字序列28, 22, 20, 19, 8, 12, 15, 5 是大根堆（最大堆），对该堆进行两次删除操作后，得到
+的新堆是 。
+A. 20, 19, 15, 12, 8, 5
+B. 20, 19, 15, 5, 8, 12
+C. 20, 19, 12, 15, 8, 5
+D. 20, 19, 8, 12, 15, 5","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-factual_logical-refq-408-2024-09::mutated,v2-factual_logical-refq-408-2024-09,mutated,error,factual_logical,data_structure,refq-408-2024-09,"已知关键字序列28, 22, 20, 19, 8, 12, 15, 5 是小根堆（最小堆），对该堆进行两次删除操作后，得到
+的新堆是 。
+A. 20, 19, 15, 12, 8, 5
+B. 20, 19, 15, 5, 8, 12
+C. 20, 19, 12, 15, 8, 5
+D. 20, 19, 8, 12, 15, 5","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2024-25::clean,v2-type_mismatch-refq-408-2024-25,clean,clean,type_mismatch,operating_system,refq-408-2024-25,"在支持页式存储管理的系统中，进程切换时操作系统需要执行的操作是 。
+I. 更新程序计数器的值
+II. 更新栈基址寄存器值
+III. 更新页表基地址寄存器值
+A. 仅III
+B. 仅I、II
+C. 仅I、III
+D. I、II、III","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2024-25::mutated,v2-type_mismatch-refq-408-2024-25,mutated,error,type_mismatch,operating_system,refq-408-2024-25,"在支持页式存储管理的系统中，进程切换时操作系统需要执行的操作是 。
+I. 更新程序计数器的值
+II. 更新栈基址寄存器值
+III.请结合各选项分别说明理由（简答题）。 更新页表基地址寄存器值
+A. 仅III
+B. 仅I、II
+C. 仅I、III
+D. I、II、III","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2022-33::clean,v2-type_mismatch-refq-408-2022-33,clean,clean,type_mismatch,computer_network,refq-408-2022-33,"在ISO/OSI 参考模型中，实现两个相邻结点间流量控制功能的是 。
+A. 物理层
+B. 数据链路层
+C. 网络层
+D. 传输层","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2022-33::mutated,v2-type_mismatch-refq-408-2022-33,mutated,error,type_mismatch,computer_network,refq-408-2022-33,"在ISO/OSI 参考模型中，实现两个相邻结点间流量控制功能的是 。请按重要性从高到低排列各选项序号。
+A. 物理层
+B. 数据链路层
+C. 网络层
+D. 传输层","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2024-08::clean,v2-type_mismatch-refq-408-2024-08,clean,clean,type_mismatch,data_structure,refq-408-2024-08,"使用快速排序算法对含n“（n≥3）个元素的数组M 进行排序，若第一趟排序将M 中除枢轴外的n–
+1 个元素划分为均不为空的P 和Q 两块，则下列叙述中，正确的是 。
+A. P 和Q 块间有序
+B. P 和Q 均块内有序
+C. P 和Q 的元素个数大致相等
+D. P 中和Q 中均不存在相等的元素","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2024-08::mutated,v2-type_mismatch-refq-408-2024-08,mutated,error,type_mismatch,data_structure,refq-408-2024-08,"使用快速排序算法对含n“（n≥3）个元素的数组M 进行排序，若第一趟排序将M 中除枢轴外的n–
+1 个元素划分为均不为空的P 和Q 两块，则下列叙述中，正确的是 。请在答题卡上画出对应结构并标注关键结点。
+A. P 和Q 块间有序
+B. P 和Q 均块内有序
+C. P 和Q 的元素个数大致相等
+D. P 中和Q 中均不存在相等的元素","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-16::clean,v2-type_mismatch-refq-408-2025-16,clean,clean,type_mismatch,operating_system,refq-408-2025-16,"下列选项中，由指令集体系结构（ISA）规定的是 。
+A. 是否采用阵列乘法器
+B. 是否采用定长指令字格式
+C. 是否采用微程序控制器
+D. 是否采用单总线数据通路","【学科】操作系统
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-16::mutated,v2-type_mismatch-refq-408-2025-16,mutated,error,type_mismatch,operating_system,refq-408-2025-16,"下列选项中，由指令集体系结构（ISA）规定的是 。请证明你的结论并写出完整推导过程。
+A. 是否采用阵列乘法器
+B. 是否采用定长指令字格式
+C. 是否采用微程序控制器
+D. 是否采用单总线数据通路","【学科】操作系统
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-18::clean,v2-type_mismatch-refq-408-2025-18,clean,clean,type_mismatch,operating_system,refq-408-2025-18,"下列关于CPI 和CPU 时钟周期的叙述中，错误
+．．的是
+A. 不同类型指令的CPI 可能不一样
+B. 程序的CPI 与Cache 缺失率无关
+C. 单周期CPU 的时钟周期以最耗时指令所用时间为准
+D. 流水线CPU 的时钟周期以最长流水段所用时间为准","【学科】操作系统
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-18::mutated,v2-type_mismatch-refq-408-2025-18,mutated,error,type_mismatch,operating_system,refq-408-2025-18,"下列关于CPI 和CPU 时钟周期的叙述中，错误
+．．的是请逐项判断各选项的正误（正确画√，错误画×）。
+A. 不同类型指令的CPI 可能不一样
+B. 程序的CPI 与Cache 缺失率无关
+C. 单周期CPU 的时钟周期以最耗时指令所用时间为准
+D. 流水线CPU 的时钟周期以最长流水段所用时间为准","【学科】操作系统
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2022-35::clean,v2-type_mismatch-refq-408-2022-35,clean,clean,type_mismatch,computer_network,refq-408-2022-35,"若某主机的IP 地址是183.80.72.48，子网掩码是255.255.192.0，则该主机所在网络的网络地址
+是 。
+A. 183.80.0.0
+B. 183.80.64.0
+C. 183.80.72.0
+D. 183.80.192.0","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2022-35::mutated,v2-type_mismatch-refq-408-2022-35,mutated,error,type_mismatch,computer_network,refq-408-2022-35,"若某主机的IP 地址是183.80.72.48，子网掩码是255.255.192.0，则该主机所在网络的网络地址
+是 。本题为多项选择题，请选出所有符合题意的选项。
+A. 183.80.0.0
+B. 183.80.64.0
+C. 183.80.72.0
+D. 183.80.192.0","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2024-10::clean,v2-type_mismatch-refq-408-2024-10,clean,clean,type_mismatch,data_structure,refq-408-2024-10,"现有由关键字组成的3 个有序序列(3，5)、(7，9)和(6)，若按从左至右的次序选择有序序列进行二
+路归并排序，则关键字之间的总比较次数是 。
+A. 3
+B. 4
+C. 5
+D. 6","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2024-10::mutated,v2-type_mismatch-refq-408-2024-10,mutated,error,type_mismatch,data_structure,refq-408-2024-10,"现有由关键字组成的3 个有序序列(3，5)、(7，9)和(6)，若按从左至右的次序选择有序序列进行二
+路归并排序，则关键字之间的总比较次数是 。请写出完整的计算过程与中间结果。
+A. 3
+B. 4
+C. 5
+D. 6","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-19::clean,v2-type_mismatch-refq-408-2025-19,clean,clean,type_mismatch,operating_system,refq-408-2025-19,"下列关于CPU 中的数据通路和控制器的叙述中，错误
+．．的是
+A. 通用寄存器组中应该包含程序计数器
+B. 控制器中一定包含指令操作码的译码电路
+C. 单周期CPU 中的控制器比多周期CPU 中的更简单
+D. 流水线CPU 需解决数据相关和控制相关等冒险问题","【学科】操作系统
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-19::mutated,v2-type_mismatch-refq-408-2025-19,mutated,error,type_mismatch,operating_system,refq-408-2025-19,"下列关于CPU 中的数据通路和控制器的叙述中，错误
+．．的是请用英文专业术语作答。
+A. 通用寄存器组中应该包含程序计数器
+B. 控制器中一定包含指令操作码的译码电路
+C. 单周期CPU 中的控制器比多周期CPU 中的更简单
+D. 流水线CPU 需解决数据相关和控制相关等冒险问题","【学科】操作系统
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2022-37::clean,v2-type_mismatch-refq-408-2022-37,clean,clean,type_mismatch,computer_network,refq-408-2022-37,"在SDN 网络体系结构中，SDN 控制器向数据平面的SDN 交换机下发流表时所使用的接口
+是 .
+A. 东向接口
+B. 南向接口
+C. 西向接口
+D. 北向接口","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2022-37::mutated,v2-type_mismatch-refq-408-2022-37,mutated,error,type_mismatch,computer_network,refq-408-2022-37,"在SDN 网络体系结构中，SDN 控制器向数据平面的SDN 交换机下发流表时所使用的接口
+是 .请列举出全部符合条件的对象并逐一说明。
+A. 东向接口
+B. 南向接口
+C. 西向接口
+D. 北向接口","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-01::clean,v2-type_mismatch-refq-408-2025-01,clean,clean,type_mismatch,data_structure,refq-408-2025-01,"下列程序段的时间复杂度是 。
+int count=0, i, j;
+for(i=1; i*i<=n; i++)
+for(j=1; j<=i; j++)
+count ++;
+A. O(log n)
+B. O(n)
+C. O(n log n)
+D. O(n 2)","【学科】数据结构
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-01::mutated,v2-type_mismatch-refq-408-2025-01,mutated,error,type_mismatch,data_structure,refq-408-2025-01,"下列程序段的时间复杂度是 。请给出实现该功能的完整代码片段。
+int count=0, i, j;
+for(i=1; i*i<=n; i++)
+for(j=1; j<=i; j++)
+count ++;
+A. O(log n)
+B. O(n)
+C. O(n log n)
+D. O(n 2)","【学科】数据结构
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-21::clean,v2-type_mismatch-refq-408-2025-21,clean,clean,type_mismatch,operating_system,refq-408-2025-21,"下列设备中，适合采用DMA 输入/输出方式的是 。
+I. 键盘
+II. 网卡
+III. 固态硬盘
+IV. 针式打印机
+A. 仅I、II
+B. 仅II、III
+C. 仅II、IV
+D. 仅III、IV","【学科】操作系统
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-21::mutated,v2-type_mismatch-refq-408-2025-21,mutated,error,type_mismatch,operating_system,refq-408-2025-21,"下列设备中，适合采用DMA 输入/输出方式的是 。
+I. 键盘
+II. 网卡
+III. 固态硬盘
+IV.请将答案填写在横线上并说明依据。 针式打印机
+A. 仅I、II
+B. 仅II、III
+C. 仅II、IV
+D. 仅III、IV","【学科】操作系统
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-04::clean,v2-type_mismatch-refq-408-2025-04,clean,clean,type_mismatch,data_structure,refq-408-2025-04,"下列关于二叉树及森林的叙述中，正确的是
+A. 完全二叉树中不存在度为1 的结点
+B. 任意一个森林都可以转换为一棵二叉树
+C. 二叉树的分支结点个数比叶结点个数少
+D. 表达式树的根中保存的是最先计算的运算符","【学科】数据结构
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-type_mismatch-refq-408-2025-04::mutated,v2-type_mismatch-refq-408-2025-04,mutated,error,type_mismatch,data_structure,refq-408-2025-04,"下列关于二叉树及森林的叙述中，正确的是请描述该过程的完整执行流程并给出时序图。
+A. 完全二叉树中不存在度为1 的结点
+B. 任意一个森林都可以转换为一棵二叉树
+C. 二叉树的分支结点个数比叶结点个数少
+D. 表达式树的根中保存的是最先计算的运算符","【学科】数据结构
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-06::clean,v2-option_structure-refq-408-2021-06,clean,clean,option_structure,data_structure,refq-408-2021-06,"给定平衡二叉树如下图所示，插入关键字23 后，根中的关键字是 。
+A. 16
+B. 20
+C. 23
+D. 25","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-06::mutated,v2-option_structure-refq-408-2021-06,mutated,error,option_structure,data_structure,refq-408-2021-06,"给定平衡二叉树如下图所示，插入关键字23 后，根中的关键字是 。
+A. 16
+B. B.  20
+C. 23
+D. 25","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2020-25::clean,v2-option_structure-refq-408-2020-25,clean,clean,option_structure,operating_system,refq-408-2020-25,"下列与中断相关的操作中，由操作系统完成的是 。
+I. 保存被中断程序的中断点
+II. 提供中断服务
+III. 初始化中断向量表
+IV. 保存中断屏蔽字
+A. 仅I、II
+B. 仅I、II、IV
+C. 仅III、IV
+D. 仅II、III、IV","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2020-25::mutated,v2-option_structure-refq-408-2020-25,mutated,error,option_structure,operating_system,refq-408-2020-25,"下列与中断相关的操作中，由操作系统完成的是 。
+I. 保存被中断程序的中断点
+II. 提供中断服务
+III. 初始化中断向量表
+IV. 保存中断屏蔽字
+①  仅I、II
+B. 仅I、II、IV
+C. 仅III、IV
+D. 仅II、III、IV","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2022-14::clean,v2-option_structure-refq-408-2022-14,clean,clean,option_structure,computer_organization,refq-408-2022-14,"－0.4375 的IEEE 754 单精度浮点数表示为 。
+A. BEE0 0000H
+B. BF60 0000H
+C. BF70 0000H
+D. C0E0 0000H","【学科】计算机组成原理
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2022-14::mutated,v2-option_structure-refq-408-2022-14,mutated,error,option_structure,computer_organization,refq-408-2022-14,"－0.4375 的IEEE 754 单精度浮点数表示为 。
+A. BEE0 0000H、
+B. BF60 0000H
+C. BF70 0000H
+D. C0E0 0000H","【学科】计算机组成原理
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-07::clean,v2-option_structure-refq-408-2021-07,clean,clean,option_structure,data_structure,refq-408-2021-07,"给定如下有向图，该图的拓扑有序序列的个数是 。
+A. 1
+B. 2
+C. 3
+D. 4","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-07::mutated,v2-option_structure-refq-408-2021-07,mutated,error,option_structure,data_structure,refq-408-2021-07,"给定如下有向图，该图的拓扑有序序列的个数是 。
+A.1
+B. 2
+C. 3
+D. 4","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2019-40::clean,v2-option_structure-refq-408-2019-40,clean,clean,option_structure,computer_network,refq-408-2019-40,"下列关于网络应用模型的叙述中，错误的是 。
+A. 在P2P 模型中，结点之间具有对等关系
+B. 在客户/服务器（C/S）模型中，客户与客户之间可以直接通信
+C. 在C/S 模型中，主动发起通信的是客户，被动通信的是服务器
+D. 在向多用户分发一个文件时，P2P 模型通常比C/S 模型所需的时间短","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2019-40::mutated,v2-option_structure-refq-408-2019-40,mutated,error,option_structure,computer_network,refq-408-2019-40,"下列关于网络应用模型的叙述中，错误的是 。
+在P2P 模型中，结点之间具有对等关系
+B. 在客户/服务器（C/S）模型中，客户与客户之间可以直接通信
+C. 在C/S 模型中，主动发起通信的是客户，被动通信的是服务器
+D. 在向多用户分发一个文件时，P2P 模型通常比C/S 模型所需的时间短","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-08::clean,v2-option_structure-refq-408-2021-08,clean,clean,option_structure,data_structure,refq-408-2021-08,"使用Dijkstra 算法求下图中从顶点1 到其余各顶点的最短路径，将当前找到的从顶点1 到顶点2,
+3, 4, 5 的最短路径长度保存在数组dist 中，求出第二条最短路径后，dist 中的内容更新
+为 。
+A. 26, 3, 14, 6
+B. 25, 3, 14, 6
+C. 21, 3, 14, 6
+D. 15, 3, 14, 6","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-08::mutated,v2-option_structure-refq-408-2021-08,mutated,error,option_structure,data_structure,refq-408-2021-08,"使用Dijkstra 算法求下图中从顶点1 到其余各顶点的最短路径，将当前找到的从顶点1 到顶点2,
+3, 4, 5 的最短路径长度保存在数组dist 中，求出第二条最短路径后，dist 中的内容更新
+为 。
+a. 26, 3, 14, 6
+B. 25, 3, 14, 6
+C. 21, 3, 14, 6
+D. 15, 3, 14, 6","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-17::clean,v2-option_structure-refq-408-2021-17,clean,clean,option_structure,operating_system,refq-408-2021-17,"下列寄存器中，汇编语言程序员可见的 。
+I. 指令寄存器
+II. 微指令寄存器
+III. 基址寄存器
+IV. 标志/状态寄存器
+A. 仅I、II
+B. 仅I、IV
+C. 仅II、IV
+D. 仅III、IV","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-17::mutated,v2-option_structure-refq-408-2021-17,mutated,error,option_structure,operating_system,refq-408-2021-17,"下列寄存器中，汇编语言程序员可见的 。
+I. 指令寄存器
+II. 微指令寄存器
+III. 基址寄存器
+IV. 标志/状态寄存器
+E. 仅I、II
+B. 仅I、IV
+C. 仅II、IV
+D. 仅III、IV","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2020-26::clean,v2-option_structure-refq-408-2020-26,clean,clean,option_structure,computer_network,refq-408-2020-26,"下列与进程调度有关的因素中，在设计多级反馈队列调度算法时需要考虑的是 。
+I. 就绪队列的数量
+
+II. 就绪队列的优先级
+III. 各就绪队列的调度算法
+IV. 进程在就绪队列间的迁移条件
+A. 仅I、II
+B. 仅III、IV
+C. 仅II 、III、IV
+D. I、II、III 和IV","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2020-26::mutated,v2-option_structure-refq-408-2020-26,mutated,error,option_structure,computer_network,refq-408-2020-26,"下列与进程调度有关的因素中，在设计多级反馈队列调度算法时需要考虑的是 。
+I. 就绪队列的数量
+
+II. 就绪队列的优先级
+III. 各就绪队列的调度算法
+IV. 进程在就绪队列间的迁移条件
+A) 仅I、II
+B. 仅III、IV
+C. 仅II 、III、IV
+D. I、II、III 和IV","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2023-13::clean,v2-option_structure-refq-408-2023-13,clean,clean,option_structure,computer_organization,refq-408-2023-13,"若short 型变量x = -8 190，则x 的机器数是 。
+A. E002H
+B. E001H
+C. 9FFFH
+D. 9FFEH","【学科】计算机组成原理
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2023-13::mutated,v2-option_structure-refq-408-2023-13,mutated,error,option_structure,computer_organization,refq-408-2023-13,"若short 型变量x = -8 190，则x 的机器数是 。
+A． E002H
+B. E001H
+C. 9FFFH
+D. 9FFEH","【学科】计算机组成原理
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-09::clean,v2-option_structure-refq-408-2021-09,clean,clean,option_structure,data_structure,refq-408-2021-09,"在一棵高度为3 的3 阶B 树中，根为第1 层，若第2 层中有4 个关键字，则该树的结点个数最
+多是 。
+A. 11
+B. 10
+C. 9
+D. 8","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-09::mutated,v2-option_structure-refq-408-2021-09,mutated,error,option_structure,data_structure,refq-408-2021-09,"在一棵高度为3 的3 阶B 树中，根为第1 层，若第2 层中有4 个关键字，则该树的结点个数最
+多是 。
+A. 11
+A.  10
+C. 9
+D. 8","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-18::clean,v2-option_structure-refq-408-2021-18,clean,clean,option_structure,operating_system,refq-408-2021-18,"下列关于数据通路的叙述中，错误的是 。
+A. 数据通路包含ALU 等组合逻辑（操作）元件
+B. 数据通路包含寄存器等时序逻辑（状态）元件
+C. 数据通路不包含用于异常事件检测及响应的电路
+D. 数据通路中的数据流动路径由控制信号进行控制","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-18::mutated,v2-option_structure-refq-408-2021-18,mutated,error,option_structure,operating_system,refq-408-2021-18,"下列关于数据通路的叙述中，错误的是 。
+A、 数据通路包含ALU 等组合逻辑（操作）元件
+B. 数据通路包含寄存器等时序逻辑（状态）元件
+C. 数据通路不包含用于异常事件检测及响应的电路
+D. 数据通路中的数据流动路径由控制信号进行控制","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2020-28::clean,v2-option_structure-refq-408-2020-28,clean,clean,option_structure,computer_network,refq-408-2020-28,"下列因素中，影响请求分页系统有效（平均）访存时间的是 。
+I. 缺页率
+II. 磁盘读写时间
+III. 内存访问时间
+IV. 执行缺页处理程序的CPU 时间
+A. 仅II、III
+B. 仅I、IV
+C. 仅I、III、IV
+D. I、II、III 和IV","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2020-28::mutated,v2-option_structure-refq-408-2020-28,mutated,error,option_structure,computer_network,refq-408-2020-28,"下列因素中，影响请求分页系统有效（平均）访存时间的是 。
+I. 缺页率
+II. 磁盘读写时间
+III. 内存访问时间
+IV. 执行缺页处理程序的CPU 时间
+A. 仅II、III；
+B. 仅I、IV
+C. 仅I、III、IV
+D. I、II、III 和IV","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2023-14::clean,v2-option_structure-refq-408-2023-14,clean,clean,option_structure,computer_organization,refq-408-2023-14,"已知float 型变量用IEEE 754 单精度浮点数格式表示。若float 型变量x 的机器数为8020 0000H，
+则x 的值是 。
+A. –2–128
+B. –1.01×2–127
+C. –1.01×2–126
+D. 非数（NAN）","【学科】计算机组成原理
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2023-14::mutated,v2-option_structure-refq-408-2023-14,mutated,error,option_structure,computer_organization,refq-408-2023-14,"已知float 型变量用IEEE 754 单精度浮点数格式表示。若float 型变量x 的机器数为8020 0000H，
+则x 的值是 。
+[A] –2–128
+B. –1.01×2–127
+C. –1.01×2–126
+D. 非数（NAN）","【学科】计算机组成原理
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-10::clean,v2-option_structure-refq-408-2021-10,clean,clean,option_structure,data_structure,refq-408-2021-10,"设数组S[]={93, 946, 372, 9, 146, 151, 301, 485, 236, 327, 43, 892}，采用最低位优先（LSD）基数
+排序将S 排列成升序序列。第1 趟分配、收集后，元素372 之前、之后紧邻的元素分别
+是 。
+A. 43, 892
+B. 236, 301
+C. 301, 892
+D. 485, 301","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-10::mutated,v2-option_structure-refq-408-2021-10,mutated,error,option_structure,data_structure,refq-408-2021-10,"设数组S[]={93, 946, 372, 9, 146, 151, 301, 485, 236, 327, 43, 892}，采用最低位优先（LSD）基数
+排序将S 排列成升序序列。第1 趟分配、收集后，元素372 之前、之后紧邻的元素分别
+是 。
+A.. 43, 892
+B. 236, 301
+C. 301, 892
+D. 485, 301","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-19::clean,v2-option_structure-refq-408-2021-19,clean,clean,option_structure,operating_system,refq-408-2021-19,"下列关于总线的叙述中，错误的是 。
+A. 总线是在两个或多个部件之间进行数据交换的传输介质
+B. 同步总线由时钟信号定时，时钟频率不一定等于工作频率
+C. 异步总线由握手信号定时，一次握手过程完成一位数据交换
+D. 突发（Burst）传送总线事务可以在总线上连续传送多个数据","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2021-19::mutated,v2-option_structure-refq-408-2021-19,mutated,error,option_structure,operating_system,refq-408-2021-19,"下列关于总线的叙述中，错误的是 。
+A. 总线是在两个或多个部件之间进行数据交换的传输介质）
+B. 同步总线由时钟信号定时，时钟频率不一定等于工作频率
+C. 异步总线由握手信号定时，一次握手过程完成一位数据交换
+D. 突发（Burst）传送总线事务可以在总线上连续传送多个数据","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2020-29::clean,v2-option_structure-refq-408-2020-29,clean,clean,option_structure,computer_network,refq-408-2020-29,"下列关于父进程与子进程的叙述中，错误的是 。
+A. 父进程与子进程可以并发执行
+B. 父进程与子进程共享虚拟地址空间
+C. 父进程与子进程有不同的进程控制块
+D. 父进程与子进程不能同时使用同一临界资源","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2020-29::mutated,v2-option_structure-refq-408-2020-29,mutated,error,option_structure,computer_network,refq-408-2020-29,"下列关于父进程与子进程的叙述中，错误的是 。
+F. 父进程与子进程可以并发执行
+B. 父进程与子进程共享虚拟地址空间
+C. 父进程与子进程有不同的进程控制块
+D. 父进程与子进程不能同时使用同一临界资源","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2024-11::clean,v2-option_structure-refq-408-2024-11,clean,clean,option_structure,computer_organization,refq-408-2024-11,"在外排序中，利用败者树对初始为升序的归并段进行多路归并，败者树中记录“冠军”的结点保
+存的是 。
+A. 最大关键字
+B. 最小关键字
+C. 最大关键字所在的归并段号
+D. 最小关键字所在的归并段号","【学科】计算机组成原理
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2024-11::mutated,v2-option_structure-refq-408-2024-11,mutated,error,option_structure,computer_organization,refq-408-2024-11,"在外排序中，利用败者树对初始为升序的归并段进行多路归并，败者树中记录“冠军”的结点保
+存的是 。
+A. 最大关键字，，
+B. 最小关键字
+C. 最大关键字所在的归并段号
+D. 最小关键字所在的归并段号","【学科】计算机组成原理
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2022-01::clean,v2-option_structure-refq-408-2022-01,clean,clean,option_structure,data_structure,refq-408-2022-01,"下列程序段的时间复杂度是 。
+int sum = 0;
+for (int i = 1;i < n;i*=2)
+for(int j = 0;j < i;j++)
+sum++;
+A. O(log n)
+B. O(n)
+C. O(n log n)
+D. O(n 2)","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-option_structure-refq-408-2022-01::mutated,v2-option_structure-refq-408-2022-01,mutated,error,option_structure,data_structure,refq-408-2022-01,"下列程序段的时间复杂度是 。
+int sum = 0;
+for (int i = 1;i < n;i*=2)
+for(int j = 0;j < i;j++)
+sum++;
+A. 
+B. O(n)
+C. O(n log n)
+D. O(n 2)","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-26::clean,v2-typo-refq-408-2019-26,clean,clean,typo,computer_network,refq-408-2019-26,"下列选项中，可用于文件系统管理空闲磁盘块的数据结构是 。
+I. 位图
+II. 索引结点
+III. 空闲磁盘块链
+IV. 文件分配表（FAT）
+A. 仅I、II
+B. 仅I、III、IV
+C. 仅I、III
+D. 仅II、III、IV","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-26::mutated,v2-typo-refq-408-2019-26,mutated,error,typo,computer_network,refq-408-2019-26,"下列选项中，可用于文件系统管理空闲磁盘块的數据结构是 。
+I. 位图
+II. 索引结点
+III. 空闲磁盘块链
+IV. 文件分配表（FAT）
+A. 仅I、II
+B. 仅I、III、IV
+C. 仅I、III
+D. 仅II、III、IV","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-14::clean,v2-typo-refq-408-2019-14,clean,clean,typo,computer_organization,refq-408-2019-14,"下列关于缺页处理的叙述中，错误的是 。
+A. 缺页是在地址转换时CPU 检测到的一种异常
+B. 缺页处理由操作系统提供的缺页处理程序来完成
+C. 缺页处理程序根据页故障地址从外存读入所缺失的页
+D. 缺页处理完成后回到发生缺页的指令的下一条指令执行","【学科】计算机组成原理
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-14::mutated,v2-typo-refq-408-2019-14,mutated,error,typo,computer_organization,refq-408-2019-14,"下下列关于缺页处理的叙述中，错误的是 。
+A. 缺页是在地址转换时CPU 检测到的一种异常
+B. 缺页处理由操作系统提供的缺页处理程序来完成
+C. 缺页处理程序根据页故障地址从外存读入所缺失的页
+D. 缺页处理完成后回到发生缺页的指令的下一条指令执行","【学科】计算机组成原理
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-01::clean,v2-typo-refq-408-2020-01,clean,clean,typo,data_structure,refq-408-2020-01,"将一个10×10 对称矩阵M 的上三角部分的元素叫mi, j（1≤i≤j≤10）按列优先存入C 语言的一
+维数组N 中，元素m7, 2在N 中的下标是 。
+A. 15
+B. 16
+C. 22
+D. 23","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-01::mutated,v2-typo-refq-408-2020-01,mutated,error,typo,data_structure,refq-408-2020-01,"将个10×10 对称矩阵M 的上三角部分的元素叫mi, j（1≤i≤j≤10）按列优先存入C 语言的一
+维数组N 中，元素m7, 2在N 中的下标是 。
+A. 15
+B. 16
+C. 22
+D. 23","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-16::clean,v2-typo-refq-408-2019-16,clean,clean,typo,operating_system,refq-408-2019-16,"下列有关处理器时钟脉冲信号的叙述中，错误的是 。
+A. 时钟脉冲信号由机器脉冲源发出的脉冲信号经整形和分频后形成
+B. 时钟脉冲信号的宽度称为时钟周期，时钟周期的倒数为机器主频
+C. 时钟周期以相邻状态单元间组合逻辑电路的最大延迟为基准确定
+D. 处理器总是在每来一个时钟脉冲信号时就开始执行一条新的指令","【学科】操作系统
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-16::mutated,v2-typo-refq-408-2019-16,mutated,error,typo,operating_system,refq-408-2019-16,"列下有关处理器时钟脉冲信号的叙述中，错误的是 。
+A. 时钟脉冲信号由机器脉冲源发出的脉冲信号经整形和分频后形成
+B. 时钟脉冲信号的宽度称为时钟周期，时钟周期的倒数为机器主频
+C. 时钟周期以相邻状态单元间组合逻辑电路的最大延迟为基准确定
+D. 处理器总是在每来一个时钟脉冲信号时就开始执行一条新的指令","【学科】操作系统
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-28::clean,v2-typo-refq-408-2019-28,clean,clean,typo,computer_network,refq-408-2019-28,"在分段存储管理系统中，用共享段表描述所有被共享的段。若进程P1和P2共享段S，下列叙述
+中，错误的是 。
+A. 在物理内存中仅保存一份段S 的内容
+B. 段S 在P1和P2中应该具有相同的段号
+C. P1和P2共享段S 在共享段表中的段表项
+D. P1和P2都不再使用段S 时才回收段S 所占的内存空间","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-28::mutated,v2-typo-refq-408-2019-28,mutated,error,typo,computer_network,refq-408-2019-28,"在分段存储管理系统中，用共享段表描述所有被共享的段。若珵程P1和P2共享段S，下列叙述
+中，错误的是 。
+A. 在物理内存中仅保存一份段S 的内容
+B. 段S 在P1和P2中应该具有相同的段号
+C. P1和P2共享段S 在共享段表中的段表项
+D. P1和P2都不再使用段S 时才回收段S 所占的内存空间","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-15::clean,v2-typo-refq-408-2019-15,clean,clean,typo,computer_organization,refq-408-2019-15,"某计算机采用大端方式，按字节编址。某指令中操作数的机器数为1234 FF00H，该操作数采用
+基址寻址方式，形式地址（用补码表示）为FF12H，基址寄存器的内容为F000 0000H，则该操
+作数的LSB（最低有效字节）所在的地址是 。
+A. F000 FF12H
+B. F000 FF15H
+C. EFFF FF12H
+D. EFFF FF15H","【学科】计算机组成原理
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-15::mutated,v2-typo-refq-408-2019-15,mutated,error,typo,computer_organization,refq-408-2019-15,"某某计算机采用大端方式，按字节编址。某指令中操作数的机器数为1234 FF00H，该操作数采用
+基址寻址方式，形式地址（用补码表示）为FF12H，基址寄存器的内容为F000 0000H，则该操
+作数的LSB（最低有效字节）所在的地址是 。
+A. F000 FF12H
+B. F000 FF15H
+C. EFFF FF12H
+D. EFFF FF15H","【学科】计算机组成原理
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-02::clean,v2-typo-refq-408-2020-02,clean,clean,typo,data_structure,refq-408-2020-02,"对空栈S 进行Push 和Pop 操作，入栈序列为 a, b, c, d, e，经过Push, Push, Pop, Push, Pop, Push,
+Push, Pop 操作后得到的出栈序列是 。
+A. b, a, c
+B. b, a, e
+C. b, c, a
+D. b, c, e","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-02::mutated,v2-typo-refq-408-2020-02,mutated,error,typo,data_structure,refq-408-2020-02,"对栈S 进行Push 和Pop 操作，入栈序列为 a, b, c, d, e，经过Push, Push, Pop, Push, Pop, Push,
+Push, Pop 操作后得到的出栈序列是 。
+A. b, a, c
+B. b, a, e
+C. b, c, a
+D. b, c, e","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-23::clean,v2-typo-refq-408-2019-23,clean,clean,typo,operating_system,refq-408-2019-23,"下列关于线程的描述中，错误的是 。
+A. 内核级线程的调度由操作系统完成
+B. 操作系统为每个用户级线程建立一个线程控制块
+C. 用户级线程间的切换比内核级线程间的切换效率高
+D. 用户级线程可以在不支持内核级线程的操作系统上实现","【学科】操作系统
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-23::mutated,v2-typo-refq-408-2019-23,mutated,error,typo,operating_system,refq-408-2019-23,"列下关于线程的描述中，错误的是 。
+A. 内核级线程的调度由操作系统完成
+B. 操作系统为每个用户级线程建立一个线程控制块
+C. 用户级线程间的切换比内核级线程间的切换效率高
+D. 用户级线程可以在不支持内核级线程的操作系统上实现","【学科】操作系统
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-29::clean,v2-typo-refq-408-2019-29,clean,clean,typo,computer_network,refq-408-2019-29,"某系统釆用LRU 页置换算法和局部置换策略，若系统为进程P 预分配了4 个页框，进程P 访问
+页号的序列为0, 1, 2, 7, 0, 5, 3, 5, 0, 2, 7, 6，则进程访问上述页的过程中，产生页置换的总次数
+是 。
+A. 3
+B. 4
+C. 5
+D. 6","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-29::mutated,v2-typo-refq-408-2019-29,mutated,error,typo,computer_network,refq-408-2019-29,"某系统釆用LRU 页置换算法和局部置换策略，若系统为珵程P 预分配了4 个页框，进程P 访问
+页号的序列为0, 1, 2, 7, 0, 5, 3, 5, 0, 2, 7, 6，则进程访问上述页的过程中，产生页置换的总次数
+是 。
+A. 3
+B. 4
+C. 5
+D. 6","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-11::clean,v2-typo-refq-408-2020-11,clean,clean,typo,computer_organization,refq-408-2020-11,"对大部分元素已有序的数组进行排序时，直接插入排序比简单选择排序效率更高，其原因
+是 。
+I. 直接插入排序过程中元素之间的比较次数更少
+II. 直接插入排序过程中所需要的辅助空间更少
+III. 直接插入排序过程中元素的移动次数更少
+A. 仅I
+B. 仅III
+C. 仅I、II
+D. I、II 和III","【学科】计算机组成原理
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-11::mutated,v2-typo-refq-408-2020-11,mutated,error,typo,computer_organization,refq-408-2020-11,"对对大部分元素已有序的数组进行排序时，直接插入排序比简单选择排序效率更高，其原因
+是 。
+I. 直接插入排序过程中元素之间的比较次数更少
+II. 直接插入排序过程中所需要的辅助空间更少
+III. 直接插入排序过程中元素的移动次数更少
+A. 仅I
+B. 仅III
+C. 仅I、II
+D. I、II 和III","【学科】计算机组成原理
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-03::clean,v2-typo-refq-408-2020-03,clean,clean,typo,data_structure,refq-408-2020-03,"对于任意一棵高度为5 且有10 个结点的二叉树，若采用顺序存储结构保存，每个结点占1 个存
+储单元（仅存放结点的数据信息），则存放该二叉树需要的存储单元数量至少是 。
+A. 31
+B. 16
+C. 15
+D. 10","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-03::mutated,v2-typo-refq-408-2020-03,mutated,error,typo,data_structure,refq-408-2020-03,"对任意一棵高度为5 且有10 个结点的二叉树，若采用顺序存储结构保存，每个结点占1 个存
+储单元（仅存放结点的数据信息），则存放该二叉树需要的存储单元数量至少是 。
+A. 31
+B. 16
+C. 15
+D. 10","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-24::clean,v2-typo-refq-408-2019-24,clean,clean,typo,operating_system,refq-408-2019-24,"下列选项中，可能会将进程唤醒的事件是 。
+I. I/O 结束
+II. 某进程退出临界区 III. 当前进程的时间片用完
+A. 仅I
+B. 仅III
+C. 仅I、II
+D. I、II、III","【学科】操作系统
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-24::mutated,v2-typo-refq-408-2019-24,mutated,error,typo,operating_system,refq-408-2019-24,"列下选项中，可能会将进程唤醒的事件是 。
+I. I/O 结束
+II. 某进程退出临界区 III. 当前进程的时间片用完
+A. 仅I
+B. 仅III
+C. 仅I、II
+D. I、II、III","【学科】操作系统
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-30::clean,v2-typo-refq-408-2019-30,clean,clean,typo,computer_network,refq-408-2019-30,"下列关于死锁的叙述中，正确的是 。
+I. 可以通过剥夺进程资源解除死锁
+II. 死锁的预防方法能确保系统不发生死锁
+III. 银行家算法可以判断系统是否处于死锁状态
+IV. 当系统出现死锁时，必然有两个或两个以上的进程处于阻塞态
+A. 仅II、III
+B. 仅I、II、IV
+C. 仅I、II、III
+D. 仅I、III、IV","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-30::mutated,v2-typo-refq-408-2019-30,mutated,error,typo,computer_network,refq-408-2019-30,"下列关于死锁的叙述中，正确的是 。
+I. 可以通过剥夺珵程资源解除死锁
+II. 死锁的预防方法能确保系统不发生死锁
+III. 银行家算法可以判断系统是否处于死锁状态
+IV. 当系统出现死锁时，必然有两个或两个以上的进程处于阻塞态
+A. 仅II、III
+B. 仅I、II、IV
+C. 仅I、II、III
+D. 仅I、III、IV","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-12::clean,v2-typo-refq-408-2020-12,clean,clean,typo,computer_organization,refq-408-2020-12,"下列给出的部件中，其位数（宽度）一定与机器字长相同的是 。
+I. ALU
+II. 指令寄存器
+III. 通用寄存器
+IV. 浮点寄存器
+A. 仅 I、II
+B. 仅 I、III
+C. 仅 II、III
+D. 仅II、III、IV","【学科】计算机组成原理
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-12::mutated,v2-typo-refq-408-2020-12,mutated,error,typo,computer_organization,refq-408-2020-12,"下下列给出的部件中，其位数（宽度）一定与机器字长相同的是 。
+I. ALU
+II. 指令寄存器
+III. 通用寄存器
+IV. 浮点寄存器
+A. 仅 I、II
+B. 仅 I、III
+C. 仅 II、III
+D. 仅II、III、IV","【学科】计算机组成原理
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-04::clean,v2-typo-refq-408-2020-04,clean,clean,typo,data_structure,refq-408-2020-04,"已知森林F 及与之对应的二叉树T，若F 的先根遍历序列是a, b, c, d, e, f，中根遍历序列是b, a,
+d, f, e, c,则T 的后根遍历序列是 。
+A. b, a, d, f, e, c
+B. b, d, f, e, c, a
+C. b, f, e, d, c, a
+D. f, e, d, c, b, a","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-04::mutated,v2-typo-refq-408-2020-04,mutated,error,typo,data_structure,refq-408-2020-04,"已森林F 及与之对应的二叉树T，若F 的先根遍历序列是a, b, c, d, e, f，中根遍历序列是b, a,
+d, f, e, c,则T 的后根遍历序列是 。
+A. b, a, d, f, e, c
+B. b, d, f, e, c, a
+C. b, f, e, d, c, a
+D. f, e, d, c, b, a","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-17::clean,v2-typo-refq-408-2020-17,clean,clean,typo,operating_system,refq-408-2020-17,"下列给出的处理器类型中，理想情况下，CPI 为1 的是 。
+I. 单周期CPU
+II. 多周期CPU
+III. 基本流水线CPU
+IV. 超标量流水线CPU
+A. 仅I、II
+B. 仅I、III
+C. 仅II、IV
+D. 仅III、IV","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-17::mutated,v2-typo-refq-408-2020-17,mutated,error,typo,operating_system,refq-408-2020-17,"列下给出的处理器类型中，理想情况下，CPI 为1 的是 。
+I. 单周期CPU
+II. 多周期CPU
+III. 基本流水线CPU
+IV. 超标量流水线CPU
+A. 仅I、II
+B. 仅I、III
+C. 仅II、IV
+D. 仅III、IV","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-31::clean,v2-typo-refq-408-2019-31,clean,clean,typo,computer_network,refq-408-2019-31,"某计算机主存按字节编址，采用二级分页存储管理，地址结构如下所示：
+页目录号（10 位）
+页号（10 位）
+页内偏移（12 位）
+虚拟地址2050 1225H 对应的页目录号、页号分别是 。
+A. 081H、101H
+B. 081H、401H
+C. 201H、101H
+D. 201H、401H","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2019-31::mutated,v2-typo-refq-408-2019-31,mutated,error,typo,computer_network,refq-408-2019-31,"某计算机主存按字节编址，采用二级分页存储管理，地址結构如下所示：
+页目录号（10 位）
+页号（10 位）
+页内偏移（12 位）
+虚拟地址2050 1225H 对应的页目录号、页号分别是 。
+A. 081H、101H
+B. 081H、401H
+C. 201H、101H
+D. 201H、401H","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-15::clean,v2-typo-refq-408-2020-15,clean,clean,typo,computer_organization,refq-408-2020-15,"下列关于TLB 和Cache 的叙述中，错误的是 。
+A. 命中率都与程序局部性有关
+B. 缺失后都需要去访问主存
+C. 缺失处理都可以由硬件实现
+D. 都由DRAM 存储器组成","【学科】计算机组成原理
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-15::mutated,v2-typo-refq-408-2020-15,mutated,error,typo,computer_organization,refq-408-2020-15,"下下列关于TLB 和Cache 的叙述中，错误的是 。
+A. 命中率都与程序局部性有关
+B. 缺失后都需要去访问主存
+C. 缺失处理都可以由硬件实现
+D. 都由DRAM 存储器组成","【学科】计算机组成原理
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-05::clean,v2-typo-refq-408-2020-05,clean,clean,typo,data_structure,refq-408-2020-05,"下列给定的关键字输入序列中，不能生成如下二叉排序树的是 。
+A. 4, 5, 2, 1, 3
+B. 4, 5, 1, 2, 3
+C. 4, 2, 5, 3, 1
+D. 4, 2, 1, 3, 5","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-05::mutated,v2-typo-refq-408-2020-05,mutated,error,typo,data_structure,refq-408-2020-05,"下给定的关键字输入序列中，不能生成如下二叉排序树的是 。
+A. 4, 5, 2, 1, 3
+B. 4, 5, 1, 2, 3
+C. 4, 2, 5, 3, 1
+D. 4, 2, 1, 3, 5","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-18::clean,v2-typo-refq-408-2020-18,clean,clean,typo,operating_system,refq-408-2020-18,"下列关于“自陷”（Trap，也称陷阱）的叙述中，错误的是 。
+A. 自陷是通过陷阱指令预先设定的一类外部中断事件
+B. 自陷可用于实现程序调试时的断点设置和单步跟踪
+C. 自陷发生后CPU 将转去执行操作系统内核相应程序
+D. 自陷处理完成后返回到陷阱指令的下一条指令执行","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-18::mutated,v2-typo-refq-408-2020-18,mutated,error,typo,operating_system,refq-408-2020-18,"列下关于“自陷”（Trap，也称陷阱）的叙述中，错误的是 。
+A. 自陷是通过陷阱指令预先设定的一类外部中断事件
+B. 自陷可用于实现程序调试时的断点设置和单步跟踪
+C. 自陷发生后CPU 将转去执行操作系统内核相应程序
+D. 自陷处理完成后返回到陷阱指令的下一条指令执行","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2021-12::clean,v2-typo-refq-408-2021-12,clean,clean,typo,computer_organization,refq-408-2021-12,"2017 年公布的全球超级计算机TOP 500 排名中，我国“神威•太湖之光”超级计算机蝉联第一，
+其浮点运算速度为93.0146PFLOPS,说明该计算机每秒钟内完成的浮点操作次数约为 。
+A. 9.3×10 13次
+B. 9.3×10 15次
+C. 9.3 千万亿次
+D. 9.3 亿亿次","【学科】计算机组成原理
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2021-12::mutated,v2-typo-refq-408-2021-12,mutated,error,typo,computer_organization,refq-408-2021-12,"2017 年年公布的全球超级计算机TOP 500 排名中，我国“神威•太湖之光”超级计算机蝉联第一，
+其浮点运算速度为93.0146PFLOPS,说明该计算机每秒钟内完成的浮点操作次数约为 。
+A. 9.3×10 13次
+B. 9.3×10 15次
+C. 9.3 千万亿次
+D. 9.3 亿亿次","【学科】计算机组成原理
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-06::clean,v2-typo-refq-408-2020-06,clean,clean,typo,data_structure,refq-408-2020-06,"修改递归方式实现的图的深度优先搜索（DFS）算法，将输出（访问）顶
+点信息的语句移到退出递归前（即执行输出语句后立刻退出递归）。采用
+修改后的算法遍历有向无环图G，若输出结果中包含G 中的全部顶点，则输出的顶点序列是G
+的 。
+A. 拓扑有序序列
+B. 逆拓扑有序序列
+C. 广度优先搜索序列
+D. 深度优先搜索序列","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-06::mutated,v2-typo-refq-408-2020-06,mutated,error,typo,data_structure,refq-408-2020-06,"修递归方式实现的图的深度优先搜索（DFS）算法，将输出（访问）顶
+点信息的语句移到退出递归前（即执行输出语句后立刻退出递归）。采用
+修改后的算法遍历有向无环图G，若输出结果中包含G 中的全部顶点，则输出的顶点序列是G
+的 。
+A. 拓扑有序序列
+B. 逆拓扑有序序列
+C. 广度优先搜索序列
+D. 深度优先搜索序列","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-20::clean,v2-typo-refq-408-2020-20,clean,clean,typo,operating_system,refq-408-2020-20,"下列事件中，属于外部中断事件的是 。
+I. 访存时缺页
+II. 定时器到时
+III. 网络数据包到达
+A. 仅 I、II
+B. 仅 I、III
+C. 仅II、III
+D. I、II 和III","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-typo-refq-408-2020-20::mutated,v2-typo-refq-408-2020-20,mutated,error,typo,operating_system,refq-408-2020-20,"列下事件中，属于外部中断事件的是 。
+I. 访存时缺页
+II. 定时器到时
+III. 网络数据包到达
+A. 仅 I、II
+B. 仅 I、III
+C. 仅II、III
+D. I、II 和III","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-33::clean,v2-punctuation-refq-408-2019-33,clean,clean,punctuation,computer_network,refq-408-2019-33,"OSI 参考模型的第5 层（自下而上）完成的主要功能是 。
+A. 差错控制
+B. 路由选择
+C. 会话管理
+D. 数据表示转换","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-33::mutated,v2-punctuation-refq-408-2019-33,mutated,error,punctuation,computer_network,refq-408-2019-33,"OSI 参考模型的第5 层（自下而上）完成的主要功能是 ；
+A. 差错控制
+B. 路由选择
+C. 会话管理
+D. 数据表示转换","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2021-13::clean,v2-punctuation-refq-408-2021-13,clean,clean,punctuation,computer_organization,refq-408-2021-13,"已知带符号整数用补码表示，变量x, y, z 的机器数分别为FFFDH, FFDFH, 7FFCH，下列结论
+中，正确的是 。
+A. 若x, y 和z 为无符号整数，则z＜x＜y
+B. 若x, y 和z 为无符号整数，则x＜y＜z
+C. 若x, y 和z 为带符号整数，则x＜y＜z
+D. 若x, y 和z 为带符号整数，则y＜x＜z","【学科】计算机组成原理
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2021-13::mutated,v2-punctuation-refq-408-2021-13,mutated,error,punctuation,computer_organization,refq-408-2021-13,"已知带符号整数用补码表示、变量x, y, z 的机器数分别为FFFDH, FFDFH, 7FFCH，下列结论
+中，正确的是 。
+A. 若x, y 和z 为无符号整数，则z＜x＜y
+B. 若x, y 和z 为无符号整数，则x＜y＜z
+C. 若x, y 和z 为带符号整数，则x＜y＜z
+D. 若x, y 和z 为带符号整数，则y＜x＜z","【学科】计算机组成原理
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-08::clean,v2-punctuation-refq-408-2020-08,clean,clean,punctuation,data_structure,refq-408-2020-08,"若使用AOE 网估算工程进度，则下列叙述中正确的是 。
+A. 关键路径是从原点到汇点边数最多的一条路径
+B. 关键路径是从原点到汇点路径长度最长的路径
+C. 增加任一关键活动的时间不会延长工程的工期
+D. 缩短任一关键活动的时间将会缩短工程的工期","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-08::mutated,v2-punctuation-refq-408-2020-08,mutated,error,punctuation,data_structure,refq-408-2020-08,"若使用AOE 网估算工程进度。则下列叙述中正确的是 。
+A. 关键路径是从原点到汇点边数最多的一条路径
+B. 关键路径是从原点到汇点路径长度最长的路径
+C. 增加任一关键活动的时间不会延长工程的工期
+D. 缩短任一关键活动的时间将会缩短工程的工期","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-21::clean,v2-punctuation-refq-408-2020-21,clean,clean,punctuation,operating_system,refq-408-2020-21,"外部中断包括不可屏蔽中断（NMI）和可屏蔽中断，下列关于外部中断的叙述中，错误的
+是 。
+A. CPU 处于关中断状态时，也能响应NMI 请求
+B. 一旦可屏蔽中断请求信号有效，CPU 将立即响应
+C. 不可屏蔽中断的优先级比可屏蔽中断的优先级高
+D. 可通过中断屏蔽字改变可屏蔽中断的处理优先级","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-21::mutated,v2-punctuation-refq-408-2020-21,mutated,error,punctuation,operating_system,refq-408-2020-21,"外部中断包括不可屏蔽中断（NMI）和可屏蔽中断；下列关于外部中断的叙述中，错误的
+是 。
+A. CPU 处于关中断状态时，也能响应NMI 请求
+B. 一旦可屏蔽中断请求信号有效，CPU 将立即响应
+C. 不可屏蔽中断的优先级比可屏蔽中断的优先级高
+D. 可通过中断屏蔽字改变可屏蔽中断的处理优先级","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-34::clean,v2-punctuation-refq-408-2019-34,clean,clean,punctuation,computer_network,refq-408-2019-34,"100BaseT 快速以太网使用的导向传输介质是 。
+A. 双绞线
+B. 单模光纤
+C. 多模光纤
+D. 同轴电缆","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-34::mutated,v2-punctuation-refq-408-2019-34,mutated,error,punctuation,computer_network,refq-408-2019-34,"100BaseT 快速以太网使用的导向传输介质是 ；
+A. 双绞线
+B. 单模光纤
+C. 多模光纤
+D. 同轴电缆","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2021-14::clean,v2-punctuation-refq-408-2021-14,clean,clean,punctuation,computer_organization,refq-408-2021-14,"下列数值中，不能用IEEE 754 浮点格式精确表示的 。
+A. 1.2
+B. 1.25
+C. 2.0
+D. 2.5","【学科】计算机组成原理
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2021-14::mutated,v2-punctuation-refq-408-2021-14,mutated,error,punctuation,computer_organization,refq-408-2021-14,"下列数值中、不能用IEEE 754 浮点格式精确表示的 。
+A. 1.2
+B. 1.25
+C. 2.0
+D. 2.5","【学科】计算机组成原理
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-10::clean,v2-punctuation-refq-408-2020-10,clean,clean,punctuation,data_structure,refq-408-2020-10,"依次将关键字5, 6, 9, 13, 8, 2, 12, 15 插入初始为空的4 阶B 树后，根结点中包含的关键字
+是 。
+A. 8
+B. 6,9
+C. 8, 13
+D. 9, 12","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-10::mutated,v2-punctuation-refq-408-2020-10,mutated,error,punctuation,data_structure,refq-408-2020-10,"依次将关键字5, 6, 9, 13, 8, 2, 12, 15 插入初始为空的4 阶B 树后。根结点中包含的关键字
+是 。
+A. 8
+B. 6,9
+C. 8, 13
+D. 9, 12","【学科】数据结构
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-22::clean,v2-punctuation-refq-408-2020-22,clean,clean,punctuation,operating_system,refq-408-2020-22,"若设备采用周期挪用DMA 方式进行输入和输出，每次DMA 传送的数据块大小为512 字节，相
+应的I/O 接口中有一个32 位数数据缓冲寄存器。对于数据输入过程，下列叙述中，错误的
+是 。
+A. 每准备好32 位数据，DMA 控制器就发出一次总线请求
+B. 相对于CPU，DMA 控制器的总线使用权的优先级更高
+C. 在整个数据块的传送过程中，CPU 不可以访问主存储器
+D. 数据块传送结束时，会产生“DMA 传送结束”中断请求","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-22::mutated,v2-punctuation-refq-408-2020-22,mutated,error,punctuation,operating_system,refq-408-2020-22,"若设备采用周期挪用DMA 方式进行输入和输出；每次DMA 传送的数据块大小为512 字节，相
+应的I/O 接口中有一个32 位数数据缓冲寄存器。对于数据输入过程，下列叙述中，错误的
+是 。
+A. 每准备好32 位数据，DMA 控制器就发出一次总线请求
+B. 相对于CPU，DMA 控制器的总线使用权的优先级更高
+C. 在整个数据块的传送过程中，CPU 不可以访问主存储器
+D. 数据块传送结束时，会产生“DMA 传送结束”中断请求","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-35::clean,v2-punctuation-refq-408-2019-35,clean,clean,punctuation,computer_network,refq-408-2019-35,"对于滑动窗口协议，若分组序号采用3 比特编号，发送窗口大小为5，则接收窗口最大
+是 。
+A. 2
+B. 3
+C. 4
+D. 5","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-35::mutated,v2-punctuation-refq-408-2019-35,mutated,error,punctuation,computer_network,refq-408-2019-35,"对于滑动窗口协议、若分组序号采用3 比特编号，发送窗口大小为5，则接收窗口最大
+是 。
+A. 2
+B. 3
+C. 4
+D. 5","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2022-11::clean,v2-punctuation-refq-408-2022-11,clean,clean,punctuation,computer_organization,refq-408-2022-11,"对数据进行排序时，若采用直接插入排序而不采用快速排序，则可能的原因是 。
+I. 大部分元素己有序
+
+II. 待排序元素数量很少
+III. 要求空间复杂度为O(1)
+IV. 要求排序算法是稳定的
+A. 仅I、II
+B. 仅III、IV
+C. 仅I、II、IV
+D. I、II、III、IV","【学科】计算机组成原理
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2022-11::mutated,v2-punctuation-refq-408-2022-11,mutated,error,punctuation,computer_organization,refq-408-2022-11,"对数据进行排序时，若采用直接插入排序而不采用快速排序，则可能的原因是 。
+I. 大部分元素己有序
+
+II. 待排序元素数量很少
+III. 要求空间复杂度为O(1)
+IV. 要求排序算法是稳定的
+A. 仅I，II
+B. 仅III、IV
+C. 仅I、II、IV
+D. I、II、III、IV","【学科】计算机组成原理
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2021-02::clean,v2-punctuation-refq-408-2021-02,clean,clean,punctuation,data_structure,refq-408-2021-02,"已知初始为空的队列Q 的一端仅能进行入队操作，另外一端既能进行入队操作又能进行出队操
+作。若Q 的入队序列是1, 2, 3, 4, 5, 则不能得到的出队序列是 。
+A. 5, 4, 3, 1, 2
+B. 5, 3, 1, 2, 4
+C. 4, 2, 1, 3, 5
+D. 4, 1, 3, 2, 5","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2021-02::mutated,v2-punctuation-refq-408-2021-02,mutated,error,punctuation,data_structure,refq-408-2021-02,"已知初始为空的队列Q 的一端仅能进行入队操作，另外一端既能进行入队操作又能进行出队操
+作；若Q 的入队序列是1, 2, 3, 4, 5, 则不能得到的出队序列是 。
+A. 5, 4, 3, 1, 2
+B. 5, 3, 1, 2, 4
+C. 4, 2, 1, 3, 5
+D. 4, 1, 3, 2, 5","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-23::clean,v2-punctuation-refq-408-2020-23,clean,clean,punctuation,operating_system,refq-408-2020-23,"若多个进程共享同一个文件F，则下列叙述中，正确的是 。
+A. 各进程只能用“读”方式打开文件F
+B. 在系统打开文件表中仅有一个表项包含F 的属性
+C. 各进程的用户打开文件表中关于F 的表项内容相同
+D. 进程关闭F 时，系统删除F 在系统打开文件表中的表项","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-23::mutated,v2-punctuation-refq-408-2020-23,mutated,error,punctuation,operating_system,refq-408-2020-23,"若多个进程共享同一个文件F。则下列叙述中，正确的是 。
+A. 各进程只能用“读”方式打开文件F
+B. 在系统打开文件表中仅有一个表项包含F 的属性
+C. 各进程的用户打开文件表中关于F 的表项内容相同
+D. 进程关闭F 时，系统删除F 在系统打开文件表中的表项","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-36::clean,v2-punctuation-refq-408-2019-36,clean,clean,punctuation,computer_network,refq-408-2019-36,"假设一个采用CSMA/CD 协议的10Mb/s 局域网，最小帧长是128B，则在一个冲突域内两个站点
+之间的单向传播延时最多是 。
+A. 2.56μs
+B. 5.12μs
+C. 10.24μs
+D. 20.48μs","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-36::mutated,v2-punctuation-refq-408-2019-36,mutated,error,punctuation,computer_network,refq-408-2019-36,"假设一个采用CSMA/CD 协议的10Mb/s 局域网；最小帧长是128B，则在一个冲突域内两个站点
+之间的单向传播延时最多是 。
+A. 2.56μs
+B. 5.12μs
+C. 10.24μs
+D. 20.48μs","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2022-12::clean,v2-punctuation-refq-408-2022-12,clean,clean,punctuation,computer_organization,refq-408-2022-12,"某计算机主频为1GHz，程序p 运行过程中，共执行了10000 条指令，其中，80%的指令执行平
+均需1 个时钟周期，20%的指令执行平均需10 个时钟周期。程序P 的平均CPI 和CPU 执行时间
+分别是 。
+A. 2.8，28μs
+B. 28, 28μs
+C. 2.8, 28ms
+D. 28, 28ms","【学科】计算机组成原理
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2022-12::mutated,v2-punctuation-refq-408-2022-12,mutated,error,punctuation,computer_organization,refq-408-2022-12,"某计算机主频为1GHz、程序p 运行过程中，共执行了10000 条指令，其中，80%的指令执行平
+均需1 个时钟周期，20%的指令执行平均需10 个时钟周期。程序P 的平均CPI 和CPU 执行时间
+分别是 。
+A. 2.8，28μs
+B. 28, 28μs
+C. 2.8, 28ms
+D. 28, 28ms","【学科】计算机组成原理
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2021-05::clean,v2-punctuation-refq-408-2021-05,clean,clean,punctuation,data_structure,refq-408-2021-05,"若某二叉树有5 个叶结点，其权值分别为10, 12, 16, 21, 30，则其最小的带权路径长度（WPL）
+是 。
+A. 89
+B. 200
+C. 208
+D. 289","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2021-05::mutated,v2-punctuation-refq-408-2021-05,mutated,error,punctuation,data_structure,refq-408-2021-05,"若某二叉树有5 个叶结点，其权值分别为10, 12, 16, 21, 30，则其最小的带权路径长度（WPL）
+是 ；
+A. 89
+B. 200
+C. 208
+D. 289","【学科】数据结构
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-24::clean,v2-punctuation-refq-408-2020-24,clean,clean,punctuation,operating_system,refq-408-2020-24,"下列选项中，支持文件长度可变、随机访问的磁盘存储空间分配方式是 。
+A. 索引分配
+B. 链接分配
+C. 连续分配
+D. 动态分区分配","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2020-24::mutated,v2-punctuation-refq-408-2020-24,mutated,error,punctuation,operating_system,refq-408-2020-24,"下列选项中，支持文件长度可变，随机访问的磁盘存储空间分配方式是 。
+A. 索引分配
+B. 链接分配
+C. 连续分配
+D. 动态分区分配","【学科】操作系统
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-37::clean,v2-punctuation-refq-408-2019-37,clean,clean,punctuation,computer_network,refq-408-2019-37,"若将101.200.16.0/20 划分为5 个子网，则可能的最小子网的可分配IP 地址数是 。
+A. 126
+B. 254
+C. 510
+D. 1022","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2019-37::mutated,v2-punctuation-refq-408-2019-37,mutated,error,punctuation,computer_network,refq-408-2019-37,"若将101.200.16.0/20 划分为5 个子网。则可能的最小子网的可分配IP 地址数是 。
+A. 126
+B. 254
+C. 510
+D. 1022","【学科】计算机网络
+【试卷标题】2019年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2022-13::clean,v2-punctuation-refq-408-2022-13,clean,clean,punctuation,computer_organization,refq-408-2022-13,"32 位补码所能表示的整数范围是 。
+A. －2 32～2 31 – 1
+B. －2 31～2 31 – 1
+C. －2 32～2 32 – 1
+D. －2 31～2 32 – 1","【学科】计算机组成原理
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-punctuation-refq-408-2022-13::mutated,v2-punctuation-refq-408-2022-13,mutated,error,punctuation,computer_organization,refq-408-2022-13,"32 位补码所能表示的整数范围是 ；
+A. －2 32～2 31 – 1
+B. －2 31～2 31 – 1
+C. －2 32～2 32 – 1
+D. －2 31～2 32 – 1","【学科】计算机组成原理
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-20::clean,v2-missing_info-refq-408-2021-20,clean,clean,missing_info,operating_system,refq-408-2021-20,"下列选项中，不属于I/O 接口的是 。
+A. 磁盘驱动器
+B. 打印机适配器
+C. 网络控制器
+D. 可编程中断控制器","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-20::mutated,v2-missing_info-refq-408-2021-20,mutated,error,missing_info,operating_system,refq-408-2021-20,"下列选项中。
+A. 磁盘驱动器
+B. 打印机适配器
+C. 网络控制器
+D. 可编程中断控制器","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2020-31::clean,v2-missing_info-refq-408-2020-31,clean,clean,missing_info,computer_network,refq-408-2020-31,"某文件系统的目录项由文件名和索引结点号构成。若每个目录项长度为64 字节，其中4 字节存
+放索引结点号，60 字节存放文件名。文件名由小写英文字母构成，则该文件系统能创建的文件
+数量的上限为 。
+A. 2 26
+B. 2 32
+C. 2 60
+D. 2 64","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2020-31::mutated,v2-missing_info-refq-408-2020-31,mutated,error,missing_info,computer_network,refq-408-2020-31,"某文件系统的目录项由文件名和索引结点号构成。其中4 字节存
+放索引结点号，60 字节存放文件名。文件名由小写英文字母构成，则该文件系统能创建的文件
+数量的上限为 。
+A. 2 26
+B. 2 32
+C. 2 60
+D. 2 64","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2024-12::clean,v2-missing_info-refq-408-2024-12,clean,clean,missing_info,computer_organization,refq-408-2024-12,"C 语言代码如下：
+int i = 32777;
+short si =i;
+int j=si;
+执行上述代码段后，j 的值是 。
+A. －32 777
+B. －32 759
+C. 32 759
+D. 32 777","【学科】计算机组成原理
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2024-12::mutated,v2-missing_info-refq-408-2024-12,mutated,error,missing_info,computer_organization,refq-408-2024-12,"C 语言代码如下：
+int i = 32777;
+short si =i;
+int j=si;
+执行上述代码段后。
+A. －32 777
+B. －32 759
+C. 32 759
+D. 32 777","【学科】计算机组成原理
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2022-03::clean,v2-missing_info-refq-408-2022-03,clean,clean,missing_info,data_structure,refq-408-2022-03,"若结点p 与q 在二叉树T 的中序遍历序列中相邻，且p 在q 之前，则下列p 与q 的关系中，不．
+可能的是 。
+I. q 是p 的双亲
+II. q 是p 的右孩子
+III. q 是p 的右兄弟
+IV. q 是p 的双亲的双亲
+A. 仅I
+B. 仅III
+C. 仅II、III
+D. 仅II、IV","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2022-03::mutated,v2-missing_info-refq-408-2022-03,mutated,error,missing_info,data_structure,refq-408-2022-03,"若结点p 与q 在二叉树T 的中序遍历序列中相邻，则下列p 与q 的关系中，不．
+可能的是 。
+I. q 是p 的双亲
+II. q 是p 的右孩子
+III. q 是p 的右兄弟
+IV. q 是p 的双亲的双亲
+A. 仅I
+B. 仅III
+C. 仅II、III
+D. 仅II、IV","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-21::clean,v2-missing_info-refq-408-2021-21,clean,clean,missing_info,operating_system,refq-408-2021-21,"异常事件在当前指令执行过程中进行检测，中断请求则在当前指令执行后进行检测。下列事件
+中，相应处理程序执行后，必须回到当前指令重新执行的是 。
+A. 系统调用
+B. 页缺失
+C. DMA 传送结束
+D. 打印机缺纸","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-21::mutated,v2-missing_info-refq-408-2021-21,mutated,error,missing_info,operating_system,refq-408-2021-21,"异常事件在当前指令执行过程中进行检测，中断请求则在当前指令执行后进行检测。下列事件
+中必须回到当前指令重新执行的是 。
+A. 系统调用
+B. 页缺失
+C. DMA 传送结束
+D. 打印机缺纸","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2020-32::clean,v2-missing_info-refq-408-2020-32,clean,clean,missing_info,computer_network,refq-408-2020-32,"下列准则中，实现临界区互斥机制必须遵循的是 。
+I. 两个进程不能同时进入临界区
+II. 允许进程访问空闲的临界资源
+III. 进程等待进入临界区的时间是有限的
+IV. 不能进入临界区的执行态进程立即放弃CPU
+A. 仅 I、IV
+B. 仅 II、III
+C. 仅 I、II、III
+D. 仅 I、III、IV","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2020-32::mutated,v2-missing_info-refq-408-2020-32,mutated,error,missing_info,computer_network,refq-408-2020-32,"下列准则中。
+I. 两个进程不能同时进入临界区
+II. 允许进程访问空闲的临界资源
+III. 进程等待进入临界区的时间是有限的
+IV. 不能进入临界区的执行态进程立即放弃CPU
+A. 仅 I、IV
+B. 仅 II、III
+C. 仅 I、II、III
+D. 仅 I、III、IV","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2024-13::clean,v2-missing_info-refq-408-2024-13,clean,clean,missing_info,computer_organization,refq-408-2024-13,"通常情况下，将汇编语言程序中实现特定功能的指令序列定义成一条伪指令“（pseudoinstruction）。
+下列选项中，CPU 能理解并直接执行的是 。
+I. 伪指令
+II. 微指令
+III. 机器指令
+IV. 汇编指令
+A. 仅I 和IV
+B. 仅II 和III
+C. 仅III 和IV
+D. 仅I、II 和IV","【学科】计算机组成原理
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2024-13::mutated,v2-missing_info-refq-408-2024-13,mutated,error,missing_info,computer_organization,refq-408-2024-13,"通常情况下，将汇编语言程序中实现特定功能的指令序列定义成一条伪指令“。
+下列选项中，CPU 能理解并直接执行的是 。
+I. 伪指令
+II. 微指令
+III. 机器指令
+IV. 汇编指令
+A. 仅I 和IV
+B. 仅II 和III
+C. 仅III 和IV
+D. 仅I、II 和IV","【学科】计算机组成原理
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2022-04::clean,v2-missing_info-refq-408-2022-04,clean,clean,missing_info,data_structure,refq-408-2022-04,"若三叉树T 中有244 个结点（叶结点的高度为1），则T 的高度至少是 。
+A. 8
+B. 7
+C. 6
+D. 5","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2022-04::mutated,v2-missing_info-refq-408-2022-04,mutated,error,missing_info,data_structure,refq-408-2022-04,"若三叉树T 中有244 个结点，则T 的高度至少是 。
+A. 8
+B. 7
+C. 6
+D. 5","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-23::clean,v2-missing_info-refq-408-2021-23,clean,clean,missing_info,operating_system,refq-408-2021-23,"下列指令中，只能在内核态执行的是 。
+A. trap 指令
+B. I/O 指令
+C. 数据传送指令
+D. 设置断点指令","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-23::mutated,v2-missing_info-refq-408-2021-23,mutated,error,missing_info,operating_system,refq-408-2021-23,"下列指令中。
+A. trap 指令
+B. I/O 指令
+C. 数据传送指令
+D. 设置断点指令","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2024-15::clean,v2-missing_info-refq-408-2024-15,clean,clean,missing_info,computer_organization,refq-408-2024-15,"下列关于整数乘法运算的叙述中，错误
+．．的是 。
+A. 用阵列乘法器实现的乘运算可以在一个时钟周期内完成
+B. 用ALU 和移位器实现的乘运算无法在一个时钟周期内完成
+C. 变量与常数的乘运算可编译优化为若干条移位及加/减运算指令
+D. 两个变量的乘运算无法编译转换为移位及加法等指令的循环实现","【学科】计算机组成原理
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2024-15::mutated,v2-missing_info-refq-408-2024-15,mutated,error,missing_info,computer_organization,refq-408-2024-15,"下列关于整数乘法运算的叙述中。
+A. 用阵列乘法器实现的乘运算可以在一个时钟周期内完成
+B. 用ALU 和移位器实现的乘运算无法在一个时钟周期内完成
+C. 变量与常数的乘运算可编译优化为若干条移位及加/减运算指令
+D. 两个变量的乘运算无法编译转换为移位及加法等指令的循环实现","【学科】计算机组成原理
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2022-05::clean,v2-missing_info-refq-408-2022-05,clean,clean,missing_info,data_structure,refq-408-2022-05,"对任意给定的含n（n > 2）个字符的有限集S，用二叉树表示S 的哈夫曼编码集和定长编码集，
+分别得到二叉树T1 和T2。下列叙述中，正确的是 。
+A. T1 与T2 的结点数相同
+B. T1 的高度大于T2 的高度
+C. 出现频次不同的字符在T1 中处于不同的层
+D. 出现频次不同的字符在T2 中处于相同的层","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2022-05::mutated,v2-missing_info-refq-408-2022-05,mutated,error,missing_info,data_structure,refq-408-2022-05,"对任意给定的含n个字符的有限集S，用二叉树表示S 的哈夫曼编码集和定长编码集，
+分别得到二叉树T1 和T2。下列叙述中，正确的是 。
+A. T1 与T2 的结点数相同
+B. T1 的高度大于T2 的高度
+C. 出现频次不同的字符在T1 中处于不同的层
+D. 出现频次不同的字符在T2 中处于相同的层","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-24::clean,v2-missing_info-refq-408-2021-24,clean,clean,missing_info,operating_system,refq-408-2021-24,"下列操作中，操作系统在创建新进程时，必须完成的是 。
+I. 申请空白的进程控制块
+II. 初始化进程控制块
+III. 设置进程状态为执行态
+A. 仅I
+B. 仅I、II
+C. 仅I、III
+D. 仅II、III","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-24::mutated,v2-missing_info-refq-408-2021-24,mutated,error,missing_info,operating_system,refq-408-2021-24,"下列操作中必须完成的是 。
+I. 申请空白的进程控制块
+II. 初始化进程控制块
+III. 设置进程状态为执行态
+A. 仅I
+B. 仅I、II
+C. 仅I、III
+D. 仅II、III","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2020-34::clean,v2-missing_info-refq-408-2020-34,clean,clean,missing_info,computer_network,refq-408-2020-34,"下列关于虚电路网络的叙述中，错误的是 。
+A. 可以确保数据分组传输顺序
+B. 需要为每条虚电路预分配带宽
+C. 建立虚电路时需要进行路由选择
+D. 依据虚电路号（VCID）进行数据分组转发","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2020-34::mutated,v2-missing_info-refq-408-2020-34,mutated,error,missing_info,computer_network,refq-408-2020-34,"下列关于虚电路网络的叙述中，错误的是 。
+A. 可以确保数据分组传输顺序
+B. 需要为每条虚电路预分配带宽
+C. 建立虚电路时需要进行路由选择
+D. 依据虚电路号进行数据分组转发","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2025-12::clean,v2-missing_info-refq-408-2025-12,clean,clean,missing_info,computer_organization,refq-408-2025-12,"在32 位计算机上执行下列C 语言代码段后，ui 的值是 。
+short si=-32767;
+unsigned int ui=si;
+A. 2 15 – 1
+B. 2 15 + 1
+C. 2 32 – 2 15 – 1
+D. 2 32 – 2 15 + 1","【学科】计算机组成原理
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2025-12::mutated,v2-missing_info-refq-408-2025-12,mutated,error,missing_info,computer_organization,refq-408-2025-12,"在32 位计算机上执行下列C 语言代码段后。
+short si=-32767;
+unsigned int ui=si;
+A. 2 15 – 1
+B. 2 15 + 1
+C. 2 32 – 2 15 – 1
+D. 2 32 – 2 15 + 1","【学科】计算机组成原理
+【试卷标题】2025年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2022-06::clean,v2-missing_info-refq-408-2022-06,clean,clean,missing_info,data_structure,refq-408-2022-06,"对于无向图G = (V, E)，下列选项中，正确的
+是 。
+A. 当| V | > | E |时，G 一定是连通的
+B. 当| V | < | E |时，G 一定是连通的
+C. 当| V | = | E | – 1 时，G 一定是不连通的
+D. 当| V | > | E | + 1 时，G 一定是不连通的","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2022-06::mutated,v2-missing_info-refq-408-2022-06,mutated,error,missing_info,data_structure,refq-408-2022-06,"对于无向图G = (V, E)正确的
+是 。
+A. 当| V | > | E |时，G 一定是连通的
+B. 当| V | < | E |时，G 一定是连通的
+C. 当| V | = | E | – 1 时，G 一定是不连通的
+D. 当| V | > | E | + 1 时，G 一定是不连通的","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-25::clean,v2-missing_info-refq-408-2021-25,clean,clean,missing_info,operating_system,refq-408-2021-25,"下列内核的数据结构或程序中，分时系统实现时间片轮转调度需要使用的是 。
+I. 进程控制块
+II. 时钟中断处理程序 III. 进程就绪队列
+IV. 进程阻塞队列
+A. 仅II、III
+B. 仅I、IV
+C. 仅I、II、III
+D. 仅I、II、IV","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2021-25::mutated,v2-missing_info-refq-408-2021-25,mutated,error,missing_info,operating_system,refq-408-2021-25,"下列内核的数据结构或程序中用的是 。
+I. 进程控制块
+II. 时钟中断处理程序 III. 进程就绪队列
+IV. 进程阻塞队列
+A. 仅II、III
+B. 仅I、IV
+C. 仅I、II、III
+D. 仅I、II、IV","【学科】操作系统
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2020-35::clean,v2-missing_info-refq-408-2020-35,clean,clean,missing_info,computer_network,refq-408-2020-35,"在下图所示的网络中，冲突域和广播域的个数分别是 。
+A. 2, 2
+B. 2, 4
+C. 4, 2
+D. 4, 4","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-missing_info-refq-408-2020-35::mutated,v2-missing_info-refq-408-2020-35,mutated,error,missing_info,computer_network,refq-408-2020-35,"冲突域和广播域的个数分别是 。
+A. 2, 2
+B. 2, 4
+C. 4, 2
+D. 4, 4","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-17::clean,v2-ambiguity-refq-408-2022-17,clean,clean,ambiguity,operating_system,refq-408-2022-17,"某内存条包含8 个8192×8192×8 位的DRAM 芯片，按字节编址，支持突发（burst）传送方
+式，对应存储器总线宽度为64 位，每个DRAM 芯片内有一个行缓冲区（row buffer）。下列关于
+该内存条的叙述中，不．正确的是 。
+A. 内存条的容量为512MB
+B. 采用多模块交叉编址方式
+C. 芯片的地址引脚为26 位
+D. 芯片内行缓冲有8192×8 位","【学科】操作系统
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-17::mutated,v2-ambiguity-refq-408-2022-17,mutated,error,ambiguity,operating_system,refq-408-2022-17,"某内存条包含8 个8192×8192×8 位的DRAM 芯片，按字节编址，支持突发（burst）传送方
+式，对应存储器总线宽度为64 位，每个DRAM 芯片内有一个行缓冲区（row buffer）。下列关于
+某个未指明的对象内存条的叙述中，不．正确的是 。
+A. 内存条的容量为512MB
+B. 采用多模块交叉编址方式
+C. 芯片的地址引脚为26 位
+D. 芯片内行缓冲有8192×8 位","【学科】操作系统
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2020-36::clean,v2-ambiguity-refq-408-2020-36,clean,clean,ambiguity,computer_network,refq-408-2020-36,"假设主机甲采用停–等协议向主机乙发送数据帧，数据帧长与确认帧长均为1000B，数据传输速
+率是10kbps，单向传播延时是200ms。则甲的最大信道利用率为 。
+A. 80%
+B. 66.7%
+C. 44.4%
+D. 40%","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2020-36::mutated,v2-ambiguity-refq-408-2020-36,mutated,error,ambiguity,computer_network,refq-408-2020-36,"假设主机甲采用停–等协议向主机乙发送数据帧，数据帧长与确认帧长部分为1000B，数据传输速
+率是10kbps，单向传播延时是200ms。则甲的最大信道利用率为 。
+A. 80%
+B. 66.7%
+C. 44.4%
+D. 40%","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2026-11::clean,v2-ambiguity-refq-408-2026-11,clean,clean,ambiguity,computer_organization,refq-408-2026-11,"采用k-路归并对外存中保存的数据进行排序，排序的趟数记为d。下列叙述中，正确的是 。
+I. 增大k 的值可能减小d 的值
+II. 初始归并段的个数不影响d 的值
+III. 可用内存大小限制了初始归并段的最大长度
+A. 仅I
+B. 仅I、II
+C. 仅I、III
+D. 仅II、III","【学科】计算机组成原理
+【试卷标题】2026年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2026-11::mutated,v2-ambiguity-refq-408-2026-11,mutated,error,ambiguity,computer_organization,refq-408-2026-11,"采用k-路归并对外存中保存的数据进行排序，排序的趟数记为d。下列叙述中，正确的是 。
+I. 增大k 的值可能减小d 的值
+II. 初始归并段的个数不影响d 的值
+III. 可用内存大小限制了初始归并段的最大长度
+A. 包含但不限于I
+B. 仅I、II
+C. 仅I、III
+D. 仅II、III","【学科】计算机组成原理
+【试卷标题】2026年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-18::clean,v2-ambiguity-refq-408-2022-18,clean,clean,ambiguity,operating_system,refq-408-2022-18,"下列选项中，属于指令集体系结构（ISA）规定的内容是 。
+I. 指令字格式和指令类型
+II. CPU 的时钟周期
+III. 通用寄存器个数和位数
+IV. 加法器的进位方式
+A. 仅I、II
+B. 仅I、III
+C. 仅II、IV
+D. 仅I、III、IV","【学科】操作系统
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-18::mutated,v2-ambiguity-refq-408-2022-18,mutated,error,ambiguity,operating_system,refq-408-2022-18,"下列选项中，属于指令集体系结构（ISA）规定的内容是 。
+I. 指令字格式或指令类型
+II. CPU 的时钟周期
+III. 通用寄存器个数和位数
+IV. 加法器的进位方式
+A. 仅I、II
+B. 仅I、III
+C. 仅II、IV
+D. 仅I、III、IV","【学科】操作系统
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2020-37::clean,v2-ambiguity-refq-408-2020-37,clean,clean,ambiguity,computer_network,refq-408-2020-37,"某IEEE 802.11 无线局域网中，主机H 与AP 之间发送或接收CSMA/CA 帧的过程如下图所示。
+在H 或AP 发送帧前所等待的帧间间隔时间（IFS）中，最长的是 。
+A. IFS1
+B. IFS2
+C. IFS3
+D. IFS4","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2020-37::mutated,v2-ambiguity-refq-408-2020-37,mutated,error,ambiguity,computer_network,refq-408-2020-37,"某IEEE 802.11 无线局域网中，主机H 或AP 之间发送或接收CSMA/CA 帧的过程如下图所示。
+在H 或AP 发送帧前所等待的帧间间隔时间（IFS）中，最长的是 。
+A. IFS1
+B. IFS2
+C. IFS3
+D. IFS4","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2026-12::clean,v2-ambiguity-refq-408-2026-12,clean,clean,ambiguity,computer_organization,refq-408-2026-12,"下列关于计算机系统层次结构的叙述中，错误
+．．的是 。
+A. 最上层是应用软件层，最下层是器件及物理封装层
+B. 指令集体系结构是软件和硬件之间的接口，且必不可少
+C. 计算机组成（即微架构）属于指令集体系结构的物理实现层
+D. 操作系统可通过指令集体系结构进行相应抽象，向上层软件提供服务","【学科】计算机组成原理
+【试卷标题】2026年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2026-12::mutated,v2-ambiguity-refq-408-2026-12,mutated,error,ambiguity,computer_organization,refq-408-2026-12,"下列关于计算机系统层次结构的叙述中，错误
+．．的是 。
+A. 最上层是应用软件层，最下层是器件及物理封装层
+B. 指令集体系结构是软件或硬件之间的接口，且必不可少
+C. 计算机组成（即微架构）属于指令集体系结构的物理实现层
+D. 操作系统可通过指令集体系结构进行相应抽象，向上层软件提供服务","【学科】计算机组成原理
+【试卷标题】2026年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-09::clean,v2-ambiguity-refq-408-2022-09,clean,clean,ambiguity,data_structure,refq-408-2022-09,"下列因素中，影响散列（哈希）方法平均查找长度的是 。
+I. 装填因子
+II. 散列函数
+III. 冲突解决策略
+A. 仅I、II
+B. 仅I、III
+C. 仅II、III
+D. I、II、III","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-09::mutated,v2-ambiguity-refq-408-2022-09,mutated,error,ambiguity,data_structure,refq-408-2022-09,"下列因素中，影响散列（哈希）方法平部分查找长度的是 。
+I. 装填因子
+II. 散列函数
+III. 冲突解决策略
+A. 仅I、II
+B. 仅I、III
+C. 仅II、III
+D. I、II、III","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-19::clean,v2-ambiguity-refq-408-2022-19,clean,clean,ambiguity,operating_system,refq-408-2022-19,"设计某指令系统时，假设采用16 位定长指令字格式，操作码使用扩展编码方式，地址码为6
+位，包含零地址、一地址和二地址3 种格式的指令。若二地址指令有12 条，一地址指令有254
+条，则零地址指令的条数最多为 。
+A. 0
+B. 2
+C. 64
+D. 128","【学科】操作系统
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-19::mutated,v2-ambiguity-refq-408-2022-19,mutated,error,ambiguity,operating_system,refq-408-2022-19,"设计某指令系统时，假设采用16 位定长指令字格式，操作码使用扩展编码方式，地址码为6
+位，包含零地址、一地址和二地址3 种格式的指令。若二地址指令有12 条，一地址指令有254
+条，则零地址指令的条数若干为 。
+A. 0
+B. 2
+C. 64
+D. 128","【学科】操作系统
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2020-38::clean,v2-ambiguity-refq-408-2020-38,clean,clean,ambiguity,computer_network,refq-408-2020-38,"若主机甲与主机乙已建立一条TCP 连接，最大段长（MSS）为1KB，往返时间（RTT）为
+2ms，则在不出现拥塞的前提下，拥塞窗口从8KB 增长到32KB 所需的最长时间是 。
+A. 4ms
+B. 8ms
+C. 24ms
+D. 48ms","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2020-38::mutated,v2-ambiguity-refq-408-2020-38,mutated,error,ambiguity,computer_network,refq-408-2020-38,"若主机甲或主机乙已建立一条TCP 连接，最大段长（MSS）为1KB，往返时间（RTT）为
+2ms，则在不出现拥塞的前提下，拥塞窗口从8KB 增长到32KB 所需的最长时间是 。
+A. 4ms
+B. 8ms
+C. 24ms
+D. 48ms","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-10::clean,v2-ambiguity-refq-408-2022-10,clean,clean,ambiguity,data_structure,refq-408-2022-10,"使用二路归并排序对含n 个元素的数组M 进行排序时，二路归并操作的功能是 。
+A. 将两个有序表合并为一个新的有序表
+B. 将M 划分为两部分，两部分的元素个数大致相等
+C. 将M 划分为n 个部分，每个部分中仅含有一个元素
+D. 将M 划分为两部分，一部分元素的值均小于另一部分元素的值","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2022-10::mutated,v2-ambiguity-refq-408-2022-10,mutated,error,ambiguity,data_structure,refq-408-2022-10,"使用二路归并排序对含n 个元素的数组M 进行排序时，二路归并操作的功能是 。
+A. 将两个有序表合并为一个新的有序表
+B. 将M 划分为两部分，两部分的元素个数大致相等
+C. 将M 划分为n 个部分，每个部分中包含但不限于含有一个元素
+D. 将M 划分为两部分，一部分元素的值均小于另一部分元素的值","【学科】数据结构
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2020-39::clean,v2-ambiguity-refq-408-2020-39,clean,clean,ambiguity,computer_network,refq-408-2020-39,"若主机甲与主机乙建立TCP 连接时，发送的SYN 段中的序号为1000，在断开连接时，甲发送给
+乙的FIN 段中的序号为5001，则在无任何重传的情况下，甲向乙已经发送的应用层数据的字节
+数为 。
+A. 4002
+B. 4001
+C. 4000
+D. 3999","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2020-39::mutated,v2-ambiguity-refq-408-2020-39,mutated,error,ambiguity,computer_network,refq-408-2020-39,"若主机甲或主机乙建立TCP 连接时，发送的SYN 段中的序号为1000，在断开连接时，甲发送给
+乙的FIN 段中的序号为5001，则在无任何重传的情况下，甲向乙已经发送的应用层数据的字节
+数为 。
+A. 4002
+B. 4001
+C. 4000
+D. 3999","【学科】计算机网络
+【试卷标题】2020年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2026-15::clean,v2-ambiguity-refq-408-2026-15,clean,clean,ambiguity,computer_organization,refq-408-2026-15,"若用8 个64M×8 位的DRAM 芯片按交叉编址方式构成主存储器，并与一个宽度为64 位的存储
+器总线相连，主存每次最多读写64 位，且按字节编址，则下列地址中，与主存地址0018 001DH
+位于同一芯片中的是 。
+A. 0000 01D5H
+B. 000F A020H
+C. 0018 001EH
+D. 0F02 0014H","【学科】计算机组成原理
+【试卷标题】2026年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2026-15::mutated,v2-ambiguity-refq-408-2026-15,mutated,error,ambiguity,computer_organization,refq-408-2026-15,"若用8 个64M×8 位的DRAM 芯片按交叉编址方式构成主存储器，并与一个宽度为64 位的存储
+器总线相连，主存每次若干读写64 位，且按字节编址，则下列地址中，与主存地址0018 001DH
+位于同一芯片中的是 。
+A. 0000 01D5H
+B. 000F A020H
+C. 0018 001EH
+D. 0F02 0014H","【学科】计算机组成原理
+【试卷标题】2026年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2023-01::clean,v2-ambiguity-refq-408-2023-01,clean,clean,ambiguity,data_structure,refq-408-2023-01,"下列对顺序存储的有序表（长度为n）实现给定操作的算法中，平均时间复杂度为O(1)的
+是 。
+A. 查找包含指定值元素的算法
+B. 插入包含指定值元素的算法
+C. 删除第i（1≤i≤n）个元素的算法
+D. 获取第i（1≤i≤n）个元素的算法","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-ambiguity-refq-408-2023-01::mutated,v2-ambiguity-refq-408-2023-01,mutated,error,ambiguity,data_structure,refq-408-2023-01,"下列对顺序存储的有序表（长度为n）实现给定操作的算法中，平部分时间复杂度为O(1)的
+是 。
+A. 查找包含指定值元素的算法
+B. 插入包含指定值元素的算法
+C. 删除第i（1≤i≤n）个元素的算法
+D. 获取第i（1≤i≤n）个元素的算法","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2022-23::clean,v2-unsolvable-refq-408-2022-23,clean,clean,unsolvable,operating_system,refq-408-2022-23,"下列关于多道程序系统的叙述中，不．正确的是 。
+A. 支持进程的并发执行
+B. 不必支持虚拟存储管理
+C. 需要实现对共享资源的管理
+D. 进程数越多CPU 利用率越高","【学科】操作系统
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2022-23::mutated,v2-unsolvable-refq-408-2022-23,mutated,error,unsolvable,operating_system,refq-408-2022-23,"下列关于多道程序系统的叙述中，不．正确的是 。
+A. 支持进程的并发执行
+B. 不必支持某种未指明的机制管理
+C. 需要实现对共享资源的管理
+D. 进程数越多CPU 利用率越高","【学科】操作系统
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2023-04::clean,v2-unsolvable-refq-408-2023-04,clean,clean,unsolvable,data_structure,refq-408-2023-04,"在由6 个字符组成的字符集S 中，各字符出现的频次分别为3, 4, 5, 6, 8, 10，为S 构造的哈夫曼
+编码的加权平均长度为 。
+A. 2.4
+B. 2.5
+C. 2.67
+D. 2.75","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2023-04::mutated,v2-unsolvable-refq-408-2023-04,mutated,error,unsolvable,data_structure,refq-408-2023-04,"在由给定的某个值字符组成的字符集S 中，各字符出现的频次分别为3, 4, 5, 6, 8, 10，为S 构造的哈夫曼
+编码的加权平均长度为 。
+A. 2.4
+B. 2.5
+C. 2.67
+D. 2.75","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2023-16::clean,v2-unsolvable-refq-408-2023-16,clean,clean,unsolvable,operating_system,refq-408-2023-16,"己知x、y 为int 类型，当x=100、y=200 时，执行“x 减y”指令得到的溢出标志OF 和借位标志
+CF 分别为0、1，那么当x=10，y=–20 时，执行该指令得到的OF 和CF 分别是 。
+A. OF=0，CF=0
+B. OF=0，CF=1
+C. OF=1，CF=0
+D. OF=1，CF=1","【学科】操作系统
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2023-16::mutated,v2-unsolvable-refq-408-2023-16,mutated,error,unsolvable,operating_system,refq-408-2023-16,"己知x、y 为int 类型，当x=100、y=200 时，执行“x 减y”指令得到的溢出标志OF 和借位标志
+CF 分别为0、1，那么当x=10，y=–20 时，执行该指令得到的OF 和CF 分别是 。
+A. OF=0，CF=给定的某个值. OF=0，CF=1
+C. OF=1，CF=0
+D. OF=1，CF=1","【学科】操作系统
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2021-31::clean,v2-unsolvable-refq-408-2021-31,clean,clean,unsolvable,computer_network,refq-408-2021-31,"若系统中有n（n≥2）个进程，每个进程均需要使用某类临界资源2 个，则系统不会发生死锁所
+需的该类资源总数至少是 。
+A. 2
+B. n
+C. n + 1
+D. 2n","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2021-31::mutated,v2-unsolvable-refq-408-2021-31,mutated,error,unsolvable,computer_network,refq-408-2021-31,"若系统中有n（n≥2）个进程，每个进程均需要使用某类临界资源，则系统不会发生死锁所
+需的该类资源总数至少是 。
+A. 2
+B. n
+C. n + 1
+D. 2n","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2023-06::clean,v2-unsolvable-refq-408-2023-06,clean,clean,unsolvable,data_structure,refq-408-2023-06,"已知无向连通图G 中各边的权值均为1，下列算法中，一定能够求出图G 中
+从某顶点到其余各顶点最短路径的是 。
+I. 普里姆（Prim）算法 II. 克鲁斯卡尔（Kruskal）算法
+III. 图的广度优先搜索算法
+A. 仅I
+B. 仅III
+C. 仅I、II
+D. I、II、III","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2023-06::mutated,v2-unsolvable-refq-408-2023-06,mutated,error,unsolvable,data_structure,refq-408-2023-06,"已知无向连通图G 中各边的权值均为1，下列算法中，一定能够求出图G 中
+从某顶点到其余各顶点最短路径的是 。
+I. 普里姆算法 II. 克鲁斯卡尔（Kruskal）算法
+III. 图的广度优先搜索算法
+A. 仅I
+B. 仅III
+C. 仅I、II
+D. I、II、III","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2023-08::clean,v2-unsolvable-refq-408-2023-08,clean,clean,unsolvable,data_structure,refq-408-2023-08,"对含有600 个元素的有序顺序表进行折半查找，关键字间的比较次数最多是 。
+A. 9
+B. 10
+C. 30
+D. 300","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-unsolvable-refq-408-2023-08::mutated,v2-unsolvable-refq-408-2023-08,mutated,error,unsolvable,data_structure,refq-408-2023-08,"对含有元素的有序顺序表进行折半查找，关键字间的比较次数最多是 。
+A. 9
+B. 10
+C. 30
+D. 300","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-23::clean,v2-answer_leakage-refq-408-2023-23,clean,clean,answer_leakage,operating_system,refq-408-2023-23,"与宏内核操作系统相比，下列特征中，微内核操作系统具有的是 。
+I. 较好的性能
+II. 较高的可靠性
+III. 较高的安全性
+IV. 较强的可扩展性
+A. 仅II、IV
+B. 仅I、II、III
+C. 仅I、III、IV
+D. 仅II、III、IV","【学科】操作系统
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-23::mutated,v2-answer_leakage-refq-408-2023-23,mutated,error,answer_leakage,operating_system,refq-408-2023-23,"与宏内核操作系统相比，（本题正确选项为D）下列特征中，微内核操作系统具有的是 。
+I. 较好的性能
+II. 较高的可靠性
+III. 较高的安全性
+IV. 较强的可扩展性
+A. 仅II、IV
+B. 仅I、II、III
+C. 仅I、III、IV
+D. 仅II、III、IV","【学科】操作系统
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-34::clean,v2-answer_leakage-refq-408-2021-34,clean,clean,answer_leakage,computer_network,refq-408-2021-34,"若下图为一段差分曼彻斯特编码信号波形，则其编码的二进制位串是 。
+A. 1011 1001
+B. 1101 0001
+C. 0010 1110
+D. 1011 0110","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-34::mutated,v2-answer_leakage-refq-408-2021-34,mutated,error,answer_leakage,computer_network,refq-408-2021-34,"若下图为一段差分曼彻斯特编码信号波形，则其编码的二进制位串是 。（正确选项的内容与教材结论一致）
+A. 1011 1001
+B. 1101 0001
+C. 0010 1110
+D. 1011 0110","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-09::clean,v2-answer_leakage-refq-408-2023-09,clean,clean,answer_leakage,data_structure,refq-408-2023-09,"现有长度为5、初始为空的散列表HT，散列表函数H(k)=(k+4)%5，用线性探查再散列法解决冲
+突。若将关键字序列2022, 12, 25 依次插入HT 中，然后删除关键字25，则HT 中查找失败的平
+均查找长度为 。
+A. 1
+B. 1.6
+C. 1.8
+D. 2.2","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-09::mutated,v2-answer_leakage-refq-408-2023-09,mutated,error,answer_leakage,data_structure,refq-408-2023-09,"现有长度为5、初始为空的散列表HT，散列表函数H(k)=(k+4)%5，用线性探查再散列法解决冲
+突。若将关键字序列2022, 12, 25 依次插入HT 中，然后删除关键字25，则HT 中查找失败的平
+均查找长度为 。（提示：按公式逐项代入即可得到答案）
+A. 1
+B. 1.6
+C. 1.8
+D. 2.2","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-24::clean,v2-answer_leakage-refq-408-2023-24,clean,clean,answer_leakage,operating_system,refq-408-2023-24,"在操作系统内核中，中断向量表适合采用的数据结构是 。
+A. 数组
+B. 队列
+C. 单向链表
+D. 双向链表","【学科】操作系统
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-24::mutated,v2-answer_leakage-refq-408-2023-24,mutated,error,answer_leakage,operating_system,refq-408-2023-24,"在操作系统内核中，中断向量表适合采用的数据结构是 。（选项A与B均可直接排除）
+A. 数组
+B. 队列
+C. 单向链表
+D. 双向链表","【学科】操作系统
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-35::clean,v2-answer_leakage-refq-408-2021-35,clean,clean,answer_leakage,computer_network,refq-408-2021-35,"现将一个IP 网络划分为3 个子网，若其中一个子网是192.168.9.128/26，则下列网络中，不可能
+是另外两个子网之一的是 。
+A. 192.168.9.0/25
+B. 192.168.9.0/26
+C. 192.168.9.192/26
+D. 192.168.9.192/27","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-35::mutated,v2-answer_leakage-refq-408-2021-35,mutated,error,answer_leakage,computer_network,refq-408-2021-35,"现将一个IP 网络划分为3 个子网，若其中一个子网是192.168.9.128/26，则（提示：中间计算结果已经确定）下列网络中，不可能
+是另外两个子网之一的是 。
+A. 192.168.9.0/25
+B. 192.168.9.0/26
+C. 192.168.9.192/26
+D. 192.168.9.192/27","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-10::clean,v2-answer_leakage-refq-408-2023-10,clean,clean,answer_leakage,data_structure,refq-408-2023-10,"下列排序算法中，不稳定的是 。
+I. 希尔排序
+II. 归并排序
+III. 快速排序
+IV.堆排序
+V. 基数排序
+A. I、II
+B. II、V
+C. I、III、IV
+D. III、IV、V","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-10::mutated,v2-answer_leakage-refq-408-2023-10,mutated,error,answer_leakage,data_structure,refq-408-2023-10,"（本题正确选项为C）下列排序算法中，不稳定的是 。
+I. 希尔排序
+II. 归并排序
+III. 快速排序
+IV.堆排序
+V. 基数排序
+A. I、II
+B. II、V
+C. I、III、IV
+D. III、IV、V","【学科】数据结构
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-25::clean,v2-answer_leakage-refq-408-2023-25,clean,clean,answer_leakage,operating_system,refq-408-2023-25,"某系统采用页式存储管理，用位图管理空闲页框。若页大小为4KB，物理内存大小为16GB，则位
+图所占空间的大小是 。
+A. 128B
+B. 128KB
+C. 512KB
+D. 4MB","【学科】操作系统
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2023-25::mutated,v2-answer_leakage-refq-408-2023-25,mutated,error,answer_leakage,operating_system,refq-408-2023-25,"某系统采用页式存储管理，用位图管理空闲页框。若页大小为4KB，物理内存大小为16GB，则位
+图所占空间的大小是 。（正确选项的内容与教材结论一致）
+A. 128B
+B. 128KB
+C. 512KB
+D. 4MB","【学科】操作系统
+【试卷标题】2023年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-36::clean,v2-answer_leakage-refq-408-2021-36,clean,clean,answer_leakage,computer_network,refq-408-2021-36,"若路由器向MTU = 800B 的链路转发一个总长度为1580B 的IP 数据报（首部长度为20B）时，
+进行了分片，且每个分片尽可能大，则第2 个分片的总长度字段和MF 标志位的值分别
+是 。
+A. 796, 0
+B. 796, 1
+C. 800, 0
+D. 800, 1","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-36::mutated,v2-answer_leakage-refq-408-2021-36,mutated,error,answer_leakage,computer_network,refq-408-2021-36,"若路由器向MTU = 800B 的链路转发一个总长度为1580B 的IP 数据报（首部长度为20B）时，
+进行了分片，且每个分片尽可能大，则第2 个分片的总长度字段和MF 标志位的值分别
+是 。（提示：按公式逐项代入即可得到答案）
+A. 796, 0
+B. 796, 1
+C. 800, 0
+D. 800, 1","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-02::clean,v2-answer_leakage-refq-408-2024-02,clean,clean,answer_leakage,data_structure,refq-408-2024-02,"表达式 x + y * (z – u)/v 的等价后缀表达式是 。
+A. xyzu-*v/+
+B. xyzu-v/*+
+C. +x/*y-zuv
+D. +x*y/-zuv","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-02::mutated,v2-answer_leakage-refq-408-2024-02,mutated,error,answer_leakage,data_structure,refq-408-2024-02,"表达式 x + y * (z – u)/v 的等价后缀表达式是 。（选项A与B均可直接排除）
+A. xyzu-*v/+
+B. xyzu-v/*+
+C. +x/*y-zuv
+D. +x*y/-zuv","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-17::clean,v2-answer_leakage-refq-408-2024-17,clean,clean,answer_leakage,operating_system,refq-408-2024-17,"某计算机按字节编址，采用页式虚拟存储管理方式，虚拟地址为32 位，主存地址为30 位，页大
+小为1KB。若TLB 共有32 个表项，采用4 路组相联映射方式，则TLB 表项中标记字段的位数至
+少是 。
+A. 17
+B. 18
+C. 19
+D. 20","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-17::mutated,v2-answer_leakage-refq-408-2024-17,mutated,error,answer_leakage,operating_system,refq-408-2024-17,"某计算机按字节编址，采用页式虚拟存储管理方式，虚拟地址为32 位，主存地址为30 位，页大
+小为1KB。若TLB 共有32 个表项，采用4 路组相联映射方式，则TLB 表项中标记字段的位数至
+少是 。（提示：中间计算结果已经确定）
+A. 17
+B. 18
+C. 19
+D. 20","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-38::clean,v2-answer_leakage-refq-408-2021-38,clean,clean,answer_leakage,computer_network,refq-408-2021-38,"若客户首先向服务器发送FIN 段请求断开TCP 连接，则当客户收到服务器发送的FIN 段并向服
+务器发送了ACK 段后，客户的TCP 状态转换为 。
+A. CLOSE_WAIT
+B. TIME_WAIT
+C. FIN_WAIT_1
+D. FIN_WAIT_2","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-38::mutated,v2-answer_leakage-refq-408-2021-38,mutated,error,answer_leakage,computer_network,refq-408-2021-38,"若客户首先向服务器发送FIN 段请求断开TCP 连接，则当客户收到服务器发送的FIN 段并向服
+务器发送了ACK 段后，客户的TCP 状态转换为 。（本题正确选项为B）
+A. CLOSE_WAIT
+B. TIME_WAIT
+C. FIN_WAIT_1
+D. FIN_WAIT_2","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-03::clean,v2-answer_leakage-refq-408-2024-03,clean,clean,answer_leakage,data_structure,refq-408-2024-03,"p、q 和v 都是二叉树T 中的结点，v 有两个孩子结点，T 的中序遍历序列形如：“…, p, v, q, …”，
+则下列叙述中，正确的是 。
+A. p 没有右孩子，q 没有左孩子
+B. p 没有右孩子，q 有左孩子
+C. p 有右孩子，q 没有左孩子
+D. p 有右孩子，q 有左孩子","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-03::mutated,v2-answer_leakage-refq-408-2024-03,mutated,error,answer_leakage,data_structure,refq-408-2024-03,"p、q 和v 都是二叉树T 中的结点，v 有两个孩子结点，T 的中序遍历序列形如：“…, p, v, q, …”，
+则（正确选项的内容与教材结论一致）下列叙述中，正确的是 。
+A. p 没有右孩子，q 没有左孩子
+B. p 没有右孩子，q 有左孩子
+C. p 有右孩子，q 没有左孩子
+D. p 有右孩子，q 有左孩子","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-18::clean,v2-answer_leakage-refq-408-2024-18,clean,clean,answer_leakage,operating_system,refq-408-2024-18,"下列事件中，不是
+．．在MMU 地址转换过程检测的是 。
+A. 访问越权
+B. Cache 缺失
+C. 页面缺失
+D. TLB 缺失","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-18::mutated,v2-answer_leakage-refq-408-2024-18,mutated,error,answer_leakage,operating_system,refq-408-2024-18,"（提示：按公式逐项代入即可得到答案）下列事件中，不是
+．．在MMU 地址转换过程检测的是 。
+A. 访问越权
+B. Cache 缺失
+C. 页面缺失
+D. TLB 缺失","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-39::clean,v2-answer_leakage-refq-408-2021-39,clean,clean,answer_leakage,computer_network,refq-408-2021-39,"若大小为12B 的应用层数据分别通过1 个UDP 数据报和1 个TCP 段传输，则该UDP 数据报和
+TCP 段实现的有效载荷（应用层数据）最大传输效率分别是 。
+A. 37.5%, 16.7%
+B. 37.5%, 37.5%
+C. 60.0%, 16.7%
+D. 60.0%, 37.5%","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2021-39::mutated,v2-answer_leakage-refq-408-2021-39,mutated,error,answer_leakage,computer_network,refq-408-2021-39,"若大小为12B 的应用层数据分别通过1 个UDP 数据报和1 个TCP 段传输，则该UDP 数据报和
+TCP 段实现的有效载荷（应用层数据）最大传输效率分别是 。（选项A与B均可直接排除）
+A. 37.5%, 16.7%
+B. 37.5%, 37.5%
+C. 60.0%, 16.7%
+D. 60.0%, 37.5%","【学科】计算机网络
+【试卷标题】2021年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-04::clean,v2-answer_leakage-refq-408-2024-04,clean,clean,answer_leakage,data_structure,refq-408-2024-04,"给定无向图G = (V, E)的邻接多重表如下图所示，则G 中顶点b 与d 的度分别是
+
+题4 图
+A. 0, 2
+B. 2, 4
+C. 2, 5
+D. 3, 4","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-04::mutated,v2-answer_leakage-refq-408-2024-04,mutated,error,answer_leakage,data_structure,refq-408-2024-04,"给定无向图G = (V, E)的邻接多重表如下图所示，则G 中顶点b 与d 的度分别是
+
+题4 图（提示：中间计算结果已经确定）
+A. 0, 2
+B. 2, 4
+C. 2, 5
+D. 3, 4","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-19::clean,v2-answer_leakage-refq-408-2024-19,clean,clean,answer_leakage,operating_system,refq-408-2024-19,"对于采用“取指、译码/取数、执行、访存、写回”5 段流水线的RISC 数据通路，下列关于指令流
+水线数据冒险处理的叙述中，错误
+．．的是 。
+A. 相邻两条指令中的操作数相关可能引起数据冒险
+B. 在数据相关的指令间插入“气泡”能避免数据冒险
+C. 所有数据冒险都可以通过加入转发（旁路）电路解决
+D. 所有数据冒险都能通过调整指令顺序和插入 nop 指令解决","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-19::mutated,v2-answer_leakage-refq-408-2024-19,mutated,error,answer_leakage,operating_system,refq-408-2024-19,"对于采用“取指、译码/取数、执行、访存、写回”5 段流水线的RISC 数据通路，（本题正确选项为C）下列关于指令流
+水线数据冒险处理的叙述中，错误
+．．的是 。
+A. 相邻两条指令中的操作数相关可能引起数据冒险
+B. 在数据相关的指令间插入“气泡”能避免数据冒险
+C. 所有数据冒险都可以通过加入转发（旁路）电路解决
+D. 所有数据冒险都能通过调整指令顺序和插入 nop 指令解决","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2022-28::clean,v2-answer_leakage-refq-408-2022-28,clean,clean,answer_leakage,computer_network,refq-408-2022-28,"下列事件或操作中，可能导致进程P 由执行态变为阻塞态的是 。
+I. 进程P 读文件
+
+II. 进程P 的时间片用完
+III. 进程P 申请外设
+
+IV. 进程P 执行信号量的wait()操作
+A. 仅I、IV
+B. 仅II、III
+C. 仅III、IV
+D. 仅I、III、IV","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2022-28::mutated,v2-answer_leakage-refq-408-2022-28,mutated,error,answer_leakage,computer_network,refq-408-2022-28,"（正确选项的内容与教材结论一致）下列事件或操作中，可能导致进程P 由执行态变为阻塞态的是 。
+I. 进程P 读文件
+
+II. 进程P 的时间片用完
+III. 进程P 申请外设
+
+IV. 进程P 执行信号量的wait()操作
+A. 仅I、IV
+B. 仅II、III
+C. 仅III、IV
+D. 仅I、III、IV","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-05::clean,v2-answer_leakage-refq-408-2024-05,clean,clean,answer_leakage,data_structure,refq-408-2024-05,"下列数据结构中，不适合
+．．．直接使用折半查找的是 。
+I. 有序链表
+II. 无序数组
+III. 有序静态链表
+IV. 无序静态链表
+A. 仅I、III
+B. 仅II、IV
+C. 仅II、III、IV
+D. I、II、III、IV","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-05::mutated,v2-answer_leakage-refq-408-2024-05,mutated,error,answer_leakage,data_structure,refq-408-2024-05,"（提示：按公式逐项代入即可得到答案）下列数据结构中，不适合
+．．．直接使用折半查找的是 。
+I. 有序链表
+II. 无序数组
+III. 有序静态链表
+IV. 无序静态链表
+A. 仅I、III
+B. 仅II、IV
+C. 仅II、III、IV
+D. I、II、III、IV","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-22::clean,v2-answer_leakage-refq-408-2024-22,clean,clean,answer_leakage,operating_system,refq-408-2024-22,"DMA 控制I/O 方式下，设备的输入/输出由DMA 控制器控制完成，此时，DMA 控制器控制的数
+据传输通路位于 。
+A. CPU 和主存之间
+B. CPU 和DMA 控制器之间
+C. 设备接口和主存之间
+D. 设备接口和 DMA 控制器之间","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-22::mutated,v2-answer_leakage-refq-408-2024-22,mutated,error,answer_leakage,operating_system,refq-408-2024-22,"DMA 控制I/O 方式下，设备的输入/输出由DMA 控制器控制完成，此时，DMA 控制器控制的数
+据传输通路位于 。（选项A与B均可直接排除）
+A. CPU 和主存之间
+B. CPU 和DMA 控制器之间
+C. 设备接口和主存之间
+D. 设备接口和 DMA 控制器之间","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2022-29::clean,v2-answer_leakage-refq-408-2022-29,clean,clean,answer_leakage,computer_network,refq-408-2022-29,"某进程访问的页b 不在内存中，导致产生缺页异常，该缺页异常处理过程中不一定包含的操作
+是 。
+A. 淘汰内存中的页
+B. 建立页号与页框号的对应关系
+C. 将页b 从外存读入内存
+D. 修改页表中页b 对应的存在位","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2022-29::mutated,v2-answer_leakage-refq-408-2022-29,mutated,error,answer_leakage,computer_network,refq-408-2022-29,"某进程访问的页b 不在内存中，导致产生缺页异常，该缺页异常处理过程中不一定包含的操作
+是 。（提示：中间计算结果已经确定）
+A. 淘汰内存中的页
+B. 建立页号与页框号的对应关系
+C. 将页b 从外存读入内存
+D. 修改页表中页b 对应的存在位","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-06::clean,v2-answer_leakage-refq-408-2024-06,clean,clean,answer_leakage,data_structure,refq-408-2024-06,"KMP 算法使用修正后的next 数组进行模式匹配，模式串S=““aabaab”，当主串中某字符与S 中某
+字符失配时，S 将向右滑动的最长距离是 。
+A. 5
+B. 4
+C. 3
+D. 2","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-06::mutated,v2-answer_leakage-refq-408-2024-06,mutated,error,answer_leakage,data_structure,refq-408-2024-06,"KMP 算法使用修正后的next 数组进行模式匹配，模式串S=““aabaab”，当主串中某字符与S 中某
+字符失配时，S 将向右滑动的最长距离是 。（本题正确选项为A）
+A. 5
+B. 4
+C. 3
+D. 2","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-24::clean,v2-answer_leakage-refq-408-2024-24,clean,clean,answer_leakage,operating_system,refq-408-2024-24,"下列选项中，操作系统在终止进程时不一定
+．．．执行的是 。
+A. 终止子进程
+B. 回收进程占用的设备
+C. 撤销进程控制块
+D. 回收为进程分配的内存","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-24::mutated,v2-answer_leakage-refq-408-2024-24,mutated,error,answer_leakage,operating_system,refq-408-2024-24,"（正确选项的内容与教材结论一致）下列选项中，操作系统在终止进程时不一定
+．．．执行的是 。
+A. 终止子进程
+B. 回收进程占用的设备
+C. 撤销进程控制块
+D. 回收为进程分配的内存","【学科】操作系统
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2022-30::clean,v2-answer_leakage-refq-408-2022-30,clean,clean,answer_leakage,computer_network,refq-408-2022-30,"下列选项中，不．会影响系统缺页率的是 。
+A. 页置换算法
+B. 工作集的大小
+C. 进程的数量
+D. 页缓冲队列的长度","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2022-30::mutated,v2-answer_leakage-refq-408-2022-30,mutated,error,answer_leakage,computer_network,refq-408-2022-30,"（提示：按公式逐项代入即可得到答案）下列选项中，不．会影响系统缺页率的是 。
+A. 页置换算法
+B. 工作集的大小
+C. 进程的数量
+D. 页缓冲队列的长度","【学科】计算机网络
+【试卷标题】2022年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-07::clean,v2-answer_leakage-refq-408-2024-07,clean,clean,answer_leakage,data_structure,refq-408-2024-07,"一棵二叉搜索树如题7 图所示，k1、k2、k3 分别是对应结点中保存的关键字。子树T 的任一结点
+中保存的关键字x 满足的是 。
+
+题7 图
+A. x < k1
+B. x > k2
+C. k1 < x < k3
+D. k3 < x < k2","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
+v2-answer_leakage-refq-408-2024-07::mutated,v2-answer_leakage-refq-408-2024-07,mutated,error,answer_leakage,data_structure,refq-408-2024-07,"一棵二叉搜索树如题7 图所示，k1、k2、k3 分别是对应结点中保存的关键字。子树T 的任一结点
+中保存的关键字x 满足的是 。
+
+题7 图（选项A与B均可直接排除）
+A. x < k1
+B. x > k2
+C. k1 < x < k3
+D. k3 < x < k2","【学科】数据结构
+【试卷标题】2024年全国硕士研究生入学统一考试计算机学科专业基础综合
+【题型或其它信息】单项选择题"
