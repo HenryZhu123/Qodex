@@ -12,15 +12,12 @@ interface RegisteredExamCheckerTool {
 	execute: (
 		toolCallId: string,
 		params: {
-			operation: "review_file" | "review_document" | "review_question" | "revise_question" | "get_question_state";
+			operation: "review_file" | "review_document" | "review_question" | "get_question_state";
 			file_path?: string;
 			document_id?: string;
 			task_id?: string;
 			question_id?: string;
 			version?: number;
-			base_version?: number;
-			question_json?: Record<string, unknown>;
-			user_instruction?: string;
 		},
 		signal: AbortSignal | undefined,
 		onUpdate: undefined,
@@ -77,6 +74,7 @@ function fullReview(status: "PASS" | "NEEDS_REVISION" | "UNRESOLVED") {
 		question_id: "question_2",
 		question_number: "2",
 		version: 2,
+		review_id: "review-2-v2",
 		question: { reference: "ignored", detection_content: "ignored" },
 		ingestion: undefined as { status: "STORED" | "FAILED" | "SKIPPED"; record_id?: string } | undefined,
 		review: {
@@ -98,6 +96,7 @@ describe("compactReviewResult", () => {
 			question_id: "question_2",
 			question_number: "2",
 			version: 2,
+			review_id: "review-2-v2",
 			status: "PASS",
 			errors: [],
 			unresolved_checks: [],
@@ -176,6 +175,7 @@ describe("compactReviewResult", () => {
 					question_id: "question_2",
 					question_number: "2",
 					version: 2,
+					review_id: "review-2-v2",
 					status: "PASS",
 					errors: [],
 					unresolved_checks: [],
@@ -185,6 +185,7 @@ describe("compactReviewResult", () => {
 					question_id: "question_3",
 					question_number: "3",
 					version: 2,
+					review_id: "review-2-v2",
 					status: "NEEDS_REVISION",
 					errors: [],
 					unresolved_checks: [],
@@ -279,49 +280,6 @@ describe("compactReviewResult", () => {
 			expect.objectContaining({ method: "GET" }),
 		);
 		expect(JSON.parse(result.content[0]?.text ?? "{}")).toEqual(state);
-	});
-
-	it("routes revise_question with the version and user instruction", async () => {
-		const response = fullReview("PASS");
-		response.ingestion = { status: "STORED", record_id: "record_1" };
-		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
-			new Response(JSON.stringify(response), {
-				status: 200,
-				headers: { "content-type": "application/json" },
-			}),
-		);
-
-		const result = await registeredTool().execute(
-			"call_revise",
-			{
-				operation: "revise_question",
-				task_id: "exam_1",
-				question_id: "question_2",
-				base_version: 2,
-				user_instruction: "保持原考点，修正选项 C",
-			},
-			undefined,
-			undefined,
-			{ cwd: "/workspace" },
-		);
-
-		expect(fetchMock).toHaveBeenCalledWith(
-			"http://127.0.0.1:8091/v1/exam-checker/tasks/exam_1/questions/question_2/revise",
-			expect.objectContaining({
-				method: "POST",
-				body: JSON.stringify({
-					base_version: 2,
-					idempotency_key: "call_revise",
-					user_instruction: "保持原考点，修正选项 C",
-				}),
-			}),
-		);
-		expect(JSON.parse(result.content[0]?.text ?? "{}")).toMatchObject({
-			task_id: "exam_1",
-			question_id: "question_2",
-			status: "PASS",
-			ingestion: { status: "STORED", record_id: "record_1" },
-		});
 	});
 
 	it("parses review_file once and then reviews the parsed document", async () => {

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import asyncio
 
-from ..domain.models import QuestionChangeLog, QuestionView, StoredQuestionVersion
-from .persistence import QuestionVersionConflictError, QuestionVersionNotFoundError
+from ..domain.models import QuestionView, StoredQuestionVersion
+from .persistence import QuestionVersionNotFoundError
 
 
 class InMemoryQuestionVersionRepository:
@@ -52,6 +52,10 @@ class InMemoryQuestionVersionRepository:
             versions = self._versions.setdefault(key, [])
             for snapshot in versions:
                 if snapshot.version == version:
+                    if snapshot.question != question:
+                        raise ValueError(
+                            "Generated version content conflicts with the imported snapshot"
+                        )
                     return snapshot
             snapshot = StoredQuestionVersion(
                 task_id=task_id,
@@ -63,33 +67,3 @@ class InMemoryQuestionVersionRepository:
             versions.append(snapshot)
             versions.sort(key=lambda item: item.version)
             return snapshot
-
-    async def create_revision(
-        self,
-        *,
-        task_id: str,
-        question_id: str,
-        base_version: int,
-        revision_source: str,
-        question: QuestionView,
-        change_log: QuestionChangeLog,
-    ) -> StoredQuestionVersion:
-        async with self._lock:
-            versions = self._versions.get((task_id, question_id))
-            if not versions:
-                raise QuestionVersionNotFoundError((task_id, question_id))
-            latest = versions[-1]
-            if latest.version != base_version:
-                raise QuestionVersionConflictError(
-                    "The question changed after the requested base version"
-                )
-            version = StoredQuestionVersion(
-                task_id=task_id,
-                question_id=question_id,
-                version=latest.version + 1,
-                revision_source=revision_source,
-                question=question,
-                change_log=change_log,
-            )
-            versions.append(version)
-            return version

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { rejectUnsafeRequest } from "../lib/local-access";
 import { proxyService, serviceTarget } from "../lib/service-proxy";
-import { canReviseQuestion, parseModelSelection, validateQuotas } from "../lib/workspace-api";
+import { parseModelSelection, validateQuotas } from "../lib/workspace-api";
 
 test("local teacher API rejects hostile origins and non-local hosts", () => {
 	Object.assign(process.env, { NODE_ENV: "development" });
@@ -109,11 +109,4 @@ test("model selections preserve model IDs containing slashes", () => {
 	});
 	assert.equal(parseModelSelection("missing-separator"), undefined);
 	assert.equal(parseModelSelection("provider/"), undefined);
-});
-
-test("revision controls follow the backend NEEDS_REVISION precondition", () => {
-	assert.equal(canReviseQuestion({ review: { status: "NEEDS_REVISION" } }), true);
-	assert.equal(canReviseQuestion({ review: { status: "PASS" } }), false);
-	assert.equal(canReviseQuestion({ review: { status: "UNRESOLVED" } }), false);
-	assert.equal(canReviseQuestion(undefined), false);
 });

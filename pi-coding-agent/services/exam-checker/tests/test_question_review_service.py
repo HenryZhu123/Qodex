@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 from pathlib import Path
+from uuid import UUID
 
 import pytest
 
@@ -9,6 +10,7 @@ from exam_checker.domain.models import (
     CheckerPayload,
     JevPrediction,
     ReviewError,
+    ReviewedQuestion,
     SpecialistReviewResult,
 )
 from exam_checker.prompts.repositories import JevPromptRepository
@@ -120,6 +122,13 @@ class FailingRouter:
         raise RuntimeError("router unavailable")
 
 
+class ExistingReviewRepository:
+    stored_review_id = UUID("22222222-2222-4222-8222-222222222222")
+
+    async def save(self, review: ReviewedQuestion) -> UUID:
+        return self.stored_review_id
+
+
 @pytest.mark.asyncio
 async def test_jev_failure_fails_open_to_every_specialist() -> None:
     reviewer = RecordingReviewer()
@@ -154,6 +163,28 @@ async def test_jev_failure_fails_open_to_every_specialist() -> None:
         for decision in result.review.routing.values()
     )
     assert result.review.status == "PASS"
+
+
+@pytest.mark.asyncio
+async def test_result_exposes_the_review_id_returned_by_persistence() -> None:
+    repository = ExistingReviewRepository()
+    service = QuestionReviewService(
+        router=FailingRouter(),
+        reviewer=RecordingReviewer(),
+        jev_prompts=JevPromptRepository(PROMPT_ROOT),
+        review_repository=repository,
+    )
+
+    result = await service.review_question(
+        task_id="exam_1",
+        question_id="question_1",
+        question_number="1",
+        version=1,
+        idempotency_key="existing-review",
+        payload=CheckerPayload(reference="", detection_content="测试题"),
+    )
+
+    assert result.review_id == str(repository.stored_review_id)
 
 
 class MixedReviewer:

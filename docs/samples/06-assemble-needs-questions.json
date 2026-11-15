@@ -1,0 +1,90 @@
+{
+  "request_id": "sample-short-1",
+  "status": "NEEDS_QUESTIONS",
+  "eligible_candidate_count": 0,
+  "eligible_question_ids": [],
+  "uses_mock_reviews": false,
+  "topic_deficits": {
+    "循环队列": 1
+  },
+  "difficulty_deficits": {
+    "easy": 1,
+    "medium": 0,
+    "hard": 0
+  },
+  "excluded_questions": [],
+  "note": "真实题库接口；已核对版本和 PASS，已接入字面相似筛查及内容绑定人工复核。未认证完整语义去重，未检测跨题提示。",
+  "confirmed_duplicate_pairs": [],
+  "accepted_similarity_decisions": [],
+  "initial_similarity_screen": {
+    "policy_version": "lexical-v1",
+    "method": "ALL_SELECTED_PAIRS_LEXICAL_SCREEN",
+    "pair_count": 0,
+    "flagged_pairs": [],
+    "semantic_quality_certified": false,
+    "note": "字面线索仅用于筛查，可能漏掉改写题或标记正常题；同知识点或同答案本身不构成重复证据。未检测跨题提示。"
+  },
+  "schema_version": "1.0",
+  "mode": "POSTGRES_QUESTION_BANK_API",
+  "pool_complete": true,
+  "rejected_records": [],
+  "artifacts": {
+    "replenishment_request": "<repo>/.local/demo-logs/assembly/09c76161283d4cd5a2d55286435514ee/replenishment_request.json",
+    "request": "<repo>/.local/demo-logs/assembly/09c76161283d4cd5a2d55286435514ee/request.json",
+    "report": "<repo>/.local/demo-logs/assembly/09c76161283d4cd5a2d55286435514ee/report.json"
+  },
+  "replenishment_request": {
+    "schema_version": "1.0",
+    "request_id": "sample-short-1",
+    "plan_status": "PROPOSED_NOT_EXECUTED",
+    "scope": "CURRENT_VERIFIED_CANDIDATE_POOL",
+    "suggested_additional_count": 1,
+    "minimum_count_proven": true,
+    "search": {
+      "nodes": 0,
+      "max_nodes": 50000,
+      "budget_exhausted": false
+    },
+    "pairing_basis": "ONE_FEASIBLE_COMPLETION_OF_MARGINAL_QUOTAS",
+    "deficits": [
+      {
+        "subject": "数据结构",
+        "question_type": "single_choice",
+        "knowledge_point": "循环队列",
+        "difficulty": "easy",
+        "score_per_question": 2,
+        "missing_count": 1
+      }
+    ],
+    "keep_assignments": [],
+    "avoid_stems": [],
+    "requirements": {
+      "review_status": "PASS",
+      "ingestion_status": "STORED",
+      "answer_required": true,
+      "review_must_match_current_version": true,
+      "distinct_stems": true,
+      "new_unique_record_ids": true,
+      "avoid_confirmed_record_pairs": [],
+      "rerun_similarity_screen": true
+    },
+    "next_action": "SUPPLY_ACCEPTED_BANK_QUESTIONS_THEN_REASSEMBLE",
+    "note": "仅为补题建议，不调用生成或审校；补题须独立通过审校并入库，之后重新查询和验证整卷。"
+  },
+  "deficits": [
+    {
+      "subject": "数据结构",
+      "question_type": "single_choice",
+      "knowledge_point": "循环队列",
+      "difficulty": "easy",
+      "score_per_question": 2,
+      "missing_count": 1
+    }
+  ],
+  "deficit_semantics": "PROPOSED_JOINT_COMPLETION_NOT_ADDITIONAL_MARGINAL_TOTALS",
+  "history": {
+    "status": "STORED",
+    "exam_id": "27097996-3764-467f-b7ee-c43450493f2f",
+    "created_at": "2026-11-15T09:03:21.021197+00:00"
+  }
+}

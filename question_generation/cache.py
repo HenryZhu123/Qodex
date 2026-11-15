@@ -38,17 +38,33 @@ def build(rng, cache_size, block_size, address):
     memory_block, offset = divmod(address, block_size)
     tag, index = divmod(memory_block, lines)
 
-    # Each distractor changes one field. Use an in-range bit error when
-    # the misconception would coincide with the answer or exceed the field.
-    tag_error = (memory_block, "误把完整的主存块号当作标记。")
-    if memory_block == tag or memory_block >= 2**ADDRESS_BITS // cache_size:
-        tag_error = (tag ^ 1, "误读了标记的最低位。")
-    index_error = (offset % lines, "误用块内偏移对行数取余来选行。")
-    if index_error[0] == index:
-        index_error = (index ^ 1, "误读了行号的最低位。")
-    offset_error = (offset + 1, "误把块内偏移从 1 开始计数。")
-    if offset + 1 == block_size:
-        offset_error = (offset ^ 1, "误读了块内偏移的最低位。")
+    # Each option changes one field. At the boundaries, use a different
+    # misconception whose value remains in range and differs from the answer.
+    if tag < memory_block < 2**ADDRESS_BITS // cache_size:
+        tag_error = memory_block, f"误把完整的主存块号 {memory_block} 当成标记。"
+    elif tag:
+        wrong_span = 2 * cache_size
+        wrong_tag = address // wrong_span
+        tag_error = wrong_tag, f"标记少取了最低一位，误用 {address} ÷ {wrong_span} 取整得到 {wrong_tag}。"
+    else:
+        tag_error = 1, "误把首个地址区的标记从 1 开始编号，得到 1。"
+
+    address_remainder = address % lines
+    if address_remainder != index:
+        index_error = address_remainder, f"误用字节地址对行数取余，{address} mod {lines} = {address_remainder}。"
+    elif index:
+        aligned_address = address - address % cache_size
+        index_error = 0, f"误把地址按 {cache_size} B 对齐为 {aligned_address} 后再取行号，得到 0。"
+    else:
+        mask = lines - 1
+        index_error = mask, f"误把行号字段的掩码当成行号，{lines} − 1 = {mask}。"
+
+    if offset:
+        wrong_offset = offset // 2
+        offset_error = wrong_offset, f"误把块内字节偏移换成 2 B 字编号，{offset} ÷ 2 取整得到 {wrong_offset}。"
+    else:
+        remaining_bytes = block_size - 1
+        offset_error = remaining_bytes, f"误把当前字节之后的块内字节数当成偏移，{block_size} − 1 = {remaining_bytes}。"
 
     choices = [
         ((tag, index, offset),

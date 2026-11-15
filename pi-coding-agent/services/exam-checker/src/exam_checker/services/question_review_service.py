@@ -154,7 +154,11 @@ class QuestionReviewService:
             ),
         )
         if self.review_repository is not None:
-            await self.review_repository.save(review)
+            stored_review_id = await self.review_repository.save(review)
+            if review.review_id != str(stored_review_id):
+                review = review.model_copy(
+                    update={"review_id": str(stored_review_id)}
+                )
         return review
 
     async def _run_task(

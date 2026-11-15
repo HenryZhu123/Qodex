@@ -9,12 +9,11 @@ const examCheckerParameters = Type.Object({
 			Type.Literal("review_file"),
 			Type.Literal("review_document"),
 			Type.Literal("review_question"),
-			Type.Literal("revise_question"),
 			Type.Literal("get_question_state"),
 		],
 		{
 			description:
-				"Choose review_file for an original PDF/DOC/DOCX, review_document for every question in a parsed document, review_question for one parsed question, revise_question to modify and re-review one question, or get_question_state to read its latest version and workflow state.",
+				"Choose review_file for an original PDF/DOC/DOCX, review_document for every question in a parsed document, review_question for one immutable question version, or get_question_state to read its latest version and workflow state.",
 		},
 	),
 	file_path: Type.Optional(
@@ -27,24 +26,13 @@ const examCheckerParameters = Type.Object({
 		Type.String({ description: "Question task ID returned by question_generation or document parsing." }),
 	),
 	question_id: Type.Optional(
-		Type.String({ description: "Question node ID. Required for review_question and revise_question." }),
+		Type.String({ description: "Question node ID. Required for review_question and get_question_state." }),
 	),
 	version: Type.Optional(
 		Type.Integer({
 			minimum: 1,
 			description: "Exact immutable question version; omit to review the current version.",
 		}),
-	),
-	base_version: Type.Optional(
-		Type.Integer({ minimum: 1, description: "Version returned by the latest state. Required for revise_question." }),
-	),
-	question_json: Type.Optional(
-		Type.Record(Type.String(), Type.Unknown(), {
-			description: "Complete user-edited single-question JSON. Optional for revise_question.",
-		}),
-	),
-	user_instruction: Type.Optional(
-		Type.String({ description: "Optional user instruction for the question revision model." }),
 	),
 });
 
@@ -96,6 +84,7 @@ export interface CompactExamCheckerResult {
 	question_id: string;
 	question_number: string;
 	version: number;
+	review_id: string;
 	status: ExamCheckerStatus;
 	errors: CompactReviewError[];
 	unresolved_checks: UnresolvedCheck[];
@@ -243,6 +232,7 @@ export function compactReviewResult(value: unknown): CompactExamCheckerResult {
 				: (() => {
 						throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_RESPONSE");
 					})(),
+		review_id: requiredString(value, "review_id"),
 		status: reviewStatus(review),
 		errors: review.summary.errors.map(compactError),
 		unresolved_checks: unresolvedChecks,
@@ -350,11 +340,11 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 		name: "exam_checker",
 		label: "exam checker",
 		description:
-			"Run the exam-checker workflow to parse and review exams, review or revise a question, or read a question's latest workflow state.",
-		promptSnippet: "Parse, review, revise, or inspect exam questions through the exam-checker workflow",
+			"Parse and review exams, review one immutable generated-question version, or read review state. This tool never creates or edits question versions.",
+		promptSnippet: "Parse, review, or inspect immutable exam-question versions",
 		promptGuidelines: [
-			"Use review_file for an original PDF, DOC, or DOCX; review_document for every question in a document_id; use task_id and question_id for review_question, get_question_state, and revise_question. Reuse the task_id returned by question_generation. Revise only after NEEDS_REVISION, using the state result's version as base_version.",
-			"For revise_question, pass a complete user-edited question_json when the user supplied the replacement; otherwise pass the user's revision request as user_instruction so the service can apply the recorded review errors.",
+			"Use review_file for an original PDF, DOC, or DOCX; review_document for every question in a document_id; use task_id and question_id for review_question and get_question_state. Reuse the task_id returned by question_generation.",
+			"This tool has no authority to create or edit a question version. When a generated question returns NEEDS_REVISION, reason over its structured errors and independently decide whether to call question_generation with operation=revise for the same task and exact version; use the returned review_id as feedback.feedback_id.",
 			"Treat exam_checker.status as the sole review decision: PASS is eligible for automatic ingestion; NEEDS_REVISION must be returned to the user with the reported errors; UNRESOLVED means review is incomplete.",
 			"For UNRESOLVED results, report unresolved_checks and never claim that the question or document passed.",
 			"Do not override exam_checker.status or invent errors that are absent from its result.",
@@ -364,14 +354,7 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 		async execute(toolCallId, params, signal, _onUpdate, ctx) {
 			try {
 				if (params.operation === "get_question_state") {
-					const taskId = requireOnly(params.task_id, [
-						params.file_path,
-						params.document_id,
-						params.base_version,
-						params.version,
-						params.question_json,
-						params.user_instruction,
-					]);
+					const taskId = requireOnly(params.task_id, [params.file_path, params.document_id, params.version]);
 					if (!params.question_id) throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_INPUT");
 					const fullReview = await requestJson(
 						`${serviceUrl()}/v1/exam-checker/tasks/${encodeURIComponent(taskId)}/questions/${encodeURIComponent(params.question_id)}/state`,
@@ -386,39 +369,8 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 					};
 				}
 
-				if (params.operation === "revise_question") {
-					const taskId = requireOnly(params.task_id, [params.file_path, params.document_id, params.version]);
-					if (!params.question_id || !params.base_version) {
-						throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_INPUT");
-					}
-					const fullReview = await requestJson(
-						`${serviceUrl()}/v1/exam-checker/tasks/${encodeURIComponent(taskId)}/questions/${encodeURIComponent(params.question_id)}/revise`,
-						{
-							method: "POST",
-							headers: { "content-type": "application/json" },
-							body: JSON.stringify({
-								base_version: params.base_version,
-								idempotency_key: toolCallId,
-								...(params.question_json ? { question_json: params.question_json } : {}),
-								user_instruction: params.user_instruction ?? "",
-							}),
-							signal,
-						},
-					);
-					return {
-						content: [{ type: "text", text: JSON.stringify(compactReviewResult(fullReview)) }],
-						details: { fullReview },
-					};
-				}
-
 				if (params.operation === "review_question") {
-					const taskId = requireOnly(params.task_id, [
-						params.file_path,
-						params.document_id,
-						params.base_version,
-						params.question_json,
-						params.user_instruction,
-					]);
+					const taskId = requireOnly(params.task_id, [params.file_path, params.document_id]);
 					if (!params.question_id) throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_INPUT");
 					const fullReview = await requestJson(
 						`${serviceUrl()}/v1/exam-checker/tasks/${encodeURIComponent(taskId)}/questions/${encodeURIComponent(params.question_id)}/review`,
@@ -446,9 +398,6 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 						params.question_id,
 						params.task_id,
 						params.version,
-						params.base_version,
-						params.question_json,
-						params.user_instruction,
 					]);
 					const absolutePath = resolve(ctx.cwd, filePath);
 					let bytes: Uint8Array;
@@ -474,9 +423,6 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 						params.question_id,
 						params.task_id,
 						params.version,
-						params.base_version,
-						params.question_json,
-						params.user_instruction,
 					]);
 				}
 
@@ -526,7 +472,7 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 		promptGuidelines: [
 			"Use get_question when a question-bank record_id is known; use search_questions to find accepted questions by subject, question type, difficulty, knowledge point, or question-text keyword.",
 			"Treat returned question_json as the complete stored question record. Do not invent fields or assume that omitted search results exist.",
-			"This tool is read-only. Use exam_checker for review, revision, and workflow state.",
+			"This tool is read-only. Use exam_checker for review and workflow state; only question_generation may create a revised question version.",
 		],
 		parameters: questionBankParameters,
 		executionMode: "parallel",

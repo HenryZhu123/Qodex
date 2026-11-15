@@ -1,0 +1,1 @@
+{"schema_version":"0.1","request_id":"sample-invalid-1","status":"INVALID_REQUEST","questions":[],"message":"requirements 须为1至8条非空要求，每条不超过1000字。","task_id":"b5e5d8ae-27bf-42bf-b578-15504d57f354","queue_receipts":[]}

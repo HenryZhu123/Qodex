@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS question_generation.generation_tasks (
     task_id uuid PRIMARY KEY,
     request_id text NOT NULL,
     generation_mode text NOT NULL CHECK (
-        generation_mode IN ('single', 'batch', 'comprehensive', 'revise', 'legacy')
+        generation_mode IN ('single', 'batch', 'comprehensive', 'revise', 'author', 'replenishment', 'legacy')
     ),
     status text NOT NULL CHECK (
         status IN ('CREATED', 'GENERATING', 'PENDING_REVIEW', 'COMPLETED', 'FAILED')
@@ -23,6 +23,15 @@ CREATE TABLE IF NOT EXISTS question_generation.generation_tasks (
 
 CREATE INDEX IF NOT EXISTS generation_tasks_request_id
     ON question_generation.generation_tasks (request_id, created_at DESC);
+
+-- The brief-driven `author` and the assembly `replenishment` paths also create tasks.
+-- Older installs carry the narrower check, and CREATE TABLE IF NOT EXISTS cannot widen it.
+ALTER TABLE question_generation.generation_tasks
+    DROP CONSTRAINT IF EXISTS generation_tasks_generation_mode_check;
+ALTER TABLE question_generation.generation_tasks
+    ADD CONSTRAINT generation_tasks_generation_mode_check CHECK (
+        generation_mode IN ('single', 'batch', 'comprehensive', 'revise', 'author', 'replenishment', 'legacy')
+    );
 
 ALTER TABLE question_generation.pending_questions
     ADD COLUMN IF NOT EXISTS task_id uuid;

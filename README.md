@@ -8,13 +8,19 @@ Qodex 是面向计算机考研 408 的 AI 试题工作流，当前仓库已经�
 
 | 模块 | 已实现能力 | Pi 工具 | 默认地址 |
 | --- | --- | --- | --- |
-| 自主命题 | 单选题、批量槽位命题、综合应用题、按反馈修订、确定性自检、待审版本入队 | `question_generation` | `http://127.0.0.1:8093` |
+| 自主命题 | 单选题、批量槽位命题、综合应用题、按反馈修订、通用材料驱动创作与粗需求入口、确定性自检、待审版本入队 | `question_generation` | `http://127.0.0.1:8093` |
 | AI 审校 | PDF/DOC/DOCX 解析、整卷/单题审校、九类专项检查、知识库检索、题目版本修订 | `exam_checker` | `http://127.0.0.1:8091` |
 | 正式题库 | 查询审校通过题目，按学科、题型、难度、知识点和关键词检索 | `question_bank` | 复用 8091 |
 | 智能组卷 | 从正式题库选题、约束校验、缺题报告、相似题复核、HTML/PDF 导出、PostgreSQL 历史快照与下载 | `exam_assembly` | `http://127.0.0.1:8092` |
 | Pi Agent | 注册上述内置工具并组织调用 | — | 终端交互 |
 
 命题和审校现在使用统一的 `task_id + question_id + version`。Pi 发起一次命题时自动生成 `task_id`，同组题共享该 ID；审校任务接口按不可变版本从待审队列导入快照，PASS 后幂等写入正式题库。该链路由 Pi 显式调用，不是数据库后台自动消费。
+
+当前边界：命题与审校通过 `task_id + question_id + version` 对齐，Pi 显式调用两个工具完成接入；链路已实测（见 [Agent 工作流](docs/agent-workflow.md)），
+由 Pi 的 `qodex-workflow` 扩展（政策 + 护栏：调用预算、重复付费拦截、失败可见、入库措辞门禁、trace）驱动。
+**仍未闭合**：组卷只支持四选项单选、同题型单一分值，综合题/题组/带图题不支持；审校看不到答案与评分，因此 `PASS` 不证明答案正确。
+**题目质量层（“像不像真题”：超纲、计算量、考点粒度、图题/题组）属于待开工的问题 1，一行代码未改**，
+见 [TASK_STATE](../TASK_STATE.md) 的「未开工：问题 1」。链路跑通不等于题目合格。
 
 ## 一键演示
 
@@ -196,7 +202,7 @@ npm run hydrate:model-data:release
 合并后的 main 会自动注册：
 
 - `question_generation`：`single`、`batch`、`comprehensive`、`revise`
-- `exam_checker`：`review_file`、`review_document`，以及使用 `task_id` 的 `review_question`、`revise_question`、`get_question_state`
+- `exam_checker`：`review_file`、`review_document`，以及使用 `task_id` 的 `review_question`、`get_question_state`；只审校不可变版本，不创建新版本
 - `question_bank`：`get_question`、`search_questions`
 - `exam_assembly`：提交组卷请求并返回试卷、缺题结果和历史记录 ID；历史查询目前通过 HTTP 接口完成
 

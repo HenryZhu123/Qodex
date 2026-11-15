@@ -2,17 +2,7 @@
 
 import { Search, ShieldCheck, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-	api,
-	array,
-	canReviseQuestion,
-	type JsonObject,
-	object,
-	post,
-	pretty,
-	statusLabel,
-	text,
-} from "@/lib/workspace-api";
+import { api, array, type JsonObject, object, post, pretty, statusLabel, text } from "@/lib/workspace-api";
 import { Report } from "./assembly-workspace";
 
 export function QuestionBank() {
@@ -147,8 +137,7 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 	const [result, setResult] = useState<JsonObject>(),
 		[state, setState] = useState<JsonObject>();
 	const [busy, setBusy] = useState(false),
-		[error, setError] = useState(""),
-		[instruction, setInstruction] = useState("");
+		[error, setError] = useState("");
 	async function run(action: () => Promise<JsonObject>, kind: "document" | "state" = "document") {
 		if (busy) return;
 		setBusy(true);
@@ -327,33 +316,12 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 						审校：{statusLabel(object(state.review).status)} · 入库：{text(object(state.question_bank).status)}
 					</p>
 					<Report value={state} />
-					<label className="qx-field">
-						修订要求
-						<textarea
-							rows={3}
-							value={instruction}
-							onChange={(e) => setInstruction(e.target.value)}
-							placeholder="先查看报告，再说明需要修改的内容"
-						/>
-					</label>
-					<button
-						type="button"
-						className="qx-btn"
-						disabled={busy || !instruction.trim() || !canReviseQuestion(state)}
-						onClick={() =>
-							run(async () => {
-								await post(`${documentPath}/questions/${encodeURIComponent(text(state.question_id))}/revise`, {
-									base_version: state.version,
-									idempotency_key: crypto.randomUUID(),
-									user_instruction: instruction,
-								});
-								return api(`${documentPath}/questions/${encodeURIComponent(text(state.question_id))}/state`);
-							}, "state")
-						}
-					>
-						按当前版本进行 AI 修订与重审
-					</button>
-					{!canReviseQuestion(state) && <p className="qx-note">只有最新审校状态为“需要修订”的题目才能创建新版本。</p>}
+					{object(state.review).status === "NEEDS_REVISION" && (
+						<p className="qx-note">
+							审校服务只提供修改建议，不创建题目版本。AI 命题题由 Pi
+							自主决定是否调用命题工具生成下一版本；上传文档题请修改源文件后重新上传。
+						</p>
+					)}
 				</section>
 			)}
 			<GenerationPanel />

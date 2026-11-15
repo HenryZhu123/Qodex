@@ -21,6 +21,13 @@ def test_health() -> None:
     assert response.json() == {"status": "ok"}
 
 
+def test_openapi_does_not_expose_question_revision_endpoints() -> None:
+    with TestClient(app) as client:
+        paths = client.get("/openapi.json").json()["paths"]
+
+    assert not any(path.endswith("/revise") for path in paths)
+
+
 class FakeReviewService:
     async def review_question(
         self, *, task_id, question_id, question_number, payload
