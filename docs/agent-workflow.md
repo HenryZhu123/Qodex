@@ -53,10 +53,10 @@ flowchart TD
     A -- INVALID_REQUEST --> FIX[按 errors 修参数, 不支持的能力要说明]
 
     subgraph GUARD[护栏: 不依赖模型自觉]
-        B1[tool_call: 预算 12/12/3 · 墙钟 45min · 同参数重复付费拦截 · 连续失败 3 次停]
+        B1[tool_call: 预算按目标题量(2N+2/3N+2) · 墙钟 90min · 同参数重复付费拦截<br/>连续失败 3 次停 · 连续 5 次无进展停 · 停后需用户回复才解封]
         B2[tool_result: 失败置 isError + 压成 observation<br/>ok/status/code/retry/needs/next/errors/artifact]
         B3[message_end: 没有 STORED 就不许说"已入库"<br/>引号内文字不算断言 · 只在出题/审校后生效]
-        B4[trace: 输入→调用→观察→拦截 全部落盘]
+        B4[goal_report: 停止时写清原因 + 已入库题 + 逐题账本<br/>trace: 输入→调用→观察→拦截→续做 全部落盘]
     end
 ```
 

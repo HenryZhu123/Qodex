@@ -67,19 +67,60 @@ export interface WorkflowLimits {
 	review: number;
 	assembly: number;
 	wallClockMs: number;
-	/** Failed (rejected) calls allowed before the run must stop and hand back. */
+	/** Consecutive rejected calls allowed before the run must stop and hand back. */
 	failures: number;
+	/**
+	 * Calls that spend money but advance nothing. Five of them in a row is not bad luck,
+	 * it is a wrong approach, so the run stops instead of burning the remaining budget.
+	 */
+	noProgress: number;
+	/** Hard ceiling for the whole session, however many goals it serves. */
+	total: number;
 }
 
 const DEFAULT_LIMITS: WorkflowLimits = {
-	// One item may take one draft plus three review-driven rewrites, so a small paper
-	// needs well over six calls; the wall clock and the failure cap stop runaways.
+	// A single item is one draft plus at most three review-driven rewrites.
 	generation: 12,
 	review: 12,
-	assembly: 3,
-	wallClockMs: 45 * 60_000,
+	assembly: 4,
+	wallClockMs: 90 * 60_000,
 	failures: 3,
+	noProgress: 5,
+	total: 40,
 };
+
+/** Above this a "N questions" reading is a misparse, not a quota. */
+const MAX_QUOTA = 40;
+
+const CHINESE_DIGITS: Record<string, number> = {
+	一: 1, 两: 2, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9,
+};
+
+function chineseNumber(token: string): number | undefined {
+	if (token === "十") return 10;
+	if (!token.includes("十")) {
+		return token.length === 1 ? CHINESE_DIGITS[token] : undefined;
+	}
+	const [tens, ones] = token.split("十");
+	const tensValue = tens ? CHINESE_DIGITS[tens] : 1;
+	const onesValue = ones ? CHINESE_DIGITS[ones] : 0;
+	return tensValue === undefined || onesValue === undefined ? undefined : tensValue * 10 + onesValue;
+}
+
+/**
+ * Read how many questions the user asked for. This only sizes the budget; a wrong reading
+ * costs a looser cap, never a wrong answer, so it stays a simple pattern match.
+ */
+export function parseQuota(prompt: string): number | null {
+	const found: number[] = [];
+	for (const match of prompt.matchAll(/(\d{1,2})\s*(?:道|题)/g)) found.push(Number(match[1]));
+	for (const match of prompt.matchAll(/([一两二三四五六七八九十]{1,3})\s*(?:道|题)/g)) {
+		const value = chineseNumber(match[1]);
+		if (value !== undefined) found.push(value);
+	}
+	const usable = found.filter((value) => value >= 1 && value <= MAX_QUOTA);
+	return usable.length > 0 ? Math.max(...usable) : null;
+}
 
 function positiveInteger(value: string | undefined, fallback: number): number {
 	if (!value) return fallback;
@@ -87,13 +128,36 @@ function positiveInteger(value: string | undefined, fallback: number): number {
 	return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
-export function resolveLimits(env: Record<string, string | undefined>): WorkflowLimits {
+/**
+ * Budget is sized by the goal, not by the tool: a five-question paper legitimately needs
+ * five drafts plus rewrites. Explicit environment values always win, so an operator can
+ * still clamp a run.
+ */
+export function resolveLimits(
+	env: Record<string, string | undefined>,
+	quota: number | null = null,
+): WorkflowLimits {
+	const scaled = quota
+		? {
+				generation: Math.min(quota * 2 + 2, 40),
+				review: Math.min(quota * 3 + 2, 40),
+				total: Math.min(Math.max(quota * 5 + 8, DEFAULT_LIMITS.total), 80),
+			}
+		: undefined;
 	return {
-		generation: positiveInteger(env.QODEX_MAX_GENERATION_CALLS, DEFAULT_LIMITS.generation),
-		review: positiveInteger(env.QODEX_MAX_REVIEW_CALLS, DEFAULT_LIMITS.review),
+		generation: positiveInteger(
+			env.QODEX_MAX_GENERATION_CALLS,
+			Math.max(DEFAULT_LIMITS.generation, scaled?.generation ?? 0),
+		),
+		review: positiveInteger(
+			env.QODEX_MAX_REVIEW_CALLS,
+			Math.max(DEFAULT_LIMITS.review, scaled?.review ?? 0),
+		),
 		assembly: positiveInteger(env.QODEX_MAX_ASSEMBLY_CALLS, DEFAULT_LIMITS.assembly),
 		wallClockMs: positiveInteger(env.QODEX_MAX_WALL_CLOCK_MS, DEFAULT_LIMITS.wallClockMs),
 		failures: positiveInteger(env.QODEX_MAX_FAILED_CALLS, DEFAULT_LIMITS.failures),
+		noProgress: positiveInteger(env.QODEX_MAX_NO_PROGRESS_CALLS, DEFAULT_LIMITS.noProgress),
+		total: positiveInteger(env.QODEX_MAX_TOTAL_CALLS, scaled?.total ?? DEFAULT_LIMITS.total),
 	};
 }
 
@@ -329,18 +393,31 @@ function messageText(message: AgentMessage): string {
 		.join("\n");
 }
 
+type ItemRecord = { reviews: number; status: string; code?: string; version?: string; stored: boolean };
+
 export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 	const startedAt = Date.now();
 	const counts: Record<Bucket, number> = { generation: 0, review: 0, assembly: 0 };
 	const completed = new Map<string, Observation>();
 	const rollback = new Map<string, Observation>();
+	/** One entry per question the run has actually reviewed: the closing report reads this. */
+	const items = new Map<string, ItemRecord>();
+	const storedItems = new Set<string>();
 	const traceDir = process.env.QODEX_TRACE_DIR ?? DEFAULT_TRACE_DIR;
 	const traceFile = join(traceDir, `workflow-${startedAt.toString(36)}.jsonl`);
 	let ingestionVerified = false;
 	let policyAttached = false;
 	let domainCalls = 0;
-	let failedCalls = 0;
 	let lastDomainTool = "";
+	/** How many questions the user asked for, when the request said so. */
+	let quota: number | null = null;
+	let stored = 0;
+	let assembled = 0;
+	let consecutiveFailures = 0;
+	let noProgress = 0;
+	/** Set once a stop condition fires; a new user message is the only way out. */
+	let stopped: string | null = null;
+	let resumes = 0;
 
 	const trace = async (event: string, fields: Record<string, unknown> = {}): Promise<void> => {
 		try {
@@ -349,6 +426,24 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		} catch {
 			// Tracing must never block a tool call.
 		}
+	};
+
+	const goalReport = (reason: string): Record<string, unknown> => ({
+		stop: reason,
+		elapsedMs: Date.now() - startedAt,
+		counts: { ...counts },
+		quota,
+		stored,
+		assembled,
+		resumes,
+		items: [...items.entries()].map(([questionId, item]) => ({ question_id: questionId, ...item })),
+	});
+
+	/** One stop condition, one deterministic report: the operator can read why it ended. */
+	const stopRun = async (reason: string): Promise<void> => {
+		if (stopped) return;
+		stopped = reason;
+		await trace("goal_report", goalReport(reason));
 	};
 
 	pi.on("session_start", async (event) => {
@@ -360,6 +455,18 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		// which tool ran, what came back. Prompt text is capped so a pasted paper cannot
 		// bloat the log.
 		await trace("user_prompt", { prompt: event.prompt.slice(0, 2000), length: event.prompt.length });
+		const asked = parseQuota(event.prompt);
+		if (asked !== null) quota = Math.max(quota ?? 0, asked);
+		if (stopped) {
+			// Answering the hand-back is how a run continues: the blockage the user just
+			// addressed is gone, so the streaks that caused it restart at zero.
+			const previous = stopped;
+			stopped = null;
+			resumes += 1;
+			consecutiveFailures = 0;
+			noProgress = 0;
+			await trace("resume", { previous, resumes, quota });
+		}
 		if (!policyEnabled(process.env)) return undefined;
 		policyAttached = true;
 		if (event.systemPrompt.includes(POLICY_MARKER)) return undefined;
@@ -368,12 +475,31 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 
 	pi.on("tool_call", async (event: ToolCallEvent) => {
 		if (!DOMAIN_TOOLS.has(event.toolName)) return undefined;
-		const limits = resolveLimits(process.env);
+		const limits = resolveLimits(process.env, quota);
 		const bucket = bucketOf(event.toolName);
 		const digest = callDigest(event.toolName, event.input);
+		const allowance = limits.total + resumes * 10;
 
+		if (stopped) {
+			await trace("blocked", { tool: event.toolName, reason: "STOPPED", stop: stopped, digest });
+			return {
+				block: true,
+				reason:
+					`RUN_STOPPED: 本轮已因「${stopped}」收尾，不再执行新调用。` +
+					"把已完成部分、卡住的位置、需要用户提供什么说清楚；用户回复后可以继续。",
+			};
+		}
+		if (domainCalls >= allowance) {
+			await stopRun("TOTAL_CALLS");
+			return {
+				block: true,
+				reason:
+					`BUDGET_EXHAUSTED: 整轮已用 ${domainCalls}/${allowance} 次业务调用。` +
+					"停止新调用，报告已完成部分、产出位置与下一步建议。",
+			};
+		}
 		if (bucket && counts[bucket] >= limits[bucket]) {
-			await trace("blocked", { tool: event.toolName, reason: "BUDGET", bucket, digest });
+			await stopRun(`BUDGET:${bucket}`);
 			return {
 				block: true,
 				reason:
@@ -382,7 +508,7 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 			};
 		}
 		if (Date.now() - startedAt > limits.wallClockMs) {
-			await trace("blocked", { tool: event.toolName, reason: "WALL_CLOCK", digest });
+			await stopRun("WALL_CLOCK");
 			return {
 				block: true,
 				reason: "BUDGET_EXHAUSTED: 本轮墙钟已超出预算。停止新调用并向用户报告当前结果。",
@@ -400,19 +526,31 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		}
 		domainCalls += 1;
 		lastDomainTool = event.toolName;
-		if (failedCalls >= limits.failures) {
-			await trace("blocked", { tool: event.toolName, reason: "REPEATED_FAILURES", digest });
+		if (consecutiveFailures >= limits.failures) {
+			await stopRun(`REPEATED_FAILURES:${consecutiveFailures}`);
 			return {
 				block: true,
 				reason:
-					`REPEATED_FAILURES: 本轮已连续失败 ${failedCalls} 次。停止新调用，把失败原文与请求体交回用户，` +
+					`REPEATED_FAILURES: 已连续失败 ${consecutiveFailures} 次。停止新调用，把失败原文与请求体交回用户，` +
 					"不要继续试参数。",
+			};
+		}
+		if (noProgress >= limits.noProgress) {
+			await stopRun(`NO_PROGRESS:${noProgress}`);
+			return {
+				block: true,
+				reason:
+					`NO_PROGRESS: 连续 ${noProgress} 次调用没有新增入库题、也没有改变组卷状态。` +
+					"这不是偶发失败：停下来说明卡在哪一步、已经排除了什么、需要用户补充什么。",
 			};
 		}
 		await trace("tool_call", {
 			tool: event.toolName,
 			digest,
 			counts: { ...counts },
+			quota,
+			stored,
+			noProgress,
 			operation: stringField(event.input as Record<string, unknown>, "operation"),
 		});
 		return undefined;
@@ -424,16 +562,56 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		const observation = observe(event.toolName, payload);
 		const digest = callDigest(event.toolName, event.input);
 		const bucket = bucketOf(event.toolName);
+		const limits = resolveLimits(process.env, quota);
 		if (observation.ok) {
 			completed.set(digest, observation);
 			rollback.delete(digest);
+			consecutiveFailures = 0;
 			// Only successful work consumes the per-tool budget, so one malformed request
-			// cannot end the session; repeated failures are bounded separately below.
+			// cannot end the session; repeated failures are bounded separately.
 			if (bucket) counts[bucket] += 1;
 		} else {
 			rollback.set(digest, observation);
-			failedCalls += 1;
+			consecutiveFailures += 1;
 		}
+
+		// Progress means the run moved forward, not that a call succeeded: a draft nobody
+		// can review is not progress, and neither is a revise that changes nothing.
+		let progress = false;
+		if (event.toolName === REVIEW_TOOL) {
+			const questionId = observation.artifact?.question_id ?? digest;
+			const version = observation.artifact?.version;
+			const record = items.get(questionId);
+			if (!record) {
+				progress = true;
+				items.set(questionId, {
+					reviews: 1,
+					status: observation.status ?? "UNKNOWN",
+					stored: false,
+					...(version ? { version } : {}),
+				});
+			} else {
+				// A revise produces a new version; reviewing that version moves the item on.
+				// Re-reviewing the same version does not, which is how a loop gets caught.
+				if (version && version !== record.version) progress = true;
+				record.reviews += 1;
+				record.status = observation.status ?? record.status;
+				record.code = observation.code;
+				if (version) record.version = version;
+			}
+			if (observation.artifact?.ingestion === "STORED" && !storedItems.has(questionId)) {
+				storedItems.add(questionId);
+				stored += 1;
+				progress = true;
+				const current = items.get(questionId);
+				if (current) current.stored = true;
+			}
+		}
+		if (event.toolName === ASSEMBLY_TOOL && observation.status === "STRUCTURAL_PASS") {
+			assembled += 1;
+			progress = true;
+		}
+		if (bucket) noProgress = progress ? 0 : noProgress + 1;
 		if (observation.artifact?.ingestion === "STORED" || observation.status === "PASS") {
 			ingestionVerified = observation.artifact?.ingestion === "STORED";
 		}
@@ -444,7 +622,13 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 			status: observation.status,
 			code: observation.code,
 			artifact: observation.artifact,
+			progress,
+			stored,
+			noProgress,
 		});
+		if (noProgress >= limits.noProgress && !stopped) {
+			await stopRun(`NO_PROGRESS:${noProgress}`);
+		}
 		if (!payload) return undefined;
 		return {
 			content: [{ type: "text", text: JSON.stringify({ observation }) }],
@@ -474,16 +658,25 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 	});
 
 	pi.registerCommand("qodex", {
-		description: "显示 Qodex 工作流的三类意图、预算使用和 trace 位置",
+		description: "显示 Qodex 工作流的意图、目标账本、预算使用和 trace 位置",
 		handler: async (_args, ctx) => {
-			const limits = resolveLimits(process.env);
+			const limits = resolveLimits(process.env, quota);
+			const itemLines = [...items.entries()].slice(0, 8).map(
+				([questionId, item]) =>
+					`  · ${questionId.slice(0, 16)} ${item.status}${item.stored ? " / 已入库" : ""}（审校 ${item.reviews} 次）`,
+			);
 			const lines = [
 				"Qodex 工作流（先说清你是谁要什么，再动手）",
 				"1) 出题：'数据结构 图 单选 2 道进待审'",
 				"2) 组卷：'数据结构 10 题各 2 分，简单 3 中 5 难 2'",
 				"3) 练题：'我想练循环队列'（只看学生视图）",
+				"4) 非业务/越界：一句话回绝，不调业务工具",
+				`目标：需求题量 ${quota ?? "未说明"}，已入库 ${stored} 道，组卷成功 ${assembled} 次` +
+					`${stopped ? `；已停止（${stopped}）` : ""}`,
+				...itemLines,
 				`预算：命题 ${counts.generation}/${limits.generation}，审校 ${counts.review}/${limits.review}，` +
-					`组卷 ${counts.assembly}/${limits.assembly}；policy=${policyAttached ? "已注入" : "未注入"}`,
+					`组卷 ${counts.assembly}/${limits.assembly}，总调用 ${domainCalls}/${limits.total + resumes * 10}；` +
+					`无进展 ${noProgress}/${limits.noProgress}；policy=${policyAttached ? "已注入" : "未注入"}`,
 				`trace：${traceFile}`,
 			];
 			ctx.ui.notify(lines.join("\n"));

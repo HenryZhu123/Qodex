@@ -7,6 +7,7 @@ import {
 	callDigest,
 	observe,
 	POLICY_MARKER,
+	parseQuota,
 	policyEnabled,
 	resolveLimits,
 } from "../../src/extensions/qodex-workflow/index.ts";
@@ -33,17 +34,33 @@ it("parses limits and keeps the policy switch explicit", () => {
 	expect(resolveLimits({})).toEqual({
 		generation: 12,
 		review: 12,
-		assembly: 3,
-		wallClockMs: 45 * 60_000,
+		assembly: 4,
+		wallClockMs: 90 * 60_000,
 		failures: 3,
+		noProgress: 5,
+		total: 40,
 	});
 	expect(resolveLimits({ QODEX_MAX_GENERATION_CALLS: "2", QODEX_MAX_WALL_CLOCK_MS: "1000" })).toMatchObject({
 		generation: 2,
 		wallClockMs: 1000,
 	});
 	expect(resolveLimits({ QODEX_MAX_GENERATION_CALLS: "0" }).generation).toBe(12);
+	// A stated goal sizes the budget: a five-question paper gets room to draft and rework.
+	expect(resolveLimits({}, 5)).toMatchObject({ generation: 12, review: 17, total: 40 });
+	expect(resolveLimits({}, 10)).toMatchObject({ generation: 22, review: 32, total: 58 });
+	// Explicit environment values still win over the goal-derived size.
+	expect(resolveLimits({ QODEX_MAX_GENERATION_CALLS: "1" }, 10).generation).toBe(1);
 	expect(policyEnabled({})).toBe(true);
 	expect(policyEnabled({ QODEX_WORKFLOW_POLICY: "off" })).toBe(false);
+});
+
+it("reads the requested question count without treating a score as a count", () => {
+	expect(parseQuota("数据结构出10题")).toBe(10);
+	expect(parseQuota("出三道单选")).toBe(3);
+	expect(parseQuota("组十五道题的卷子")).toBe(15);
+	expect(parseQuota("各 2 分，出一份卷")).toBeNull();
+	expect(parseQuota("帮我出点题")).toBeNull();
+	expect(parseQuota("")).toBeNull();
 });
 
 it("digests identical calls the same regardless of key order", () => {
@@ -202,6 +219,105 @@ it("does not spend the generation budget on a rejected request", async () => {
 	await harness.session.prompt("先错一次，再修正后重试");
 
 	expect(fetchStub).toHaveBeenCalledTimes(2);
+});
+
+it("stops when calls keep succeeding but nothing advances", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	const fetchStub = vi
+		.fn<typeof fetch>()
+		.mockImplementation(async () => Response.json({ status: "GENERATED", questions: [{}] }));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	const calls = ["a", "b", "c", "d", "e", "f"].map((id) =>
+		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: id } }), {
+			stopReason: "toolUse",
+		}),
+	);
+	harness.setResponses([...calls, fauxAssistantMessage("stopped")]);
+
+	await harness.session.prompt("出五道题");
+
+	// Five drafts nobody reviewed is no progress; the sixth call never reaches the service.
+	expect(fetchStub).toHaveBeenCalledTimes(5);
+	const results = harness.session.messages.filter((message) => message.role === "toolResult");
+	expect(getMessageText(results[5])).toContain("NO_PROGRESS");
+	const { readdirSync, readFileSync } = await import("node:fs");
+	const dir = process.env.QODEX_TRACE_DIR as string;
+	const log = readdirSync(dir)
+		.map((name) => readFileSync(`${dir}/${name}`, "utf8"))
+		.join("");
+	expect(log).toContain('"event":"goal_report"');
+	expect(log).toContain('"stop":"NO_PROGRESS:5"');
+	// "出五道题" sizes the budget, and the report keeps the ledger for the hand-back.
+	expect(log).toContain('"quota":5');
+});
+
+it("counts a stored question as progress and records it in the ledger", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	// Shape the real service returns: the tool compacts it, so the hook sees the flat form.
+	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(
+		Response.json({
+			task_id: "t-1",
+			question_id: "q-1",
+			question_number: "1",
+			version: 1,
+			review: { status: "PASS", summary: { errors: [] }, checks: [] },
+			ingestion: { status: "STORED" },
+		}),
+	);
+	vi.stubGlobal("fetch", fetchStub);
+	// The review tool lives in another extension, so load both for this case.
+	const withReview = builtInExtensions.filter(
+		(extension) => extension.name === "qodex-workflow" || extension.name === "exam-checker",
+	);
+	harness = await createHarness({ extensionFactories: withReview });
+	harness.setResponses([
+		fauxAssistantMessage(
+			fauxToolCall("exam_checker", { operation: "review_question", task_id: "t-1", question_id: "q-1", version: 1 }),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("审校一下这道题");
+
+	const { readdirSync, readFileSync } = await import("node:fs");
+	const dir = process.env.QODEX_TRACE_DIR as string;
+	const log = readdirSync(dir)
+		.map((name) => readFileSync(`${dir}/${name}`, "utf8"))
+		.join("");
+	expect(log).toContain('"progress":true');
+	expect(log).toContain('"stored":1');
+});
+
+it("lets the run continue once the user answers the hand-back", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	const fetchStub = vi
+		.fn<typeof fetch>()
+		.mockImplementation(async () => Response.json({ status: "GENERATED", questions: [{}] }));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	const first = ["a", "b", "c", "d", "e", "blocked"].map((id) =>
+		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: id } }), {
+			stopReason: "toolUse",
+		}),
+	);
+	harness.setResponses([...first, fauxAssistantMessage("已停止"), fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "g" } }), { stopReason: "toolUse" }), fauxAssistantMessage("继续了")]);
+
+	await harness.session.prompt("出五道题");
+	await harness.session.prompt("材料放好了，继续");
+
+	// The stop blocked the sixth call of the first turn; the new message unblocked the run.
+	expect(fetchStub).toHaveBeenCalledTimes(6);
+	const results = harness.session.messages.filter((message) => message.role === "toolResult");
+	expect(getMessageText(results[5])).toContain("RUN_STOPPED");
+	expect(getMessageText(results[6])).not.toContain("RUN_STOPPED");
+	const { readdirSync, readFileSync } = await import("node:fs");
+	const dir = process.env.QODEX_TRACE_DIR as string;
+	const log = readdirSync(dir)
+		.map((name) => readFileSync(`${dir}/${name}`, "utf8"))
+		.join("");
+	expect(log).toContain('"event":"resume"');
 });
 
 it("refuses to pay twice for the same call", async () => {
