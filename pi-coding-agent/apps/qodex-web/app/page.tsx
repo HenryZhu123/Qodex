@@ -1,10 +1,21 @@
 "use client";
 
 import { useAui } from "@assistant-ui/react";
-import { BookOpen, Database, FileText, History, Home as HomeIcon, Menu, PenLine, RefreshCw } from "lucide-react";
+import {
+	BookOpen,
+	Database,
+	FileText,
+	History,
+	Home as HomeIcon,
+	Library,
+	Menu,
+	PenLine,
+	RefreshCw,
+} from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { AssemblyForm, HistoryDetail, HistoryList } from "@/components/assembly-workspace";
+import { KnowledgeBase } from "@/components/knowledge-base";
 import { PiRequests } from "@/components/pi-requests";
 import { QodexThread } from "@/components/qodex-thread";
 import { QodexThreadList } from "@/components/qodex-thread-list";
@@ -30,6 +41,7 @@ function Workspace() {
 	const pages = [
 		["chat", "工作台", HomeIcon],
 		["checker", "命题与审校", PenLine],
+		["kb", "知识库", Library],
 		["bank", "正式题库", Database],
 		["assembly", "智能组卷", FileText],
 		["history", "组卷历史", History],
@@ -145,7 +157,7 @@ function Workspace() {
 				<main className="qx-mainbody">
 					<div
 						className={
-							route === "chat" || (!["checker", "bank", "assembly", "history"].includes(route) && !detailId)
+							route === "chat" || (!["checker", "bank", "assembly", "history", "kb"].includes(route) && !detailId)
 								? "qx-chatpanel"
 								: "qx-hidden"
 						}
@@ -160,6 +172,9 @@ function Workspace() {
 					</div>
 					<div className={route === "bank" ? "qx-scrollpanel" : "qx-hidden"}>
 						<QuestionBank />
+					</div>
+					<div className={route === "kb" ? "qx-scrollpanel" : "qx-hidden"}>
+						<KnowledgeBase />
 					</div>
 					{route === "history" && (
 						<div className="qx-scrollpanel">
