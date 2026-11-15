@@ -614,7 +614,6 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     if not choice:
         metadata["score"] = request.constraints["total_score"]
     metadata["syllabus_areas"] = list(settings.get("syllabus_areas", []))
-    metadata["knowledge_points"] = list(candidate["design"]["concepts"][:8])
     version = version or (BRIEF_VERSION if brief_plan is not None else engine_version(settings))
     question = {
         "version": 1, "metadata": metadata, "student_view": student,

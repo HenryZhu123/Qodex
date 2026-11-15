@@ -4,6 +4,7 @@ Every model call here is a scripted transport replay. These tests assert the
 delivery contract, not authoring quality.
 """
 from copy import deepcopy
+from typing import Any, cast
 from unittest import TestCase
 
 from test_question_generation_general import CASES, GeneralContractTests, Replay
@@ -310,14 +311,17 @@ class PromptContextTests(DeliveryTests):
         self.assertEqual(rejected['status'], 'SELF_CHECK_FAILED')
         self.assertIn('综合题总分与请求不符', rejected['authoring_report']['details'])
 
-    def test_metadata_carries_scope_and_knowledge_points_without_difficulty(self):
+    def test_metadata_carries_scope_without_knowledge_points_or_difficulty(self):
+        # The bank's knowledge_points are written by exam-checker's annotation, which
+        # runs only after review PASS. Copying design concepts into delivery metadata
+        # produced a free-text list that no code read and that the downstream assembly
+        # step mistook for a classification key, so the field is no longer emitted.
         result, _ = self.run_case(deepcopy(CASES[0]))
         self.assertEqual(result['status'], 'GENERATED', result)
         question, = result['questions']
         metadata = question['metadata']
         self.assertEqual(metadata['syllabus_areas'], ['ds.graphs'])
-        self.assertEqual(metadata['knowledge_points'],
-                         CASES[0]['candidate']['design']['concepts'][:8])
+        self.assertNotIn('knowledge_points', metadata)
         self.assertNotIn('difficulty', metadata)
         self.assertEqual(question['generator']['parameters']['authoring'],
                          CASES[0]['request']['constraints']['authoring'])
@@ -358,7 +362,9 @@ class ReplenishmentPreflightTests(TestCase):
     def test_non_object_payload_is_an_invalid_request_not_an_exception(self):
         for payload in (None, [], 'x'):
             with self.subTest(payload=payload):
-                self.assertEqual(generate_replenishment(payload)['status'], 'INVALID_REQUEST')
+                # Deliberately non-object input: the contract must reject it, not raise.
+                result = generate_replenishment(cast(Any, payload))
+                self.assertEqual(result['status'], 'INVALID_REQUEST')
 
     def test_two_authored_slots_remain_usable(self):
         def scripted(slot):
