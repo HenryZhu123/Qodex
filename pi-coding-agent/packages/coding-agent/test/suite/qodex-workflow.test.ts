@@ -68,6 +68,25 @@ it("digests identical calls the same regardless of key order", () => {
 	expect(callDigest("t", { a: 1 })).not.toBe(callDigest("t", { a: 2 }));
 });
 
+it("treats a targeted repair as success, not as a failed run", () => {
+	// revise_authored returns REVISED; a GENERATED-only success set ended the loop early.
+	expect(
+		observe("question_generation", {
+			status: "REVISED",
+			questions: [{ question_id: "q-1", version: 2 }],
+			queue_receipts: [{ question_id: "q-1", version: 2, status: "QUEUED" }],
+		}),
+	).toMatchObject({ ok: true, artifact: { questions: "1", version: "2" } });
+	// Enqueuing was rejected as stale: the new version never entered review.
+	expect(
+		observe("question_generation", {
+			status: "REVISED",
+			questions: [{ question_id: "q-1", version: 2 }],
+			queue_receipts: [{ question_id: "q-1", version: 2, status: "VERSION_CONFLICT" }],
+		}),
+	).toMatchObject({ ok: false });
+});
+
 it("turns each service payload into a routing observation", () => {
 	expect(observe("question_generation", { status: "GENERATED", questions: [{}, {}] })).toMatchObject({
 		ok: true,

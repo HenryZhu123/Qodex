@@ -222,7 +222,10 @@ function hintFor(status: string | undefined, code: string | undefined): string[]
 		return ["换一次检索范围或检索词", "仍不足则向用户说明缺失的材料类型，不要编造依据"];
 	}
 	if (code === "audit_rejected" || status === "NEEDS_REVISION") {
-		return ["用审校给出的 errors 修订一次（revise_question）", "第二轮仍不过就停下并如实报告"];
+		return [
+			"按审校 errors 调 question_generation.revise（沿用原 task_id，feedback.feedback_id 用 review_id，target_version 用被审校版本）",
+			"v1→v2→v3 共三次审校机会，第三次仍不过就停下并如实报告；每轮必须换改法",
+		];
 	}
 	if (status === "UNRESOLVED") {
 		return ["审校不完整，必须说明未通过而非通过", "重试一次 review_question，或交回用户"];
@@ -286,7 +289,14 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 		const code = stringField(failure, "code");
 		const retry = stringField(failure, "retry");
 		const questions = Array.isArray(payload?.questions) ? payload.questions.length : 0;
-		const ok = status === "GENERATED";
+		// A targeted repair returns REVISED, not GENERATED: treating it as failure stopped
+		// the agent one round early on every review-driven rewrite.
+		const receipts = Array.isArray(payload?.queue_receipts) ? payload.queue_receipts : [];
+		const conflicted = receipts.some((item) => {
+			const state = item && typeof item === "object" ? (item as Record<string, unknown>).status : undefined;
+			return state === "VERSION_CONFLICT" || state === "SUPERSEDED";
+		});
+		const ok = (status === "GENERATED" || status === "REVISED") && !conflicted;
 		const next = ok ? [] : hintFor(status, code);
 		const observation: Observation = { ok, next };
 		if (status) observation.status = status;

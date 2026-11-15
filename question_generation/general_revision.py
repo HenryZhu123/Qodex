@@ -7,6 +7,7 @@ import re
 from .authoring import cached_authoring, read_authoring
 from .comprehensive import read_revision, request_id, revised
 from .curriculum import AREAS
+from .comprehensive import MAX_REVISIONS
 from .general_authoring import BRIEF_VERSION, REVISION_VERSION, SCOUTED_BRIEF_VERSION, VERSION, prompt_fingerprint, run
 from .general_contract import text, validate_candidate
 from .generation import RequestError, _evidence_refs, failure_result
@@ -61,10 +62,13 @@ def revise_authored(payload, *, knowledge=None, client=None, cache_path=None):
         if (feedback["action"] != "repair" or not text(feedback["comment"], 2000)
                 or not text(feedback["feedback_id"], 200)):
             raise RequestError("通用修订须指定 action=repair 和不超过2000字的具体问题。")
-        if current["version"] != 1:
-            raise RequestError("通用创作题只接受一轮定向修订。", "REVISION_LIMIT")
+        # v1 -> v2 -> v3 is the whole chain: the agent may review at most three versions,
+        # so a repaired package must itself be revisable once more.
+        if current["version"] > MAX_REVISIONS:
+            raise RequestError(f"通用创作题最多修订至 v{MAX_REVISIONS + 1}。", "REVISION_LIMIT")
         generator = current["generator"]
-        if generator["version"] not in {VERSION, VERSION + "-public-v1", BRIEF_VERSION, SCOUTED_BRIEF_VERSION}:
+        if generator["version"] not in {VERSION, VERSION + "-public-v1", BRIEF_VERSION,
+                                        SCOUTED_BRIEF_VERSION, REVISION_VERSION}:
             raise RequestError("当前创作版本没有可复用的修订契约。", "UNSUPPORTED_REQUEST")
         if current.get("review_status") != "PENDING" or current["self_check"].get("status") != "PASSED":
             raise RequestError("修订须提供已入待审流程的完整题包。")

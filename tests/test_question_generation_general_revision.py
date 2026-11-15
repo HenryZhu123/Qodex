@@ -72,8 +72,18 @@ class GeneralRevisionTests(TestCase):
                 self.assertEqual([call[0] for call in model.calls], [REPAIR_PROMPT, READER_PROMPT, AUDIT_PROMPT])
                 self.assertEqual(set(model.calls[1][1]), {'question_type', 'student_view'})
                 self.assertEqual(model.calls[2][1]['repair']['feedback'], payload['feedback'])
-                limit = {**payload, 'current_question': repaired,
-                         'feedback': {**payload['feedback'], 'target_version': 2}}
+                # The agent may review v1, v2 and v3, so a repaired package is revisable once more.
+                second = {**payload, 'current_question': repaired,
+                          'feedback': {**payload['feedback'], 'target_version': 2}}
+                # A revision must actually change the question, so replay a different candidate.
+                candidate = deepcopy(case['candidate'])
+                candidate['student_view']['stem'] += ' 按上述约定作答。'
+                third = revise_authored(second, client=RepairReplay(candidate), cache_path=self.cache)
+                self.assertEqual(third['status'], 'REVISED', third)
+                revised, = third['questions']
+                self.assertEqual((revised['version'], revised['revision']['from_version']), (3, 2))
+                limit = {**payload, 'current_question': revised,
+                         'feedback': {**payload['feedback'], 'target_version': 3}}
                 self.assertEqual(revise_authored(limit, client=model, cache_path=self.cache)['status'], 'REVISION_LIMIT')
 
     def test_malformed_target_source_drift_and_stale_feedback_stop_before_model(self):
