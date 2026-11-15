@@ -43,6 +43,14 @@ export function badgeClass(status: unknown): string {
 export function historyUrl(id: string, suffix = ""): string {
 	return `assembly/v1/exam-assembly/history/${encodeURIComponent(id)}${suffix}`;
 }
+export function parseModelSelection(value: string): { provider: string; modelId: string } | undefined {
+	const separator = value.indexOf("/");
+	if (separator <= 0 || separator === value.length - 1) return undefined;
+	return { provider: value.slice(0, separator), modelId: value.slice(separator + 1) };
+}
+export function canReviseQuestion(state: unknown): boolean {
+	return object(object(state).review).status === "NEEDS_REVISION";
+}
 export function validateQuotas(
 	count: number,
 	points: number,

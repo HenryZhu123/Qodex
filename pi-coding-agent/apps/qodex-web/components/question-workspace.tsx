@@ -2,7 +2,17 @@
 
 import { Search, ShieldCheck, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
-import { api, array, type JsonObject, object, post, pretty, statusLabel, text } from "@/lib/workspace-api";
+import {
+	api,
+	array,
+	canReviseQuestion,
+	type JsonObject,
+	object,
+	post,
+	pretty,
+	statusLabel,
+	text,
+} from "@/lib/workspace-api";
 import { Report } from "./assembly-workspace";
 
 export function QuestionBank() {
@@ -329,7 +339,7 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 					<button
 						type="button"
 						className="qx-btn"
-						disabled={busy || !instruction.trim()}
+						disabled={busy || !instruction.trim() || !canReviseQuestion(state)}
 						onClick={() =>
 							run(async () => {
 								await post(`${documentPath}/questions/${encodeURIComponent(text(state.question_id))}/revise`, {
@@ -342,6 +352,7 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 					>
 						按当前版本进行 AI 修订与重审
 					</button>
+					{!canReviseQuestion(state) && <p className="qx-note">只有最新审校状态为“需要修订”的题目才能创建新版本。</p>}
 				</section>
 			)}
 			<GenerationPanel />
@@ -405,10 +416,15 @@ function GenerationPanel() {
 					<option value="comprehensive">综合应用题</option>
 					<option value="revise">修订综合题</option>
 				</select>
-				<button type="button" className="qx-btn" disabled={busy} onClick={example}>
-					加载项目请求示例
+				<button type="button" className="qx-btn" disabled={busy || operation === "revise"} onClick={example}>
+					{operation === "revise" ? "修订需使用真实当前题目" : "加载项目请求示例"}
 				</button>
 			</div>
+			{operation === "revise" && (
+				<p className="qx-note">
+					修订请求必须携带已生成题目的完整 current_question 和对应版本反馈，不能使用通用静态示例。
+				</p>
+			)}
 			<textarea
 				aria-label="命题请求 JSON"
 				rows={12}

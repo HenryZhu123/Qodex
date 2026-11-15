@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { type ReactNode, useEffect, useState } from "react";
+import { parseModelSelection } from "@/lib/workspace-api";
 
 const SUGGESTIONS = [
 	"查询已审校题库中的数据结构题目",
@@ -331,8 +332,8 @@ function ModelPicker() {
 				value={value}
 				disabled={status === "running"}
 				onChange={(event) => {
-					const [nextProvider, nextModelId] = event.target.value.split("/", 2);
-					if (nextProvider && nextModelId) void setModel({ provider: nextProvider, modelId: nextModelId });
+					const selection = parseModelSelection(event.target.value);
+					if (selection) void setModel(selection);
 				}}
 				className="appearance-none border-0 bg-transparent pr-4 text-xs font-medium text-[var(--muted-strong)] outline-none disabled:opacity-50"
 			>

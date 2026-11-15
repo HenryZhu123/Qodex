@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { rejectUnsafeRequest } from "../lib/local-access";
 import { proxyService, serviceTarget } from "../lib/service-proxy";
-import { validateQuotas } from "../lib/workspace-api";
+import { canReviseQuestion, parseModelSelection, validateQuotas } from "../lib/workspace-api";
 
 test("local teacher API rejects hostile origins and non-local hosts", () => {
 	Object.assign(process.env, { NODE_ENV: "development" });
@@ -100,4 +100,20 @@ test("quota validation rejects silent rebalancing, duplicate topics, fractional 
 	);
 	assert.notEqual(validateQuotas(3, 1.5, [{ name: "树", count: 3 }], [1, 2, 0]), "");
 	assert.notEqual(validateQuotas(3, 2, [{ name: "树", count: 3 }], [0, 1, 0]), "");
+});
+
+test("model selections preserve model IDs containing slashes", () => {
+	assert.deepEqual(parseModelSelection("openrouter/anthropic/claude-sonnet-4"), {
+		provider: "openrouter",
+		modelId: "anthropic/claude-sonnet-4",
+	});
+	assert.equal(parseModelSelection("missing-separator"), undefined);
+	assert.equal(parseModelSelection("provider/"), undefined);
+});
+
+test("revision controls follow the backend NEEDS_REVISION precondition", () => {
+	assert.equal(canReviseQuestion({ review: { status: "NEEDS_REVISION" } }), true);
+	assert.equal(canReviseQuestion({ review: { status: "PASS" } }), false);
+	assert.equal(canReviseQuestion({ review: { status: "UNRESOLVED" } }), false);
+	assert.equal(canReviseQuestion(undefined), false);
 });
