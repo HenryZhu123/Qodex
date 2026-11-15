@@ -62,6 +62,8 @@ export interface WorkflowLimits {
 	review: number;
 	assembly: number;
 	wallClockMs: number;
+	/** Failed (rejected) calls allowed before the run must stop and hand back. */
+	failures: number;
 }
 
 const DEFAULT_LIMITS: WorkflowLimits = {
@@ -69,6 +71,7 @@ const DEFAULT_LIMITS: WorkflowLimits = {
 	review: 6,
 	assembly: 3,
 	wallClockMs: 45 * 60_000,
+	failures: 3,
 };
 
 function positiveInteger(value: string | undefined, fallback: number): number {
@@ -83,6 +86,7 @@ export function resolveLimits(env: Record<string, string | undefined>): Workflow
 		review: positiveInteger(env.QODEX_MAX_REVIEW_CALLS, DEFAULT_LIMITS.review),
 		assembly: positiveInteger(env.QODEX_MAX_ASSEMBLY_CALLS, DEFAULT_LIMITS.assembly),
 		wallClockMs: positiveInteger(env.QODEX_MAX_WALL_CLOCK_MS, DEFAULT_LIMITS.wallClockMs),
+		failures: positiveInteger(env.QODEX_MAX_FAILED_CALLS, DEFAULT_LIMITS.failures),
 	};
 }
 
@@ -302,8 +306,12 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 	return { ok: true, next: [] };
 }
 
+// Quoted text is the agent talking about the words, not asserting a result: it explains
+// the rule as `看到 ingestion.status=STORED 才说"已入库"`. Strip quotes before matching,
+// then require an unquoted completion claim.
 function claimOfIngestion(text: string): boolean {
-	return /(已入库|已通过审校|审校通过|已经入库|accepted into the bank)/i.test(text);
+	const unquoted = text.replace(/"[^"]*"|“[^”]*”|「[^」]*」|『[^』]*』|'[^']*'/g, " ");
+	return /((?<![从把])已入库|已通过审校|审校通过|已经入库|accepted into the bank)/i.test(unquoted);
 }
 
 function messageText(message: AgentMessage): string {
@@ -323,6 +331,9 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 	const traceFile = join(traceDir, `workflow-${startedAt.toString(36)}.jsonl`);
 	let ingestionVerified = false;
 	let policyAttached = false;
+	let domainCalls = 0;
+	let failedCalls = 0;
+	let lastDomainTool = "";
 
 	const trace = async (event: string, fields: Record<string, unknown> = {}): Promise<void> => {
 		try {
@@ -380,7 +391,17 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 					"不要重复付费；需要不同结果请改参数或换考点。",
 			};
 		}
-		if (bucket) counts[bucket] += 1;
+		domainCalls += 1;
+		lastDomainTool = event.toolName;
+		if (failedCalls >= limits.failures) {
+			await trace("blocked", { tool: event.toolName, reason: "REPEATED_FAILURES", digest });
+			return {
+				block: true,
+				reason:
+					`REPEATED_FAILURES: 本轮已连续失败 ${failedCalls} 次。停止新调用，把失败原文与请求体交回用户，` +
+					"不要继续试参数。",
+			};
+		}
 		await trace("tool_call", {
 			tool: event.toolName,
 			digest,
@@ -395,11 +416,16 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		const payload = parsePayload(firstText(event.content));
 		const observation = observe(event.toolName, payload);
 		const digest = callDigest(event.toolName, event.input);
+		const bucket = bucketOf(event.toolName);
 		if (observation.ok) {
 			completed.set(digest, observation);
 			rollback.delete(digest);
+			// Only successful work consumes the per-tool budget, so one malformed request
+			// cannot end the session; repeated failures are bounded separately below.
+			if (bucket) counts[bucket] += 1;
 		} else {
 			rollback.set(digest, observation);
+			failedCalls += 1;
 		}
 		if (observation.artifact?.ingestion === "STORED" || observation.status === "PASS") {
 			ingestionVerified = observation.artifact?.ingestion === "STORED";
@@ -424,6 +450,10 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		const text = messageText(event.message);
 		if (!text || !claimOfIngestion(text)) return undefined;
 		if (ingestionVerified) return undefined;
+		// Nothing was executed, so the sentence can only be about capabilities; and a
+		// read-only bank query cannot have produced an ingestion receipt either.
+		if (domainCalls === 0) return undefined;
+		if (lastDomainTool !== REVIEW_TOOL && lastDomainTool !== GENERATION_TOOL) return undefined;
 		const correction =
 			"\n\n[护栏] 本轮没有拿到 ingestion.status=STORED 的回执，因此上面的“已入库/已通过”不成立；" +
 			"请改成“自检通过 / 待审校”或“审校未完成”。";

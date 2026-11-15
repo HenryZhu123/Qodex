@@ -35,6 +35,7 @@ it("parses limits and keeps the policy switch explicit", () => {
 		review: 6,
 		assembly: 3,
 		wallClockMs: 45 * 60_000,
+		failures: 3,
 	});
 	expect(resolveLimits({ QODEX_MAX_GENERATION_CALLS: "2", QODEX_MAX_WALL_CLOCK_MS: "1000" })).toMatchObject({
 		generation: 2,
@@ -179,6 +180,30 @@ it("stops spending when the generation budget is exhausted", async () => {
 	expect(getMessageText(results[1])).toContain("BUDGET_EXHAUSTED");
 });
 
+it("does not spend the generation budget on a rejected request", async () => {
+	vi.stubEnv("QODEX_MAX_GENERATION_CALLS", "1");
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	const fetchStub = vi
+		.fn<typeof fetch>()
+		.mockResolvedValueOnce(Response.json({ status: "INVALID_REQUEST", questions: [], message: "requirements 须为数组" }))
+		.mockResolvedValueOnce(Response.json({ status: "GENERATED", questions: [] }));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	harness.setResponses([
+		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "bad" } }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "good" } }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("先错一次，再修正后重试");
+
+	expect(fetchStub).toHaveBeenCalledTimes(2);
+});
+
 it("refuses to pay twice for the same call", async () => {
 	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
 	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json({ status: "GENERATED", questions: [] }));
@@ -228,6 +253,39 @@ it("reports a domain failure as an error observation instead of a success", asyn
 	const body = JSON.parse(getMessageText(result));
 	expect(body.observation).toMatchObject({ ok: false, code: "audit_rejected", retry: "new_request" });
 	expect(body.observation.next.length).toBeGreaterThan(0);
+});
+
+it("leaves a quoted policy rule alone even after a read-only tool call", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json({ questions: [] }));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	harness.setResponses([
+		fauxAssistantMessage(fauxToolCall("question_bank", { operation: "search_questions", limit: 5 }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage('看到 ingestion.status=STORED 我才会说“已入库”。'),
+	]);
+
+	await harness.session.prompt("题库里有什么？");
+
+	const texts = harness.session.messages
+		.filter((message) => message.role === "assistant")
+		.map((message) => getMessageText(message));
+	expect(texts.at(-1)).not.toContain("[护栏]");
+});
+
+it("leaves a capability sentence alone when no tool ran", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	harness.setResponses([fauxAssistantMessage("我可以从已入库题目组卷，也可以出题送审。")]);
+
+	await harness.session.prompt("你能做什么？");
+
+	const texts = harness.session.messages
+		.filter((message) => message.role === "assistant")
+		.map((message) => getMessageText(message));
+	expect(texts.at(-1)).not.toContain("[护栏]");
 });
 
 it("corrects an ingestion claim that the ledger cannot support", async () => {
