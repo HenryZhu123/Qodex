@@ -136,6 +136,12 @@ it("appends the policy without replacing the assembled system prompt", async () 
 	await harness.session.prompt("帮我出几道 408 题");
 
 	expect(harness.session.systemPrompt).toContain(POLICY_MARKER);
+	// The operator trace must show what the user typed, not only which tools ran.
+	const traceDirPath = process.env.QODEX_TRACE_DIR as string;
+	const { readdirSync, readFileSync } = await import("node:fs");
+	const log = readdirSync(traceDirPath).map((name) => readFileSync(`${traceDirPath}/${name}`, "utf8")).join("");
+	expect(log).toContain('"event":"user_prompt"');
+	expect(log).toContain("帮我出几道 408 题");
 	expect(harness.session.systemPrompt.length).toBeGreaterThan(before.length);
 });
 

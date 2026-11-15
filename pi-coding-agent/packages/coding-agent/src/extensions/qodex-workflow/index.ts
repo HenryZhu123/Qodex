@@ -337,7 +337,11 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		await trace("session_start", { reason: event.reason, trace: traceFile });
 	});
 
-	pi.on("before_agent_start", (event) => {
+	pi.on("before_agent_start", async (event) => {
+		// The trace is the operator's window into a live session: what the user typed,
+		// which tool ran, what came back. Prompt text is capped so a pasted paper cannot
+		// bloat the log.
+		await trace("user_prompt", { prompt: event.prompt.slice(0, 2000), length: event.prompt.length });
 		if (!policyEnabled(process.env)) return undefined;
 		policyAttached = true;
 		if (event.systemPrompt.includes(POLICY_MARKER)) return undefined;
