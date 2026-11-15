@@ -78,7 +78,8 @@ function Workspace() {
 		location.hash = id ? `exam/${id}` : "history";
 	}
 	const detailId = route.startsWith("exam/") ? route.slice(5) : "";
-	const title = detailId ? "试卷详情" : pages.find((p) => p[0] === route)?.[1] || "工作台";
+	const kbDetail = route.startsWith("kb/");
+	const title = detailId ? "试卷详情" : kbDetail ? "知识库" : pages.find((p) => p[0] === route)?.[1] || "工作台";
 	return (
 		<div className="qx-app">
 			<aside className={`qx-sidebar ${sidebarOpen ? "is-open" : ""}`}>
@@ -157,7 +158,8 @@ function Workspace() {
 				<main className="qx-mainbody">
 					<div
 						className={
-							route === "chat" || (!["checker", "bank", "assembly", "history", "kb"].includes(route) && !detailId)
+							route === "chat" ||
+							(!["checker", "bank", "assembly", "history", "kb"].includes(route) && !kbDetail && !detailId)
 								? "qx-chatpanel"
 								: "qx-hidden"
 						}
@@ -173,7 +175,7 @@ function Workspace() {
 					<div className={route === "bank" ? "qx-scrollpanel" : "qx-hidden"}>
 						<QuestionBank />
 					</div>
-					<div className={route === "kb" ? "qx-scrollpanel" : "qx-hidden"}>
+					<div className={route === "kb" || kbDetail ? "qx-scrollpanel" : "qx-hidden"}>
 						<KnowledgeBase />
 					</div>
 					{route === "history" && (

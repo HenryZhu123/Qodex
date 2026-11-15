@@ -947,3 +947,20 @@
 .qx-kb-toolbar .qx-actions {
 	flex: 0 0 auto;
 }
+
+/* Page jump box inside the pager */
+.qx-kb-jump {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	white-space: nowrap;
+}
+.qx-kb-jump input {
+	width: 54px;
+	padding: 5px 6px;
+	text-align: center;
+	border: 1px solid #dfe5d5;
+	border-radius: 7px;
+	background: #fff;
+	font: inherit;
+}

@@ -261,6 +261,31 @@ export async function addBook(subjectKey: string, sourcePath: string): Promise<{
 	return { kbId, job };
 }
 
+/** Add a book uploaded from the browser: the bytes are written straight into the library. */
+export async function addBookFromFile(
+	subjectKey: string,
+	fileName: string,
+	data: Buffer,
+): Promise<{ kbId: string; job: BuildJob; file: string }> {
+	if (!validKey(subjectKey)) throw new Error("专业标识不合法。");
+	const name = path.basename(fileName || "book");
+	if (!/\.(pdf|docx|doc|txt|md)$/i.test(name)) throw new Error("只接受 PDF、DOC、DOCX、TXT、MD。");
+	const kbId = `kb_${Date.now().toString(36)}`;
+	const kbDir = path.join(libraryDir(), kbId);
+	await mkdir(path.join(kbDir, "sources"), { recursive: true });
+	const book = path.join(kbDir, "sources", name);
+	await writeFile(book, data);
+	await writeJson(path.join(kbDir, "book.json"), {
+		id: kbId,
+		title: path.basename(name, path.extname(name)),
+		sourcePath: name,
+		createdAt: new Date().toISOString(),
+	});
+	const job = startBuild(kbDir, book);
+	await linkKb(subjectKey, kbId);
+	return { kbId, job, file: name };
+}
+
 function startBuild(kbDir: string, book: string): BuildJob {
 	const id = Date.now().toString(36);
 	const job: BuildJob = {
