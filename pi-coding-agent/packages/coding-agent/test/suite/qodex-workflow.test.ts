@@ -31,8 +31,8 @@ function traceDir(): string {
 
 it("parses limits and keeps the policy switch explicit", () => {
 	expect(resolveLimits({})).toEqual({
-		generation: 6,
-		review: 6,
+		generation: 12,
+		review: 12,
 		assembly: 3,
 		wallClockMs: 45 * 60_000,
 		failures: 3,
@@ -41,7 +41,7 @@ it("parses limits and keeps the policy switch explicit", () => {
 		generation: 2,
 		wallClockMs: 1000,
 	});
-	expect(resolveLimits({ QODEX_MAX_GENERATION_CALLS: "0" }).generation).toBe(6);
+	expect(resolveLimits({ QODEX_MAX_GENERATION_CALLS: "0" }).generation).toBe(12);
 	expect(policyEnabled({})).toBe(true);
 	expect(policyEnabled({ QODEX_WORKFLOW_POLICY: "off" })).toBe(false);
 });

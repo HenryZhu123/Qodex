@@ -38,27 +38,30 @@ flowchart TD
 
     REV --> V{review.status}
     V -- PASS --> ING[(自动 annotate + 入库<br/>ingestion=STORED)]
-    V -- NEEDS_REVISION --> ONE[revise_question 修 1 轮] --> V2{还不过?}
-    V2 -- 是 --> STOP2([停下, 附审校理由])
+    V -- NEEDS_REVISION --> ONE[revise_question 最多 3 轮<br/>逐轮换改法: 定点修→换结构→换题] --> V2{3 轮仍不过?}
+    V2 -- 是 --> STOP2([停下, 附三轮审校理由])
     V2 -- 否 --> ING
     V -- UNRESOLVED --> STOP3([说明"审校不完整", 不写成通过])
 
     ING --> ASM
     ASM --> A{status}
     A -- STRUCTURAL_PASS --> OUT([学生卷 + 答案卷 HTML<br/>+ 组卷历史])
-    A -- NEEDS_QUESTIONS --> SUP[读 deficits 补题] --> REV2[补的题必须再审校入库] --> ASM2[重排 1 次] --> A2{还缺?}
+    A -- NEEDS_QUESTIONS --> SUP[读 deficits 补题] --> REV2[补的题必须再审校入库] --> ASM2[重排 ≤2 次] --> A2{还缺?}
     A2 -- 是 --> GAP([交回缺口报告, 不硬凑])
     A2 -- 否 --> OUT
     A -- UNRESOLVED --> STOP4([候选池不完整, 不能断言缺题])
     A -- INVALID_REQUEST --> FIX[按 errors 修参数, 不支持的能力要说明]
 
     subgraph GUARD[护栏: 不依赖模型自觉]
-        B1[tool_call: 预算 6/6/3 · 墙钟 45min · 同参数重复付费拦截 · 连续失败 3 次停]
+        B1[tool_call: 预算 12/12/3 · 墙钟 45min · 同参数重复付费拦截 · 连续失败 3 次停]
         B2[tool_result: 失败置 isError + 压成 observation<br/>ok/status/code/retry/needs/next/errors/artifact]
         B3[message_end: 没有 STORED 就不许说"已入库"<br/>引号内文字不算断言 · 只在出题/审校后生效]
         B4[trace: 输入→调用→观察→拦截 全部落盘]
     end
 ```
+
+> 目标形态（三层对象 Goal/Item/Attempt、失败四分类、多题隔离与部分交付、按 Goal 记账的预算）
+> 见 [workflow-target.md](workflow-target.md)。本图只画当前**已实现**的行为。
 
 **读法**：实线是"正常路径"；每个 `STOP` 都是**安全停止**（如实说明 + 交回用户），不是异常崩溃。
 图中任何一步都可能被右下角护栏打断，打断时给出可读理由（预算耗尽 / 重复调用 / 连续失败）。
