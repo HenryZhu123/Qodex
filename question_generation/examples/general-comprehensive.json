@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1",
+  "request_id": "general-topological_design-open",
+  "subject": "data_structures",
+  "topic": "topological_design",
+  "question_type": "comprehensive",
+  "seed": 42,
+  "constraints": {
+    "authoring": {
+      "objective": "design",
+      "syllabus_areas": [
+        "ds.graphs"
+      ]
+    },
+    "total_score": 10
+  },
+  "evidence": [
+    {
+      "id": "note-topological_design",
+      "source": "Qodex自编教学说明（协议与反例测试，非教材检索）",
+      "version": "1",
+      "anchor": "topological_design",
+      "summary": "有向无环图的拓扑序要求每条边的起点先于终点。添加边会增加先后约束；有向环使拓扑序不存在。",
+      "rules": []
+    }
+  ]
+}

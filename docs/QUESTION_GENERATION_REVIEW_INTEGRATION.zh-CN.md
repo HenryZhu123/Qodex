@@ -65,7 +65,7 @@ AI 审校服务 :8091
 
 - `task_id`：UUID 主键。
 - `request_id`：命题模块原有的请求追踪 ID，不是主键或幂等键。
-- `generation_mode`：`single`、`batch`、`comprehensive`、`revise` 或迁移产生的 `legacy`。
+- `generation_mode`：`single`、`batch`、`comprehensive`、`revise`、`author`、`replenishment` 或迁移产生的 `legacy`。
 - `question_count`：任务计划或首次生成的题量。
 - `request_json`：完整命题请求。
 - 模型、Prompt 版本、状态和时间字段。
@@ -316,7 +316,7 @@ npm run demo
 目前已经完成命题版本到审校版本的可靠连接，但仍有以下边界：
 
 1. 没有后台进程自动消费 `pending_questions`，必须由 Pi Agent 或调用方发起审校。
-2. “审校不通过后是否重新命题”由 Pi Agent 根据结构化结果自主决定，不是后端状态机；最多三次是 Agent 策略，因此不同模型的决策轨迹可能不同。
+2. “审校不通过后是否重新命题”由 Pi Agent 根据结构化结果自主决定，不是后端状态机。Pi 侧的政策 + 护栏（`qodex-workflow`）要求逐轮换改法，拦截同参数重复提交并记账，最多审校 v1、v2、v3；但它不是独立编排服务，也不由审校服务驱动，经其他入口调用时需自行遵守。见 [agent-workflow.md](agent-workflow.md) §4 和 §9。
 3. 命题服务当前创建和保存任务，但尚未在所有题都审校完成后自动汇总更新任务最终状态。
 4. 当前命题侧通用修订能力仍受具体题型生成器支持范围约束；不支持的反馈必须明确返回失败，不能让审校服务代为修改。
 5. 文档解析和 AI 命题共用审校快照模型，但来源外键不同，不应把 `document_id` 当成 AI 命题任务 ID。

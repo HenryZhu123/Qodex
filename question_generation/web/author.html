@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>408 自主命题试题台</title>
+  <link rel="stylesheet" href="/ui.css">
+  <script src="/author.js" defer></script>
+</head>
+<body class="author-page">
+  <header class="author-hero">
+    <div class="wrap">
+      <nav class="workbench-nav" aria-label="验证模式">
+        <span class="eyebrow">QODEX / 408</span>
+        <a href="/rules">规则题验证台 ↗</a>
+      </nav>
+      <div class="hero-copy">
+        <p class="eyebrow hero-kicker">自主命题 · 本机试题台</p>
+        <h1>从一句需求，看到一道题怎么被造出来</h1>
+        <p class="subtitle">需求解析、材料检索、创作、盲解与反例审计，每一步都显示在流水线上。哪里通过、哪里被阻断，一眼可见。</p>
+        <div class="tags">
+          <span id="provider-label">正在读取运行配置</span>
+          <span id="knowledge-label" hidden></span>
+          <span>单次一题 · 结果留在本机</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap author-shell">
+    <section class="panel controls author-controls" aria-labelledby="input-title">
+      <div class="panel-head">
+        <p class="eyebrow">01 / 提需求</p>
+        <h2 id="input-title">你想出什么题？</h2>
+        <p class="muted">描述想练的机制、易混点或具体场景，越具体越好。</p>
+      </div>
+      <form id="author-form">
+        <fieldset id="author-controls" disabled>
+          <label class="author-label" for="brief">命题需求</label>
+          <textarea id="brief" name="brief" rows="6" maxlength="2000" placeholder="比如：想练内存这块，考查为什么增加页框后缺页次数反而变多。"></textarea>
+          <p class="muted tiny">留空时，由模块根据科目与材料选择考点。</p>
+          <div class="presets brief-presets" aria-label="填入示例需求">
+            <button type="button" data-brief="想练内存这块">内存</button>
+            <button type="button" data-brief="用最少的边保证拓扑序唯一">拓扑序</button>
+            <button type="button" data-brief="信道容量与码元电平，考查哪个限制先起作用">信道容量</button>
+          </div>
+
+          <details class="author-input-details">
+            <summary>粘贴参考材料</summary>
+            <label class="author-label" for="material">参考材料原文</label>
+            <textarea id="material" name="material" rows="6" maxlength="12000" placeholder="粘贴教材、讲义或自己的笔记。"></textarea>
+            <label class="author-label" for="source">材料来源（可选）</label>
+            <input id="source" name="source" type="text" maxlength="200" placeholder="例如：操作系统讲义，第 6 章">
+          </details>
+
+          <details class="author-input-details">
+            <summary>指定科目或题型</summary>
+            <div class="fields author-fields">
+              <label>科目<select name="subject">
+                <option value="">由模块决定</option><option value="data_structures">数据结构</option>
+                <option value="computer_organization">计算机组成原理</option><option value="operating_systems">操作系统</option>
+                <option value="computer_networks">计算机网络</option>
+              </select></label>
+              <label>题型<select name="question_type"><option value="">由模块决定</option><option value="single_choice">单选题</option><option value="comprehensive">综合题</option></select></label>
+            </div>
+          </details>
+
+          <label id="cloud-label" class="cloud-confirm" hidden><input id="cloud-confirmed" type="checkbox"> 同意本次将需求与材料发给 DeepSeek，最多 4 次模型调用，可能产生费用。</label>
+          <button id="generate-author" type="submit" class="primary generate-button">
+            <span class="generate-icon" aria-hidden="true">✦</span>生成试题
+          </button>
+          <button id="history-example" type="button" class="history-button" hidden>查看历史实测样题</button>
+        </fieldset>
+      </form>
+
+      <div class="controls-note">
+        <span class="note-dot" aria-hidden="true"></span>
+        生成后仍需独立审校，本页结果不会直接入库。
+      </div>
+    </section>
+
+    <div class="author-main">
+      <section class="panel progress-panel" aria-labelledby="pipeline-title">
+        <div class="result-heading progress-heading">
+          <div>
+            <p class="eyebrow">02 / 看进度</p>
+            <h2 id="pipeline-title">命题流水线</h2>
+          </div>
+          <output id="author-status" class="status" data-tone="idle" aria-live="polite">等待输入</output>
+        </div>
+        <p id="author-message" class="muted run-message" aria-live="polite">提交需求后，这里会逐段点亮线路，并保留每个阶段的输出与日志。</p>
+
+        <div class="progress-card">
+          <div class="progress-summary">
+            <div class="progress-track-label">
+              <span class="live-dot" id="live-dot" aria-hidden="true"></span>
+              <strong id="current-stage-label">尚未开始</strong>
+            </div>
+            <div class="progress-metrics" aria-live="off">
+              <span><b id="metric-elapsed">0.0s</b> 用时</span>
+              <span><b id="metric-calls">0</b> 次模型调用</span>
+              <span><b id="metric-tokens">0</b> tokens</span>
+            </div>
+          </div>
+          <div class="progress-rail" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-rail">
+            <span id="progress-fill" class="progress-fill"></span>
+          </div>
+          <ol id="pipeline-track" class="pipeline-track" aria-label="命题阶段线路"></ol>
+        </div>
+
+        <div id="blocked-banner" class="blocked-banner" role="alert" hidden>
+          <span class="blocked-icon" aria-hidden="true">!</span>
+          <div>
+            <strong id="blocked-title">在此阶段被阻断</strong>
+            <p id="blocked-message"></p>
+          </div>
+        </div>
+
+        <div class="stage-section">
+          <div class="section-title-row">
+            <h3>阶段输出</h3>
+            <span class="section-hint">点击线路可定位阶段</span>
+          </div>
+          <ol id="stage-list" class="stage-list"></ol>
+        </div>
+
+        <details class="log-wrap" open>
+          <summary>
+            <span>实时日志</span>
+            <span class="log-hint">随阶段推进追加</span>
+          </summary>
+          <ol id="event-log" class="event-log" aria-live="polite"></ol>
+        </details>
+      </section>
+
+      <section class="panel paper-panel" aria-labelledby="preview-title">
+        <div class="result-heading">
+          <div>
+            <p class="eyebrow">03 / 看题目</p>
+            <h2 id="preview-title">试题预览</h2>
+          </div>
+          <span id="review-badge" class="review-badge" hidden>待独立审校</span>
+        </div>
+        <p id="preview-empty" class="empty-state">生成的题面会出现在这里：先看学生视角，再展开教师答案与评分。</p>
+        <div id="author-question" hidden>
+          <p id="question-meta" class="section-label"></p>
+          <p id="author-stem" class="stem prose"></p>
+          <ol id="author-parts" class="question-parts"></ol>
+          <details id="author-teacher"><summary>教师答案与评分</summary><div id="author-solutions"></div></details>
+        </div>
+        <details id="author-design" hidden><summary>考查计划、材料与自检</summary><div id="author-diagnostics"></div></details>
+        <details id="author-raw" hidden><summary>查看完整结果</summary><pre id="author-json"></pre></details>
+      </section>
+
+      <footer class="scope">试题台调用自主命题模块，预览结果留在本机。模型题仍需独立审校。</footer>
+    </div>
+  </main>
+</body>
+</html>

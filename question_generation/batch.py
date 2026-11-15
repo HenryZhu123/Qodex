@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from random import Random
 from unicodedata import normalize
@@ -14,7 +15,7 @@ METADATA_FIELDS = ("subject", "topic", "question_type")
 BATCH_FIELDS = {"schema_version", "request_id", "seed", "question_count", "total_score", "slots"}
 SLOT_FIELDS = {"slot_id", "count", "score_per_question", *METADATA_FIELDS}
 REFERENCE_FIELDS = {"reference_id", "stem", "source", "license"}
-TERMINAL_STATUSES = {"INVALID_REQUEST", "UNSUPPORTED_REQUEST", "NEEDS_MATERIAL"}
+TERMINAL_STATUSES = {"INVALID_REQUEST", "UNSUPPORTED_REQUEST", "NEEDS_MATERIAL", "KNOWLEDGE_BASE_UNAVAILABLE", "MODEL_UNAVAILABLE", "AUTHORING_CACHE_UNAVAILABLE", "SELF_CHECK_FAILED"}
 
 
 @dataclass
@@ -28,6 +29,12 @@ class SlotSample:
 
 def _is_text(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
+
+
+def authored_question_count(slots: list[dict]) -> int:
+    """Number of paid model-authored items a batch would request."""
+    return sum(slot["count"] for slot in slots
+               if isinstance(slot.get("constraints"), dict) and "authoring" in slot["constraints"])
 
 
 def _validate(payload: object) -> None:
@@ -67,6 +74,11 @@ def _validate(payload: object) -> None:
         seen.add(slot["slot_id"])
         if any(type(slot[key]) is not int or slot[key] < 1 for key in ("count", "score_per_question")):
             raise ValueError("槽位题量和每题分值必须是正整数。")
+    authored_count = authored_question_count(slots)
+    if authored_count > 2:
+        raise ValueError(
+            f"单批最多包含 2 道模型创作题，当前为 {authored_count} 道；"
+            "请按槽位拆分为多个请求（每个请求最多 2 道 authored 题）以控制调用预算。")
     if sum(slot["count"] for slot in slots) != count:
         raise ValueError("各槽位题量之和必须等于 question_count。")
     if sum(slot["count"] * slot["score_per_question"] for slot in slots) != score:
@@ -107,15 +119,20 @@ def _matches(question: dict, slot: dict) -> bool:
 
 
 def _sample_slot(
-    slot: dict, request_id: str, index: int, rng: Random, reference_index: dict[str, list[dict]]
+    slot: dict, request_id: str, index: int, rng: Random, reference_index: dict[str, list[dict]],
+    single_generator: Callable[[object], dict],
 ) -> SlotSample:
     base = {key: slot[key] for key in (*METADATA_FIELDS, "constraints", "evidence") if key in slot}
     candidates = {}
     last_failure = None
     blocked_attempts = 0
     matched_references = {}
-    for attempt in range(1, ATTEMPTS_PER_QUESTION * slot["count"] + 1):
-        result = generate_question({
+    # Model candidates already undergo bounded internal selection. Do not turn
+    # the rule-generator search budget into 8*n paid authoring runs.
+    authored = isinstance(slot.get("constraints"), dict) and "authoring" in slot["constraints"]
+    attempts = slot["count"] if authored else ATTEMPTS_PER_QUESTION * slot["count"]
+    for attempt in range(1, attempts + 1):
+        result = single_generator({
             **base,
             "schema_version": SCHEMA_VERSION,
             "request_id": f"{request_id}/batch/{index}/{attempt}",
@@ -126,7 +143,7 @@ def _sample_slot(
             last_failure = {"code": status, "message": result["message"]}
             if "missing_rules" in result:
                 last_failure["missing_rules"] = result["missing_rules"]
-            if status in TERMINAL_STATUSES:
+            if status in TERMINAL_STATUSES and (status != "SELF_CHECK_FAILED" or authored):
                 break
             continue
         questions = result["questions"]
@@ -170,7 +187,10 @@ def _allocate(slots: list[dict], pools: list[dict]) -> dict[str, int]:
     return owners
 
 
-def generate_batch(payload: object) -> dict:
+def generate_batch(
+    payload: object, *, single_generator: Callable[[object], dict] | None = None,
+    reserved_stems: tuple[str, ...] = (),
+) -> dict:
     """Fill a batch of scored slots using self-checked single questions."""
     try:
         _validate(payload)
@@ -180,9 +200,16 @@ def generate_batch(payload: object) -> dict:
         return failure_result("INVALID_REQUEST", str(error), request_id if _is_text(request_id) else None)
 
     request_id = payload["request_id"]
+    for index, stem in enumerate(reserved_stems, 1):
+        reference_index.setdefault(_stem_key(stem), []).append({
+            "reference_id": f"reserved-stem-{index}",
+            "source": request_id,
+        })
     slots = payload["slots"]
     rng = Random(payload["seed"])
-    samples = [_sample_slot(slot, request_id, index, rng, reference_index) for index, slot in enumerate(slots)]
+    generator = single_generator if single_generator is not None else generate_question
+    samples = [_sample_slot(slot, request_id, index, rng, reference_index, generator)
+               for index, slot in enumerate(slots)]
     owners = _allocate(slots, [sample.candidates for sample in samples])
     questions = []
     deficits = []
@@ -243,6 +270,6 @@ def generate_batch(payload: object) -> dict:
         "questions": questions,
         "deficits": deficits,
     }
-    if "reference_questions" in payload:
+    if "reference_questions" in payload or reserved_stems:
         result["reference_matches"] = reference_matches
     return result

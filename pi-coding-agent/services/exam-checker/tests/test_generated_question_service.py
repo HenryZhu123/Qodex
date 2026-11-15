@@ -38,9 +38,12 @@ def test_generated_package_becomes_task_scoped_question_snapshot() -> None:
     assert question.question_id == "paging-1"
     assert question.question_number == "paging-1"
     assert question.points == 2
-    assert question.options == ["0x1000", "0x2000"]
+    # 408 single choice carries no score in the package; the hand-off supplies the convention.
+    assert question.subject == "操作系统"
+    assert question.options == ["A. 0x1000", "B. 0x2000"]
     assert question.section_titles == ["single_level_paging"]
-    assert question.reference == "OSTEP Paging"
+    # Evidence is provenance, not shared material; assembly rejects a non-empty reference.
+    assert question.reference == ""
 
 
 @pytest.mark.asyncio

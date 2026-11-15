@@ -1,0 +1,98 @@
+{
+  "request_id": "sample-pass-1",
+  "status": "STRUCTURAL_PASS",
+  "eligible_candidate_count": 1,
+  "eligible_question_ids": [
+    "ea1b3e83-0705-4b14-a258-4d7c4f915585"
+  ],
+  "uses_mock_reviews": false,
+  "topic_deficits": {
+    "循环队列": 0
+  },
+  "difficulty_deficits": {
+    "easy": 0,
+    "medium": 0,
+    "hard": 0
+  },
+  "excluded_questions": [],
+  "note": "真实题库接口；已核对版本和 PASS，已接入字面相似筛查及内容绑定人工复核。未认证完整语义去重，未检测跨题提示。",
+  "selection_trace": {
+    "search_nodes": 2,
+    "budget_exhausted": false,
+    "max_nodes": 50000
+  },
+  "repair_history": [],
+  "initial_question_ids": [
+    "ea1b3e83-0705-4b14-a258-4d7c4f915585"
+  ],
+  "validation": {
+    "passed": true,
+    "checks": {
+      "question_count": true,
+      "total_score": true,
+      "unique_ids": true,
+      "topic_counts": true,
+      "difficulty_counts": true,
+      "subject_and_type": true,
+      "individual_scores": true,
+      "current_reviews": true,
+      "unique_stems": true,
+      "confirmed_duplicate_pairs_absent": true,
+      "no_pending_lexical_flags": true
+    },
+    "actual_total_score": 2,
+    "actual_topic_counts": {
+      "循环队列": 1
+    },
+    "actual_difficulty_counts": {
+      "medium": 1
+    },
+    "semantic_checks": "LEXICAL_SCREEN_AND_SUPPLIED_HUMAN_DECISIONS_ONLY"
+  },
+  "conflicts": [],
+  "confirmed_duplicate_pairs": [],
+  "accepted_similarity_decisions": [],
+  "initial_similarity_screen": {
+    "policy_version": "lexical-v1",
+    "method": "ALL_SELECTED_PAIRS_LEXICAL_SCREEN",
+    "pair_count": 0,
+    "flagged_pairs": [],
+    "semantic_quality_certified": false,
+    "note": "字面线索仅用于筛查，可能漏掉改写题或标记正常题；同知识点或同答案本身不构成重复证据。未检测跨题提示。"
+  },
+  "similarity_review": {
+    "policy_version": "lexical-v1",
+    "method": "ALL_SELECTED_PAIRS_LEXICAL_SCREEN",
+    "pair_count": 0,
+    "flagged_pairs": [],
+    "semantic_quality_certified": false,
+    "note": "字面线索仅用于筛查，可能漏掉改写题或标记正常题；同知识点或同答案本身不构成重复证据。未检测跨题提示。",
+    "status": "NO_PENDING_LEXICAL_FLAGS",
+    "pending_pair_count": 0
+  },
+  "schema_version": "1.0",
+  "mode": "POSTGRES_QUESTION_BANK_API",
+  "pool_complete": true,
+  "rejected_records": [],
+  "artifacts": {
+    "student_exam_html": "<repo>/.local/demo-logs/assembly/751075d5b9d54c93b2a102c73b7ae5b5/student_exam.html",
+    "answer_key_html": "<repo>/.local/demo-logs/assembly/751075d5b9d54c93b2a102c73b7ae5b5/answer_key.html",
+    "student_exam": "<repo>/.local/demo-logs/assembly/751075d5b9d54c93b2a102c73b7ae5b5/student_exam.json",
+    "answer_key": "<repo>/.local/demo-logs/assembly/751075d5b9d54c93b2a102c73b7ae5b5/answer_key.json",
+    "request": "<repo>/.local/demo-logs/assembly/751075d5b9d54c93b2a102c73b7ae5b5/request.json",
+    "report": "<repo>/.local/demo-logs/assembly/751075d5b9d54c93b2a102c73b7ae5b5/report.json"
+  },
+  "selected_sources": [
+    {
+      "record_id": "ea1b3e83-0705-4b14-a258-4d7c4f915585",
+      "task_id": "8125b0b3-6dd4-4d0c-89c2-0fccd3e82f72",
+      "question_id": "authored-d7a1c7daf13a3796209835f0",
+      "version": 1
+    }
+  ],
+  "history": {
+    "status": "STORED",
+    "exam_id": "b03406aa-ff2d-4ed0-a9b6-db149c4be68f",
+    "created_at": "2026-11-15T09:03:31.712725+00:00"
+  }
+}

@@ -1,0 +1,1494 @@
+[
+  {
+    "provenance": "assistant-authored test fixture, not model experiment",
+    "request": {
+      "schema_version": "0.1",
+      "request_id": "general-topological_design",
+      "subject": "data_structures",
+      "topic": "topological_design",
+      "question_type": "single_choice",
+      "seed": 42,
+      "constraints": {
+        "authoring": {
+          "objective": "design",
+          "syllabus_areas": [
+            "ds.graphs"
+          ]
+        }
+      },
+      "evidence": [
+        {
+          "id": "note-topological_design",
+          "source": "Qodex自编教学说明（协议与反例测试，非教材检索）",
+          "version": "1",
+          "anchor": "topological_design",
+          "summary": "有向无环图的拓扑序要求每条边的起点先于终点。添加边会增加先后约束；有向环使拓扑序不存在。",
+          "rules": []
+        }
+      ]
+    },
+    "candidate": {
+      "student_view": {
+        "stem": "有向图的顶点为A、B、C、D，边为A→C、B→C、C→D。只允许添加一条边，要求图仍无环且拓扑序唯一，应选择哪条边？",
+        "options": [
+          {
+            "id": "A",
+            "text": "A→B"
+          },
+          {
+            "id": "B",
+            "text": "A→D"
+          },
+          {
+            "id": "C",
+            "text": "D→C"
+          },
+          {
+            "id": "D",
+            "text": "C→B"
+          }
+        ]
+      },
+      "instructor_view": {
+        "correct_option_id": "A",
+        "explanation": "原图允许ABCD和BACD。A→B消除B在A前的可能，只剩ABCD；A→D已由路径蕴含，另外两项产生环。",
+        "option_explanations": {
+          "A": "增加A先于B约束，唯一为ABCD。",
+          "B": "A→C→D已经蕴含A先于D，仍有两个顺序。",
+          "C": "与C→D构成环，无拓扑序。",
+          "D": "与B→C构成环，无拓扑序。"
+        },
+        "misconceptions": {
+          "B": "把冗余约束当作新增信息。",
+          "C": "只看限制更多，忽略存在性。",
+          "D": "混淆强制顺序与有向环。"
+        }
+      },
+      "design": {
+        "target": "同时满足可行性和唯一性，区分有效约束、冗余约束与矛盾约束。",
+        "concepts": [
+          "同时满足可行性和唯一性，区分有效约束、冗余约束与矛盾约束。"
+        ],
+        "claims": [
+          {
+            "id": "k1",
+            "statement": "有向无环图的拓扑序要求每条边的起点先于终点。添加边会增加先后约束；有向环使拓扑序不存在。",
+            "evidence_id": "note-topological_design",
+            "quote": "有向无环图的拓扑序要求每条边的起点先于终点。添加边会增加先后约束；有向环使拓扑序不存在。"
+          }
+        ],
+        "givens": [
+          {
+            "id": "g1",
+            "text": "边为A→C、B→C、C→D"
+          }
+        ],
+        "derivation": [
+          {
+            "id": "d1",
+            "uses": [
+              "k1",
+              "g1"
+            ],
+            "result": "原图仅A、B的相对先后未定，合法序为ABCD和BACD。"
+          },
+          {
+            "id": "d2",
+            "uses": [
+              "d1",
+              "k1",
+              "g1"
+            ],
+            "result": "加入A→B排除BACD，且不产生环；其余候选冗余或成环。"
+          }
+        ],
+        "conclusions": [
+          "d2"
+        ],
+        "counterfactual": {
+          "given_id": "g1",
+          "replacement": "把C→D改成D→C",
+          "effect": "添加A→B后D的位置仍未唯一，原答案不再满足要求。",
+          "reason": "可有ABDC和DABC，说明原C→D约束对唯一性有作用。"
+        }
+      },
+      "calculations": [
+        {
+          "kind": "finite_domain",
+          "inputs": {
+            "domains": {
+              "a": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "b": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "c": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "d": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            "constraints": [
+              [
+                "ne",
+                "a",
+                "b"
+              ],
+              [
+                "ne",
+                "a",
+                "c"
+              ],
+              [
+                "ne",
+                "a",
+                "d"
+              ],
+              [
+                "ne",
+                "b",
+                "c"
+              ],
+              [
+                "ne",
+                "b",
+                "d"
+              ],
+              [
+                "ne",
+                "c",
+                "d"
+              ],
+              [
+                "lt",
+                "a",
+                "c"
+              ],
+              [
+                "lt",
+                "b",
+                "c"
+              ],
+              [
+                "lt",
+                "c",
+                "d"
+              ]
+            ],
+            "queries": [
+              {
+                "id": "A",
+                "mode": "count",
+                "predicate": [
+                  "lt",
+                  "a",
+                  "b"
+                ]
+              },
+              {
+                "id": "B",
+                "mode": "count",
+                "predicate": [
+                  "lt",
+                  "a",
+                  "d"
+                ]
+              },
+              {
+                "id": "C",
+                "mode": "count",
+                "predicate": [
+                  "lt",
+                  "d",
+                  "c"
+                ]
+              },
+              {
+                "id": "D",
+                "mode": "count",
+                "predicate": [
+                  "lt",
+                  "c",
+                  "b"
+                ]
+              }
+            ]
+          },
+          "result": {
+            "solution_count": 2,
+            "queries": {
+              "A": 1,
+              "B": 2,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "provenance": "assistant-authored test fixture, not model experiment",
+    "request": {
+      "schema_version": "0.1",
+      "request_id": "general-overflow_diagnosis",
+      "subject": "computer_organization",
+      "topic": "overflow_diagnosis",
+      "question_type": "single_choice",
+      "seed": 42,
+      "constraints": {
+        "authoring": {
+          "objective": "diagnose",
+          "syllabus_areas": [
+            "co.representation"
+          ]
+        }
+      },
+      "evidence": [
+        {
+          "id": "note-overflow_diagnosis",
+          "source": "Qodex自编教学说明（协议与反例测试，非教材检索）",
+          "version": "1",
+          "anchor": "overflow_diagnosis",
+          "summary": "8位补码范围为-128至127。同号相加而结果符号改变时发生有符号溢出。无符号进位表示和超过255，与有符号溢出不同。",
+          "rules": []
+        }
+      ]
+    },
+    "candidate": {
+      "student_view": {
+        "stem": "某8位加法器输出低8位结果，并报告一个声称表示有符号溢出的标志V。测试0x7F+0x01得到0x80、V=0；测试0xFF+0x01得到0x00、V=1。若只在下列四种标志实现中选择，哪种实现与两次观测都一致？",
+        "options": [
+          {
+            "id": "A",
+            "text": "V取最高位向外的进位"
+          },
+          {
+            "id": "B",
+            "text": "V取结果的符号位"
+          },
+          {
+            "id": "C",
+            "text": "V取两个输入符号位的异或再取反"
+          },
+          {
+            "id": "D",
+            "text": "V按同号输入得到异号结果判断"
+          }
+        ]
+      },
+      "instructor_view": {
+        "correct_option_id": "A",
+        "explanation": "127+1超出有符号范围但没有无符号进位；255+1有向外进位，而补码-1+1=0不溢出。观测恰好是进位标志0、1。",
+        "option_explanations": {
+          "A": "两个无符号和为128和256，向外进位分别0和1。",
+          "B": "结果符号分别1和0，与观测相反。",
+          "C": "输入符号相同与不同，分别得到1和0，与观测相反。",
+          "D": "正确溢出标志应为1和0，与观测相反。"
+        },
+        "misconceptions": {
+          "B": "把结果为负当成溢出。",
+          "C": "只看同号输入，忽略结果符号。",
+          "D": "把正确判断条件误认为与错误观测一致。"
+        }
+      },
+      "design": {
+        "target": "用两种解释下的运算边界诊断标志实现错误。",
+        "concepts": [
+          "用两种解释下的运算边界诊断标志实现错误。"
+        ],
+        "claims": [
+          {
+            "id": "k1",
+            "statement": "8位补码范围为-128至127。同号相加而结果符号改变时发生有符号溢出。无符号进位表示和超过255，与有符号溢出不同。",
+            "evidence_id": "note-overflow_diagnosis",
+            "quote": "8位补码范围为-128至127。同号相加而结果符号改变时发生有符号溢出。无符号进位表示和超过255，与有符号溢出不同。"
+          }
+        ],
+        "givens": [
+          {
+            "id": "g1",
+            "text": "测试0x7F+0x01得到0x80、V=0；测试0xFF+0x01得到0x00、V=1"
+          }
+        ],
+        "derivation": [
+          {
+            "id": "d1",
+            "uses": [
+              "k1",
+              "g1"
+            ],
+            "result": "两次运算的补码溢出应为1、0，而无符号进位为0、1。"
+          },
+          {
+            "id": "d2",
+            "uses": [
+              "d1",
+              "k1",
+              "g1"
+            ],
+            "result": "逐项计算标志，只有向外进位符合两次观察。"
+          }
+        ],
+        "conclusions": [
+          "d2"
+        ],
+        "counterfactual": {
+          "given_id": "g1",
+          "replacement": "两次测试都改为0x01+0x01，V=0",
+          "effect": "无法区分向外进位、结果符号与正确溢出判断。",
+          "reason": "三者均为0，两条有区分力的观测被移除。"
+        }
+      },
+      "calculations": []
+    }
+  },
+  {
+    "provenance": "assistant-authored test fixture, not model experiment",
+    "request": {
+      "schema_version": "0.1",
+      "request_id": "general-safe_state",
+      "subject": "operating_systems",
+      "topic": "safe_state",
+      "question_type": "single_choice",
+      "seed": 42,
+      "constraints": {
+        "authoring": {
+          "objective": "analyze",
+          "syllabus_areas": [
+            "os.process"
+          ]
+        }
+      },
+      "evidence": [
+        {
+          "id": "note-safe_state",
+          "source": "Qodex自编教学说明（协议与反例测试，非教材检索）",
+          "version": "1",
+          "anchor": "safe_state",
+          "summary": "银行家安全检查在某进程剩余最大需求不超过可用资源时，可假设它完成并归还已分配资源，再检查其他进程。存在能让所有进程完成的顺序即安全。不安全表示不能保证满足所有最大需求，并不等于当前已经死锁。",
+          "rules": []
+        }
+      ]
+    },
+    "candidate": {
+      "student_view": {
+        "stem": "系统只有一种可复用资源，共10个单位。P1已分配3、最大需求7；P2已分配2、最大需求5；P3已分配2、最大需求3。各进程当前尚未阻塞。若立即批准P1再申请2个单位，以下判断何者成立？",
+        "options": [
+          {
+            "id": "A",
+            "text": "批准后仍安全，可按P3、P1、P2完成"
+          },
+          {
+            "id": "B",
+            "text": "批准后不安全，P1剩余需求大于当前可用量"
+          },
+          {
+            "id": "C",
+            "text": "批准后已死锁，三个进程不能同时满足最大需求"
+          },
+          {
+            "id": "D",
+            "text": "批准前安全，但批准后任何进程均无法完成"
+          }
+        ]
+      },
+      "instructor_view": {
+        "correct_option_id": "A",
+        "explanation": "批准后可用1，剩余需求为2、3、1。P3先完成归还2，使可用3；P1再完成归还5，使可用8，最后P2完成。",
+        "option_explanations": {
+          "A": "安全检查得到可用量1→3→8→10。",
+          "B": "安全性允许其他进程先完成，不要求P1立刻完成。",
+          "C": "安全顺序存在，且题面说明当前尚未阻塞。",
+          "D": "P3的剩余需求为1，恰好可先满足。"
+        },
+        "misconceptions": {
+          "B": "只检查申请者而忽略资源释放顺序。",
+          "C": "把同时满足最大需求当作安全必要条件。",
+          "D": "忘记计算其他进程的剩余需求。"
+        }
+      },
+      "design": {
+        "target": "根据分配变化寻找完成顺序，区分可用量与长期可满足性。",
+        "concepts": [
+          "根据分配变化寻找完成顺序，区分可用量与长期可满足性。"
+        ],
+        "claims": [
+          {
+            "id": "k1",
+            "statement": "银行家安全检查在某进程剩余最大需求不超过可用资源时，可假设它完成并归还已分配资源，再检查其他进程。存在能让所有进程完成的顺序即安全。不安全表示不能保证满足所有最大需求，并不等于当前已经死锁。",
+            "evidence_id": "note-safe_state",
+            "quote": "银行家安全检查在某进程剩余最大需求不超过可用资源时，可假设它完成并归还已分配资源，再检查其他进程。存在能让所有进程完成的顺序即安全。不安全表示不能保证满足所有最大需求，并不等于当前已经死锁。"
+          }
+        ],
+        "givens": [
+          {
+            "id": "g1",
+            "text": "共10个单位。P1已分配3、最大需求7；P2已分配2、最大需求5；P3已分配2、最大需求3"
+          }
+        ],
+        "derivation": [
+          {
+            "id": "d1",
+            "uses": [
+              "k1",
+              "g1"
+            ],
+            "result": "批准后可用1，P1/P2/P3剩余需求分别为2、3、1。"
+          },
+          {
+            "id": "d2",
+            "uses": [
+              "d1",
+              "k1",
+              "g1"
+            ],
+            "result": "P3归还2后可用3，P1归还5后可用8，P2可完成，故安全。"
+          }
+        ],
+        "conclusions": [
+          "d2"
+        ],
+        "counterfactual": {
+          "given_id": "g1",
+          "replacement": "资源总量改为9，其他数值不变，仍批准申请",
+          "effect": "批准后可用0，无进程能满足其剩余最大需求，状态不安全，但不能断言已死锁。",
+          "reason": "所有剩余需求均大于0；当前未阻塞不允许等同于死锁。"
+        }
+      },
+      "calculations": []
+    }
+  },
+  {
+    "provenance": "assistant-authored test fixture, not model experiment",
+    "request": {
+      "schema_version": "0.1",
+      "request_id": "general-route_aggregation",
+      "subject": "computer_networks",
+      "topic": "route_aggregation",
+      "question_type": "single_choice",
+      "seed": 42,
+      "constraints": {
+        "authoring": {
+          "objective": "design",
+          "syllabus_areas": [
+            "cn.network"
+          ]
+        }
+      },
+      "evidence": [
+        {
+          "id": "note-route_aggregation",
+          "source": "Qodex自编教学说明（协议与反例测试，非教材检索）",
+          "version": "1",
+          "anchor": "route_aggregation",
+          "summary": "IPv4转发使用目的地址的最长前缀匹配。路由聚合以较短共同前缀表示连续地址块，但更具体路由优先于聚合路由。未匹配任何专用前缀时才使用默认路由。",
+          "rules": []
+        }
+      ]
+    },
+    "candidate": {
+      "student_view": {
+        "stem": "路由器有10.0.0.0/24→X、10.0.1.0/24→X、10.0.1.128/25→Y以及默认路由→Z。只合并前两条且保留其余条目，要求所有IPv4目的地址的转发下一跳不变，应采用哪个替代条目？",
+        "options": [
+          {
+            "id": "A",
+            "text": "10.0.0.0/23→X"
+          },
+          {
+            "id": "B",
+            "text": "10.0.0.0/22→X"
+          },
+          {
+            "id": "C",
+            "text": "10.0.0.0/24→X"
+          },
+          {
+            "id": "D",
+            "text": "10.0.0.0/23→Y"
+          }
+        ]
+      },
+      "instructor_view": {
+        "correct_option_id": "A",
+        "explanation": "两个/24恰好组成/23，保留的/25仍优先去Y；/22额外覆盖10.0.2.0至10.0.3.255，原本去Z的流量会被改变。",
+        "option_explanations": {
+          "A": "覆盖范围恰好，且/25优先于/23。",
+          "B": "例如10.0.2.1会从Z改去X。",
+          "C": "例如10.0.1.1会从X改去Z。",
+          "D": "例如10.0.0.1会从X改去Y。"
+        },
+        "misconceptions": {
+          "B": "只验证已有X地址，忽略聚合扩大覆盖的反例。",
+          "C": "遗漏第二个/24中的非例外地址。",
+          "D": "把更具体路由的下一跳错误推广到整个聚合段。"
+        }
+      },
+      "design": {
+        "target": "同时检查聚合边界和例外优先级，用反例验证全地址行为不变。",
+        "concepts": [
+          "同时检查聚合边界和例外优先级，用反例验证全地址行为不变。"
+        ],
+        "claims": [
+          {
+            "id": "k1",
+            "statement": "IPv4转发使用目的地址的最长前缀匹配。路由聚合以较短共同前缀表示连续地址块，但更具体路由优先于聚合路由。未匹配任何专用前缀时才使用默认路由。",
+            "evidence_id": "note-route_aggregation",
+            "quote": "IPv4转发使用目的地址的最长前缀匹配。路由聚合以较短共同前缀表示连续地址块，但更具体路由优先于聚合路由。未匹配任何专用前缀时才使用默认路由。"
+          }
+        ],
+        "givens": [
+          {
+            "id": "g1",
+            "text": "10.0.0.0/24→X、10.0.1.0/24→X、10.0.1.128/25→Y以及默认路由→Z"
+          }
+        ],
+        "derivation": [
+          {
+            "id": "d1",
+            "uses": [
+              "k1",
+              "g1"
+            ],
+            "result": "前两条覆盖10.0.0.0至10.0.1.255，正好是/23。"
+          },
+          {
+            "id": "d2",
+            "uses": [
+              "d1",
+              "k1",
+              "g1"
+            ],
+            "result": "/25例外保留且更长；检查外部地址排除/22扩展，检查内部地址排除其余选项。"
+          }
+        ],
+        "conclusions": [
+          "d2"
+        ],
+        "counterfactual": {
+          "given_id": "g1",
+          "replacement": "删除10.0.1.128/25→Y后再比较合并前后的行为",
+          "effect": "原先10.0.1.200去Y，现在去X，不能声称保持原表全部行为。",
+          "reason": "最长匹配例外被删除，聚合覆盖正确本身不足以保证转发等价。"
+        }
+      },
+      "calculations": []
+    }
+  },
+  {
+    "provenance": "assistant-authored test fixture, not model experiment",
+    "request": {
+      "schema_version": "0.1",
+      "request_id": "general-topological_design-open",
+      "subject": "data_structures",
+      "topic": "topological_design",
+      "question_type": "comprehensive",
+      "seed": 42,
+      "constraints": {
+        "authoring": {
+          "objective": "design",
+          "syllabus_areas": [
+            "ds.graphs"
+          ]
+        },
+        "total_score": 10
+      },
+      "evidence": [
+        {
+          "id": "note-topological_design",
+          "source": "Qodex自编教学说明（协议与反例测试，非教材检索）",
+          "version": "1",
+          "anchor": "topological_design",
+          "summary": "有向无环图的拓扑序要求每条边的起点先于终点。添加边会增加先后约束；有向环使拓扑序不存在。",
+          "rules": []
+        }
+      ]
+    },
+    "candidate": {
+      "student_view": {
+        "stem": "有向图的顶点为A、B、C、D，边为A→C、B→C、C→D。",
+        "parts": [
+          {
+            "id": "p1",
+            "prompt": "说明原图全部合法拓扑序，并证明没有遗漏。",
+            "score": 3
+          },
+          {
+            "id": "p2",
+            "prompt": "只添加一条边，使图仍无环且拓扑序唯一；给出一个可行方案并证明。",
+            "score": 4
+          },
+          {
+            "id": "p3",
+            "prompt": "若把原C→D改为D→C，前问方案是否仍保证唯一？给出证明或反例。",
+            "score": 3
+          }
+        ]
+      },
+      "instructor_view": {
+        "grading_policy": "按各点给分。同一前问算术错误不重复扣分；后续沿用错误值但方法正确，可获得对应方法分。事实判断须有推理支持。",
+        "parts": [
+          {
+            "part_id": "p1",
+            "solution": "原图只有ABCD、BACD。A与B都必须在C前，C必须在D前，所以没有其他顺序。",
+            "depends_on": [],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 2,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "原图只有ABCD、BACD。A与B都必须在C前，C必须在D前，所以没有其他顺序。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "原图只有ABCD、BACD。A与B都必须在C前，C必须在D前，所以没有其他顺序。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "接受A→B或B→A，必须证明存在且唯一；只给一个合法序不足以证明唯一。"
+              }
+            ]
+          },
+          {
+            "part_id": "p2",
+            "solution": "可添加A→B得到唯一ABCD；也接受B→A得到唯一BACD。二者均不会产生环。",
+            "depends_on": [
+              "p1"
+            ],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 3,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "可添加A→B得到唯一ABCD；也接受B→A得到唯一BACD。二者均不会产生环。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "可添加A→B得到唯一ABCD；也接受B→A得到唯一BACD。二者均不会产生环。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "接受A→B或B→A，必须证明存在且唯一；只给一个合法序不足以证明唯一。"
+              }
+            ]
+          },
+          {
+            "part_id": "p3",
+            "solution": "不再唯一。A→B方案允许ABDC、DABC；B→A方案允许BADC、DBAC。",
+            "depends_on": [],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 2,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "不再唯一。A→B方案允许ABDC、DABC；B→A方案允许BADC、DBAC。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "不再唯一。A→B方案允许ABDC、DABC；B→A方案允许BADC、DBAC。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "接受A→B或B→A，必须证明存在且唯一；只给一个合法序不足以证明唯一。"
+              }
+            ]
+          }
+        ]
+      },
+      "design": {
+        "target": "同时满足可行性和唯一性，区分有效约束、冗余约束与矛盾约束。",
+        "concepts": [
+          "同时满足可行性和唯一性，区分有效约束、冗余约束与矛盾约束。"
+        ],
+        "claims": [
+          {
+            "id": "k1",
+            "statement": "有向无环图的拓扑序要求每条边的起点先于终点。添加边会增加先后约束；有向环使拓扑序不存在。",
+            "evidence_id": "note-topological_design",
+            "quote": "有向无环图的拓扑序要求每条边的起点先于终点。添加边会增加先后约束；有向环使拓扑序不存在。"
+          }
+        ],
+        "givens": [
+          {
+            "id": "g1",
+            "text": "边为A→C、B→C、C→D"
+          }
+        ],
+        "derivation": [
+          {
+            "id": "d1",
+            "uses": [
+              "k1",
+              "g1"
+            ],
+            "result": "原图仅A、B的相对先后未定，合法序为ABCD和BACD。"
+          },
+          {
+            "id": "d2",
+            "uses": [
+              "d1",
+              "k1",
+              "g1"
+            ],
+            "result": "加入A→B排除BACD，且不产生环；其余候选冗余或成环。"
+          },
+          {
+            "id": "d3",
+            "uses": [
+              "k1",
+              "g1",
+              "d1",
+              "d2"
+            ],
+            "result": "不再唯一。A→B方案允许ABDC、DABC；B→A方案允许BADC、DBAC。"
+          }
+        ],
+        "conclusions": [
+          "d2",
+          "d3"
+        ],
+        "counterfactual": {
+          "given_id": "g1",
+          "replacement": "把C→D改成D→C",
+          "effect": "添加A→B后D的位置仍未唯一，原答案不再满足要求。",
+          "reason": "可有ABDC和DABC，说明原C→D约束对唯一性有作用。"
+        }
+      },
+      "calculations": [
+        {
+          "kind": "finite_domain",
+          "inputs": {
+            "domains": {
+              "a": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "b": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "c": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "d": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            "constraints": [
+              [
+                "ne",
+                "a",
+                "b"
+              ],
+              [
+                "ne",
+                "a",
+                "c"
+              ],
+              [
+                "ne",
+                "a",
+                "d"
+              ],
+              [
+                "ne",
+                "b",
+                "c"
+              ],
+              [
+                "ne",
+                "b",
+                "d"
+              ],
+              [
+                "ne",
+                "c",
+                "d"
+              ],
+              [
+                "lt",
+                "a",
+                "c"
+              ],
+              [
+                "lt",
+                "b",
+                "c"
+              ],
+              [
+                "lt",
+                "c",
+                "d"
+              ]
+            ],
+            "queries": [
+              {
+                "id": "A",
+                "mode": "count",
+                "predicate": [
+                  "lt",
+                  "a",
+                  "b"
+                ]
+              },
+              {
+                "id": "B",
+                "mode": "count",
+                "predicate": [
+                  "lt",
+                  "a",
+                  "d"
+                ]
+              },
+              {
+                "id": "C",
+                "mode": "count",
+                "predicate": [
+                  "lt",
+                  "d",
+                  "c"
+                ]
+              },
+              {
+                "id": "D",
+                "mode": "count",
+                "predicate": [
+                  "lt",
+                  "c",
+                  "b"
+                ]
+              }
+            ]
+          },
+          "result": {
+            "solution_count": 2,
+            "queries": {
+              "A": 1,
+              "B": 2,
+              "C": 0,
+              "D": 0
+            }
+          }
+        }
+      ]
+    }
+  },
+  {
+    "provenance": "assistant-authored test fixture, not model experiment",
+    "request": {
+      "schema_version": "0.1",
+      "request_id": "general-overflow_diagnosis-open",
+      "subject": "computer_organization",
+      "topic": "overflow_diagnosis",
+      "question_type": "comprehensive",
+      "seed": 42,
+      "constraints": {
+        "authoring": {
+          "objective": "diagnose",
+          "syllabus_areas": [
+            "co.representation"
+          ]
+        },
+        "total_score": 10
+      },
+      "evidence": [
+        {
+          "id": "note-overflow_diagnosis",
+          "source": "Qodex自编教学说明（协议与反例测试，非教材检索）",
+          "version": "1",
+          "anchor": "overflow_diagnosis",
+          "summary": "8位补码范围为-128至127。同号相加而结果符号改变时发生有符号溢出。无符号进位表示和超过255，与有符号溢出不同。",
+          "rules": []
+        }
+      ]
+    },
+    "candidate": {
+      "student_view": {
+        "stem": "某8位加法器输出低8位结果，并报告声称表示有符号溢出的标志V。测试0x7F+0x01得到0x80、V=0；测试0xFF+0x01得到0x00、V=1。",
+        "parts": [
+          {
+            "id": "p1",
+            "prompt": "分别按8位有符号补码和无符号数解释两次运算，给出正确溢出标志与向外进位。",
+            "score": 3
+          },
+          {
+            "id": "p2",
+            "prompt": "若错误实现只可能是向外进位、结果符号、输入符号相等或正确溢出判断，定位其实现并说明证据。",
+            "score": 4
+          },
+          {
+            "id": "p3",
+            "prompt": "若只测0x01+0x01且观测V=0，能否区分向外进位、结果符号和正确溢出判断？解释。",
+            "score": 3
+          }
+        ]
+      },
+      "instructor_view": {
+        "grading_policy": "按各点给分。同一前问算术错误不重复扣分；后续沿用错误值但方法正确，可获得对应方法分。事实判断须有推理支持。",
+        "parts": [
+          {
+            "part_id": "p1",
+            "solution": "有符号为127+1溢出、-1+1不溢出，标志1、0；无符号和128、256，向外进位0、1。",
+            "depends_on": [],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 2,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "有符号为127+1溢出、-1+1不溢出，标志1、0；无符号和128、256，向外进位0、1。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "有符号为127+1溢出、-1+1不溢出，标志1、0；无符号和128、256，向外进位0、1。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "接受符号判定或最高位进位异或等合法溢出分析，须区分有符号与无符号含义。"
+              }
+            ]
+          },
+          {
+            "part_id": "p2",
+            "solution": "向外进位与观测0、1一致；另外三种实现均给出1、0，不一致。",
+            "depends_on": [
+              "p1"
+            ],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 3,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "向外进位与观测0、1一致；另外三种实现均给出1、0，不一致。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "向外进位与观测0、1一致；另外三种实现均给出1、0，不一致。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "接受符号判定或最高位进位异或等合法溢出分析，须区分有符号与无符号含义。"
+              }
+            ]
+          },
+          {
+            "part_id": "p3",
+            "solution": "不能。低8位结果为2，三种标志均为0，观测无区分力。",
+            "depends_on": [],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 2,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "不能。低8位结果为2，三种标志均为0，观测无区分力。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "不能。低8位结果为2，三种标志均为0，观测无区分力。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "接受符号判定或最高位进位异或等合法溢出分析，须区分有符号与无符号含义。"
+              }
+            ]
+          }
+        ]
+      },
+      "design": {
+        "target": "用两种解释下的运算边界诊断标志实现错误。",
+        "concepts": [
+          "用两种解释下的运算边界诊断标志实现错误。"
+        ],
+        "claims": [
+          {
+            "id": "k1",
+            "statement": "8位补码范围为-128至127。同号相加而结果符号改变时发生有符号溢出。无符号进位表示和超过255，与有符号溢出不同。",
+            "evidence_id": "note-overflow_diagnosis",
+            "quote": "8位补码范围为-128至127。同号相加而结果符号改变时发生有符号溢出。无符号进位表示和超过255，与有符号溢出不同。"
+          }
+        ],
+        "givens": [
+          {
+            "id": "g1",
+            "text": "测试0x7F+0x01得到0x80、V=0；测试0xFF+0x01得到0x00、V=1"
+          }
+        ],
+        "derivation": [
+          {
+            "id": "d1",
+            "uses": [
+              "k1",
+              "g1"
+            ],
+            "result": "两次运算的补码溢出应为1、0，而无符号进位为0、1。"
+          },
+          {
+            "id": "d2",
+            "uses": [
+              "d1",
+              "k1",
+              "g1"
+            ],
+            "result": "逐项计算标志，只有向外进位符合两次观察。"
+          },
+          {
+            "id": "d3",
+            "uses": [
+              "k1",
+              "g1",
+              "d1",
+              "d2"
+            ],
+            "result": "不能。低8位结果为2，三种标志均为0，观测无区分力。"
+          }
+        ],
+        "conclusions": [
+          "d2",
+          "d3"
+        ],
+        "counterfactual": {
+          "given_id": "g1",
+          "replacement": "两次测试都改为0x01+0x01，V=0",
+          "effect": "无法区分向外进位、结果符号与正确溢出判断。",
+          "reason": "三者均为0，两条有区分力的观测被移除。"
+        }
+      },
+      "calculations": []
+    }
+  },
+  {
+    "provenance": "assistant-authored test fixture, not model experiment",
+    "request": {
+      "schema_version": "0.1",
+      "request_id": "general-safe_state-open",
+      "subject": "operating_systems",
+      "topic": "safe_state",
+      "question_type": "comprehensive",
+      "seed": 42,
+      "constraints": {
+        "authoring": {
+          "objective": "analyze",
+          "syllabus_areas": [
+            "os.process"
+          ]
+        },
+        "total_score": 10
+      },
+      "evidence": [
+        {
+          "id": "note-safe_state",
+          "source": "Qodex自编教学说明（协议与反例测试，非教材检索）",
+          "version": "1",
+          "anchor": "safe_state",
+          "summary": "银行家安全检查在某进程剩余最大需求不超过可用资源时，可假设它完成并归还已分配资源，再检查其他进程。存在能让所有进程完成的顺序即安全。不安全表示不能保证满足所有最大需求，并不等于当前已经死锁。",
+          "rules": []
+        }
+      ]
+    },
+    "candidate": {
+      "student_view": {
+        "stem": "系统只有一种可复用资源，共10个单位。P1已分配3、最大需求7；P2已分配2、最大需求5；P3已分配2、最大需求3。各进程当前尚未阻塞。立即批准P1再申请2个单位。",
+        "parts": [
+          {
+            "id": "p1",
+            "prompt": "批准请求后计算可用量与每个进程的剩余最大需求。",
+            "score": 3
+          },
+          {
+            "id": "p2",
+            "prompt": "判断批准后是否安全，给出完成顺序及资源变化。",
+            "score": 4
+          },
+          {
+            "id": "p3",
+            "prompt": "若资源总量改为9且仍批准同一申请，状态如何？能否据此断言当前死锁？",
+            "score": 3
+          }
+        ]
+      },
+      "instructor_view": {
+        "grading_policy": "按各点给分。同一前问算术错误不重复扣分；后续沿用错误值但方法正确，可获得对应方法分。事实判断须有推理支持。",
+        "parts": [
+          {
+            "part_id": "p1",
+            "solution": "批准后分配为5、2、2，可用1，剩余需求2、3、1。",
+            "depends_on": [],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 2,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "批准后分配为5、2、2，可用1，剩余需求2、3、1。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "批准后分配为5、2、2，可用1，剩余需求2、3、1。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "接受任意合法安全序列；每一步当前剩余最大需求须不超过当时可用量。"
+              }
+            ]
+          },
+          {
+            "part_id": "p2",
+            "solution": "安全。P3完成使可用3，P1完成使可用8，P2完成使可用10；P3、P2、P1也可接受。",
+            "depends_on": [
+              "p1"
+            ],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 3,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "安全。P3完成使可用3，P1完成使可用8，P2完成使可用10；P3、P2、P1也可接受。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "安全。P3完成使可用3，P1完成使可用8，P2完成使可用10；P3、P2、P1也可接受。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "接受任意合法安全序列；每一步当前剩余最大需求须不超过当时可用量。"
+              }
+            ]
+          },
+          {
+            "part_id": "p3",
+            "solution": "批准后可用0，三者剩余需求都大于0，故不安全；题面指出尚未阻塞，不能断言当前死锁。",
+            "depends_on": [],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 2,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "批准后可用0，三者剩余需求都大于0，故不安全；题面指出尚未阻塞，不能断言当前死锁。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "批准后可用0，三者剩余需求都大于0，故不安全；题面指出尚未阻塞，不能断言当前死锁。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "接受任意合法安全序列；每一步当前剩余最大需求须不超过当时可用量。"
+              }
+            ]
+          }
+        ]
+      },
+      "design": {
+        "target": "根据分配变化寻找完成顺序，区分可用量与长期可满足性。",
+        "concepts": [
+          "根据分配变化寻找完成顺序，区分可用量与长期可满足性。"
+        ],
+        "claims": [
+          {
+            "id": "k1",
+            "statement": "银行家安全检查在某进程剩余最大需求不超过可用资源时，可假设它完成并归还已分配资源，再检查其他进程。存在能让所有进程完成的顺序即安全。不安全表示不能保证满足所有最大需求，并不等于当前已经死锁。",
+            "evidence_id": "note-safe_state",
+            "quote": "银行家安全检查在某进程剩余最大需求不超过可用资源时，可假设它完成并归还已分配资源，再检查其他进程。存在能让所有进程完成的顺序即安全。不安全表示不能保证满足所有最大需求，并不等于当前已经死锁。"
+          }
+        ],
+        "givens": [
+          {
+            "id": "g1",
+            "text": "共10个单位。P1已分配3、最大需求7；P2已分配2、最大需求5；P3已分配2、最大需求3"
+          }
+        ],
+        "derivation": [
+          {
+            "id": "d1",
+            "uses": [
+              "k1",
+              "g1"
+            ],
+            "result": "批准后可用1，P1/P2/P3剩余需求分别为2、3、1。"
+          },
+          {
+            "id": "d2",
+            "uses": [
+              "d1",
+              "k1",
+              "g1"
+            ],
+            "result": "P3归还2后可用3，P1归还5后可用8，P2可完成，故安全。"
+          },
+          {
+            "id": "d3",
+            "uses": [
+              "k1",
+              "g1",
+              "d1",
+              "d2"
+            ],
+            "result": "批准后可用0，三者剩余需求都大于0，故不安全；题面指出尚未阻塞，不能断言当前死锁。"
+          }
+        ],
+        "conclusions": [
+          "d2",
+          "d3"
+        ],
+        "counterfactual": {
+          "given_id": "g1",
+          "replacement": "资源总量改为9，其他数值不变，仍批准申请",
+          "effect": "批准后可用0，无进程能满足其剩余最大需求，状态不安全，但不能断言已死锁。",
+          "reason": "所有剩余需求均大于0；当前未阻塞不允许等同于死锁。"
+        }
+      },
+      "calculations": []
+    }
+  },
+  {
+    "provenance": "assistant-authored test fixture, not model experiment",
+    "request": {
+      "schema_version": "0.1",
+      "request_id": "general-route_aggregation-open",
+      "subject": "computer_networks",
+      "topic": "route_aggregation",
+      "question_type": "comprehensive",
+      "seed": 42,
+      "constraints": {
+        "authoring": {
+          "objective": "design",
+          "syllabus_areas": [
+            "cn.network"
+          ]
+        },
+        "total_score": 10
+      },
+      "evidence": [
+        {
+          "id": "note-route_aggregation",
+          "source": "Qodex自编教学说明（协议与反例测试，非教材检索）",
+          "version": "1",
+          "anchor": "route_aggregation",
+          "summary": "IPv4转发使用目的地址的最长前缀匹配。路由聚合以较短共同前缀表示连续地址块，但更具体路由优先于聚合路由。未匹配任何专用前缀时才使用默认路由。",
+          "rules": []
+        }
+      ]
+    },
+    "candidate": {
+      "student_view": {
+        "stem": "路由器有10.0.0.0/24→X、10.0.1.0/24→X、10.0.1.128/25→Y以及默认路由→Z。",
+        "parts": [
+          {
+            "id": "p1",
+            "prompt": "合并前两条路由而保留其余路由，给出不改变全部转发行为的聚合条目并解释例外。",
+            "score": 3
+          },
+          {
+            "id": "p2",
+            "prompt": "若改用10.0.0.0/22→X，给出转发行为改变的一个具体目的地址并说明新旧下一跳。",
+            "score": 4
+          },
+          {
+            "id": "p3",
+            "prompt": "若采用正确聚合但删除/25例外条目，给出一个行为改变的地址并解释。",
+            "score": 3
+          }
+        ]
+      },
+      "instructor_view": {
+        "grading_policy": "按各点给分。同一前问算术错误不重复扣分；后续沿用错误值但方法正确，可获得对应方法分。事实判断须有推理支持。",
+        "parts": [
+          {
+            "part_id": "p1",
+            "solution": "聚合为10.0.0.0/23→X，恰好覆盖两个/24；保留/25仍更长并优先去Y，外部仍去Z。",
+            "depends_on": [],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 2,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "聚合为10.0.0.0/23→X，恰好覆盖两个/24；保留/25仍更长并优先去Y，外部仍去Z。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "聚合为10.0.0.0/23→X，恰好覆盖两个/24；保留/25仍更长并优先去Y，外部仍去Z。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "反例地址可不同，但须属于新增/22范围或被删除/25范围，且明确新旧下一跳。"
+              }
+            ]
+          },
+          {
+            "part_id": "p2",
+            "solution": "例如10.0.2.1原本匹配默认去Z，新表匹配/22去X。",
+            "depends_on": [
+              "p1"
+            ],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 3,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "例如10.0.2.1原本匹配默认去Z，新表匹配/22去X。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "例如10.0.2.1原本匹配默认去Z，新表匹配/22去X。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "反例地址可不同，但须属于新增/22范围或被删除/25范围，且明确新旧下一跳。"
+              }
+            ]
+          },
+          {
+            "part_id": "p3",
+            "solution": "例如10.0.1.200原本/25去Y，删除后/23去X。",
+            "depends_on": [],
+            "scoring_points": [
+              {
+                "id": "s1",
+                "points": 2,
+                "criterion": "给出正确结论或合法方案",
+                "expected": "例如10.0.1.200原本/25去Y，删除后/23去X。"
+              },
+              {
+                "id": "s2",
+                "points": 1,
+                "criterion": "说明条件依赖或逐步核对，不能仅写结论",
+                "expected": "例如10.0.1.200原本/25去Y，删除后/23去X。"
+              }
+            ],
+            "equivalent_methods": [
+              {
+                "id": "m1",
+                "acceptance": "反例地址可不同，但须属于新增/22范围或被删除/25范围，且明确新旧下一跳。"
+              }
+            ]
+          }
+        ]
+      },
+      "design": {
+        "target": "同时检查聚合边界和例外优先级，用反例验证全地址行为不变。",
+        "concepts": [
+          "同时检查聚合边界和例外优先级，用反例验证全地址行为不变。"
+        ],
+        "claims": [
+          {
+            "id": "k1",
+            "statement": "IPv4转发使用目的地址的最长前缀匹配。路由聚合以较短共同前缀表示连续地址块，但更具体路由优先于聚合路由。未匹配任何专用前缀时才使用默认路由。",
+            "evidence_id": "note-route_aggregation",
+            "quote": "IPv4转发使用目的地址的最长前缀匹配。路由聚合以较短共同前缀表示连续地址块，但更具体路由优先于聚合路由。未匹配任何专用前缀时才使用默认路由。"
+          }
+        ],
+        "givens": [
+          {
+            "id": "g1",
+            "text": "10.0.0.0/24→X、10.0.1.0/24→X、10.0.1.128/25→Y以及默认路由→Z"
+          }
+        ],
+        "derivation": [
+          {
+            "id": "d1",
+            "uses": [
+              "k1",
+              "g1"
+            ],
+            "result": "前两条覆盖10.0.0.0至10.0.1.255，正好是/23。"
+          },
+          {
+            "id": "d2",
+            "uses": [
+              "d1",
+              "k1",
+              "g1"
+            ],
+            "result": "/25例外保留且更长；检查外部地址排除/22扩展，检查内部地址排除其余选项。"
+          },
+          {
+            "id": "d3",
+            "uses": [
+              "k1",
+              "g1",
+              "d1",
+              "d2"
+            ],
+            "result": "例如10.0.1.200原本/25去Y，删除后/23去X。"
+          }
+        ],
+        "conclusions": [
+          "d2",
+          "d3"
+        ],
+        "counterfactual": {
+          "given_id": "g1",
+          "replacement": "删除10.0.1.128/25→Y后再比较合并前后的行为",
+          "effect": "原先10.0.1.200去Y，现在去X，不能声称保持原表全部行为。",
+          "reason": "最长匹配例外被删除，聚合覆盖正确本身不足以保证转发等价。"
+        }
+      },
+      "calculations": []
+    }
+  }
+]

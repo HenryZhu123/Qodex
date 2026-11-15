@@ -17,7 +17,7 @@ def main() -> int:
     mode.add_argument("--comprehensive", dest="run", action="store_const", const=generate_comprehensive,
                       help="生成综合题")
     mode.add_argument("--revise", dest="run", action="store_const", const=revise_comprehensive,
-                      help="按版本反馈修订综合题")
+                      help="按版本反馈修订题目")
     parser.set_defaults(run=generate_question)
     parser.add_argument("request", type=Path, help="UTF-8 JSON 请求文件")
     args = parser.parse_args()

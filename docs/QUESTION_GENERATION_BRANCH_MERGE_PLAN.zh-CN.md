@@ -1,13 +1,16 @@
 # 命题分支与版本权限分支合并方案
 
+> 状态：已按本方案集成 `feat/question-generation@2acd161` 与
+> `codex/generation-owns-versions@d11e6a3`；本文继续作为冲突决策和验收依据。
+
 ## 1. 目的
 
 本文用于合并以下两个远端分支，并把结果交付到 `main`：
 
 | 分支 | 核对提交 | 主要内容 |
 | --- | --- | --- |
-| `feat/question-generation` | `8a98b63` | 通用材料驱动命题、`author`、`replenishment`、命题修订、命题工作台和 Qodex 工作流护栏 |
-| `codex/generation-owns-versions` | `2457219` | 只有命题服务能创建题目版本；审校只审固定版本；网页、CLI、服务和文档统一这一权限边界 |
+| `feat/question-generation` | `2acd161` | 通用材料驱动命题、`author`、`replenishment`、命题修订、命题工作台和 Qodex 工作流护栏 |
+| `codex/generation-owns-versions` | `d11e6a3` | 只有命题服务能创建题目版本；审校只审固定版本；网页、CLI、服务和文档统一这一权限边界 |
 
 两个分支都以 `main@c2268b5` 为共同基线。`feat/question-generation` 已经合入过该 main，技术上可以合并；但两个分支对“谁创建版本”和“Agent 如何取得修订数据”的理解不同，不能直接采用默认冲突结果。
 

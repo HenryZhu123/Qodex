@@ -1,0 +1,54 @@
+{
+  "questions": [
+    {
+      "record_id": "ea1b3e83-0705-4b14-a258-4d7c4f915585",
+      "task_id": "8125b0b3-6dd4-4d0c-89c2-0fccd3e82f72",
+      "question_id": "authored-d7a1c7daf13a3796209835f0",
+      "version": 1,
+      "question_json": {
+        "task_id": "8125b0b3-6dd4-4d0c-89c2-0fccd3e82f72",
+        "version": 1,
+        "metadata": {
+          "difficulty": "medium",
+          "knowledge_points": [
+            "循环队列",
+            "队空与队满判定",
+            "少用一个元素空间",
+            "队头队尾指针移动",
+            "取模运算",
+            "元素个数计算"
+          ]
+        },
+        "question": {
+          "points": 2.0,
+          "options": [
+            "A. (5, 3, 5)",
+            "B. (2, 4, 6)",
+            "C. (5, 4, 6)",
+            "D. (5, 1, 3)"
+          ],
+          "subject": "数据结构",
+          "task_id": "8125b0b3-6dd4-4d0c-89c2-0fccd3e82f72",
+          "reference": "",
+          "answer_text": "(5, 4, 6)",
+          "paper_title": "AI generation task 8125b0b3-6dd4-4d0c-89c2-0fccd3e82f72",
+          "question_id": "authored-d7a1c7daf13a3796209835f0",
+          "question_text": "一个顺序存储的循环队列，MAXQSIZE=7，采用“少用一个元素空间”的约定来区分队空和队满。front 指向队头元素，rear 指向队尾元素的下一个位置；初始时 front=2、rear=6。现依次执行：入队 2 个元素，出队 3 个元素，再入队 3 个元素。所有操作均在合法状态下完成。最终 (front, rear, 元素个数) 是：",
+          "question_type": "single_choice",
+          "numbering_path": [],
+          "section_titles": [
+            "循环队列的判空判满、队头队尾指针取模移动与元素个数计算"
+          ],
+          "question_number": "authored-d7a1c7daf13a3796209835f0",
+          "numbering_description": "Generated version 1"
+        },
+        "ingestion": {
+          "status": "STORED",
+          "record_id": "ea1b3e83-0705-4b14-a258-4d7c4f915585"
+        },
+        "question_id": "authored-d7a1c7daf13a3796209835f0",
+        "review_status": "PASS"
+      }
+    }
+  ]
+}

@@ -53,6 +53,10 @@ describe("built-in exam assembly", () => {
 			if (typeof extension === "function" || extension.hidden) continue;
 			extension.factory({
 				registerTool: (definition: { name: string }) => registered.push(definition.name),
+				// Workflow-style extensions subscribe to events; a startup smoke test must
+				// offer the same surface the real API does.
+				on: () => () => undefined,
+				registerCommand: () => undefined,
 			} as unknown as ExtensionAPI);
 		}
 		expect(registered).toContain("question_bank");

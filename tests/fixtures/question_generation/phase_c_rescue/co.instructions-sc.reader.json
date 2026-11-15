@@ -1,0 +1,24 @@
+{
+  "case_id": "co.instructions-sc",
+  "source": {
+    "reader_call": "run/calls/*-co.instructions-sc-reader.json"
+  },
+  "reason": "recorded reader review was rejected only because quality.depth == 1",
+  "reader_response": {
+    "solution": "按 M=101 的规则，先计算间址地址：R[2]+D=1000H+20H=1020H。再按地址 1020H 访问主存，读出内容 3456H，该内容作为有效地址。因此该指令操作数的有效地址为 3456H，对应选项 A。",
+    "answer": "A",
+    "part_solutions": [],
+    "issues": [],
+    "depth_evidence": "不能只做 R[2]+D 就停止，因为题目规定 M=101 是“先变址后间址”：相加只得到间址地址，还必须访问该地址取出内容，内容才是有效地址。若只套“变址寻址”会误选 1020H；若多间址一次会误选 789AH。",
+    "condition_test": {
+      "change": "若 D 改为 10H，其他条件不变。",
+      "effect": "间址地址变为 1000H+10H=1010H，读取地址 1010H 的内容得到 2468H，因此有效地址变为 2468H；说明结果依赖“变址相加后的间址地址再取内容”这一中间步骤。"
+    },
+    "quality": {
+      "answerability": 2,
+      "depth": 1,
+      "distractors": 2,
+      "clarity": 2
+    }
+  }
+}
