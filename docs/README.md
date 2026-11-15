@@ -28,6 +28,7 @@ Qodex 面向计算机考研 408，围绕知识库、命题、单题审校和组�
 - [相似题复核](SIMILARITY_REVIEW.zh-CN.md)
 - [模型目录说明](MODEL_CATALOG.zh-CN.md)
 - [接口真样本：成功与失败的真实请求/响应](samples/README.md)（四个模块字段对不上时先比对这里）
+- [分支合并交接](BRANCH_MERGE_HANDOFF.zh-CN.md)（把 `feat/question-generation` 合入集成分支前必读）
 - [验收记录](VALIDATION.zh-CN.md)
 - [GitHub 提交说明](GITHUB_SUBMISSION.zh-CN.md)
 
