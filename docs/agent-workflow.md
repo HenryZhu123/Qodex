@@ -53,7 +53,7 @@ Pi Agent（qodex-workflow）
 `quality_gate`、`condition_test_incomplete`、`blind_disagreement`、`blind_incomplete`、`audit_rejected`，
 每项带 `retry`（`same_request`/`new_request`/`no`）与 `needs`（`material`/`human`/null）。
 
-## 5. 运行与验证
+## 5-A. 运行与验证
 
 ```bash
 # 数据库（PG 5433 + 命题侧表）
@@ -71,6 +71,40 @@ python3 -m unittest discover -s tests
 cd pi-coding-agent/services/exam-checker && .venv/bin/python -m pytest
 cd pi-coding-agent/packages/coding-agent && node ../../node_modules/vitest/dist/cli.js --run test/suite/qodex-workflow.test.ts
 ```
+
+## 5-B. 实测记录（2026-11-15，合并 origin/main 后）
+
+环境：PostgreSQL 17（compose，5433）+ 8091/8092/8093 本机；命题与审校均用官方 `deepseek-flash`。
+
+| 轮次 | 请求 | 结果 |
+| --- | --- | --- |
+| run1 | 循环队列单选 | 命题 200 / 审校 **NEEDS_REVISION**（选项缺 A–D 标识，见下"接缝缺陷 2"） |
+| run2 | 循环队列单选 | 命题 200 → 审校 **PASS** → `ingestion=STORED` |
+| run3 | 时间片轮转单选 | 命题 **MODEL_UNAVAILABLE**（author `content_decode`，两次都截断；属于可复现的模型失败） |
+| run4 | 哈夫曼 WPL 单选 | 命题 200 → **PASS** → STORED |
+| run5 | 栈与队列单选 | 命题 200 → **PASS** → STORED |
+| run6 | 二叉树遍历单选 | 命题 200 → **PASS** → STORED |
+| run7 | 单链表头插尾插单选 | 命题 200 → **PASS** → STORED → 组 **1 题 2 分** → **STRUCTURAL_PASS**（学生卷/答案卷 HTML 落盘） |
+
+耗时：命题 90–130 s（plan 18–20 s / author 40–92 s / reader 5 s / audit 28 s）；审校 9–11 s（9 项检查并发，3 项走 JEV 路由 + 1 次 annotate）。
+
+### 合并后发现并修好的 6 个接缝缺陷
+
+这些都是真实跑出来的，不是推测；每条都会让链路在某一环整体失败：
+
+1. `generation_tasks.generation_mode` 的 CHECK 不含 `author`/`replenishment`
+   → 命题花完模型钱后写库失败，返回 `QUEUE_UNAVAILABLE`（run1 前实测）。
+2. 生成题选项进审校时丢了 A–D 标识 → `options_check` 判"选项缺少标识符"，**每道题都 NEEDS_REVISION**（run1）。
+3. `subject` 用考纲 slug（`data_structures`），题库与组卷用中文 → 组卷查不到候选（run2 后实测 `points=None` 同类问题同源）。
+4. 单选没有分值（`points=None`）→ 组卷拒绝（"不自动修改分值"）；按 408 约定在交接处补 2 分。
+5. `answer_text` 存的是教师视图整段 JSON → 组卷拒绝（"答案必须是单个 A–D 或唯一匹配的选项全文"）。
+6. `reference` 装了材料出处 → 组卷把它当"共享材料/题组"，拒绝渲染（"不能输出残缺题面"）。
+
+### 仍未解决的（交给组卷侧）
+
+- 组卷按题逐条调用 `/tasks/{task_id}/questions/{question_id}/state`，**一条历史脏记录（有题库行、无快照）会让整次组卷 502**，
+  而不是跳过该记录。本地测试库中已删除该脏行；生产代码需要容错（建议按 `record_id` 跳过并记 `rejected_records`）。
+- 组卷契约仍只支持四选项单选、同题型单一分值；综合题/题组/带图题不支持（见 §6）。
 
 ## 6. 已知边界（不要当成已实现）
 
