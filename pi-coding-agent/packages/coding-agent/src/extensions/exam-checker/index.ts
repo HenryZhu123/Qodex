@@ -21,13 +21,22 @@ const examCheckerParameters = Type.Object({
 		Type.String({ description: "Original PDF, DOC, or DOCX path. Required only for review_file." }),
 	),
 	document_id: Type.Optional(
-		Type.String({ description: "Parsed exam document ID. Required for review_document and review_question." }),
+		Type.String({ description: "Parsed exam document ID. Required only for review_document." }),
+	),
+	task_id: Type.Optional(
+		Type.String({ description: "Question task ID returned by question_generation or document parsing." }),
 	),
 	question_id: Type.Optional(
 		Type.String({ description: "Question node ID. Required for review_question and revise_question." }),
 	),
-	base_version_id: Type.Optional(
-		Type.String({ description: "Version ID returned by the latest review. Required for revise_question." }),
+	version: Type.Optional(
+		Type.Integer({
+			minimum: 1,
+			description: "Exact immutable question version; omit to review the current version.",
+		}),
+	),
+	base_version: Type.Optional(
+		Type.Integer({ minimum: 1, description: "Version returned by the latest state. Required for revise_question." }),
 	),
 	question_json: Type.Optional(
 		Type.Record(Type.String(), Type.Unknown(), {
@@ -83,10 +92,10 @@ export interface IngestionResult {
 }
 
 export interface CompactExamCheckerResult {
-	document_id: string;
+	task_id: string;
 	question_id: string;
 	question_number: string;
-	question_version_id?: string;
+	version: number;
 	status: ExamCheckerStatus;
 	errors: CompactReviewError[];
 	unresolved_checks: UnresolvedCheck[];
@@ -225,12 +234,15 @@ export function compactReviewResult(value: unknown): CompactExamCheckerResult {
 		.filter((check): check is UnresolvedCheck => check !== undefined);
 	const ingestion = compactIngestion(value.ingestion);
 	return {
-		document_id: requiredString(value, "document_id"),
+		task_id: requiredString(value, "task_id"),
 		question_id: requiredString(value, "question_id"),
 		question_number: requiredString(value, "question_number"),
-		...(optionalString(value, "question_version_id")
-			? { question_version_id: optionalString(value, "question_version_id") }
-			: {}),
+		version:
+			typeof value.version === "number"
+				? value.version
+				: (() => {
+						throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_RESPONSE");
+					})(),
 		status: reviewStatus(review),
 		errors: review.summary.errors.map(compactError),
 		unresolved_checks: unresolvedChecks,
@@ -303,26 +315,25 @@ function questionBankEntry(value: unknown): Record<string, unknown> {
 		throw new QuestionBankToolError("INVALID_QUESTION_BANK_RESPONSE");
 	}
 	const recordId = value.record_id;
-	const documentId = value.document_id;
+	const taskId = value.task_id;
 	const questionId = value.question_id;
-	const sourceVersionId = value.source_version_id;
+	const version = value.version;
 	if (
 		typeof recordId !== "string" ||
 		recordId.length === 0 ||
-		typeof documentId !== "string" ||
-		documentId.length === 0 ||
+		typeof taskId !== "string" ||
+		taskId.length === 0 ||
 		typeof questionId !== "string" ||
-		questionId.length === 0
+		questionId.length === 0 ||
+		typeof version !== "number"
 	) {
 		throw new QuestionBankToolError("INVALID_QUESTION_BANK_RESPONSE");
 	}
 	return {
 		record_id: recordId,
-		document_id: documentId,
+		task_id: taskId,
 		question_id: questionId,
-		...(typeof sourceVersionId === "string" && sourceVersionId.length > 0
-			? { source_version_id: sourceVersionId }
-			: {}),
+		version,
 		question_json: value.question_json,
 	};
 }
@@ -342,7 +353,7 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 			"Run the exam-checker workflow to parse and review exams, review or revise a question, or read a question's latest workflow state.",
 		promptSnippet: "Parse, review, revise, or inspect exam questions through the exam-checker workflow",
 		promptGuidelines: [
-			"Use review_file for an original PDF, DOC, or DOCX; review_document for every question in a document_id; review_question for one document_id and question_id; get_question_state before revision when the latest version or status is unknown; revise_question only after a NEEDS_REVISION review, using the state result's question_version_id as base_version_id.",
+			"Use review_file for an original PDF, DOC, or DOCX; review_document for every question in a document_id; use task_id and question_id for review_question, get_question_state, and revise_question. Reuse the task_id returned by question_generation. Revise only after NEEDS_REVISION, using the state result's version as base_version.",
 			"For revise_question, pass a complete user-edited question_json when the user supplied the replacement; otherwise pass the user's revision request as user_instruction so the service can apply the recorded review errors.",
 			"Treat exam_checker.status as the sole review decision: PASS is eligible for automatic ingestion; NEEDS_REVISION must be returned to the user with the reported errors; UNRESOLVED means review is incomplete.",
 			"For UNRESOLVED results, report unresolved_checks and never claim that the question or document passed.",
@@ -350,18 +361,20 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 		],
 		parameters: examCheckerParameters,
 		executionMode: "parallel",
-		async execute(_toolCallId, params, signal, _onUpdate, ctx) {
+		async execute(toolCallId, params, signal, _onUpdate, ctx) {
 			try {
 				if (params.operation === "get_question_state") {
-					const documentId = requireOnly(params.document_id, [
+					const taskId = requireOnly(params.task_id, [
 						params.file_path,
-						params.base_version_id,
+						params.document_id,
+						params.base_version,
+						params.version,
 						params.question_json,
 						params.user_instruction,
 					]);
 					if (!params.question_id) throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_INPUT");
 					const fullReview = await requestJson(
-						`${serviceUrl()}/v1/exam-checker/documents/${encodeURIComponent(documentId)}/questions/${encodeURIComponent(params.question_id)}/state`,
+						`${serviceUrl()}/v1/exam-checker/tasks/${encodeURIComponent(taskId)}/questions/${encodeURIComponent(params.question_id)}/state`,
 						{ method: "GET", signal },
 					);
 					if (!isRecord(fullReview)) {
@@ -374,17 +387,18 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 				}
 
 				if (params.operation === "revise_question") {
-					const documentId = requireOnly(params.document_id, [params.file_path]);
-					if (!params.question_id || !params.base_version_id) {
+					const taskId = requireOnly(params.task_id, [params.file_path, params.document_id, params.version]);
+					if (!params.question_id || !params.base_version) {
 						throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_INPUT");
 					}
 					const fullReview = await requestJson(
-						`${serviceUrl()}/v1/exam-checker/documents/${encodeURIComponent(documentId)}/questions/${encodeURIComponent(params.question_id)}/revise`,
+						`${serviceUrl()}/v1/exam-checker/tasks/${encodeURIComponent(taskId)}/questions/${encodeURIComponent(params.question_id)}/revise`,
 						{
 							method: "POST",
 							headers: { "content-type": "application/json" },
 							body: JSON.stringify({
-								base_version_id: params.base_version_id,
+								base_version: params.base_version,
+								idempotency_key: toolCallId,
 								...(params.question_json ? { question_json: params.question_json } : {}),
 								user_instruction: params.user_instruction ?? "",
 							}),
@@ -398,16 +412,25 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 				}
 
 				if (params.operation === "review_question") {
-					const documentId = requireOnly(params.document_id, [
+					const taskId = requireOnly(params.task_id, [
 						params.file_path,
-						params.base_version_id,
+						params.document_id,
+						params.base_version,
 						params.question_json,
 						params.user_instruction,
 					]);
 					if (!params.question_id) throw new ExamCheckerToolError("INVALID_EXAM_CHECKER_INPUT");
 					const fullReview = await requestJson(
-						`${serviceUrl()}/v1/exam-checker/documents/${encodeURIComponent(documentId)}/questions/${encodeURIComponent(params.question_id)}/review`,
-						{ method: "POST", signal },
+						`${serviceUrl()}/v1/exam-checker/tasks/${encodeURIComponent(taskId)}/questions/${encodeURIComponent(params.question_id)}/review`,
+						{
+							method: "POST",
+							headers: { "content-type": "application/json" },
+							body: JSON.stringify({
+								...(params.version ? { version: params.version } : {}),
+								idempotency_key: toolCallId,
+							}),
+							signal,
+						},
 					);
 					return {
 						content: [{ type: "text", text: JSON.stringify(compactReviewResult(fullReview)) }],
@@ -421,7 +444,9 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 					const filePath = requireOnly(params.file_path, [
 						params.document_id,
 						params.question_id,
-						params.base_version_id,
+						params.task_id,
+						params.version,
+						params.base_version,
 						params.question_json,
 						params.user_instruction,
 					]);
@@ -447,7 +472,9 @@ export default function examCheckerExtension(pi: ExtensionAPI): void {
 					documentId = requireOnly(params.document_id, [
 						params.file_path,
 						params.question_id,
-						params.base_version_id,
+						params.task_id,
+						params.version,
+						params.base_version,
 						params.question_json,
 						params.user_instruction,
 					]);

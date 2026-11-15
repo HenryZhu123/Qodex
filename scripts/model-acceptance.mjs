@@ -62,10 +62,10 @@ if(phase==="pi"){
 	assert.equal(state.review.status,"NEEDS_REVISION");
 	const question={...state.question,question_text:state.question.question_text.replace("pop(、","pop()、"),options:["A. 1","B. 2","C. 3","D. 栈为空"]};
 	assert.equal(question.answer_text,"C","Do not invent a missing source answer");
-	const data=await api(path+"/revise",{base_version_id:state.question_version_id,question_json:question,user_instruction:"这是自行编写测试卷的原文还原。仅修正审校指出的 pop() 右括号和选项标签后的空格；保持题意、标准答案 C、来源标识及分值不变，不引入新题。"});
+	const data=await api(path+"/revise",{base_version:state.version,idempotency_key:crypto.randomUUID(),question_json:question,user_instruction:"这是自行编写测试卷的原文还原。仅修正审校指出的 pop() 右括号和选项标签后的空格；保持题意、标准答案 C、来源标识及分值不变，不引入新题。"});
 	writeFileSync(join(out,"revision-detail.json"),JSON.stringify(data,null,2));
 	const latest=await api(path+"/state");
-	const result={document_id:parsed.document_id,question_id:parsed.question_ids[0],status:data.review.status,ingestion:data.ingestion,version_number:latest.version_number,question_version_id:latest.question_version_id};
+	const result={document_id:parsed.document_id,question_id:parsed.question_ids[0],status:data.review.status,ingestion:data.ingestion,version:latest.version};
 	writeFileSync(resultFile,JSON.stringify(result,null,2));
 	assert.equal(result.status,"PASS");assert.equal(result.ingestion?.status,"STORED");
 	console.log(JSON.stringify(result,null,2));

@@ -45,7 +45,7 @@ class QuestionService:
             references.append(node.reference)
 
         return QuestionView(
-            document_id=document.document_id,
+            task_id=document.document_id,
             question_id=node.id,
             question_number=node.question_number,
             question_type=node.question_type,

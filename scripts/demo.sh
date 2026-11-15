@@ -112,6 +112,7 @@ preflight() {
 	require_command npm
 	require_file "$ROOT_DIR/package.json"
 	require_file "$ROOT_DIR/question_generation/sql/001_pending_questions.sql"
+	require_file "$ROOT_DIR/question_generation/sql/002_generation_tasks.sql"
 	[[ -x "$ROOT_PYTHON" ]] || { echo "Missing $ROOT_PYTHON; run npm run demo:setup" >&2; exit 1; }
 	[[ -x "$CHECKER_PYTHON" ]] || { echo "Missing $CHECKER_PYTHON; run npm run demo:setup" >&2; exit 1; }
 	[[ -d "$PI_DIR/node_modules" ]] || { echo "Missing Pi node_modules; run npm run demo:setup" >&2; exit 1; }
@@ -140,9 +141,11 @@ prepare_database() {
 	local db_user="${EXAM_CHECKER_POSTGRES_USER:-qodex}"
 	local db_name="${EXAM_CHECKER_POSTGRES_DB:-qodex}"
 	log "Applying question-generation schema"
-	docker compose "${COMPOSE_ARGS[@]}" exec -T postgres \
-		psql -v ON_ERROR_STOP=1 -U "$db_user" -d "$db_name" \
-		< "$ROOT_DIR/question_generation/sql/001_pending_questions.sql"
+	local schema_file
+	for schema_file in "$ROOT_DIR"/question_generation/sql/*.sql; do
+		docker compose "${COMPOSE_ARGS[@]}" exec -T postgres \
+			psql -v ON_ERROR_STOP=1 -U "$db_user" -d "$db_name" < "$schema_file"
+	done
 }
 
 start_checker() {

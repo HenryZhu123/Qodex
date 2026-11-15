@@ -16,12 +16,12 @@ def fixtures():
     request = dict(request_id="test", subject="数据结构", question_type="single_choice", question_count=1,
                    score_per_question=2, total_score=2, topic_counts={"栈": 1},
                    difficulty_counts={"easy": 1, "medium": 0, "hard": 0})
-    question = dict(document_id="doc", question_id="q1", question_text="先进后出的结构是？", subject="数据结构",
+    question = dict(task_id="task", question_id="q1", question_text="先进后出的结构是？", subject="数据结构",
                     question_type="single_choice", points=2, options=["栈", "队列", "图", "树"], answer_text="A")
-    entry = dict(record_id="record", document_id="doc", question_id="q1", source_version_id="v1",
-                 question_json=dict(document_id="doc", question_id="q1", review_status="PASS", question=question,
+    entry = dict(record_id="record", task_id="task", question_id="q1", version=1,
+                 question_json=dict(task_id="task", question_id="q1", version=1, review_status="PASS", question=question,
                                     metadata=dict(difficulty="easy", knowledge_points=["栈"])))
-    state = dict(document_id="doc", question_id="q1", question_version_id="v1", question=copy.deepcopy(question),
+    state = dict(task_id="task", question_id="q1", version=1, question=copy.deepcopy(question),
                  review=dict(status="PASS", review_id="review1", errors=[], unresolved_checks=[]),
                  question_bank=dict(status="STORED", record_id="record"))
     return request, entry, state
@@ -73,7 +73,7 @@ class ServiceTests(unittest.IsolatedAsyncioTestCase):
                 entry["question_json"]["question"]["answer_text"] = ""
                 state["question"]["answer_text"] = ""
             elif mutation == "version":
-                state["question_version_id"] = "v2"
+                state["version"] = 2
             elif mutation == "review":
                 state["review"]["status"] = "NEEDS_REVISION"
             else:

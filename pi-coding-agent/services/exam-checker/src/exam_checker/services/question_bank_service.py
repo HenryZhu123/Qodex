@@ -56,21 +56,21 @@ class QuestionBankService:
     async def ingest(
         self,
         *,
-        document_id: str,
+        task_id: str,
         question_id: str,
+        version: int,
         question_json: dict[str, Any],
-        source_version_id: UUID | None = None,
     ) -> IngestionResult:
-        stored_review = await self.review_repository.get_latest(
-            document_id, question_id
+        stored_review = await self.review_repository.get_latest_for_version(
+            task_id, question_id, version
         )
         if stored_review.review.review.status != "PASS":
             raise ReviewNotPassedError(
                 "Only a question whose latest review passed can be stored"
             )
-        if question_json.get("document_id") != document_id:
+        if question_json.get("task_id") != task_id:
             raise QuestionBankValidationError(
-                "question_json.document_id must match the requested document"
+                "question_json.task_id must match the requested task"
             )
         if question_json.get("question_id") != question_id:
             raise QuestionBankValidationError(
@@ -80,10 +80,21 @@ class QuestionBankService:
             raise QuestionBankValidationError(
                 "question_json.review_status must be PASS"
             )
+        if question_json.get("version") != version:
+            raise QuestionBankValidationError(
+                "question_json.version must match the reviewed version"
+            )
         question_content = question_json.get("question")
         if not isinstance(question_content, dict) or not question_content:
             raise QuestionBankValidationError(
                 "question_json.question must be a complete question JSON object"
+            )
+        if (
+            stored_review.question_snapshot is not None
+            and question_content != stored_review.question_snapshot
+        ):
+            raise QuestionBankValidationError(
+                "question_json.question must exactly match the reviewed question snapshot"
             )
         metadata = question_json.get("metadata")
         if not isinstance(metadata, dict):
@@ -114,19 +125,12 @@ class QuestionBankService:
             "status": "STORED",
             "record_id": str(record_id),
         }
-        resolved_version_id = source_version_id
-        if resolved_version_id is None:
-            if not stored_review.review.question_version_id:
-                raise QuestionBankValidationError(
-                    "The passed review is not linked to a question version"
-                )
-            resolved_version_id = UUID(stored_review.review.question_version_id)
-        await self.question_bank_repository.store(
+        stored_record_id = await self.question_bank_repository.store(
             record_id=record_id,
             source_review_id=stored_review.review_id,
-            source_version_id=resolved_version_id,
-            document_id=document_id,
+            task_id=task_id,
             question_id=question_id,
+            version=version,
             question_json=stored_json,
         )
-        return IngestionResult(status="STORED", record_id=str(record_id))
+        return IngestionResult(status="STORED", record_id=str(stored_record_id))

@@ -14,7 +14,7 @@ Qodex 是面向计算机考研 408 的 AI 试题工作流，当前仓库已经�
 | 智能组卷 | 从正式题库选题、约束校验、缺题报告、相似题复核、HTML/PDF 导出、PostgreSQL 历史快照与下载 | `exam_assembly` | `http://127.0.0.1:8092` |
 | Pi Agent | 注册上述内置工具并组织调用 | — | 终端交互 |
 
-当前边界：命题服务已经能把自检通过的题目写入 PostgreSQL 待审队列，但 exam-checker 还没有自动消费该队列。现阶段仍需增加“待审题登记 → 绑定题目版本 → 审校 → PASS 入正式题库”的接入层，才能形成全自动闭环。
+命题和审校现在使用统一的 `task_id + question_id + version`。Pi 发起一次命题时自动生成 `task_id`，同组题共享该 ID；审校任务接口按不可变版本从待审队列导入快照，PASS 后幂等写入正式题库。该链路由 Pi 显式调用，不是数据库后台自动消费。
 
 ## 一键演示
 
@@ -113,12 +113,15 @@ User: qodex
 Password: qodex-local
 ```
 
-为命题待审队列建表：
+为命题任务和待审队列建表：
 
 ```bash
 docker compose -f pi-coding-agent/services/exam-checker/compose.yaml \
   exec -T postgres psql -U qodex -d qodex \
   < question_generation/sql/001_pending_questions.sql
+docker compose -f pi-coding-agent/services/exam-checker/compose.yaml \
+  exec -T postgres psql -U qodex -d qodex \
+  < question_generation/sql/002_generation_tasks.sql
 ```
 
 数据库结构详见 [exam-checker 数据库说明](pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md)。
@@ -193,7 +196,7 @@ npm run hydrate:model-data:release
 合并后的 main 会自动注册：
 
 - `question_generation`：`single`、`batch`、`comprehensive`、`revise`
-- `exam_checker`：`review_file`、`review_document`、`review_question`、`revise_question`、`get_question_state`
+- `exam_checker`：`review_file`、`review_document`，以及使用 `task_id` 的 `review_question`、`revise_question`、`get_question_state`
 - `question_bank`：`get_question`、`search_questions`
 - `exam_assembly`：提交组卷请求并返回试卷、缺题结果和历史记录 ID；历史查询目前通过 HTTP 接口完成
 

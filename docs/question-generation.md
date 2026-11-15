@@ -33,45 +33,33 @@
 - 需要验证其他分支时，先阅读实际接口和测试。需要运行对方代码时，在独立 Git 工作树检出固定提交，并为联调使用独立的测试库。日常命题工作继续留在 `feat/question-generation`。
 - 正式联调先核对结构化新题能否送审、入库并回读，再接真实知识检索和组卷补题。现有接口和样例足够时可以独立推进。只有需要上游新增接口、统一共享字段或修改数据库结构时，才提交具体的最小协作事项。
 
-### L3 送审基线与待确认契约
+### L3 送审契约
 
-当前交接先使用命题侧待审表。以下审校 API 核对保留作后续接入参考。
+命题与审校已经统一使用 `task_id + question_id + version`：
 
-2026-11-09 核对了远程 `main`（`4b1aabe`）、`exam-checker`（`db50295`）、`Knowledge-base`（`3a993a2`）和 `exam-assembly`（`c891810`）。隔离联调使用 `main` 的审校实现、PostgreSQL 17 和仓库 Alembic 迁移至 `20261017_01`。题目由命题模块实际生成，测试通过审校模块现有仓储预置题目。审校和元数据模型使用确定性测试替身，版本回执、题库写入和回读使用实际服务和数据库。
+1. Pi 发起命题时自动生成 UUID `task_id`；批量调用返回的所有题共享该 ID。
+2. 命题服务创建 `generation_tasks`，并将每个自检通过版本写入 `pending_questions`。
+3. `exam_checker.review_question` 使用同一个 `task_id`、题目 ID 和可选版本；未指定版本时读取部分唯一索引标记的当前版本。
+4. 审校开始前把命题包转换为 `question_snapshots` 中的不可变快照，审校和题库都以物理复合外键绑定该版本。
+5. 相同 `idempotency_key` 的审校重试返回原记录；同一题目版本重复入库返回原题库记录。新版本不会覆盖旧版本。
 
-| 检查 | 观察结果 |
-| --- | --- |
-| 未预置的结构化新题 | 单题审校路由只查已有文档和题目，直接提交命题 JSON 返回 404 |
-| 单选题送审与回读 | 测试 PASS 后自动入库，审校回执的版本 ID 与题库来源版本一致，数据库中的来源审校 ID 也一致 |
-| 综合题版本 | v1 返回测试 `NEEDS_REVISION`。登记 v2 后状态为 `NOT_REVIEWED`，v2 独立返回测试 PASS 后入库，回读指向 v2 |
-| 同版本重复审校 | 题库仍只有原记录，第二次的入库状态返回 `QuestionAlreadyStoredError` |
-| 审校可见范围 | 现有 `CheckerPayload` 只含题面、选项和引用上下文。参考答案与评分点可存入题目视图，但不会送入审校模型 |
-| 手动入库反例 | v1 已 PASS、v2 尚待审时，手动入库接受了 v2 内容（HTTP 200），却将来源版本记为 v1 |
-
-相关实现见[审校路由](../pi-coding-agent/services/exam-checker/src/exam_checker/api/app.py#L302)、[模型载荷](../pi-coding-agent/services/exam-checker/src/exam_checker/services/question_service.py#L71)和[入库校验](../pi-coding-agent/services/exam-checker/src/exam_checker/services/question_bank_service.py#L56)。
-
-接入方案需和审校模块确认以下最小契约。
-
-1. **登记生成题版本。** 接收完整题目包，保留生成器题目 ID、版本、内容摘要和证据定位，返回审校侧的题目版本 UUID。同一身份和相同内容重试复用该 UUID，同一版本出现不同内容时返回冲突。
-2. **审校绑定版本。** 送审显式指定版本 UUID，回执带同一 UUID 和审校 ID。答案与评分点作为教师材料，仅提供给需要核对解法的任务。题面审查和答案泄露检查仍使用学生视图。
-3. **入库绑定同一份内容。** 在写入边界核对当前版本、对应 PASS 审校和不可变快照。上述 v1 PASS、v2 待审的反例须被拒绝。相同版本重试应复用题库记录，回读能够核对来源版本。
-
-后续若接入该审校 API，先验收这三项。
+上传文档仍保留在 `exam_documents`，不会伪装成 AI 命题任务；解析出的题目以文档解析 ID 作为审校 `task_id`，并通过 `source_document_id` 物理外键保留来源。
 
 ### Pi 调用与待审表交接
 
 Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和原有 JSON `request`，支持 `single`、`batch`、`comprehensive`、`revise`。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。
 
-从仓库根目录，用 Python 3.11 或更新版本安装服务依赖。数据库管理员先在约定的 PostgreSQL 数据库执行 [建表脚本](../question_generation/sql/001_pending_questions.sql)，再授权已创建的服务账号和审校只读账号。下面以 `qg_writer` 和 `qg_reviewer` 为示例角色。
+从仓库根目录，用 Python 3.11 或更新版本安装服务依赖。数据库管理员按文件名顺序执行 `question_generation/sql/*.sql`，再授权已创建的服务账号和审校只读账号。下面以 `qg_writer` 和 `qg_reviewer` 为示例角色。
 
 ```bash
 python3 -m pip install -r question_generation/service-requirements.txt
 psql "$QODEX_SCHEMA_ADMIN_DSN" -v ON_ERROR_STOP=1 -f question_generation/sql/001_pending_questions.sql
+psql "$QODEX_SCHEMA_ADMIN_DSN" -v ON_ERROR_STOP=1 -f question_generation/sql/002_generation_tasks.sql
 ```
 
 ```sql
 GRANT USAGE ON SCHEMA question_generation TO qg_writer, qg_reviewer;
-GRANT EXECUTE ON FUNCTION question_generation.enqueue_question(jsonb, text, jsonb) TO qg_writer;
+GRANT EXECUTE ON FUNCTION question_generation.enqueue_question(uuid, jsonb, text, jsonb) TO qg_writer;
 GRANT SELECT ON question_generation.current_pending_questions TO qg_reviewer;
 ```
 
@@ -85,12 +73,12 @@ curl -fsS http://127.0.0.1:8093/v1/question-generation/single \
 
 服务只入队自检通过的题目包。返回 `queue_receipts` 表示已确认写入，`QUEUED` 是首次入队，`ALREADY_QUEUED` 是相同版本的重试。批量部分成功时保存其中实际合格的题。版本冲突返回 `QUEUE_VERSION_CONFLICT`，数据库不可用返回 `QUEUE_UNAVAILABLE`。同一次调用的写入在一个事务内。修订须传入与待审表一致的原始包，可使用前次调用返回的题目。旧版仍可追溯，当前取题视图只显示最新版本。原有命令行和验证台可继续用于本地预览。
 
-审校同学使用以下查询取题，按 `question_id` 和 `version` 识别审校对象，`question_json` 内含学生题面、教师答案、评分点和证据来源。记录结果前重新按同一身份和版本核对视图，避免把旧版结论关联到新版。审校及通过后的落库由审校模块负责。
+审校按 `task_id`、`question_id` 和 `version` 识别不可变对象，`question_json` 内含学生题面、教师答案、评分点和证据来源。
 
 ```sql
-SELECT question_id, version, request_id, question_json, queued_at
+SELECT task_id, question_id, version, request_id, question_json, queued_at
 FROM question_generation.current_pending_questions
-ORDER BY queued_at, question_id
+ORDER BY queued_at, task_id, question_id
 LIMIT 100;
 ```
 

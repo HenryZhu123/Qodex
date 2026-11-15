@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 import pytest
 
@@ -25,7 +25,7 @@ from exam_checker.services.question_version_store import (
 
 def question() -> QuestionView:
     return QuestionView(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
         question_number="1",
         question_type="single_choice",
@@ -47,9 +47,9 @@ class FakeQuestionBankRepository:
         self.entry = entry
 
     async def get_by_source(
-        self, document_id: str, question_id: str
+        self, task_id: str, question_id: str
     ) -> StoredQuestionBankEntry | None:
-        assert (document_id, question_id) == ("exam_1", "question_1")
+        assert (task_id, question_id) == ("exam_1", "question_1")
         return self.entry
 
 
@@ -60,10 +60,11 @@ async def test_state_returns_latest_version_review_and_bank_record() -> None:
     await versions.initialize([question()])
     version = await versions.get_latest("exam_1", "question_1")
     review = ReviewedQuestion(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
         question_number="1",
-        question_version_id=version.version_id,
+        version=version.version,
+        idempotency_key="state-review-1",
         review_id=str(uuid4()),
         question=CheckerPayload(reference="", detection_content="TCP 是否可靠？"),
         review=QuestionReview(
@@ -82,9 +83,9 @@ async def test_state_returns_latest_version_review_and_bank_record() -> None:
     await reviews.save(review)
     entry = StoredQuestionBankEntry(
         record_id=str(uuid4()),
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
-        source_version_id=version.version_id,
+        version=version.version,
         question_json={"question": question().model_dump(mode="json")},
     )
     service = QuestionStateService(
@@ -95,7 +96,7 @@ async def test_state_returns_latest_version_review_and_bank_record() -> None:
 
     state = await service.get("exam_1", "question_1")
 
-    assert state.question_version_id == version.version_id
+    assert state.version == version.version
     assert state.review.status == "NEEDS_REVISION"
     assert state.review.errors[0].error_type == "事实/逻辑错误"
     assert state.question_bank.status == "STORED"
@@ -110,10 +111,11 @@ async def test_state_does_not_reuse_review_from_an_older_version() -> None:
     await versions.initialize([original])
     first = await versions.get_latest("exam_1", "question_1")
     old_review = ReviewedQuestion(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
         question_number="1",
-        question_version_id=first.version_id,
+        version=first.version,
+        idempotency_key="state-review-old",
         review_id=str(uuid4()),
         question=CheckerPayload(reference="", detection_content="TCP 是否可靠？"),
         review=QuestionReview(
@@ -131,9 +133,9 @@ async def test_state_does_not_reuse_review_from_an_older_version() -> None:
     )
     await reviews.save(old_review)
     await versions.create_revision(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
-        base_version_id=UUID(first.version_id),
+        base_version=first.version,
         revision_source="USER_EDIT",
         question=original.model_copy(update={"question_text": "修改后的题目"}),
         change_log={

@@ -72,7 +72,7 @@ def propose_replenishment(request, candidates, *, max_nodes=50000, forbidden_pai
                 search=dict(nodes=nodes, max_nodes=max_nodes, budget_exhausted=exhausted),
                 pairing_basis="ONE_FEASIBLE_COMPLETION_OF_MARGINAL_QUOTAS",
                 deficits=deficits,
-                keep_assignments=[dict(record_id=q["question_id"], source_version_id=q["version"],
+                keep_assignments=[dict(record_id=q["question_id"], version=q["version"],
                                        knowledge_point=q["topic"], difficulty=q["difficulty"],
                                        question_type=q["question_type"], score=q["score"]) for q in best],
                 avoid_stems=[q["stem"] for q in best],

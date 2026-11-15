@@ -17,7 +17,6 @@ from ..domain.models import (
 )
 from ..services.document_store import DocumentNotFoundError
 from ..services.persistence import (
-    QuestionAlreadyStoredError,
     QuestionBankEntryNotFoundError,
     ReviewNotFoundError,
     QuestionVersionConflictError,
@@ -28,7 +27,7 @@ from .models import (
     ExamDocumentRow,
     QuestionBankRow,
     QuestionReviewRow,
-    QuestionVersionRow,
+    QuestionSnapshotRow,
 )
 
 
@@ -67,28 +66,55 @@ class PostgresQuestionReviewRepository:
     async def save(self, review: ReviewedQuestion) -> UUID:
         review_id = UUID(review.review_id) if review.review_id else uuid4()
         async with self.sessions.begin() as session:
-            session.add(
-                QuestionReviewRow(
-                    review_id=review_id,
-                    document_id=review.document_id,
-                    question_id=review.question_id,
-                    question_version_id=(
-                        UUID(review.question_version_id)
-                        if review.question_version_id
-                        else None
-                    ),
-                    review_json=review.model_dump(mode="json"),
+            question_json = await session.scalar(
+                select(QuestionSnapshotRow.question_json).where(
+                    QuestionSnapshotRow.task_id == review.task_id,
+                    QuestionSnapshotRow.question_id == review.question_id,
+                    QuestionSnapshotRow.version == review.version,
                 )
             )
-        return review_id
+            if question_json is None:
+                raise QuestionVersionNotFoundError(
+                    (review.task_id, review.question_id, review.version)
+                )
+            statement = insert(QuestionReviewRow).values(
+                review_id=review_id,
+                task_id=review.task_id,
+                question_id=review.question_id,
+                version=review.version,
+                idempotency_key=review.idempotency_key,
+                question_json=question_json,
+                review_json=review.model_dump(mode="json"),
+            )
+            statement = statement.on_conflict_do_nothing(
+                constraint="uq_question_review_idempotency"
+            ).returning(QuestionReviewRow.review_id)
+            stored_id = await session.scalar(statement)
+            if stored_id is None:
+                stored_id = await session.scalar(
+                    select(QuestionReviewRow.review_id).where(
+                        QuestionReviewRow.idempotency_key == review.idempotency_key
+                    )
+                )
+        assert stored_id is not None
+        return stored_id
+
+    async def get_by_idempotency(self, idempotency_key: str) -> StoredQuestionReview | None:
+        async with self.sessions() as session:
+            row = await session.scalar(
+                select(QuestionReviewRow).where(
+                    QuestionReviewRow.idempotency_key == idempotency_key
+                )
+            )
+        return self._to_domain(row) if row is not None else None
 
     async def get_latest(
-        self, document_id: str, question_id: str
+        self, task_id: str, question_id: str
     ) -> StoredQuestionReview:
         statement = (
             select(QuestionReviewRow)
             .where(
-                QuestionReviewRow.document_id == document_id,
+                QuestionReviewRow.task_id == task_id,
                 QuestionReviewRow.question_id == question_id,
             )
             .order_by(QuestionReviewRow.created_at.desc())
@@ -97,21 +123,18 @@ class PostgresQuestionReviewRepository:
         async with self.sessions() as session:
             row = await session.scalar(statement)
         if row is None:
-            raise ReviewNotFoundError((document_id, question_id))
-        return StoredQuestionReview(
-            review_id=row.review_id,
-            review=ReviewedQuestion.model_validate(row.review_json),
-        )
+            raise ReviewNotFoundError((task_id, question_id))
+        return self._to_domain(row)
 
     async def get_latest_for_version(
-        self, document_id: str, question_id: str, question_version_id: UUID
+        self, task_id: str, question_id: str, version: int
     ) -> StoredQuestionReview:
         statement = (
             select(QuestionReviewRow)
             .where(
-                QuestionReviewRow.document_id == document_id,
+                QuestionReviewRow.task_id == task_id,
                 QuestionReviewRow.question_id == question_id,
-                QuestionReviewRow.question_version_id == question_version_id,
+                QuestionReviewRow.version == version,
             )
             .order_by(QuestionReviewRow.created_at.desc())
             .limit(1)
@@ -120,11 +143,16 @@ class PostgresQuestionReviewRepository:
             row = await session.scalar(statement)
         if row is None:
             raise ReviewNotFoundError(
-                (document_id, question_id, question_version_id)
+                (task_id, question_id, version)
             )
+        return self._to_domain(row)
+
+    @staticmethod
+    def _to_domain(row: QuestionReviewRow) -> StoredQuestionReview:
         return StoredQuestionReview(
             review_id=row.review_id,
             review=ReviewedQuestion.model_validate(row.review_json),
+            question_snapshot=row.question_json,
         )
 
 
@@ -137,30 +165,34 @@ class PostgresQuestionBankRepository:
         *,
         record_id: UUID,
         source_review_id: UUID,
-        source_version_id: UUID,
-        document_id: str,
+        task_id: str,
         question_id: str,
+        version: int,
         question_json: dict[str, Any],
-    ) -> None:
+    ) -> UUID:
+        statement = insert(QuestionBankRow).values(
+            record_id=record_id,
+            task_id=task_id,
+            question_id=question_id,
+            version=version,
+            source_review_id=source_review_id,
+            question_json=question_json,
+        )
+        statement = statement.on_conflict_do_nothing(
+            constraint="uq_question_bank_source_version"
+        ).returning(QuestionBankRow.record_id)
         async with self.sessions.begin() as session:
-            existing = await session.scalar(
+            stored_id = await session.scalar(statement)
+            if stored_id is None:
+                stored_id = await session.scalar(
                 select(QuestionBankRow.record_id).where(
-                    QuestionBankRow.document_id == document_id,
+                    QuestionBankRow.task_id == task_id,
                     QuestionBankRow.question_id == question_id,
+                    QuestionBankRow.version == version,
                 )
             )
-            if existing is not None:
-                raise QuestionAlreadyStoredError((document_id, question_id))
-            session.add(
-                QuestionBankRow(
-                    record_id=record_id,
-                    document_id=document_id,
-                    question_id=question_id,
-                    source_review_id=source_review_id,
-                    source_version_id=source_version_id,
-                    question_json=question_json,
-                )
-            )
+        assert stored_id is not None
+        return stored_id
 
     async def get(self, record_id: UUID) -> StoredQuestionBankEntry:
         async with self.sessions() as session:
@@ -170,12 +202,12 @@ class PostgresQuestionBankRepository:
         return self._to_domain(row)
 
     async def get_by_source(
-        self, document_id: str, question_id: str
+        self, task_id: str, question_id: str
     ) -> StoredQuestionBankEntry | None:
         statement = select(QuestionBankRow).where(
-            QuestionBankRow.document_id == document_id,
+            QuestionBankRow.task_id == task_id,
             QuestionBankRow.question_id == question_id,
-        )
+        ).order_by(QuestionBankRow.version.desc()).limit(1)
         async with self.sessions() as session:
             row = await session.scalar(statement)
         return self._to_domain(row) if row is not None else None
@@ -226,11 +258,9 @@ class PostgresQuestionBankRepository:
     def _to_domain(row: QuestionBankRow) -> StoredQuestionBankEntry:
         return StoredQuestionBankEntry(
             record_id=str(row.record_id),
-            document_id=row.document_id,
+            task_id=row.task_id,
             question_id=row.question_id,
-            source_version_id=(
-                str(row.source_version_id) if row.source_version_id else None
-            ),
+            version=row.version,
             question_json=row.question_json,
         )
 
@@ -244,79 +274,108 @@ class PostgresQuestionVersionRepository:
             return
         async with self.sessions.begin() as session:
             for question in questions:
-                statement = insert(QuestionVersionRow).values(
-                    version_id=uuid4(),
-                    document_id=question.document_id,
+                statement = insert(QuestionSnapshotRow).values(
+                    task_id=question.task_id,
                     question_id=question.question_id,
-                    version_number=1,
-                    parent_version_id=None,
+                    version=1,
+                    generation_task_id=None,
+                    source_document_id=question.task_id,
                     revision_source="PARSED",
                     question_json=question.model_dump(mode="json"),
                     change_log=None,
                 )
                 await session.execute(
                     statement.on_conflict_do_nothing(
-                        constraint="uq_question_version_number"
+                        index_elements=[
+                            QuestionSnapshotRow.task_id,
+                            QuestionSnapshotRow.question_id,
+                            QuestionSnapshotRow.version,
+                        ]
                     )
                 )
 
     async def get_latest(
-        self, document_id: str, question_id: str
+        self, task_id: str, question_id: str
     ) -> StoredQuestionVersion:
         statement = (
-            select(QuestionVersionRow)
+            select(QuestionSnapshotRow)
             .where(
-                QuestionVersionRow.document_id == document_id,
-                QuestionVersionRow.question_id == question_id,
+                QuestionSnapshotRow.task_id == task_id,
+                QuestionSnapshotRow.question_id == question_id,
             )
-            .order_by(QuestionVersionRow.version_number.desc())
+            .order_by(QuestionSnapshotRow.version.desc())
             .limit(1)
         )
         async with self.sessions() as session:
             row = await session.scalar(statement)
         if row is None:
-            raise QuestionVersionNotFoundError((document_id, question_id))
+            raise QuestionVersionNotFoundError((task_id, question_id))
         return self._to_domain(row)
+
+    async def get(self, task_id: str, question_id: str, version: int) -> StoredQuestionVersion:
+        async with self.sessions() as session:
+            row = await session.get(QuestionSnapshotRow, (task_id, question_id, version))
+        if row is None:
+            raise QuestionVersionNotFoundError((task_id, question_id, version))
+        return self._to_domain(row)
+
+    async def import_generated(
+        self, *, task_id: str, question_id: str, version: int, question: QuestionView
+    ) -> StoredQuestionVersion:
+        statement = insert(QuestionSnapshotRow).values(
+            task_id=task_id,
+            question_id=question_id,
+            version=version,
+            generation_task_id=UUID(task_id),
+            source_document_id=None,
+            revision_source="GENERATED",
+            question_json=question.model_dump(mode="json"),
+            change_log=None,
+        ).on_conflict_do_nothing(
+            index_elements=[
+                QuestionSnapshotRow.task_id,
+                QuestionSnapshotRow.question_id,
+                QuestionSnapshotRow.version,
+            ]
+        )
+        async with self.sessions.begin() as session:
+            await session.execute(statement)
+        return await self.get(task_id, question_id, version)
 
     async def create_revision(
         self,
         *,
-        document_id: str,
+        task_id: str,
         question_id: str,
-        base_version_id: UUID,
+        base_version: int,
         revision_source: str,
         question: QuestionView,
         change_log: QuestionChangeLog,
     ) -> StoredQuestionVersion:
         statement = (
-            select(QuestionVersionRow)
+            select(QuestionSnapshotRow)
             .where(
-                QuestionVersionRow.document_id == document_id,
-                QuestionVersionRow.question_id == question_id,
+                QuestionSnapshotRow.task_id == task_id,
+                QuestionSnapshotRow.question_id == question_id,
             )
-            .order_by(QuestionVersionRow.version_number.desc())
+            .order_by(QuestionSnapshotRow.version.desc())
             .limit(1)
             .with_for_update()
         )
         async with self.sessions.begin() as session:
-            await session.scalar(
-                select(ExamDocumentRow.document_id)
-                .where(ExamDocumentRow.document_id == document_id)
-                .with_for_update()
-            )
             latest = await session.scalar(statement)
             if latest is None:
-                raise QuestionVersionNotFoundError((document_id, question_id))
-            if latest.version_id != base_version_id:
+                raise QuestionVersionNotFoundError((task_id, question_id))
+            if latest.version != base_version:
                 raise QuestionVersionConflictError(
                     "The question changed after the requested base version"
                 )
-            row = QuestionVersionRow(
-                version_id=uuid4(),
-                document_id=document_id,
+            row = QuestionSnapshotRow(
+                task_id=task_id,
                 question_id=question_id,
-                version_number=latest.version_number + 1,
-                parent_version_id=latest.version_id,
+                version=latest.version + 1,
+                generation_task_id=latest.generation_task_id,
+                source_document_id=latest.source_document_id,
                 revision_source=revision_source,
                 question_json=question.model_dump(mode="json"),
                 change_log=change_log.model_dump(mode="json"),
@@ -326,15 +385,11 @@ class PostgresQuestionVersionRepository:
             return self._to_domain(row)
 
     @staticmethod
-    def _to_domain(row: QuestionVersionRow) -> StoredQuestionVersion:
+    def _to_domain(row: QuestionSnapshotRow) -> StoredQuestionVersion:
         return StoredQuestionVersion(
-            version_id=str(row.version_id),
-            document_id=row.document_id,
+            task_id=row.task_id,
             question_id=row.question_id,
-            version_number=row.version_number,
-            parent_version_id=(
-                str(row.parent_version_id) if row.parent_version_id else None
-            ),
+            version=row.version,
             revision_source=row.revision_source,
             question=QuestionView.model_validate(row.question_json),
             change_log=(

@@ -15,8 +15,9 @@ def convert(entry, state, request):
     review_id = verified_state(entry, state)
     payload = entry["question_json"]
     q, meta = payload["question"], payload["metadata"]
-    if (payload.get("document_id") != entry["document_id"]
-            or payload.get("question_id") != entry["question_id"]):
+    if (payload.get("task_id") != entry["task_id"]
+            or payload.get("question_id") != entry["question_id"]
+            or payload.get("version") != entry["version"]):
         raise ValueError("题目来源标识不一致")
     if q.get("subject") != request["subject"] or q.get("question_type") != "single_choice":
         raise ValueError("学科或题型不匹配；目前生产接口仅支持 single_choice")
@@ -54,13 +55,13 @@ def convert(entry, state, request):
     if q.get("reference"):
         # Current document exporter cannot render parent passages or source images.
         raise ValueError("包含参考材料，尚不支持完整渲染，不能输出残缺题面")
-    return dict(question_id=entry["record_id"], version=entry["source_version_id"],
+    return dict(question_id=entry["record_id"], version=entry["version"],
                 subject=q["subject"], question_type="single_choice", topic=topics[0],
                 eligible_topics=topics, knowledge_points=knowledge, difficulty=meta["difficulty"],
                 score=int(points), stem=q["question_text"], options=options, answer=answer,
                 explanation=q.get("explanation") or payload.get("explanation") or "",
-                provenance={k: entry[k] for k in ("record_id", "document_id", "question_id", "source_version_id")},
-                review={"status": "PASS", "question_version": entry["source_version_id"],
+                provenance={k: entry[k] for k in ("record_id", "task_id", "question_id", "version")},
+                review={"status": "PASS", "question_version": entry["version"],
                         "is_mock": False, "review_id": review_id})
 
 

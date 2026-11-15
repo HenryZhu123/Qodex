@@ -92,12 +92,13 @@ alembic upgrade head
 The schema stores complete JSON in PostgreSQL `JSONB` columns:
 
 - `exam_documents`: one complete `ExamDocument` per parsed file.
-- `question_versions`: immutable complete single-question JSON; parsing creates version 1 and every edit appends a version. Edited versions also store a JSONB `change_log` containing `user_instruction`, `review_feedback`, a model-written natural-language `changes` record, and `model`.
-- `question_reviews`: one append-only complete `ReviewedQuestion` per review run.
-- `question_bank`: one complete, metadata-enriched question JSON per accepted question.
+- `question_snapshots`: immutable complete single-question JSON keyed by `task_id + question_id + version`; parsed files create version 1 and AI-generated versions are imported from the pending queue. Edited versions also store a JSONB `change_log`.
+- `question_reviews`: append-only reviews bound by a physical composite foreign key to the exact snapshot; `idempotency_key` prevents duplicate execution retries.
+- `question_bank`: one complete, metadata-enriched question JSON per accepted version, unique on `task_id + question_id + version`.
 
-No optional business indexes are created yet. Primary key and uniqueness constraints
-still use PostgreSQL's required internal indexes.
+The snapshot primary key supports latest-version lookup by `task_id + question_id`.
+Dedicated indexes support exact-version review lookup and latest question-bank source lookup;
+the pending queue uses a partial unique index for its single current version.
 
 ## API
 
@@ -111,22 +112,25 @@ still use PostgreSQL's required internal indexes.
 - `POST /v1/exam-checker/documents/{document_id}/questions/{question_id}/review`
 - `POST /v1/exam-checker/documents/{document_id}/questions/{question_id}/revise`
 - `POST /v1/exam-checker/documents/{document_id}/questions/{question_id}/ingest`
+- `GET /v1/exam-checker/tasks/{task_id}/questions/{question_id}/state`
+- `POST /v1/exam-checker/tasks/{task_id}/questions/{question_id}/review`
+- `POST /v1/exam-checker/tasks/{task_id}/questions/{question_id}/revise`
 - `GET /v1/question-bank/search`
 - `GET /v1/question-bank/{record_id}`
 
-The ingestion endpoint requires the latest persisted review to be `PASS`. Its JSON body
-must contain the matching `document_id`, `question_id`, `review_status: "PASS"`, a
+The ingestion endpoint requires the persisted review for the same version to be `PASS`. Its JSON body
+must contain the matching `task_id`, `question_id`, positive integer `version`, `review_status: "PASS"`, a
 complete `question` JSON object, and `metadata` containing `difficulty` and a non-empty
 `knowledge_points` string array. The normal review workflow performs this ingestion
 automatically after a passed review.
 
-The revision endpoint requires `base_version_id`. It accepts either a complete user-edited
+The task revision endpoint requires integer `base_version` and an `idempotency_key`. It accepts either a complete user-edited
 `question_json` or `user_instruction`. The revision model receives the complete latest
 question JSON, the latest review's `errors`, and the user instruction without converting the
 question to another schema. It returns the complete revised question plus one natural-language
 `changes` record; the service builds the four-field `change_log`, creates a new version, and
 runs all nine checks again. A stale
-`base_version_id` returns HTTP 409 instead of overwriting a newer edit.
+`base_version` returns HTTP 409 instead of overwriting a newer edit.
 
 The MinerU Agent API accepts files up to 10 MB and PDFs up to 20 pages. It is IP-rate-limited and returns only Markdown.
 
@@ -154,8 +158,9 @@ The response separates whole-question state from per-task execution:
 
 ```json
 {
-  "document_id": "exam_...",
+  "task_id": "exam_...",
   "question_id": "question_1",
+  "version": 1,
   "question": {
     "reference": "【学科】计算机科学\n【题型】选择题",
     "detection_content": "题目原文"
@@ -197,9 +202,9 @@ Set `EXAM_CHECKER_SERVICE_URL` when the service is not available at `http://127.
 
 - `review_file`: accepts `file_path`, parses the original PDF/DOC/DOCX once, then reviews every extracted question.
 - `review_document`: accepts `document_id` and reviews every question without repeating MinerU parsing.
-- `review_question`: accepts `document_id` and `question_id` and reviews only that question.
-- `revise_question`: accepts `document_id`, `question_id`, `base_version_id`, and either a complete `question_json` or `user_instruction`; it creates a new version and re-reviews it.
-- `get_question_state`: accepts `document_id` and `question_id`; it returns the latest complete question version, its version-specific review result, change log, and question-bank state.
+- `review_question`: accepts `task_id`, `question_id`, and optional exact integer `version`; it reviews only that immutable version. Pi supplies an idempotency key automatically.
+- `revise_question`: accepts `task_id`, `question_id`, integer `base_version`, and either a complete `question_json` or `user_instruction`; it creates a new version and re-reviews it.
+- `get_question_state`: accepts `task_id` and `question_id`; it returns the latest complete question version, its version-specific review result, change log, and question-bank state.
 
 The separate read-only `question_bank` tool exposes two operations:
 
@@ -210,10 +215,10 @@ The operation parameters are mutually exclusive. The tool keeps the full respons
 
 ```json
 {
-  "document_id": "exam_123",
+  "task_id": "b4d4d9f0-5f57-4e52-8e1f-87f72551c7bd",
   "question_id": "question_2",
   "question_number": "2",
-  "question_version_id": "5aa36f56-1ab8-4d18-b377-d0c89ac41116",
+  "version": 2,
   "status": "NEEDS_REVISION",
   "errors": [
     {

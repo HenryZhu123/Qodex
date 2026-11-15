@@ -10,14 +10,15 @@ def convert_entry(entry, topic_mapping, *, mock_input=False):
     payload = entry["question_json"]
     question = payload["question"]
     metadata = payload["metadata"]
-    document_id, question_id = entry["document_id"], entry["question_id"]
-    if payload.get("document_id") != document_id or payload.get("question_id") != question_id:
+    task_id, question_id = entry["task_id"], entry["question_id"]
+    if (payload.get("task_id") != task_id or payload.get("question_id") != question_id
+            or payload.get("version") != entry.get("version")):
         raise ValueError("题目来源标识不一致")
     if payload.get("review_status") != "PASS":
         raise ValueError("题库记录未标记 PASS")
-    version = entry.get("source_version_id")
-    if not isinstance(version, str) or not version.strip():
-        raise ValueError("缺少 source_version_id，不能伪造版本")
+    version = entry.get("version")
+    if type(version) is not int or version < 1:
+        raise ValueError("缺少正整数 version，不能伪造版本")
     # 当前搜索 API 不提供最新版本/最新审校证据，不能据入库 PASS 推断当前仍有效。
     if not mock_input:
         raise ValueError("真实记录还需验证来源审校及版本有效性；当前转换器仅支持显式开发模式")
@@ -63,14 +64,14 @@ def convert_entry(entry, topic_mapping, *, mock_input=False):
     if metadata.get("difficulty") not in ("easy", "medium", "hard"):
         raise ValueError("难度标签无效")
     return {
-        "question_id": json.dumps([document_id, question_id], ensure_ascii=False, separators=(",", ":")),
+        "question_id": json.dumps([task_id, question_id], ensure_ascii=False, separators=(",", ":")),
         "version": version, "subject": question["subject"], "topic": next(iter(mapped)),
         "knowledge_points": knowledge_points, "question_type": "single_choice",
         "difficulty": metadata["difficulty"], "score": int(score),
         "stem": question["question_text"], "options": options, "answer": answer,
         "explanation": "", "explanation_status": "NOT_PROVIDED",
         "provenance": {k: entry.get(k) for k in
-                       ("record_id", "document_id", "question_id", "source_version_id", "source_review_id")},
+                       ("record_id", "task_id", "question_id", "version", "source_review_id")},
         "original_answer_text": answer_text,
         "review": {"status": "PASS", "question_version": version, "is_mock": True,
                    "note": "显式开发转换；未验证真实审校及最新版本，不用于正式交付"},

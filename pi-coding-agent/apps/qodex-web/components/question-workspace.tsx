@@ -321,7 +321,7 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 			{state && (
 				<section className="qx-result">
 					<h2>
-						题目 {text(state.question_id)} · v{text(state.version_number)}
+						题目 {text(state.question_id)} · v{text(state.version)}
 					</h2>
 					<p>
 						审校：{statusLabel(object(state.review).status)} · 入库：{text(object(state.question_bank).status)}
@@ -343,7 +343,8 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 						onClick={() =>
 							run(async () => {
 								await post(`${documentPath}/questions/${encodeURIComponent(text(state.question_id))}/revise`, {
-									base_version_id: state.question_version_id,
+									base_version: state.version,
+									idempotency_key: crypto.randomUUID(),
 									user_instruction: instruction,
 								});
 								return api(`${documentPath}/questions/${encodeURIComponent(text(state.question_id))}/state`);

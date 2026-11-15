@@ -22,11 +22,16 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 		promptSnippet: "Generate or revise 408 questions and submit them for review",
 		promptGuidelines: [
 			"Use single for one single-choice question, batch for scored slots, comprehensive for one structured problem, and revise for version-specific feedback.",
+			"A new generation call receives one automatically generated task_id shared by every returned question. For revise, pass the existing task_id in request so the new version remains in the same task.",
 			"Send the structured request unchanged. Use pre-verified evidence supplied for the topic. Report missing evidence and batch deficits.",
 			"Treat queued versions as pending independent review. The student_view is the student-facing content; keep instructor_view separate.",
 		],
 		parameters,
 		async execute(_id, { operation, request }, signal) {
+			const requestWithTask = {
+				...request,
+				task_id: typeof request.task_id === "string" ? request.task_id : crypto.randomUUID(),
+			};
 			const base = (process.env.QUESTION_GENERATION_SERVICE_URL || "http://127.0.0.1:8093").replace(/\/+$/, "");
 			let response: Response;
 			try {
@@ -34,7 +39,7 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 				response = await fetch(`${base}/v1/question-generation/${operation}`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(request),
+					body: JSON.stringify(requestWithTask),
 					signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
 				});
 			} catch (error) {

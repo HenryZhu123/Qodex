@@ -269,9 +269,11 @@ async def test_question_review_service_timing_and_kb_metrics() -> None:
     )
 
     result = await service.review_question(
-        document_id="doc1",
+        task_id="doc1",
         question_id="q1",
         question_number="1",
+        version=1,
+        idempotency_key="kb-review",
         payload=CheckerPayload(reference="", detection_content="题目错误文本"),
     )
 

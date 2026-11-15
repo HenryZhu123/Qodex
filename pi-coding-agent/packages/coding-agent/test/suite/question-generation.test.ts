@@ -36,7 +36,9 @@ it("runs the built-in question-generation tool and preserves the service receipt
 
 	expect(fetchStub).toHaveBeenCalledOnce();
 	expect(fetchStub.mock.calls[0]?.[0]).toBe("http://127.0.0.1:8093/v1/question-generation/batch");
-	expect(fetchStub.mock.calls[0]?.[1]?.body).toBe(JSON.stringify(request));
+	const submitted = JSON.parse(String(fetchStub.mock.calls[0]?.[1]?.body));
+	expect(submitted).toMatchObject(request);
+	expect(submitted.task_id).toMatch(/^[0-9a-f-]{36}$/);
 	const result = harness.session.messages.find((message) => message.role === "toolResult");
 	expect(JSON.parse(getMessageText(result))).toEqual(response);
 });

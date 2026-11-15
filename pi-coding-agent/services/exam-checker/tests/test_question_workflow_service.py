@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from uuid import UUID, uuid4
+from uuid import uuid4
 
 import pytest
 
 from exam_checker.domain.models import (
     CheckerPayload,
+    QuestionChangeLog,
     QuestionMetadata,
     QuestionReview,
     QuestionRevisionResult,
@@ -15,7 +16,10 @@ from exam_checker.domain.models import (
     ReviewSummary,
     ReviewTiming,
 )
-from exam_checker.services.persistence import InMemoryQuestionReviewRepository
+from exam_checker.services.persistence import (
+    InMemoryQuestionReviewRepository,
+    ReviewNotFoundError,
+)
 from exam_checker.services.question_version_store import (
     InMemoryQuestionVersionRepository,
 )
@@ -24,7 +28,7 @@ from exam_checker.services.question_workflow_service import QuestionWorkflowServ
 
 def make_question() -> QuestionView:
     return QuestionView(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
         question_number="1",
         question_type="single_choice",
@@ -72,18 +76,20 @@ class PassingReviewService:
     async def review_question(
         self,
         *,
-        document_id,
+        task_id,
         question_id,
         question_number,
+        version,
+        idempotency_key,
         payload,
-        question_version_id=None,
     ):
-        self.calls.append(question_version_id)
+        self.calls.append(version)
         review = ReviewedQuestion(
-            document_id=document_id,
+            task_id=task_id,
             question_id=question_id,
             question_number=question_number,
-            question_version_id=question_version_id,
+            version=version,
+            idempotency_key=idempotency_key,
             review_id=str(uuid4()),
             question=payload,
             review=QuestionReview(
@@ -110,10 +116,11 @@ async def test_ai_revision_creates_new_version_then_reviews_it() -> None:
     version_1 = await versions.get_latest("exam_1", "question_1")
     reviews = InMemoryQuestionReviewRepository()
     prior = ReviewedQuestion(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
         question_number="1",
-        question_version_id=version_1.version_id,
+        version=version_1.version,
+        idempotency_key="prior-review",
         review_id=str(uuid4()),
         question=CheckerPayload(reference="", detection_content=question.question_text),
         review=QuestionReview(
@@ -146,16 +153,16 @@ async def test_ai_revision_creates_new_version_then_reviews_it() -> None:
     )
 
     result = await workflow.revise_and_review(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
-        base_version_id=UUID(version_1.version_id),
+        base_version=version_1.version,
         question_json=None,
         user_instruction="保持原题难度",
+        idempotency_key="revised-review",
     )
 
     version_2 = await versions.get_latest("exam_1", "question_1")
-    assert version_2.version_number == 2
-    assert version_2.parent_version_id == version_1.version_id
+    assert version_2.version == 2
     assert version_2.revision_source == "AI_EDIT"
     assert version_2.question.question_text == "以下哪项错误？"
     assert version_2.change_log is not None
@@ -171,8 +178,99 @@ async def test_ai_revision_creates_new_version_then_reviews_it() -> None:
         "将题干中的‘错吴’修改为‘错误’，修正错别字。"
     )
     assert version_2.change_log.model == "revision-model"
-    assert reviewer.calls == [version_2.version_id]
+    assert reviewer.calls == [version_2.version]
     assert model.received_errors[0].error_type == "错别字"
     assert result.review.status == "PASS"
     assert result.ingestion is not None
     assert result.ingestion.status == "SKIPPED"
+
+
+@pytest.mark.asyncio
+async def test_review_idempotency_key_reuses_the_first_review() -> None:
+    question = make_question()
+    versions = InMemoryQuestionVersionRepository()
+    await versions.initialize([question])
+    reviews = InMemoryQuestionReviewRepository()
+    reviewer = PassingReviewService(reviews)
+    workflow = QuestionWorkflowService(
+        version_repository=versions,
+        review_repository=reviews,
+        review_service=reviewer,
+        model=FakeModel(),
+        question_bank_service=None,
+    )
+
+    first = await workflow.review_latest(
+        "exam_1", "question_1", idempotency_key="same-call"
+    )
+    second = await workflow.review_latest(
+        "exam_1", "question_1", idempotency_key="same-call"
+    )
+
+    assert second.review_id == first.review_id
+    assert reviewer.calls == [1]
+
+
+@pytest.mark.asyncio
+async def test_revision_requires_review_for_the_exact_current_version() -> None:
+    question = make_question()
+    versions = InMemoryQuestionVersionRepository()
+    await versions.initialize([question])
+    reviews = InMemoryQuestionReviewRepository()
+    prior = ReviewedQuestion(
+        task_id="exam_1",
+        question_id="question_1",
+        question_number="1",
+        version=1,
+        idempotency_key="prior-review",
+        review_id=str(uuid4()),
+        question=CheckerPayload(reference="", detection_content=question.question_text),
+        review=QuestionReview(
+            status="NEEDS_REVISION",
+            checks=[],
+            summary=ReviewSummary(
+                has_error=True,
+                total_errors=1,
+                errors=[
+                    ReviewError(
+                        error_type="错别字",
+                        original_text="错吴",
+                        correction="错误",
+                    )
+                ],
+                unresolved_checks=[],
+            ),
+            timing_ms=ReviewTiming(routing=0, specialist_checks=0, total=1),
+        ),
+    )
+    await reviews.save(prior)
+    await versions.create_revision(
+        task_id="exam_1",
+        question_id="question_1",
+        base_version=1,
+        revision_source="USER_EDIT",
+        question=question.model_copy(update={"question_text": "未审校的新版本"}),
+        change_log=QuestionChangeLog(
+            user_instruction="人工修改",
+            review_feedback=[],
+            changes="创建尚未审校的新版本。",
+            model="user",
+        ),
+    )
+    workflow = QuestionWorkflowService(
+        version_repository=versions,
+        review_repository=reviews,
+        review_service=PassingReviewService(reviews),
+        model=FakeModel(),
+        question_bank_service=None,
+    )
+
+    with pytest.raises(ReviewNotFoundError):
+        await workflow.revise_and_review(
+            task_id="exam_1",
+            question_id="question_1",
+            base_version=2,
+            question_json=None,
+            user_instruction="保持原题难度",
+            idempotency_key="must-not-run",
+        )
