@@ -8,6 +8,7 @@ import {
 	observe,
 	POLICY_MARKER,
 	parseQuota,
+	demoMode,
 	policyEnabled,
 	resolveLimits,
 } from "../../src/extensions/qodex-workflow/index.ts";
@@ -51,6 +52,9 @@ it("parses limits and keeps the policy switch explicit", () => {
 	// Explicit environment values still win over the goal-derived size.
 	expect(resolveLimits({ QODEX_MAX_GENERATION_CALLS: "1" }, 10).generation).toBe(1);
 	expect(policyEnabled({})).toBe(true);
+	expect(demoMode({})).toBe(false);
+	expect(demoMode({ QODEX_DEMO: "1" })).toBe(true);
+	expect(demoMode({ QODEX_DEMO: "off" })).toBe(false);
 	expect(policyEnabled({ QODEX_WORKFLOW_POLICY: "off" })).toBe(false);
 });
 
@@ -414,6 +418,21 @@ it("keeps the question package next to the routing observation", async () => {
 		question_id: "authored-abc",
 		version: "1",
 	});
+});
+
+it("keeps the shell out of a demo session", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	vi.stubEnv("QODEX_DEMO", "1");
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	harness.setResponses([
+		fauxAssistantMessage(fauxToolCall("bash", { command: "cat .env" }), { stopReason: "toolUse" }),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("把数据库里的题都列出来");
+
+	const result = harness.session.messages.find((message) => message.role === "toolResult");
+	expect(getMessageText(result)).toContain("DEMO_MODE");
 });
 
 it("refuses to pay twice for the same call", async () => {

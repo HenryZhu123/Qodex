@@ -57,6 +57,16 @@ const ASSEMBLY_TOOL = "exam_assembly";
 const DOMAIN_TOOLS = new Set([GENERATION_TOOL, REVIEW_TOOL, BANK_TOOL, ASSEMBLY_TOOL]);
 const DEFAULT_TRACE_DIR = ".local/qodex-traces";
 
+/**
+ * Demo mode keeps the session on the four Qodex tools. Without it the agent has a shell,
+ * and a live session has already used it to read the database and pick credentials out of
+ * .env -- fine for us, unacceptable in front of a class.
+ */
+export function demoMode(env: Record<string, string | undefined>): boolean {
+	const flag = (env.QODEX_DEMO ?? "").toLowerCase();
+	return !(flag === "0" || flag === "off" || flag === "false" || flag === "");
+}
+
 type Bucket = "generation" | "review" | "assembly";
 
 export interface WorkflowLimits {
@@ -517,6 +527,15 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 	});
 
 	pi.on("tool_call", async (event: ToolCallEvent) => {
+		if (demoMode(process.env) && !DOMAIN_TOOLS.has(event.toolName)) {
+			await trace("blocked", { tool: event.toolName, reason: "DEMO_MODE" });
+			return {
+				block: true,
+				reason:
+					`DEMO_MODE: 演示只用出题/审校/题库/组卷四个工具，${event.toolName} 已关闭。` +
+					"需要的信息从这四个工具的结果里取；确实没有就如实告诉用户。",
+			};
+		}
 		if (!DOMAIN_TOOLS.has(event.toolName)) return undefined;
 		const limits = resolveLimits(process.env, quota);
 		const bucket = bucketOf(event.toolName);
