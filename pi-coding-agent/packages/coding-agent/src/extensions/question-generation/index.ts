@@ -65,6 +65,7 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 		promptSnippet: "Generate or revise 408 questions and submit them for review",
 		promptGuidelines: [
 			"Use single for one single-choice question, batch for scored slots, comprehensive for one structured problem, and revise for version-specific feedback.",
+			"A new generation call receives one automatically generated task_id shared by every returned question. For revise, pass the existing task_id in request so the new version remains in the same task.",
 			"Use author for one reasoning question when the user gives a rough topic, materials, or asks for any 408 question. Send schema_version: '0.1', request_id, and the user's brief when provided. Omit brief for an unrestricted 408 question. Preserve explicitly requested subject, syllabus_areas, question_type, total_score, and requirements. Put supplied material in evidence entries with id, source, version, anchor, summary, rules: [], and excerpt when available. The service chooses the specific topic, learning objective, and question type when unspecified.",
 			"Keep the supplied material's wording in excerpt. Label material with no known provenance as user-provided, and split long material into excerpts of at most 12,000 characters.",
 			"Use replenishment for an exam assembly v1.0 joint shortage plan. Send it unchanged as request.replenishment_request with a seed and slot_profiles keyed by assembly-1, assembly-2, and so on. Use only supplied topic mappings.",
@@ -74,6 +75,10 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 		],
 		parameters,
 		async execute(_id, { operation, request }, signal) {
+			const requestWithTask = {
+				...request,
+				task_id: typeof request.task_id === "string" ? request.task_id : crypto.randomUUID(),
+			};
 			const base = (process.env.QUESTION_GENERATION_SERVICE_URL || "http://127.0.0.1:8093").replace(/\/+$/, "");
 			const defaultTimeout = operation === "batch" || operation === "replenishment" ? 1_200_000 : 600_000;
 			let response: Response;
@@ -86,7 +91,7 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 				response = await fetch(`${base}/v1/question-generation/${operation}`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(request),
+					body: JSON.stringify(requestWithTask),
 					signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
 				});
 			} catch (error) {

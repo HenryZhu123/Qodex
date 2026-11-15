@@ -62,9 +62,9 @@ class HttpQuestionBankRepository:
         return list(records.values()), complete
 
     async def state(self, entry):
-        doc = quote(entry["document_id"], safe="")
+        task = quote(entry["task_id"], safe="")
         question = quote(entry["question_id"], safe="")
-        return await self.get(f"/v1/exam-checker/documents/{doc}/questions/{question}/state")
+        return await self.get(f"/v1/exam-checker/tasks/{task}/questions/{question}/state")
 
 
 def verified_state(entry, state):
@@ -72,10 +72,10 @@ def verified_state(entry, state):
     payload = entry["question_json"]
     review = state.get("review", {})
     bank = state.get("question_bank", {})
-    if (state.get("document_id") != entry["document_id"]
+    if (state.get("task_id") != entry["task_id"]
             or state.get("question_id") != entry["question_id"]
-            or not entry.get("source_version_id")
-            or state.get("question_version_id") != entry["source_version_id"]
+            or type(entry.get("version")) is not int
+            or state.get("version") != entry["version"]
             or review.get("status") != "PASS" or not review.get("review_id")
             or review.get("errors") != [] or review.get("unresolved_checks") != []
             or bank.get("status") != "STORED" or bank.get("record_id") != entry["record_id"]

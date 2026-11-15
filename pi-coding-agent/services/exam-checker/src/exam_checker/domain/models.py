@@ -126,7 +126,7 @@ class ExamDocument(StrictModel):
 
 
 class QuestionView(StrictModel):
-    document_id: str
+    task_id: str
     question_id: str
     question_number: str
     question_type: str
@@ -140,28 +140,6 @@ class QuestionView(StrictModel):
     numbering_path: list[str]
     numbering_description: str
     reference: str
-
-
-class ImportDocumentRequest(StrictModel):
-    """Authored questions registered as one reviewable document."""
-
-    document_id: str
-    questions: list[QuestionView] = Field(min_length=1, max_length=200)
-    paper_title: str = ""
-    subject: str = ""
-    source_name: str = "qodex-pending"
-
-
-class ImportedQuestionRef(StrictModel):
-    question_id: str
-    question_number: str
-    question_version_id: str
-
-
-class ImportDocumentResult(StrictModel):
-    document_id: str
-    imported: int
-    questions: list[ImportedQuestionRef]
 
 
 class ReviewError(StrictModel):
@@ -188,21 +166,19 @@ class QuestionRevisionResult(StrictModel):
 
 
 class StoredQuestionVersion(StrictModel):
-    version_id: str
-    document_id: str
+    task_id: str
     question_id: str
-    version_number: int = Field(ge=1)
-    parent_version_id: str | None = None
-    revision_source: Literal["PARSED", "AI_EDIT", "USER_EDIT"]
+    version: int = Field(ge=1)
+    revision_source: Literal["GENERATED", "PARSED", "AI_EDIT", "USER_EDIT"]
     question: QuestionView
     change_log: QuestionChangeLog | None = None
 
 
 class StoredQuestionBankEntry(StrictModel):
     record_id: str
-    document_id: str
+    task_id: str
     question_id: str
-    source_version_id: str | None = None
+    version: int = Field(ge=1)
     question_json: dict[str, Any]
 
 
@@ -241,11 +217,10 @@ class QuestionBankState(StrictModel):
 
 
 class QuestionState(StrictModel):
-    document_id: str
+    task_id: str
     question_id: str
-    question_version_id: str
-    version_number: int = Field(ge=1)
-    revision_source: Literal["PARSED", "AI_EDIT", "USER_EDIT"]
+    version: int = Field(ge=1)
+    revision_source: Literal["GENERATED", "PARSED", "AI_EDIT", "USER_EDIT"]
     question: QuestionView
     change_log: QuestionChangeLog | None = None
     review: QuestionStateReview
@@ -336,10 +311,11 @@ class IngestionResult(StrictModel):
 
 
 class ReviewedQuestion(StrictModel):
-    document_id: str
+    task_id: str
     question_id: str
     question_number: str
-    question_version_id: str | None = None
+    version: int = Field(ge=1)
+    idempotency_key: str
     review_id: str | None = None
     question: CheckerPayload
     review: QuestionReview
@@ -358,6 +334,12 @@ class QuestionMetadata(StrictModel):
 
 
 class ReviseQuestionRequest(StrictModel):
-    base_version_id: str
+    base_version: int = Field(ge=1)
+    idempotency_key: str = Field(min_length=1)
     question_json: dict[str, Any] | None = None
     user_instruction: str = ""
+
+
+class ReviewQuestionRequest(StrictModel):
+    version: int | None = Field(default=None, ge=1)
+    idempotency_key: str = Field(min_length=1)

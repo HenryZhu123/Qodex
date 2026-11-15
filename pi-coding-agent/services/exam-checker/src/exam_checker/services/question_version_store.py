@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import asyncio
-from uuid import UUID, uuid4
 
 from ..domain.models import QuestionChangeLog, QuestionView, StoredQuestionVersion
 from .persistence import QuestionVersionConflictError, QuestionVersionNotFoundError
@@ -15,53 +14,79 @@ class InMemoryQuestionVersionRepository:
     async def initialize(self, questions: list[QuestionView]) -> None:
         async with self._lock:
             for question in questions:
-                key = (question.document_id, question.question_id)
+                key = (question.task_id, question.question_id)
                 if key in self._versions:
                     continue
                 self._versions[key] = [
                     StoredQuestionVersion(
-                        version_id=str(uuid4()),
-                        document_id=question.document_id,
+                        task_id=question.task_id,
                         question_id=question.question_id,
-                        version_number=1,
+                        version=1,
                         revision_source="PARSED",
                         question=question,
                     )
                 ]
 
     async def get_latest(
-        self, document_id: str, question_id: str
+        self, task_id: str, question_id: str
     ) -> StoredQuestionVersion:
-        versions = self._versions.get((document_id, question_id))
+        versions = self._versions.get((task_id, question_id))
         if not versions:
-            raise QuestionVersionNotFoundError((document_id, question_id))
+            raise QuestionVersionNotFoundError((task_id, question_id))
         return versions[-1]
+
+    async def get(
+        self, task_id: str, question_id: str, version: int
+    ) -> StoredQuestionVersion:
+        versions = self._versions.get((task_id, question_id), [])
+        for snapshot in versions:
+            if snapshot.version == version:
+                return snapshot
+        raise QuestionVersionNotFoundError((task_id, question_id, version))
+
+    async def import_generated(
+        self, *, task_id: str, question_id: str, version: int, question: QuestionView
+    ) -> StoredQuestionVersion:
+        async with self._lock:
+            key = (task_id, question_id)
+            versions = self._versions.setdefault(key, [])
+            for snapshot in versions:
+                if snapshot.version == version:
+                    return snapshot
+            snapshot = StoredQuestionVersion(
+                task_id=task_id,
+                question_id=question_id,
+                version=version,
+                revision_source="GENERATED",
+                question=question,
+            )
+            versions.append(snapshot)
+            versions.sort(key=lambda item: item.version)
+            return snapshot
 
     async def create_revision(
         self,
         *,
-        document_id: str,
+        task_id: str,
         question_id: str,
-        base_version_id: UUID,
+        base_version: int,
         revision_source: str,
         question: QuestionView,
         change_log: QuestionChangeLog,
     ) -> StoredQuestionVersion:
         async with self._lock:
-            versions = self._versions.get((document_id, question_id))
+            versions = self._versions.get((task_id, question_id))
             if not versions:
-                raise QuestionVersionNotFoundError((document_id, question_id))
+                raise QuestionVersionNotFoundError((task_id, question_id))
             latest = versions[-1]
-            if latest.version_id != str(base_version_id):
+            if latest.version != base_version:
                 raise QuestionVersionConflictError(
                     "The question changed after the requested base version"
                 )
             version = StoredQuestionVersion(
-                version_id=str(uuid4()),
-                document_id=document_id,
+                task_id=task_id,
                 question_id=question_id,
-                version_number=latest.version_number + 1,
-                parent_version_id=latest.version_id,
+                version=latest.version + 1,
                 revision_source=revision_source,
                 question=question,
                 change_log=change_log,

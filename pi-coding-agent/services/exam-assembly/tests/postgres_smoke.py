@@ -16,7 +16,7 @@ from sqlalchemy import text
 from exam_checker.api.app import create_app as create_bank_app
 from exam_checker.config import Settings
 from exam_checker.database.connection import Database
-from exam_checker.database.models import Base, ExamDocumentRow, QuestionBankRow, QuestionReviewRow, QuestionVersionRow
+from exam_checker.database.models import Base, ExamDocumentRow, QuestionBankRow, QuestionReviewRow, QuestionSnapshotRow
 from exam_assembly_service.app import create_app
 from exam_assembly_service.repository import HttpQuestionBankRepository
 
@@ -37,36 +37,38 @@ async def main():
     async with database.sessions.begin() as session:
         session.add(ExamDocumentRow(document_id=doc_id, document_json=document))
     for index in range(2):
-        record_id, version_id, review_id = uuid4(), uuid4(), uuid4()
+        record_id, review_id = uuid4(), uuid4()
         ids.append(str(record_id))
         question_id = f"q{index + 1}"
         stems = ["栈中依次压入甲和乙后，首先弹出的是哪个元素？", "对一个空栈执行出栈操作，通常会发生什么情况？"]
         choices = [["乙", "甲", "无法确定", "栈为空"], ["下溢", "上溢", "队列扩容", "图遍历"]]
-        q = dict(document_id=doc_id, question_id=question_id, question_number=str(index+1),
+        q = dict(task_id=doc_id, question_id=question_id, question_number=str(index+1),
                  question_type="single_choice", question_text=stems[index], options=choices[index],
                  answer_text="A", points=2, subject=subject, paper_title="合成联调测试", section_titles=[],
                  numbering_path=[], numbering_description="", reference="")
-        review = dict(document_id=doc_id, question_id=question_id, question_number=str(index+1),
-                      question_version_id=str(version_id), review_id=str(review_id),
+        review = dict(task_id=doc_id, question_id=question_id, question_number=str(index+1),
+                      version=1, idempotency_key=f"smoke:{review_id}", review_id=str(review_id),
                       question=dict(reference="", detection_content=q["question_text"]),
                       review=dict(status="PASS", checks=[], summary=dict(has_error=False, total_errors=0, errors=[]),
                                   timing_ms=dict(routing=0, specialist_checks=0, total=0)))
         async with database.sessions.begin() as session:
-            session.add(QuestionVersionRow(version_id=version_id, document_id=doc_id, question_id=question_id,
-                        version_number=1, revision_source="PARSED", question_json=q))
+            session.add(QuestionSnapshotRow(task_id=doc_id, question_id=question_id, version=1,
+                        generation_task_id=None, source_document_id=doc_id,
+                        revision_source="PARSED", question_json=q))
         async with database.sessions.begin() as session:
-            session.add(QuestionReviewRow(review_id=review_id, document_id=doc_id, question_id=question_id,
-                                         question_version_id=version_id, review_json=review))
+            session.add(QuestionReviewRow(review_id=review_id, task_id=doc_id, question_id=question_id,
+                                         version=1, idempotency_key=f"smoke:{review_id}",
+                                         question_json=q, review_json=review))
         async with database.sessions.begin() as session:
-            session.add(QuestionBankRow(record_id=record_id, document_id=doc_id, question_id=question_id,
-                        source_review_id=review_id, source_version_id=version_id,
-                        question_json=dict(document_id=doc_id, question_id=question_id, review_status="PASS", question=q,
+            session.add(QuestionBankRow(record_id=record_id, task_id=doc_id, question_id=question_id,
+                        version=1, source_review_id=review_id,
+                        question_json=dict(task_id=doc_id, question_id=question_id, version=1, review_status="PASS", question=q,
                                            metadata=dict(difficulty="easy", knowledge_points=["栈"]))))
 
     async def snapshot():
         result = {}
         async with database.sessions() as session:
-            for table in ("exam_documents", "question_versions", "question_reviews", "question_bank"):
+            for table in ("exam_documents", "question_snapshots", "question_reviews", "question_bank"):
                 # Fixed test-only table names; no user-supplied SQL.
                 result[table] = await session.scalar(text(
                     f"SELECT md5(coalesce(string_agg(row_to_json(t)::text, '' ORDER BY row_to_json(t)::text), '')) FROM {table} t"))

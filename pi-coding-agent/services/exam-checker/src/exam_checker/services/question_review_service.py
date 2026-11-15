@@ -73,11 +73,12 @@ class QuestionReviewService:
     async def review_question(
         self,
         *,
-        document_id: str,
+        task_id: str,
         question_id: str,
         question_number: str,
+        version: int,
+        idempotency_key: str,
         payload: CheckerPayload,
-        question_version_id: str | None = None,
     ) -> ReviewedQuestion:
         started = time.perf_counter()
         tasks = [
@@ -127,10 +128,11 @@ class QuestionReviewService:
             default=0,
         )
         review = ReviewedQuestion(
-            document_id=document_id,
+            task_id=task_id,
             question_id=question_id,
             question_number=question_number,
-            question_version_id=question_version_id,
+            version=version,
+            idempotency_key=idempotency_key,
             review_id=str(uuid4()),
             question=payload,
             review=QuestionReview(

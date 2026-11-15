@@ -81,7 +81,7 @@ async def test_parse_service_builds_and_stores_exam_document() -> None:
     assert document.nodes["question_1"].question_text == "测试题"
     assert await store.get(document.document_id) == document
     version = await versions.get_latest(document.document_id, "question_1")
-    assert version.version_number == 1
+    assert version.version == 1
     assert version.revision_source == "PARSED"
     assert version.question.question_text == "测试题"
 

@@ -68,18 +68,15 @@ it("turns each service payload into a routing observation", () => {
 			review: { summary: { errors: [{ error_type: "ambiguity" }, { error_type: "grading" }] } },
 		}),
 	).toMatchObject({ ok: false, status: "NEEDS_REVISION", errors: ["ambiguity", "grading"] });
-	expect(observe("exam_checker", { document_id: "d1", imported: 2 })).toMatchObject({
-		ok: true,
-		artifact: { document_id: "d1", imported: "2" },
-	});
 	expect(
 		observe("exam_checker", {
 			status: "PASS",
-			document_id: "d1",
-			question_id: "q1",
+			task_id: "3f6c1e0e-6d1a-4c1e-9d57-0f0f0f0f0f0f",
+			question_id: "authored-1-v1",
+			version: 1,
 			ingestion: { status: "STORED" },
 		}),
-	).toMatchObject({ ok: true, artifact: { ingestion: "STORED" } });
+	).toMatchObject({ ok: true, artifact: { ingestion: "STORED", version: "1" } });
 	expect(observe("exam_assembly", { status: "NEEDS_QUESTIONS", deficits: [{}, {}] })).toMatchObject({
 		ok: false,
 		artifact: { deficits: "2" },
@@ -103,10 +100,10 @@ it("turns each service payload into a routing observation", () => {
 	// flattens the review result, so the hook must read the flat form too.
 	expect(
 		observe("exam_checker", {
-			document_id: "pending-e2e-2",
+			task_id: "0f1e2d3c-4b5a-6978-8a9b-0c1d2e3f4a5b",
 			question_id: "authored-a36e2635f154f385939404cf-v1",
 			question_number: "1",
-			question_version_id: "8ea0f9f7-5b9b-4444-904d-6809d4ad017e",
+			version: 1,
 			status: "PASS",
 			errors: [],
 			unresolved_checks: [],
@@ -115,9 +112,10 @@ it("turns each service payload into a routing observation", () => {
 	).toMatchObject({ ok: true, status: "PASS", artifact: { ingestion: "STORED" } });
 	expect(
 		observe("exam_checker", {
-			document_id: "pending-e2e-1",
+			task_id: "0f1e2d3c-4b5a-6978-8a9b-0c1d2e3f4a5b",
 			question_id: "authored-a36e2635f154f385939404cf-v1",
 			question_number: "1",
+			version: 1,
 			status: "UNRESOLVED",
 			errors: [],
 			unresolved_checks: [

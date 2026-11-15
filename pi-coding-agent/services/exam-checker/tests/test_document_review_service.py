@@ -13,13 +13,15 @@ from exam_checker.services.question_service import QuestionService
 
 class StatusReviewService:
     async def review_question(
-        self, *, document_id, question_id, question_number, payload
+        self, *, task_id, question_id, question_number, version, idempotency_key, payload
     ) -> ReviewedQuestion:
         status = "UNRESOLVED" if question_id == "question_2" else "PASS"
         return ReviewedQuestion(
-            document_id=document_id,
+            task_id=task_id,
             question_id=question_id,
             question_number=question_number,
+            version=version,
+            idempotency_key=idempotency_key,
             question=payload,
             review=QuestionReview(
                 status=status,

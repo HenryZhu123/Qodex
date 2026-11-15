@@ -23,10 +23,11 @@ from exam_checker.services.question_bank_service import (
 
 def make_review(status: str = "PASS") -> ReviewedQuestion:
     return ReviewedQuestion(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
         question_number="1",
-        question_version_id="00000000-0000-0000-0000-000000000001",
+        version=1,
+        idempotency_key="bank-review",
         question=CheckerPayload(reference="", detection_content="测试题"),
         review=QuestionReview(
             status=status,
@@ -44,16 +45,20 @@ def make_review(status: str = "PASS") -> ReviewedQuestion:
 
 
 class FakeReviewRepository:
-    def __init__(self, review: ReviewedQuestion) -> None:
-        self.stored = StoredQuestionReview(review_id=uuid4(), review=review)
+    def __init__(
+        self, review: ReviewedQuestion, question_snapshot: dict[str, Any] | None = None
+    ) -> None:
+        self.stored = StoredQuestionReview(
+            review_id=uuid4(), review=review, question_snapshot=question_snapshot
+        )
 
     async def save(self, review: ReviewedQuestion) -> UUID:
         raise AssertionError("ingestion must not create a review")
 
-    async def get_latest(
-        self, document_id: str, question_id: str
+    async def get_latest_for_version(
+        self, task_id: str, question_id: str, version: int
     ) -> StoredQuestionReview:
-        assert (document_id, question_id) == ("exam_1", "question_1")
+        assert (task_id, question_id, version) == ("exam_1", "question_1", 1)
         return self.stored
 
 
@@ -63,20 +68,22 @@ class FakeQuestionBankRepository:
     def __init__(self) -> None:
         self.entry = StoredQuestionBankEntry(
             record_id=str(uuid4()),
-            document_id="exam_1",
+            task_id="exam_1",
             question_id="question_1",
+            version=1,
             question_json={"question": {"question_text": "测试题"}},
         )
 
-    async def store(self, **values: Any) -> None:
+    async def store(self, **values: Any) -> UUID:
         self.stored = values
+        return values["record_id"]
 
     async def get(self, record_id: UUID) -> StoredQuestionBankEntry:
         assert str(record_id) == self.entry.record_id
         return self.entry
 
     async def get_by_source(
-        self, document_id: str, question_id: str
+        self, task_id: str, question_id: str
     ) -> StoredQuestionBankEntry | None:
         return self.entry
 
@@ -100,8 +107,9 @@ async def test_ingest_stores_complete_json_after_passed_review() -> None:
         question_bank_repository=bank_repository,
     )
     question_json = {
-        "document_id": "exam_1",
+        "task_id": "exam_1",
         "question_id": "question_1",
+        "version": 1,
         "question": {"question_id": "question_1", "question_text": "测试题"},
         "metadata": {
             "difficulty": "medium",
@@ -111,8 +119,9 @@ async def test_ingest_stores_complete_json_after_passed_review() -> None:
     }
 
     result = await service.ingest(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
+        version=1,
         question_json=question_json,
     )
 
@@ -136,8 +145,9 @@ async def test_ingest_rejects_question_whose_latest_review_did_not_pass() -> Non
 
     with pytest.raises(ReviewNotPassedError):
         await service.ingest(
-            document_id="exam_1",
+            task_id="exam_1",
             question_id="question_1",
+            version=1,
             question_json={},
         )
 
@@ -151,14 +161,48 @@ async def test_ingest_requires_metadata() -> None:
 
     with pytest.raises(QuestionBankValidationError, match="difficulty"):
         await service.ingest(
-            document_id="exam_1",
+            task_id="exam_1",
             question_id="question_1",
+            version=1,
             question_json={
-                "document_id": "exam_1",
+                "task_id": "exam_1",
                 "question_id": "question_1",
+                "version": 1,
                 "question": {"question_text": "测试题"},
                 "review_status": "PASS",
                 "metadata": {"knowledge_points": []},
+            },
+        )
+
+
+@pytest.mark.asyncio
+async def test_ingest_rejects_content_that_differs_from_reviewed_snapshot() -> None:
+    reviewed_snapshot = {"question_id": "question_1", "question_text": "原题"}
+    service = QuestionBankService(
+        review_repository=FakeReviewRepository(
+            make_review(), question_snapshot=reviewed_snapshot
+        ),
+        question_bank_repository=FakeQuestionBankRepository(),
+    )
+
+    with pytest.raises(QuestionBankValidationError, match="exactly match"):
+        await service.ingest(
+            task_id="exam_1",
+            question_id="question_1",
+            version=1,
+            question_json={
+                "task_id": "exam_1",
+                "question_id": "question_1",
+                "version": 1,
+                "question": {
+                    "question_id": "question_1",
+                    "question_text": "被篡改的题",
+                },
+                "review_status": "PASS",
+                "metadata": {
+                    "difficulty": "medium",
+                    "knowledge_points": ["测试知识点"],
+                },
             },
         )
 

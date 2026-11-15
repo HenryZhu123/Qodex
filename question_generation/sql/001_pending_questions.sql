@@ -17,7 +17,11 @@ CREATE UNIQUE INDEX IF NOT EXISTS pending_questions_one_current
     ON question_generation.pending_questions (question_id)
     WHERE superseded_at IS NULL;
 
-CREATE OR REPLACE VIEW question_generation.current_pending_questions AS
+-- Later migrations add task_id as the leading column. PostgreSQL cannot use
+-- CREATE OR REPLACE VIEW to change existing column names or positions, so
+-- recreate this compatibility view when the bootstrap script is rerun.
+DROP VIEW IF EXISTS question_generation.current_pending_questions;
+CREATE VIEW question_generation.current_pending_questions AS
 SELECT question_id, version, request_id, question_json, queued_at
 FROM question_generation.pending_questions
 WHERE superseded_at IS NULL;

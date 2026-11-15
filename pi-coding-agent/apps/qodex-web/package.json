@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"prepare:qodex": "npm --prefix ../../packages/coding-agent run build:unbundled",
+		"prepare:qodex": "node ../../scripts/prepare-qodex-web.mjs",
 		"dev": "npm run prepare:qodex && next dev -H 127.0.0.1",
 		"build": "npm run prepare:qodex && next build",
 		"start": "next start -H 127.0.0.1",

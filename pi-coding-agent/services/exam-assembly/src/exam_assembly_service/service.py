@@ -15,8 +15,9 @@ def convert(entry, state, request):
     review_id = verified_state(entry, state)
     payload = entry["question_json"]
     q, meta = payload["question"], payload["metadata"]
-    if (payload.get("document_id") != entry["document_id"]
-            or payload.get("question_id") != entry["question_id"]):
+    if (payload.get("task_id") != entry["task_id"]
+            or payload.get("question_id") != entry["question_id"]
+            or payload.get("version") != entry["version"]):
         raise ValueError("题目来源标识不一致")
     if q.get("subject") != request["subject"] or q.get("question_type") != "single_choice":
         raise ValueError("学科或题型不匹配；目前生产接口仅支持 single_choice")
@@ -54,18 +55,18 @@ def convert(entry, state, request):
     if q.get("reference"):
         # Current document exporter cannot render parent passages or source images.
         raise ValueError("包含参考材料，尚不支持完整渲染，不能输出残缺题面")
-    return dict(question_id=entry["record_id"], version=entry["source_version_id"],
+    return dict(question_id=entry["record_id"], version=entry["version"],
                 subject=q["subject"], question_type="single_choice", topic=topics[0],
                 eligible_topics=topics, knowledge_points=knowledge, difficulty=meta["difficulty"],
                 score=int(points), stem=q["question_text"], options=options, answer=answer,
                 explanation=q.get("explanation") or payload.get("explanation") or "",
-                provenance={k: entry[k] for k in ("record_id", "document_id", "question_id", "source_version_id")},
-                review={"status": "PASS", "question_version": entry["source_version_id"],
+                provenance={k: entry[k] for k in ("record_id", "task_id", "question_id", "version")},
+                review={"status": "PASS", "question_version": entry["version"],
                         "is_mock": False, "review_id": review_id})
 
 
 async def assemble(request, repository: QuestionBankRepository, output_root: Path, *, pdf=False, public_request=None,
-                   similarity_decisions=None):
+                   similarity_decisions=None, history=None):
     errors = validate_request(request)
     if request.get("question_type") != "single_choice":
         errors.append("目前仅支持四选项 single_choice；多题型不能静默转换")
@@ -139,6 +140,10 @@ async def assemble(request, repository: QuestionBankRepository, output_root: Pat
     request_path.write_text(json.dumps(public_request if public_request is not None else request,
                                        ensure_ascii=False, indent=2), encoding="utf-8")
     report_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+    if history is not None:
+        result["history"] = await history.save(public_request if public_request is not None else request, result)
+    else:
+        result["history"] = {"status": "DISABLED"}
     # Teacher answers stay in separate artifacts; tool response contains paths and validation.
     return {key: value for key, value in result.items() if key not in (
         "student_exam", "answer_key", "similarity_review_packet", "similarity_decisions_template")}

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 from functools import cache
 import json
 import os
@@ -11,6 +12,7 @@ from pathlib import Path
 import tempfile
 import time
 from typing import Literal
+from uuid import UUID, uuid4
 
 import asyncpg
 from fastapi import Body, FastAPI, Request
@@ -190,6 +192,18 @@ async def submit(
         elapsed_ms=0.0, questions=0, queue_status="not_queued",
     )
     status, questions, queue_status = "ERROR", 0, "not_queued"
+    # A revision must stay in the task it revises, so the caller may pin task_id;
+    # otherwise the service mints one. Every question of this call shares it.
+    raw_task_id = payload.pop("task_id", None) if isinstance(payload, dict) else None
+    try:
+        task_id = UUID(raw_task_id) if raw_task_id is not None else uuid4()
+    except (TypeError, ValueError, AttributeError):
+        status = "INVALID_REQUEST"
+        return JSONResponse(
+            failure_result("INVALID_REQUEST", "task_id 必须是 UUID 字符串。", identifier),
+            status_code=422,
+        )
+    generation_request = dict(payload)
     admission = None
     acquired = False
     try:
@@ -205,27 +219,51 @@ async def submit(
             )
 
         result = await asyncio.to_thread(
-            _generate, operation, payload, getattr(request.app.state, "knowledge", None),
+            _generate, operation, generation_request, getattr(request.app.state, "knowledge", None),
         )
+        result = {**result, "task_id": str(task_id)}
         status = str(result["status"])
         question_items = result["questions"]
         questions = len(question_items)
         if status in QUEUE_FAILURE_STATUSES:
             return JSONResponse(result, status_code=503)
-        if not question_items:
-            return result
 
-        previous = json.dumps(payload["current_question"]) if operation == "revise" else None
+        previous = json.dumps(generation_request["current_question"]) if operation == "revise" else None
         receipts = {}
         try:
             async with request.app.state.queue_pool.acquire(timeout=5) as conn, conn.transaction():
+                # Record the task even when it produced no question (for example
+                # NEEDS_MATERIAL): the row is what later links review and the bank.
+                await conn.execute(
+                    """
+                    INSERT INTO question_generation.generation_tasks (
+                        task_id, request_id, generation_mode, status, question_count,
+                        request_json, model_name, prompt_version, completed_at, failure_reason
+                    ) VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10)
+                    ON CONFLICT (task_id) DO UPDATE SET
+                        updated_at = now(),
+                        status = EXCLUDED.status,
+                        completed_at = EXCLUDED.completed_at,
+                        failure_reason = EXCLUDED.failure_reason
+                    """,
+                    task_id,
+                    result.get("request_id") or "unknown",
+                    operation,
+                    "PENDING_REVIEW" if question_items else "FAILED",
+                    len(question_items),
+                    json.dumps(generation_request, ensure_ascii=False),
+                    os.environ.get("QUESTION_GENERATION_MODEL", "deterministic-local"),
+                    os.environ.get("QUESTION_GENERATION_PROMPT_VERSION", "0.1"),
+                    datetime.now(timezone.utc) if question_items else None,
+                    None if question_items else result.get("message", result.get("status")),
+                )
                 # Lock question IDs in the same order when concurrent batches overlap.
                 for question in sorted(question_items, key=lambda item: item["question_id"]):
                     question_id = question["question_id"]
                     version = question["version"]
                     queued = await conn.fetchval(
-                        "SELECT question_generation.enqueue_question($1::jsonb, $2, $3::jsonb)",
-                        json.dumps(question), result["request_id"], previous,
+                        "SELECT question_generation.enqueue_question($1, $2::jsonb, $3, $4::jsonb)",
+                        task_id, json.dumps(question, ensure_ascii=False), result["request_id"], previous,
                     )
                     if queued in {"VERSION_CONFLICT", "SUPERSEDED"}:
                         raise QueueConflict(f"题目 {question_id} v{version} 已被替代，或与待审版本不一致。")
@@ -241,7 +279,12 @@ async def submit(
             )
 
         receipt_statuses = {receipt["status"] for receipt in receipts.values()}
-        queue_status = "queued" if receipt_statuses and receipt_statuses <= {"QUEUED", "ALREADY_QUEUED"} else "partial"
+        if not receipts:
+            queue_status = "not_queued"
+        elif receipt_statuses <= {"QUEUED", "ALREADY_QUEUED"}:
+            queue_status = "queued"
+        else:
+            queue_status = "partial"
         return {
             **result,
             "queue_receipts": [receipts[question["question_id"], question["version"]] for question in question_items],

@@ -81,8 +81,8 @@ class OpenAICompatibleQuestionWorkflowModel:
             raise QuestionWorkflowModelError(
                 f"Revision response violates the result schema: {exc}"
             ) from exc
-        if result.question.document_id != question.document_id:
-            raise QuestionWorkflowModelError("Revision changed document_id")
+        if result.question.task_id != question.task_id:
+            raise QuestionWorkflowModelError("Revision changed task_id")
         if result.question.question_id != question.question_id:
             raise QuestionWorkflowModelError("Revision changed question_id")
         if proposed_question is not None and result.question != proposed_question:

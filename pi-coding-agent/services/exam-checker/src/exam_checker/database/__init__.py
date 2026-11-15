@@ -4,7 +4,7 @@ from .models import (
     ExamDocumentRow,
     QuestionBankRow,
     QuestionReviewRow,
-    QuestionVersionRow,
+    QuestionSnapshotRow,
 )
 from .repositories import (
     PostgresExamDocumentStore,
@@ -23,5 +23,5 @@ __all__ = [
     "PostgresQuestionVersionRepository",
     "QuestionBankRow",
     "QuestionReviewRow",
-    "QuestionVersionRow",
+    "QuestionSnapshotRow",
 ]

@@ -2,8 +2,6 @@
 
 自主命题面向 408 专项练习和模拟卷补题。模块依据题型、考点和可追溯的资料生成题目、参考答案和解析，完成自检后交由独立审校。收到审校反馈时修订题目并重新自检。
 
-[材料驱动的模型创作](question-authoring.md)（旧五考点 v1.1，历史快照）通过 `constraints.authoring` 设计条件反推、错误诊断和方案选择题；[通用材料驱动创作](question-generalization.md)（当前主线）在此基础上支持 24 章节、单选与综合题、粗需求入口和一轮定向修订。旧请求保持确定性规则生成。
-
 | 职责 | 边界 |
 | --- | --- |
 | 命题与自检 | 设计题目和考法，校验题面、答案及解析，提供可定位的依据 |
@@ -12,34 +10,20 @@
 | 组卷 | 提供缺题槽位及分值约束，管理整卷蓝图和整卷验证 |
 | Pi | 组织工具调用，传递材料和反馈，协调重试与交付 |
 
-现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。模块已覆盖四科五类单选、两类综合题、批量、补题和版本修订。命令行与浏览器验证台用于本地复验，Pi 通过命题服务把合格题交付待审表。当前模块验收以待审表回读为止。
-
-## 接手开发
-
-先读仓库 [AGENTS.md](../AGENTS.md) 和本页。当前任务、真实进度与恢复方式见工作区根目录的 `TASK_STATE.md`；通用命题主线的设计、接续顺序与验证边界见 [通用命题主线](question-generalization.md)。这些是本模块的当前依据；`.local/question-generation/` 下的计划与交接记录属于个人开发笔记，可能停留在旧阶段。
-
-| 需要修改 | 代码入口 |
-| --- | --- |
-| 单题请求、题型和自检 | [generation.py](../question_generation/generation.py)，题型实现在同目录 |
-| 批量约束、题干去重和组卷补题 | [batch.py](../question_generation/batch.py)、[replenishment.py](../question_generation/replenishment.py) |
-| 综合题、评分点和版本修订 | [comprehensive.py](../question_generation/comprehensive.py) |
-| 已核验知识库证据、HTTP 和待审表 | [knowledge.py](../question_generation/knowledge.py)、[service.py](../question_generation/service.py)、[待审表迁移](../question_generation/sql/001_pending_questions.sql) |
-| Pi 工具 | [内置命题扩展](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts) |
-
-从仓库根目录运行 `python3 -m unittest discover -s tests` 验证生成模块。修改 Pi 时按 [Pi 开发纪律](../pi-coding-agent/AGENTS.md) 运行全仓检查和命题扩展测试。升级前先从新鲜的 `origin/main` 核对本地待合入提交，再用隔离 PostgreSQL 复验五种 Pi 操作及待审题包回读。更新知识库快照时重新核对证据清单及指纹。
+现有 [自主命题设计稿](../research-assets/docs/feature-designs/question-generation-agent.md) 提出了单选题、综合应用题及生成和修订接口。短期 S1–S3 已验收，L1 的单选题通过同一命令行入口和浏览器验证台生成。对接时以实际服务接口和经团队确认的契约为准。个人开发计划和调研过程放在 `.local/question-generation/`。
 
 ## 工作区与依赖分支
 
 从仓库根目录运行 `git status --short --branch` 可以确认当前分支。本地命题代码在 `feat/question-generation` 开发。`git fetch origin` 更新本地对远程分支的记录，当前分支和工作文件保持原样。`main` 是团队集成基线，`origin/main` 是最近一次获取的远程主分支记录。
 
-2026-11-09 核对远程 `main` 为 `5ce46b8`，包含下表列出的分支提交。开始新一轮开发前重新获取远程记录并核对接口。
+以下是 2026-11-08 核对的代码快照。开始联调前重新获取远程记录并核对接口。
 
 | 分支和版本 | 已有能力 | 对命题的影响 |
 | --- | --- | --- |
-| 命题 · `649cdb4` | 主分支包含基础命题、Pi 内置工具和待审表 | 后续命题增量见本地分支和交接记录 |
-| 审校 · `db50295` | [PostgreSQL 迁移、审校和正式题库接口](../pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md) | 题目由命题侧交付待审表，独立审校及正式入库由审校模块处理 |
-| 知识库 · `3a993a2` | [审校侧教材检索实现](https://github.com/HenryZhu123/Qodex/blob/3a993a2/pi-coding-agent/services/exam-checker/src/exam_checker/integrations/knowledge_base.py) | 命题侧用自己的已核验证据清单只读取材 |
-| 组卷 · `c891810` | [组卷补题契约](https://github.com/HenryZhu123/Qodex/blob/c891810/ASSEMBLY_CONTRACT.zh-CN.md#L30)定义联合缺题计划 | 命题可接收联合缺题计划并登记待审题 |
+| `origin/main` · `4b1aabe` | [PostgreSQL 和数据库迁移](../pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md)、审校和正式题库接口，以及 SQLite 参考题资产 | 生成草稿可以接收本地材料。通过独立审校后，由审校服务写入正式题库 |
+| `origin/exam-checker` · `db50295` | 该版本已包含在 `main` 的历史中。当前[单题审校入口](../pi-coding-agent/services/exam-checker/src/exam_checker/api/app.py#L302)需要已有文档 ID 和题目 ID | 结构化新题如何直接送审，是接通正式入库前需要核实的接口 |
+| `origin/Knowledge-base` · `3a993a2` | 未合入 `main` 的[教材检索实现](https://github.com/HenryZhu123/hku_agent/blob/3a993a2/pi-coding-agent/services/exam-checker/src/exam_checker/integrations/knowledge_base.py#L156)，目前接在审校内部 | 命题先接收结构化的证据材料。接入真实检索时，核实如何按考点取材并保留出处 |
+| `origin/exam-assembly` · `c891810` | 未合入 `main` 的[组卷补题契约](https://github.com/HenryZhu123/hku_agent/blob/c891810/ASSEMBLY_CONTRACT.zh-CN.md#L30)，组卷已能通过审校服务查正式题库，并返回结构化缺题请求 | 可以用缺题请求样例验证命题输入，正式补题仍需经过审校、入库和重新组卷 |
 
 [SQLite 参考题](../research-assets/skills/build-knowledge-base/references/reference-question-bank.md)可作为考法示例，当前记录尚未附审校状态。PostgreSQL 的 `question_bank` 用于保存通过审校的题目及其来源版本。命题模块通过服务接口交接题目，自检和独立审校分别记录。
 
@@ -47,49 +31,35 @@
 
 - 用本地证据样例走通单选题生成和自检。最小链路可以验证输入约束、题目与解答格式、材料出处，以及资料不足时的返回。运行这条链路无需启动 PostgreSQL。
 - 需要验证其他分支时，先阅读实际接口和测试。需要运行对方代码时，在独立 Git 工作树检出固定提交，并为联调使用独立的测试库。日常命题工作继续留在 `feat/question-generation`。
-- 使用可追溯的显式材料可独立验证组卷补题到待审表。团队知识库取材及审校通过后的正式入库和重新组卷使用联调环境单独验收。
+- 正式联调先核对结构化新题能否送审、入库并回读，再接真实知识检索和组卷补题。现有接口和样例足够时可以独立推进。只有需要上游新增接口、统一共享字段或修改数据库结构时，才提交具体的最小协作事项。
 
-### L3 送审基线与待确认契约
+### L3 送审契约
 
-当前交接先使用命题侧待审表。以下审校 API 核对保留作后续接入参考。
+命题与审校已经统一使用 `task_id + question_id + version`：
 
-历史隔离联调使用当时的 `main`（`4b1aabe`）、PostgreSQL 17 和仓库 Alembic 迁移至 `20261017_01`。题目由命题模块实际生成，测试通过审校模块现有仓储预置题目。审校和元数据模型使用确定性测试替身，版本回执、题库写入和回读使用实际服务和数据库。
+1. Pi 发起命题时自动生成 UUID `task_id`；批量调用返回的所有题共享该 ID。
+2. 命题服务创建 `generation_tasks`，并将每个自检通过版本写入 `pending_questions`。
+3. `exam_checker.review_question` 使用同一个 `task_id`、题目 ID 和可选版本；未指定版本时读取部分唯一索引标记的当前版本。
+4. 审校开始前把命题包转换为 `question_snapshots` 中的不可变快照，审校和题库都以物理复合外键绑定该版本。
+5. 相同 `idempotency_key` 的审校重试返回原记录；同一题目版本重复入库返回原题库记录。新版本不会覆盖旧版本。
 
-| 检查 | 观察结果 |
-| --- | --- |
-| 未预置的结构化新题 | 单题审校路由只查已有文档和题目，直接提交命题 JSON 返回 404 |
-| 单选题送审与回读 | 测试 PASS 后自动入库，审校回执的版本 ID 与题库来源版本一致，数据库中的来源审校 ID 也一致 |
-| 综合题版本 | v1 返回测试 `NEEDS_REVISION`。登记 v2 后状态为 `NOT_REVIEWED`，v2 独立返回测试 PASS 后入库，回读指向 v2 |
-| 同版本重复审校 | 题库仍只有原记录，第二次的入库状态返回 `QuestionAlreadyStoredError` |
-| 审校可见范围 | 现有 `CheckerPayload` 只含题面、选项和引用上下文。参考答案与评分点可存入题目视图，但不会送入审校模型 |
-| 手动入库反例 | v1 已 PASS、v2 尚待审时，手动入库接受了 v2 内容（HTTP 200），却将来源版本记为 v1 |
-
-相关实现见[审校路由](../pi-coding-agent/services/exam-checker/src/exam_checker/api/app.py#L302)、[模型载荷](../pi-coding-agent/services/exam-checker/src/exam_checker/services/question_service.py#L71)和[入库校验](../pi-coding-agent/services/exam-checker/src/exam_checker/services/question_bank_service.py#L56)。
-
-接入方案需和审校模块确认以下最小契约。
-
-1. **登记生成题版本。** 接收完整题目包，保留生成器题目 ID、版本、内容摘要和证据定位，返回审校侧的题目版本 UUID。同一身份和相同内容重试复用该 UUID，同一版本出现不同内容时返回冲突。
-2. **审校绑定版本。** 送审显式指定版本 UUID，回执带同一 UUID 和审校 ID。答案与评分点作为教师材料，仅提供给需要核对解法的任务。题面审查和答案泄露检查仍使用学生视图。
-3. **入库绑定同一份内容。** 在写入边界核对当前版本、对应 PASS 审校和不可变快照。上述 v1 PASS、v2 待审的反例须被拒绝。相同版本重试应复用题库记录，回读能够核对来源版本。
-
-后续若接入该审校 API，先验收这三项。
+上传文档仍保留在 `exam_documents`，不会伪装成 AI 命题任务；解析出的题目以文档解析 ID 作为审校 `task_id`，并通过 `source_document_id` 物理外键保留来源。
 
 ### Pi 调用与待审表交接
 
-Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和 JSON `request`，支持 `single`、`batch`、`replenishment`、`comprehensive`、`revise`、`author`；`author` [从粗需求或材料生成一道推理题](question-generalization.md#上游需求细化)自 `792e5a6` 起可用，默认等待 600 秒，可用 `QUESTION_GENERATION_TIMEOUT_MS` 调整。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。
+Pi 内置工具 `question_generation` 统一注册在 [question-generation/index.ts](../pi-coding-agent/packages/coding-agent/src/extensions/question-generation/index.ts)。工具参数是 `operation` 和原有 JSON `request`，支持 `single`、`batch`、`comprehensive`、`revise`。通过 `QUESTION_GENERATION_SERVICE_URL` 指定命题服务地址，默认 `http://127.0.0.1:8093`。
 
-从仓库根目录，用 Python 3.11 或更新版本安装服务依赖。数据库管理员先在约定的 PostgreSQL 数据库执行 [建表脚本](../question_generation/sql/001_pending_questions.sql)，再授权已创建的服务账号和审校只读账号。下面以 `qg_writer` 和 `qg_reviewer` 为示例角色。
+从仓库根目录，用 Python 3.11 或更新版本安装服务依赖。数据库管理员按文件名顺序执行 `question_generation/sql/*.sql`，再授权已创建的服务账号和审校只读账号。下面以 `qg_writer` 和 `qg_reviewer` 为示例角色。
 
 ```bash
 python3 -m pip install -r question_generation/service-requirements.txt
-# 运行服务层并发/健康测试时再安装测试依赖（httpx）
-python3 -m pip install -r question_generation/service-test-requirements.txt
 psql "$QODEX_SCHEMA_ADMIN_DSN" -v ON_ERROR_STOP=1 -f question_generation/sql/001_pending_questions.sql
+psql "$QODEX_SCHEMA_ADMIN_DSN" -v ON_ERROR_STOP=1 -f question_generation/sql/002_generation_tasks.sql
 ```
 
 ```sql
 GRANT USAGE ON SCHEMA question_generation TO qg_writer, qg_reviewer;
-GRANT EXECUTE ON FUNCTION question_generation.enqueue_question(jsonb, text, jsonb) TO qg_writer;
+GRANT EXECUTE ON FUNCTION question_generation.enqueue_question(uuid, jsonb, text, jsonb) TO qg_writer;
 GRANT SELECT ON question_generation.current_pending_questions TO qg_reviewer;
 ```
 
@@ -103,84 +73,14 @@ curl -fsS http://127.0.0.1:8093/v1/question-generation/single \
 
 服务只入队自检通过的题目包。返回 `queue_receipts` 表示已确认写入，`QUEUED` 是首次入队，`ALREADY_QUEUED` 是相同版本的重试。批量部分成功时保存其中实际合格的题。版本冲突返回 `QUEUE_VERSION_CONFLICT`，数据库不可用返回 `QUEUE_UNAVAILABLE`。同一次调用的写入在一个事务内。修订须传入与待审表一致的原始包，可使用前次调用返回的题目。旧版仍可追溯，当前取题视图只显示最新版本。原有命令行和验证台可继续用于本地预览。
 
-`GET /health` 返回 `{status, database, knowledge, cache, model}` 五项；依赖不可用时 `status="degraded"`，HTTP 仍为 200，便于演示时直接观察。服务并发受 `QUESTION_GENERATION_MAX_CONCURRENT` 限制（默认 2），满时返回 503 `SERVER_BUSY`；同一请求正在生成时返回 503 `AUTHORING_IN_PROGRESS`，调用方可稍后重试。单选交付选项按 seed 重排并重标号，`self_check.delivered_option_mapping` 记录交付标签到作者选项 ID 的映射，`delivered_correct_option_author_id` 保留作者答案 ID；`blind_option_mapping` 仍是盲解标签到作者 ID。通用题 `metadata` 增加 `syllabus_areas` 与 `knowledge_points`（后者来自设计概念，未校准）。
-
-审校同学使用以下查询取题，按 `question_id` 和 `version` 识别审校对象，`question_json` 内含学生题面、教师答案、评分点和证据来源。记录结果前重新按同一身份和版本核对视图，避免把旧版结论关联到新版。审校及通过后的落库由审校模块负责。
-
-| 底表字段 | 类型 | 含义 |
-| --- | --- | --- |
-| `question_id` | `text` | 题目 ID，与 `version` 共同构成主键 |
-| `version` | `integer` | 正整数，生成时为 1 |
-| `request_id` | `text` | 触发这次生成或修订的请求 ID |
-| `question_json` | `jsonb` | 完整题包，内含 `metadata`、`student_view`、`instructor_view`、`evidence_refs`、`generator`、`self_check` 和 `review_status`。通用创作还可带考查设计 |
-| `queued_at` | `timestamptz` | 入队时间 |
-| `superseded_at` | `timestamptz`，可空 | 被新版本替代的时间。当前视图只返回此字段为空的记录，并省略此列 |
-
-[待审表完整行样例](../question_generation/examples/pending-questions.sample.json)包含一条分页单选、一条栈综合题。两行均通过命题 HTTP 服务写入临时 PostgreSQL 后原样回读，可直接供审校方核对嵌套字段。建表定义见 [001_pending_questions.sql](../question_generation/sql/001_pending_questions.sql)。
+审校按 `task_id`、`question_id` 和 `version` 识别不可变对象，`question_json` 内含学生题面、教师答案、评分点和证据来源。
 
 ```sql
-SELECT question_id, version, request_id, question_json, queued_at
+SELECT task_id, question_id, version, request_id, question_json, queued_at
 FROM question_generation.current_pending_questions
-ORDER BY queued_at, question_id
+ORDER BY queued_at, task_id, question_id
 LIMIT 100;
 ```
-
-### 按考点从知识库取材
-
-可同时配置 `QUESTION_GENERATION_KB_ROOT` 和 `QUESTION_GENERATION_KB_CATALOG`。配置后，`single`、`comprehensive`、`batch` 和 `replenishment` 请求中省略 `evidence` 的题或槽位按 `subject` 和 `topic` 取材。显式材料数组照常校验，显式空数组返回缺材料。修订继续使用原题证据。命令行和本地验证台沿用原有显式材料契约。
-
-知识库根目录沿用 `operating_system`、`data_structure`、`computer_organization`、`computer_network` 四个科目子目录，每科可引用 `kb.sqlite` 或 `kb_*.sqlite`。命题以只读方式读取 `documents` 和 `chunks`，取材范围由已核验清单指定。
-
-清单是包含 `schema_version: "0.1"` 和 `entries` 数组的 JSON。每条记录包含下列字段。
-
-| 字段 | 含义 |
-| --- | --- |
-| `subject`、`topic` | 命题契约使用的科目和考点 |
-| `database`、`doc_id`、`chunk_id` | 科目目录下的文件名、文档和片段标识 |
-| `source`、`edition` | 审校可以追溯的来源和教材版次 |
-| `source_sha256`、`content_sha256` | 源文档 SHA-256 和 SQLite 片段正文 UTF-8 的 SHA-256，均为小写十六进制 |
-| `summary`、`rules` | 预核验的摘要与该片段实际支撑的命题规则数组 |
-| `section` | 可选。章节路径抽取混入正文或误标时填写核验后的章节名，保留索引页码和分块 ID |
-
-清单由取材方核验来源、使用许可和规则覆盖。服务核对文档和片段指纹，跳过缺定位、指纹不匹配、片段元数据标记有冲突或列在同科目录 `relations.json` 冲突组里的片段。冲突文件存在但无法解析时，该科取材报 `KNOWLEDGE_BASE_UNAVAILABLE`。有效证据保留来源、版次、文档与片段指纹、章节、索引页码及片段 ID。规则不足时返回 `NEEDS_MATERIAL` 和缺失规则。配置的索引无法读取且没有可用证据时，返回 `KNOWLEDGE_BASE_UNAVAILABLE`。批量在对应槽位记录缺口并保留其他合格题。
-
-分页链路已用 OSTEP 1.10 第 18 章 §18.1 的本地隔离索引验证，从 Pi 发起到 PostgreSQL 待审表回读均带同一证据定位。[OSTEP 官方分页章节](https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf)
-
-团队 2026.11 教材包的命题配置使用解压后的 `books/` 作为根目录，清单指向单独维护的本地 JSON。首次接入核对 `MANIFEST.json` 中的文件 SHA-256、大小和分块数。建立清单时按科目和版次分别查询 `chunks_fts`，先用 jieba 对查询分词，再用 `MATCH` 和 `ORDER BY bm25(chunks_fts)` 召回候选。逐条核对支持的命题规则、章节和版次后登记分块 ID 与指纹。在线命题只读取已核验清单里的分块。教材包、正文和配套本地清单按团队约定保存在 Git 忽略目录中。[SQLite FTS5 BM25](https://www.sqlite.org/fts5.html#the_bm25_function)
-
-2026-11-09 已用团队教材包在隔离环境完成取材验收。7 个核验片段覆盖分页、栈、直接映射 Cache、IPv4 子网和 TCP 消息边界。验证了 Pi 分页单选、全部五类单选、分页与栈综合题、修订保留证据、四科混合批量及组卷缺口补题。审校只读账号从待审视图回读了 14 条当前题目版本。网络题使用第 7 版。第 8 版增量库缺少源文档指纹，页码为分卷定位，当前仅用于候选检索分析。
-
-### 组卷联合缺口到待审
-
-在 Pi 中调用 `question_generation`，将 `operation` 设为 `replenishment`，在 `request` 中提供 `replenishment_request`（组卷原始计划）、整数 `seed` 和 `slot_profiles`。同一个 `request` 也可直接发给 `POST /v1/question-generation/replenishment`。适配器使用 v1.0 联合计划的 `deficits`，按原顺序分配 `assembly-1`、`assembly-2` 等槽位 ID。保留原科目、考点、题型、难度、分值和题量，按槽位填充并过滤 `avoid_stems` 中的规范化题干。单独的考点或难度缺口统计只用于组卷诊断。
-
-`slot_profiles` 由调用方为每个可命题槽位指定命题模块的 `topic`，可提供原有 `constraints` 和 `evidence`。配置了知识库时，省略材料的槽位也可按考点取材。未配置映射、题型不支持或材料不足的槽位会在结果中保留缺口。下面用组卷演示生成的「困难栈题」缺口和已有栈材料构造请求。
-
-使用已配置的知识库在 Pi 中复验时，可提供这份计划并指示「调用 `question_generation` 的 `replenishment`，使用种子 42，将 `assembly-1` 映射到 `stack_pop_sequence`，省略 `evidence`，返回入队回执和剩余缺口」。
-
-```bash
-python3 - /path/to/replenishment_request.json <<'PY' | \
-  curl -fsS http://127.0.0.1:8093/v1/question-generation/replenishment \
-    -H 'Content-Type: application/json' --data-binary @-
-import json
-from pathlib import Path
-import sys
-
-plan = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
-sample = json.loads(Path("question_generation/examples/stack.json").read_text(encoding="utf-8"))
-print(json.dumps({
-    "replenishment_request": plan,
-    "seed": 42,
-    "slot_profiles": {
-        "assembly-1": {key: sample[key] for key in ("topic", "constraints", "evidence")}
-    },
-}, ensure_ascii=False))
-PY
-```
-
-Pi 返回完整的命题结果。结果的 `assembly_request_id` 对应组卷请求。入队题包和剩余缺口的 `assembly_slot` 都可追溯到原槽位。待审题包上的 `difficulty_status: REVIEW_REQUIRED` 表示难度仍需审校确认。若保留题干命中，`reserved-stem-1` 等编号对应 `avoid_stems` 的位置。原样重试复用待审记录。自主命题模块的装配验收到 Pi 调用和待审表回读为止。
-
-2026-11-09 在远程 `main` 的 `5ce46b8` 与本地命题 `cd2bbd7` 的隔离副本完成收尾复验。使用组卷演示输出的原始计划、2026.11 本地知识库和 PostgreSQL 17。Pi 五种操作均通过，覆盖补题成功、部分成功和重试、缺材料及过期反馈。待审只读账号回读的 15 份当前题包与 Pi 返回一致。Pi 全仓检查、11 项扩展定向测试以及 Python 3.9 和 3.12 各 69 项测试均通过。
 
 ## 本地命题契约 v0.1
 
@@ -196,7 +96,7 @@ Pi 返回完整的命题结果。结果的 `assembly_request_id` 对应组卷请
 
 出栈题设定初始空栈且容量足够，元素按 1 至 n 的顺序各入栈一次。生成器按相对次序分类。如果候选序列依次出现 a、b、c，且 b < c < a，先弹出 a 就已让 c 入栈，随后 c 会挡住 b。自检用另一种方法逐项模拟四个选项，并要求唯一可达的序列与答案 ID 一致。[Princeton 栈练习](https://algs4.cs.princeton.edu/13stacks/index.php) · [Python 栈操作说明](https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks)
 
-Cache 题使用 16 位字节地址。题面给出数据容量及块大小，每行存一块。生成器先按块大小取商和余数，再将主存块号除以行数，得到标记和行号。自检从地址位字段独立提取这三个值。自 `cache-v2` 起，三个错项分别改动标记、行号和块内偏移。每个错项的解析写出对应的误算。以 256 B Cache、16 B 块和地址 `0x0000` 为例，错项分别用从 1 起算的标记、当成行号的行掩码和当前字节之后的块内字节数。[MIT 6.004 缓存讲义](https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/pages/c14/c14s1/)
+Cache 题使用 16 位字节地址。题面给出数据容量及块大小，每行存一块。生成器先按块大小取商和余数，再将主存块号除以行数，得到标记和行号。自检从地址位字段独立提取这三个值。[MIT 6.004 缓存讲义](https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/pages/c14/c14s1/)
 
 IPv4 子网题给出地址和 CIDR 前缀长度。生成器将地址向下对齐到所属地址块的起点，使用标准库 `IPv4Network` 独立检查答案。[RFC 4632 §3.1](https://www.rfc-editor.org/rfc/rfc4632.html#section-3.1) · [Python ipaddress](https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Network)
 
@@ -217,19 +117,9 @@ python3 -m unittest discover -s tests
 
 样例均把 UTF-8 JSON 结果写到标准输出。成功退出码为 0，命题失败退出码为 1。重复使用同一个请求、生成器和 Python 版本可重放同一道题。修改示例中的 `seed` 可生成另一变体。Python 调用方也可以使用 `question_generation.generation.generate_question(payload)`。
 
-### 浏览器试题台
+### 浏览器验证台
 
-在仓库根目录启动试题台，打开 [自主命题试题台](http://127.0.0.1:8765/)。可直接输入需求、粘贴材料或留空让模块选题。先看学生题面，再展开教师答案、评分、材料和考查计划。若自检失败，或本机模型输出截断但已有完整题面，页面标记为「模型原始候选」，并显示失败阶段。试题台与 Pi 共用命题流程，预览无需 PostgreSQL。
-
-```bash
-python3 -m question_generation.ui \
-  --kb-root .local/question-generation/team-kb/books \
-  --kb-catalog .local/question-generation/team-kb/catalog.json
-```
-
-默认连接本机 Ollama 的 `jun-e4b:latest`，需已安装且运行。知识库目录与清单可以一起省略，此时可粘贴材料或使用内置出处释义。`--history-example` 可指定一份此前成功生成的 JSON 题包，页面将其标为历史实测。若自行选择用已配置的 DeepSeek，可在启动时加 `--provider deepseek`，并在页面逐次确认请求。试题台仅监听本机，可用 `--port` 更换端口，按 Ctrl+C 停止。默认只接受本机来源；如需临时共享给组员演示，可加 `--public-origin https://…` 显式放行一个外部来源（例如临时隧道域名），不设置时行为不变。共享试用时建议同时加 `--log-file <路径>`（或设置 `QUESTION_CONSOLE_LOG_FILE`），每次请求——包括失败——都会以一行 JSON 追加记录：时间、来源 IP、浏览器、请求内容、各阶段耗时与 token、状态码和完整结果，便于回收样本判断是能力缺陷还是正常失败。
-
-[规则题验证台](http://127.0.0.1:8765/rules) 保留原有参数和预设。
+在仓库根目录运行 `python3 -m question_generation.ui`，打开 [本地验证台](http://127.0.0.1:8765/)。验证台只在本机监听，可用 `--port` 更换端口。按 Ctrl+C 停止。
 
 | 预设 | 预期结果 |
 | --- | --- |
@@ -246,7 +136,7 @@ python3 -m question_generation.ui \
 | IPv4 · 超出前缀范围 | 以 `/31` 发出请求，返回 `INVALID_REQUEST`，无题目 |
 | TCP · 未知场景 | 返回 `INVALID_REQUEST`，无题目 |
 
-从规则题下拉框切换样例，可调整种子、题型参数和材料规则覆盖。结果与本地命令行一致，题目保留待独立审校状态。
+从题型下拉框切换样例，可调整种子、该题型的参数和材料规则覆盖。验证台复用命令行入口的命题逻辑，题目保留待独立审校状态。Pi、真实知识库、独立审校、入库和组卷在后续接入阶段验收。
 
 ### 请求
 
@@ -274,22 +164,6 @@ TCP 使用 `computer_networks` 和 `tcp_message_boundaries`。可选约束 `scen
 ### 输出与验收
 
 成功时返回 `GENERATED` 和一个含一道题的 `questions` 数组。面向学生的输出使用 `student_view`，含题干和带稳定 ID 的四个选项。教师视图提供答案 ID、解法和逐项说明。题目包还记录生成器版本、种子、实际题设、出处、自检结果和 `PENDING` 审校状态。选项显示字母可按顺序分配，答案按 ID 关联。
-
-模型调用失败时仍返回 `MODEL_UNAVAILABLE`。通用命题在 `authoring_report.model_failure.stage` 标明失败阶段，取值为 `plan`（需求细化）、`author`（创作或修订）、`reader`（学生视角解题）、`audit`（反例审计）。DeepSeek 适配器还可记录错误类别、实际可得的结束原因和 HTTP 状态码。`authoring_report.usage` 保留服务商已返回的用量，含可得的推理 token 数。对于原有的 `invalid_response` 和 `invalid_content`，可选字段 `response_issue` 进一步区分响应封装无法解码（`envelope_decode`）、封装缺字段或形态错误（`envelope_shape`）、正文不是字符串（`content_type`）、正文无法解码（`content_decode`）和正文解码后不是对象（`content_not_object`）。诊断只记录固定类别，响应正文、推理和截断内容均留在调用边界内。
-
-DeepSeek 每次调用的输出额度按阶段冻结，默认四个阶段统一为 32,768 token（`plan`/`author`/`reader`/`audit`），可用 `QUESTION_GENERATION_<STAGE>_MAX_OUTPUT_TOKENS`（大写阶段名）覆盖；客户端级默认仍为 16,384，可用 `QUESTION_GENERATION_MAX_OUTPUT_TOKENS` 调整。变更额度或推理档位后使用独立缓存，原配置的缓存不会被复用。模型客户端以 SSE 流式接收并拼接正文，长思考期间持续读取数据块；服务端若返回普通 JSON 回包，仍按原格式解析。原始 HTTP/SSE 字节流上限为 16,000,000 字节，拼接后的 `message.content` 保留 1,000,000 字符上限；累计式 `delta.content` 以已有内容为前缀时替换而不是重复追加。
-
-阶段预算与推理档位分离配置。默认 `plan` **32,768 输出 / 240 秒**，`author`、`reader`、`audit` 统一 **32,768 输出 / 600 秒**；可用 `QUESTION_GENERATION_<STAGE>_TIMEOUT_SECONDS` 逐阶段覆盖。超时改由两层控制：底层 socket 的单次读取空闲超时取 `min(总时限, 90 秒)`，只要服务端持续吐字、总时限内绝不误杀；连续 90 秒无数据即以 `response_timeout` + `response_issue=idle_timeout` 结束本次尝试，并按瞬态传输错误重试（受 `max_retries` 与剩余总时限约束）。总耗时超过阶段时限立即失败且不重试。推理档位只允许 `off`、`low`、`high`、`max`（服务商不存在 `medium` 档）：`off` 发送 `thinking={type:disabled}` 且不带 `reasoning_effort`，其余档位发送 `thinking={type:enabled}` 与对应 `reasoning_effort`。默认按阶段取 `plan=low`、`author=high`、`reader=low`、`audit=low`，用 `QUESTION_GENERATION_<STAGE>_REASONING_EFFORT` 覆盖；非法档位在配置阶段即报错。冻结对照显示，16,384 输出下七份审计输入只有四份拿到结论，32,768 输出下七份全部拿到；`smoke-v3-final` 中 `author` 阶段 32,768 输出的实际输出中位数仍是约 13,981 token，因此放宽上限不会诱发冗长输出。全阶段 `high` 时隐藏推理 token 占总输出 78%–91%，故计划与盲解阶段降档；该改动只影响延迟与成本核算，不改变审计结论。综合题评分点 `points` 优先使用正整数，必要时可用 **0.5 分步长**；小问内各点评分之和等于该问分值，小问分值与整题总分仍为整数。浏览器试验台的 `PreviewTrace` 透传 `max_output_tokens`、`timeout`、`stage_output_tokens`、`stage_timeout_seconds` 与 `stage_reasoning_effort` 到内层客户端，并按阶段记录实际使用的推理档位（`stage_efforts`）。
-
-官方 `api.deepseek.com` 默认使用**非流式**请求（等价于 `QUESTION_GENERATION_STREAM=0`）：该网关在长推理阶段可能长时间不发送 SSE 字节，流式读取会表现为连接停滞。非流式仍走同一 `/chat/completions`、同一 JSON 解析与 usage 记账；其他 OpenAI 兼容网关默认保留流式，可用 `QUESTION_GENERATION_STREAM=1` 强制流式。流式读取在 90 秒无数据时会回退一次非流式请求（仅一次），仍失败则按 `response_timeout` 返回。
-
-正文解码由 `_parse_json_content()` 按固定顺序做有限修复：① `json.loads(..., strict=False)`（容忍字符串内的裸控制字符）；② 剥离最外层 ```json 围栏；③ 把字符串内非法的单反斜杠转义（如 `\alpha`、`\le`，正则 `\\(?!["\\/bfnrt]|u[0-9a-fA-F]{4})`）加倍成字面反斜杠；④ 当左花括号比右花括号多 1–2 个时，在末尾补齐缺失的 `}`。修复只针对这四类格式滑落：未闭合字符串、值错误、尾随文本仍然失败，解码后的结构、引文、分值与见证校验一项不减。见证输入里的整数可写成十进制、`0x…` 或末尾 `H` 的十六进制字符串，解析为整数后再做范围检查；`bool`、小数和非数值文本仍拒绝。成功修复时用量回执里记 `content_repair`（取值为 `fence`/`backslash`/`brace` 及其组合）。注意 `\beta`、`\times` 这类第二个字符本身是合法 JSON 转义（`\b`、`\t`）的写法会被解析成控制字符，这与真实制表符/退格存在不可消解的歧义，程序不做猜测，只能由审校发现。解码失败或正文为空时消耗**一次**重试重新请求，与瞬态传输错误共用同一个 `max_retries` 预算（不叠加）；结构类失败（如正文不是对象）是确定性的，不重试。
-
-正文 JSON 语法错误时，`model_failure` 可附 `content_decode_position` 和 `content_length`，分别为解码器报告的从零开始的字符偏移及正文字符总数。两个字段仅含数字。无精确位置的解码异常仍沿用 `content_decode`。
-
-直接捕获的 `TimeoutError` 或 `URLError.reason` 中的同类异常使用 `response_timeout`，普通连接错误仍为 `transport_error`。仅对瞬态 `transport_error` 和 HTTP 502/503/504 自动重试最多 1 次（默认退避 1.75 秒，可用 `max_retries` 配置）；`response_timeout`、`incomplete_output`、`invalid_content`、`response_size_limit` 和审计拒绝不自动重试。分类依据异常类型，不从错误文案推断网络阶段，也不改写历史回执。盲解的 `quality` 门禁只要求 `answerability=2`、`clarity>=1`、`distractors>=1`、`depth>=1` 且 `issues` 为空；`depth==1` 不再拦截，改为在 `self_check.review_warnings` 追加 `reader_depth` 供审校参考（与审计把深度当软指标一致），`depth==0` 仍硬拒。盲解返回若把 `quality` 嵌在 `condition_test` 内，服务会复制并弹出该字段到顶层，再按原质量检查和 `condition_test` 精确键校验；不降低其余结构要求。审计输入只删除与 `excerpt` 逐字相同的 `summary`，原文和出处仍完整保留。审计发现具体阻断时可直接返回拒绝：拒绝只要求 `valid=false`、非空 `issues`、具体反例，以及至少一项已知检查失败并给出依据。放行采用两类检查：`answer_agreement`、`ambiguity`、`grounding`、`grading`、`witness_alignment` 是硬阻断，必须全部有据通过；`reasoning_necessity`、`requirements`、`counterfactual`、`scope` 是软指标，未通过时照常交付 `PENDING` 题包，并把检查名与原因写入 `self_check.review_warnings` 供审校关注。`grounding` 只在核心结论与材料冲突、没有材料依据或编造规则时硬失败；引文粒度不足但材料其他片段能支持时只记录说明。对单选题，`requirements` 不得以“题面未要求学生列出或写出中间过程、推导或双重说明”为由判失败。放行只由 5 项硬阻断决定：硬检查全部通过且 `valid=true`（或至少一项软指标失败）即交付，`issues` 非空不再单独否决——审计常把评分粒度、覆盖建议等非阻断意见写进 `issues`。当 9 项检查全部通过而 `issues` 非空时，`audit_warnings()` 把每条 issue 作为 `{"check":"advisory_note","reason":...}` 写入 `self_check.review_warnings`，供审校逐条查看；`valid=false` 且没有任何软指标失败解释，仍视为审计契约自相矛盾并拒绝，不静默放行。提示中保留一条 `reasoning_necessity` 软指标：题面明确给出判定规则、而错项写明的理由与该规则直接矛盾、据此可部分或全部排除错项时，如实判 `passed=false` 并引用具体错项分句，但不单独否决正确、无歧义、材料有据的题。曾试行的“有据即提前结束”与“严格边界等式”两段，均因未通过冻结门禁而未保留。被拒绝的题仍不生成题包。
-
-本地模型配置可将 `DEEPSEEK_BASE_URL` 指向 OpenCode Go 的 `https://opencode.ai/inference/go/openai/v1`，并用服务商提供的模型 ID 和密钥填写原有环境变量。此入口会携带 Qodex 客户端标识和每个模型客户端实例内稳定的会话 ID。可得的 Go 用量回执在 `usage` 中保留 `cost`、`response_model` 和 `opencode` 的 `billing_source`、`list_cost`、`allowance`。订阅额度消耗与余额扣款分别计量，跨服务商的结果须注明实际模型版本。Go 的 DeepSeek Flash JSON、`high` 推理及用量回执已在真实调用验证；`low`/`high` 分阶段档位的质量对照见评测记录。 [Go 接口](https://opencode.ai/docs/console/go/) · [用量字段](https://opencode.ai/docs/console/api/inference/)
 
 失败时返回 `INVALID_REQUEST`、`UNSUPPORTED_REQUEST`、`NEEDS_MATERIAL` 或 `SELF_CHECK_FAILED`，附原因及空题目列表。材料不足时列出缺失的规则。未知请求字段视为无效，避免忽略约束。
 
@@ -331,32 +205,6 @@ python3 -m question_generation --batch question_generation/examples/batch.json
 批量请求可选填 `reference_questions` 数组。每条须提供批内唯一的 `reference_id`、`stem`、`source` 和 `license`，均为非空字符串。调用方核验题干来源与许可。把 [本地参考题样例](../tests/fixtures/question_generation/references.json) 加入混合请求，可复验 Cache 题命中而其余 4 题保留。
 
 参考题与候选复用批内题干规范化规则，候选通过自检后、分配前过滤。提供参考题字段时，结果会在 `reference_matches` 按槽位记录拦截次数及命中的参考 ID、来源和许可，即使槽位最终填满也会记录。仍有缺口时，槽位原因使用 `REFERENCE_DUPLICATE` 并列出对应参考 ID。改写及只换数字的变体单独纳入近重复评测。
-
-### 近重复离线评测
-
-用 24 对独立开发样例选择字面相似度阈值，冻结后在四科 16 对留出样例上复验。数字模板单独评测，比较规范化题干在替换十进制、十六进制和点分地址后是否相同。字面相似度只对精确和数字模板之外的题对统计命中。
-
-| 方法 | 规范化相同 | 同义改写 | 仅换数字 | 不同题误报 |
-| --- | --- | --- | --- | --- |
-| 现有规范化精确匹配 | 4/4 | 0/4 | 0/4 | 0/4 |
-| 数字模板 | — | 0/4 | 4/4 | 0/4 |
-| 字符序列相似度，开发集 F1 最佳阈值 0.20 | — | 4/4 | — | 4/4 |
-| 字符三元组 Jaccard，开发集 F1 最佳阈值 1.00 | — | 0/4 | — | 0/4 |
-
-两种字面分数在这两组样例中都给不同题比同义改写更高的分。开发集零误报的阈值在留出集也漏掉了全部改写。数字模板可用于观察同模板变体，数字变化可能改变题意或答案。当前批量去重继续按规范化题干匹配，样本用于诊断本轮方法，覆盖率需在更大的独立题对集上另行评估。
-
-第二轮先冻结四科 44 对自编留出题，再用独立 20 对开发题实现离线原型。原型从完整题干抽取题设与所求量，并复算答案。只在题设、所求量和答案都一致时提示改写，同答案的数值变体仍单独归类。支持分页页号与偏移、栈可达性与容量、直接映射 Cache 字段、IPv4 网络与广播地址。遇到未知表述或条件时返回无法判断。
-
-| 留出类别 | 正确分类 | 仅按数字模板命中 |
-| --- | --- | --- |
-| 规范化相同 | 4/4 | 0/4 |
-| 同义改写 | 8/12 | 0/12 |
-| 换数字且答案相同 | 8/8 | 4/8 |
-| 换数字且答案改变 | 8/8 | 8/8 |
-| 所求量不同 | 8/8 | 0/8 |
-| 无法判断 | 4/4 | 2/4 |
-
-原型对 28 对非重复或无法判断样例均未提示重复，漏掉的 4 对改写各来自一科的未覆盖表述。数字模板即使命中也只说明形式相同。样例是自编题对，结果用于比较方法。结论是题意判定仅适合做候选提示，Pi 和批量去重沿用现有精确匹配。
 
 ## 分页综合题与修订 v0.1
 

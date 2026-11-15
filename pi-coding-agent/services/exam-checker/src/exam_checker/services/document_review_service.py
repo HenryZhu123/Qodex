@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+from uuid import uuid4
 
 from ..domain.models import ExamDocument, ReviewedDocument, ReviewedQuestion
 from .question_review_service import QuestionReviewService
@@ -51,8 +52,10 @@ class DocumentReviewService:
         question = self.question_service.get_question(document, question_id)
         payload = self.question_service.to_checker_payload(document, question_id)
         return await self.question_review_service.review_question(
-            document_id=document.document_id,
+            task_id=document.document_id,
             question_id=question_id,
             question_number=question.question_number,
+            version=1,
+            idempotency_key=str(uuid4()),
             payload=payload,
         )

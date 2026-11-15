@@ -2,12 +2,13 @@
   "questions": [
     {
       "record_id": "00000000-0000-0000-0000-000000000001",
-      "document_id": "MOCK_DOCUMENT",
+      "task_id": "MOCK_TASK",
       "question_id": "q1",
-      "source_version_id": "00000000-0000-0000-0000-000000000002",
+      "version": 1,
       "question_json": {
-        "document_id": "MOCK_DOCUMENT",
+        "task_id": "MOCK_TASK",
         "question_id": "q1",
+        "version": 1,
         "review_status": "PASS",
         "question": {
           "subject": "数据结构",

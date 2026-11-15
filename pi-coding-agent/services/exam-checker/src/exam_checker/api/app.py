@@ -17,12 +17,11 @@ from ..database import (
 from ..domain.models import (
     CheckerPayload,
     ExamDocument,
-    ImportDocumentRequest,
-    ImportDocumentResult,
     IngestionResult,
     QuestionBankSearchResult,
     QuestionState,
     QuestionView,
+    ReviewQuestionRequest,
     ReviseQuestionRequest,
     ReviewedDocument,
     ReviewedQuestion,
@@ -58,6 +57,7 @@ from ..services.document_parse_service import (
 )
 from ..services.document_review_service import DocumentReviewService
 from ..services.document_store import DocumentNotFoundError, InMemoryExamDocumentStore
+from ..services.generated_question_service import GeneratedQuestionImportService
 from ..services.persistence import (
     InMemoryQuestionReviewRepository,
     QuestionAlreadyStoredError,
@@ -70,11 +70,6 @@ from ..services.question_bank_service import (
     QuestionBankService,
     QuestionBankValidationError,
     ReviewNotPassedError,
-)
-from ..services.question_import_service import (
-    DocumentExistsError,
-    DocumentImportError,
-    QuestionImportService,
 )
 from ..services.question_service import QuestionNotFoundError, QuestionService
 from ..services.question_state_service import QuestionStateService
@@ -108,6 +103,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         version_repository = InMemoryQuestionVersionRepository()
         question_bank_repository = None
         question_bank_service = None
+        generated_question_service = None
     else:
         store = PostgresExamDocumentStore(database.sessions)
         review_repository = PostgresQuestionReviewRepository(database.sessions)
@@ -116,6 +112,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         question_bank_service = QuestionBankService(
             review_repository=review_repository,
             question_bank_repository=question_bank_repository,
+        )
+        generated_question_service = GeneratedQuestionImportService(
+            sessions=database.sessions,
+            version_repository=version_repository,
         )
     question_service = QuestionService()
     jev_prompts = JevPromptRepository(resolved.jev_prompt_root)
@@ -185,11 +185,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         review_repository=review_repository,
         question_bank_repository=question_bank_repository,
     )
-    question_import_service = QuestionImportService(
-        store=store,
-        version_repository=version_repository,
-        question_service=question_service,
-    )
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
@@ -231,24 +226,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise HTTPException(status_code=502, detail=str(exc)) from exc
         finally:
             await file.close()
-
-    @application.post(
-        "/v1/exam-checker/documents/import", response_model=ImportDocumentResult
-    )
-    async def import_document(request: ImportDocumentRequest) -> ImportDocumentResult:
-        """Register already-authored questions so the normal review path can run."""
-        try:
-            return await question_import_service.import_questions(
-                document_id=request.document_id,
-                questions=request.questions,
-                paper_title=request.paper_title,
-                subject=request.subject,
-                source_name=request.source_name,
-            )
-        except DocumentExistsError as exc:
-            raise HTTPException(status_code=409, detail=str(exc)) from exc
-        except DocumentImportError as exc:
-            raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     @application.get(
         "/v1/exam-checker/documents/{document_id}", response_model=ExamDocument
@@ -366,11 +343,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             await store.get(document_id)
             return await application.state.question_workflow_service.revise_and_review(
-                document_id=document_id,
+                task_id=document_id,
                 question_id=question_id,
-                base_version_id=UUID(request.base_version_id),
+                base_version=request.base_version,
                 question_json=request.question_json,
                 user_instruction=request.user_instruction,
+                idempotency_key=request.idempotency_key,
             )
         except QuestionVersionConflictError as exc:
             raise HTTPException(status_code=409, detail=str(exc)) from exc
@@ -402,8 +380,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             )
         try:
             return await question_bank_service.ingest(
-                document_id=document_id,
+                task_id=document_id,
                 question_id=question_id,
+                version=int(question_json.get("version", 0)),
                 question_json=question_json,
             )
         except ReviewNotFoundError as exc:
@@ -417,6 +396,72 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 status_code=409, detail="Question is already stored"
             ) from exc
         except QuestionBankValidationError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    @application.get(
+        "/v1/exam-checker/tasks/{task_id}/questions/{question_id}/state",
+        response_model=QuestionState,
+    )
+    async def get_task_question_state(task_id: str, question_id: str) -> QuestionState:
+        if generated_question_service is not None:
+            try:
+                await generated_question_service.import_version(task_id, question_id, None)
+            except (QuestionVersionNotFoundError, ValueError) as exc:
+                raise HTTPException(status_code=404, detail="Question not found") from exc
+        try:
+            return await question_state_service.get(task_id, question_id)
+        except QuestionVersionNotFoundError as exc:
+            raise HTTPException(status_code=404, detail="Question not found") from exc
+
+    @application.post(
+        "/v1/exam-checker/tasks/{task_id}/questions/{question_id}/review",
+        response_model=ReviewedQuestion,
+    )
+    async def review_task_question(
+        task_id: str, question_id: str, review_request: ReviewQuestionRequest
+    ) -> ReviewedQuestion:
+        if generated_question_service is None:
+            raise HTTPException(
+                status_code=503, detail="PostgreSQL persistence is not configured"
+            )
+        try:
+            snapshot = await generated_question_service.import_version(
+                task_id, question_id, review_request.version
+            )
+            return await application.state.question_workflow_service.review_version(
+                task_id,
+                question_id,
+                snapshot.version,
+                idempotency_key=review_request.idempotency_key,
+            )
+        except QuestionIdentityError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except (QuestionVersionNotFoundError, ValueError) as exc:
+            raise HTTPException(status_code=404, detail="Question not found") from exc
+
+    @application.post(
+        "/v1/exam-checker/tasks/{task_id}/questions/{question_id}/revise",
+        response_model=ReviewedQuestion,
+    )
+    async def revise_task_question(
+        task_id: str, question_id: str, revise_request: ReviseQuestionRequest
+    ) -> ReviewedQuestion:
+        try:
+            return await application.state.question_workflow_service.revise_and_review(
+                task_id=task_id,
+                question_id=question_id,
+                base_version=revise_request.base_version,
+                question_json=revise_request.question_json,
+                user_instruction=revise_request.user_instruction,
+                idempotency_key=revise_request.idempotency_key,
+            )
+        except (QuestionVersionConflictError, QuestionRevisionNotAllowedError) as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except (QuestionVersionNotFoundError, ReviewNotFoundError) as exc:
+            raise HTTPException(status_code=404, detail="Question not found") from exc
+        except QuestionWorkflowModelError as exc:
+            raise HTTPException(status_code=502, detail=str(exc)) from exc
+        except (ValueError, QuestionIdentityError) as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
 
     @application.get(
@@ -467,7 +512,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.state.question_workflow_service = question_workflow_service
     application.state.question_state_service = question_state_service
     application.state.version_repository = version_repository
-    application.state.question_import_service = question_import_service
     return application
 
 

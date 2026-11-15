@@ -67,7 +67,10 @@ it("sends the joint shortage plan unchanged and preserves partial replenishment 
 
 	expect(fetchStub).toHaveBeenCalledOnce();
 	expect(fetchStub.mock.calls[0]?.[0]).toBe("http://127.0.0.1:8093/v1/question-generation/replenishment");
-	expect(fetchStub.mock.calls[0]?.[1]?.body).toBe(JSON.stringify(request));
+	// The extension injects the task_id that ties every returned question together.
+	const submitted = JSON.parse(String(fetchStub.mock.calls[0]?.[1]?.body));
+	expect(submitted).toMatchObject(request);
+	expect(submitted.task_id).toMatch(/^[0-9a-f-]{36}$/);
 	const result = harness.session.messages.find((message) => message.role === "toolResult");
 	expect(JSON.parse(getMessageText(result))).toEqual(response);
 });
@@ -97,7 +100,9 @@ it("runs the built-in question-generation tool and preserves the service receipt
 
 	expect(fetchStub).toHaveBeenCalledOnce();
 	expect(fetchStub.mock.calls[0]?.[0]).toBe("http://127.0.0.1:8093/v1/question-generation/batch");
-	expect(fetchStub.mock.calls[0]?.[1]?.body).toBe(JSON.stringify(request));
+	const submitted = JSON.parse(String(fetchStub.mock.calls[0]?.[1]?.body));
+	expect(submitted).toMatchObject(request);
+	expect(submitted.task_id).toMatch(/^[0-9a-f-]{36}$/);
 	const result = harness.session.messages.find((message) => message.role === "toolResult");
 	expect(JSON.parse(getMessageText(result))).toEqual(response);
 });
@@ -125,7 +130,10 @@ it("preserves authoring constraints and allows the configured model timeout", as
 		]);
 		await harness.session.prompt("Generate a diagnostic question.");
 		expect(timeout).toHaveBeenCalledWith(420000);
-		expect(fetchStub.mock.calls[0]?.[1]?.body).toBe(JSON.stringify(request));
+		// The extension injects the task_id that ties every returned question together.
+	const submitted = JSON.parse(String(fetchStub.mock.calls[0]?.[1]?.body));
+	expect(submitted).toMatchObject(request);
+	expect(submitted.task_id).toMatch(/^[0-9a-f-]{36}$/);
 		const result = harness.session.messages.find((message) => message.role === "toolResult");
 		expect(JSON.parse(getMessageText(result))).toEqual(response);
 	} finally {
@@ -149,7 +157,10 @@ it("passes a rough request to the author operation for the service to plan", asy
 	]);
 	await harness.session.prompt("想练内存这块");
 	expect(fetchStub.mock.calls[0]?.[0]).toMatch(/\/v1\/question-generation\/author$/);
-	expect(fetchStub.mock.calls[0]?.[1]?.body).toBe(JSON.stringify(request));
+	// The extension injects the task_id that ties every returned question together.
+	const submitted = JSON.parse(String(fetchStub.mock.calls[0]?.[1]?.body));
+	expect(submitted).toMatchObject(request);
+	expect(submitted.task_id).toMatch(/^[0-9a-f-]{36}$/);
 	const result = harness.session.messages.find((message) => message.role === "toolResult");
 	expect(JSON.parse(getMessageText(result))).toEqual(response);
 });

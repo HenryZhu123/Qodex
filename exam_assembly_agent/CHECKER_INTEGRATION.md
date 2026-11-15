@@ -5,8 +5,8 @@
 
 | 审校字段 | 内部字段 | 策略 |
 | --- | --- | --- |
-| document_id + question_id | question_id | 组合标识，避免不同试卷题号冲突 |
-| source_version_id | version | 保留版本 UUID，不伪造递增版本 |
+| task_id + question_id | question_id | 组合标识，避免不同任务内题号冲突 |
+| version | version | 保留正整数版本，不推断或重编号 |
 | question.question_text | stem | 原文保留 |
 | question.options | options | 四项列表按 A-D 转换；支持统一的 A.、A、等标签，不支持混用/乱序 |
 | question.answer_text | answer | 仅支持单个 A-D 字母或唯一匹配的选项全文；含解释的答案不猜测 |
@@ -16,7 +16,7 @@
 
 知识点跨多个主分类的记录会拒绝转换，等待人工确认；不是自动取第一个知识点。
 科目名称目前精确匹配；未知题型、答案表达、缺失分值均记录拒绝原因。
-原始 record_id、source_version_id 等保存在 provenance 中。
+原始 `record_id`、`task_id`、`question_id` 和 `version` 保存在 provenance 中。
 
 ## 开发运行
 

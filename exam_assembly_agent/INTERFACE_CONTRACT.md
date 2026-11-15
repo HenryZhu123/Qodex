@@ -13,7 +13,7 @@
 - Pi 负责跨模块协调；组卷不能自行创建 PASS 审校结果。
 - 题库检索：GET /v1/question-bank/search。
 - 单条记录：GET /v1/question-bank/{record_id}。
-- 最新题目状态：GET /v1/exam-checker/documents/{document_id}/questions/{question_id}/state。
+- 最新题目状态：GET /v1/exam-checker/tasks/{task_id}/questions/{question_id}/state。
 - 推荐复用审校服务 API，不另建正式题库或直接改其业务表。
 
 ## 二、代码已经确定的格式
@@ -23,8 +23,8 @@
 | 字段 | 实际约束/含义 |
 | --- | --- |
 | record_id | 题库记录标识 |
-| document_id + question_id | 来源试卷和卷内题号，question_id 本身不保证跨卷唯一 |
-| source_version_id | 入库来源版本 UUID；接口允许 null，组卷遇到 null 应标记不可验证 |
+| task_id + question_id | 来源任务和任务内题号，question_id 本身不保证跨任务唯一 |
+| version | 入库来源的正整数版本，与题目快照和审校记录共同组成业务身份 |
 | question_json.question | QuestionView 对象 |
 | question_json.review_status | 入库 JSON 中要求 PASS；是历史入库声明，不能单独证明最新状态 |
 | question_json.metadata.difficulty | 标注模型规定 easy / medium / hard；组卷也应验证枚举 |
@@ -57,7 +57,7 @@ QuestionView 的相关字段：
 
 按当前“使用最新有效版本”的组卷侧接入策略，候选题需同时满足：
 
-1. state.question_version_id 与记录的 source_version_id 相同。
+1. `state.task_id + question_id + version` 与题库记录完全相同。
 2. state.review.status 为 PASS，且 unresolved_checks 为空。
 3. state.question_bank.status 为 STORED，record_id 与检索记录相同。
 4. 来源标识一致，题目字段完整，满足所请求的组卷模式。

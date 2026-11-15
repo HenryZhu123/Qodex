@@ -80,9 +80,11 @@ async def test_direct_checks_start_while_jev_routes_and_only_run_selected_tasks(
     )
     pending = asyncio.create_task(
         service.review_question(
-            document_id="exam_1",
+            task_id="exam_1",
             question_id="question_1",
             question_number="1",
+            version=1,
+            idempotency_key="review-1",
             payload=CheckerPayload(
                 reference="【题型】选择题", detection_content="题目\nA.甲\nB.乙"
             ),
@@ -128,9 +130,11 @@ async def test_jev_failure_fails_open_to_every_specialist() -> None:
     )
 
     result = await service.review_question(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
         question_number="1",
+        version=1,
+        idempotency_key="review-2",
         payload=CheckerPayload(reference="", detection_content="测试题"),
     )
 
@@ -202,9 +206,11 @@ async def test_specialist_failure_makes_question_unresolved_without_losing_error
     )
 
     result = await service.review_question(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
         question_number="1",
+        version=1,
+        idempotency_key="review-3",
         payload=CheckerPayload(reference="", detection_content="计祘机网络"),
     )
 

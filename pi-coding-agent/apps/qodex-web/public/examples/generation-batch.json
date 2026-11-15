@@ -1,0 +1,110 @@
+{
+  "schema_version": "0.1",
+  "request_id": "mixed-408-demo",
+  "seed": 42,
+  "question_count": 5,
+  "total_score": 11,
+  "slots": [
+    {
+      "slot_id": "paging",
+      "count": 2,
+      "score_per_question": 2,
+      "subject": "operating_systems",
+      "topic": "single_level_paging",
+      "question_type": "single_choice",
+      "constraints": {
+        "page_size": 256
+      },
+      "evidence": [
+        {
+          "id": "ostep-paging",
+          "source": "https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf",
+          "version": "OSTEP 1.10, chapter 18",
+          "anchor": "§18.1 A Simple Example And Overview",
+          "summary": "将虚拟地址拆为虚页号和页内偏移。用有效页表项查出物理页框号，保留页内偏移，组成物理地址。",
+          "rules": [
+            "split_address",
+            "map_virtual_page",
+            "preserve_offset"
+          ]
+        }
+      ]
+    },
+    {
+      "slot_id": "stack",
+      "count": 1,
+      "score_per_question": 2,
+      "subject": "data_structures",
+      "topic": "stack_pop_sequence",
+      "question_type": "single_choice",
+      "constraints": {
+        "element_count": 5
+      },
+      "evidence": [
+        {
+          "id": "python-tutorial-stack",
+          "source": "https://docs.python.org/3/tutorial/datastructures.html#using-lists-as-stacks",
+          "version": "Python 3 Tutorial",
+          "anchor": "§5.1.1 Using Lists as Stacks",
+          "summary": "栈遵循后进先出。入栈把元素放到栈顶，出栈只能移除当前的栈顶元素。",
+          "rules": [
+            "stack_push_top",
+            "stack_pop_top"
+          ]
+        }
+      ]
+    },
+    {
+      "slot_id": "cache",
+      "count": 1,
+      "score_per_question": 3,
+      "subject": "computer_organization",
+      "topic": "direct_mapped_cache",
+      "question_type": "single_choice",
+      "constraints": {
+        "cache_size": 256,
+        "block_size": 16,
+        "address": 4660
+      },
+      "evidence": [
+        {
+          "id": "mit-direct-mapped-cache",
+          "source": "https://ocw.mit.edu/courses/6-004-computation-structures-spring-2017/pages/c14/c14s1/",
+          "version": "MIT 6.004 Spring 2017",
+          "anchor": "§14.1, slides 25–27",
+          "summary": "直接映射 Cache 用地址的索引位选择一行，标记区分映射到同一行的主存块，低位确定块内字节偏移。",
+          "rules": [
+            "cache_byte_offset",
+            "cache_line_index",
+            "cache_tag"
+          ]
+        }
+      ]
+    },
+    {
+      "slot_id": "subnet",
+      "count": 1,
+      "score_per_question": 2,
+      "subject": "computer_networks",
+      "topic": "ipv4_subnet_network_address",
+      "question_type": "single_choice",
+      "constraints": {
+        "prefix_length": 26,
+        "ipv4_address": "10.23.45.77"
+      },
+      "evidence": [
+        {
+          "id": "rfc4632-cidr",
+          "source": "https://www.rfc-editor.org/rfc/rfc4632.html#section-3.1",
+          "version": "RFC 4632",
+          "anchor": "§3.1 Basic Concept and Prefix Notation",
+          "summary": "CIDR 前缀长度决定 IPv4 地址的高位网络部分。地址块按块大小对齐，网络地址将其余主机位清零。",
+          "rules": [
+            "ipv4_cidr_prefix",
+            "ipv4_subnet_alignment"
+          ]
+        }
+      ]
+    }
+  ]
+}

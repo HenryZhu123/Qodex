@@ -45,7 +45,7 @@ export const WORKFLOW_POLICY = `${POLICY_MARKER}
 - 只组单选。用户要综合题、题组、带图题或难度配额时，明确说当前不支持，并给可行替代（例如综合题单独出、按教师视图包交付），不要静默降级。
 - 预算或连续两次同码失败时主动收尾：列出已完成、产出在哪、下一步建议。
 
-不允许做的事：判定 PASS；自己编造 knowledge_points、版本号或 document_id；把教师视图或评分给学生；在拿到 ingestion.status=STORED 之前说"已入库/已通过"。
+不允许做的事：判定 PASS；自己编造 knowledge_points、task_id 或版本号；把教师视图或评分给学生；在拿到 ingestion.status=STORED 之前说"已入库/已通过"。
 `;
 
 const GENERATION_TOOL = "question_generation";
@@ -232,26 +232,19 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 		const status =
 			stringField(payload, "status") ?? stringField(nested(payload, "review"), "status");
 		const ingestion = nested(payload, "ingestion");
-		const documentId = stringField(payload, "document_id");
-		const imported = payload?.imported;
-		if (typeof imported === "number" && documentId) {
-			return {
-				ok: true,
-				next: ["review_question 逐题审校；PASS 才会自动 annotate 并入库"],
-				artifact: { document_id: documentId, imported: String(imported) },
-			};
-		}
 		const observation: Observation = {
 			ok: status === "PASS",
 			next: status === "PASS" ? [] : hintFor(status, undefined),
 		};
 		if (typeof status === "string") observation.status = status;
 		const artifact: Record<string, string> = {};
+		const taskId = stringField(payload, "task_id");
+		if (taskId) artifact.task_id = taskId;
+		const documentId = stringField(payload, "document_id");
 		if (documentId) artifact.document_id = documentId;
 		const questionId = stringField(payload, "question_id");
 		if (questionId) artifact.question_id = questionId;
-		const versionId = stringField(payload, "question_version_id");
-		if (versionId) artifact.question_version_id = versionId;
+		if (typeof payload?.version === "number") artifact.version = String(payload.version);
 		if (ingestion && typeof ingestion.status === "string") artifact.ingestion = ingestion.status;
 		if (Object.keys(artifact).length > 0) observation.artifact = artifact;
 		if (!observation.ok) {

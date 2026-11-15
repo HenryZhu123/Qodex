@@ -1,90 +1,178 @@
 "use client";
 
-import { Maximize2Icon, MoreHorizontalIcon, PanelsTopLeftIcon } from "lucide-react";
-import { useState } from "react";
+import { useAui } from "@assistant-ui/react";
+import { BookOpen, Database, FileText, History, Home as HomeIcon, Menu, PenLine, RefreshCw } from "lucide-react";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
+import { AssemblyForm, HistoryDetail, HistoryList } from "@/components/assembly-workspace";
+import { PiRequests } from "@/components/pi-requests";
 import { QodexThread } from "@/components/qodex-thread";
 import { QodexThreadList } from "@/components/qodex-thread-list";
+import { CheckerWorkspace, QuestionBank } from "@/components/question-workspace";
 import { RuntimeStatus } from "@/components/runtime-status";
+import { api, type JsonObject, text } from "@/lib/workspace-api";
 import { QodexRuntimeProvider } from "./runtime-provider";
 
 export default function Home() {
-	const [sidebarOpen, setSidebarOpen] = useState(true);
-
 	return (
 		<QodexRuntimeProvider>
-			<div className="h-dvh overflow-hidden bg-[var(--canvas)] p-2 sm:p-4 lg:p-5">
-				<div className="mx-auto flex h-full min-h-0 max-w-[1500px] overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--panel-raised)] shadow-[0_20px_60px_rgba(25,25,20,0.06)]">
-					<aside
-						className={`${sidebarOpen ? "md:flex" : "md:hidden"} hidden w-[272px] shrink-0 flex-col border-r border-[var(--border)] bg-[var(--sidebar)]`}
-					>
-						<div className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--border)] px-4">
-							<div className="flex items-center gap-2.5">
-								<div className="flex size-7 items-center justify-center rounded-lg border border-[var(--border-strong)] bg-[var(--text)] text-white shadow-sm">
-									<PanelsTopLeftIcon className="size-3.5" strokeWidth={2.25} />
-								</div>
-								<span className="text-sm font-semibold tracking-[-0.015em]">Qodex</span>
-							</div>
-							<button
-								type="button"
-								aria-label="Hide sidebar"
-								onClick={() => setSidebarOpen(false)}
-								className="icon-button"
-							>
-								<PanelsTopLeftIcon className="size-4" />
-							</button>
-						</div>
-						<QodexThreadList />
-					</aside>
-
-					<section className="flex min-w-0 flex-1 flex-col">
-						<header className="flex h-14 shrink-0 items-center gap-3 border-b border-[var(--border)] px-4 sm:px-5">
-							{!sidebarOpen ? (
-								<button
-									type="button"
-									aria-label="Show sidebar"
-									onClick={() => setSidebarOpen(true)}
-									className="icon-button hidden md:flex"
-								>
-									<PanelsTopLeftIcon className="size-4" />
-								</button>
-							) : null}
-							<div className="flex size-7 items-center justify-center rounded-lg bg-[var(--text)] text-white md:hidden">
-								<PanelsTopLeftIcon className="size-3.5" />
-							</div>
-							<div className="min-w-0">
-								<div className="truncate text-sm font-medium tracking-[-0.01em]">New chat</div>
-								<div className="hidden text-[11px] text-[var(--muted)] sm:block">Local coding agent</div>
-							</div>
-							<div className="ml-auto flex items-center gap-1.5">
-								<RuntimeStatus />
-								<details className="group relative">
-									<summary aria-label="More options" className="icon-button list-none">
-										<MoreHorizontalIcon className="size-4" />
-									</summary>
-									<div className="absolute right-0 top-10 z-20 w-56 rounded-xl border border-[var(--border)] bg-white p-3 text-xs shadow-xl shadow-black/10">
-										<div className="font-medium text-[var(--text)]">Local Pi runtime</div>
-										<div className="mt-1 text-[var(--muted)]">talkweb / deepseek-flash</div>
-									</div>
-								</details>
-								<button
-									type="button"
-									aria-label="Expand workspace"
-									onClick={() => {
-										if (document.fullscreenElement) void document.exitFullscreen();
-										else void document.documentElement.requestFullscreen();
-									}}
-									className="icon-button hidden sm:flex"
-								>
-									<Maximize2Icon className="size-3.5" />
-								</button>
-							</div>
-						</header>
-						<main className="min-h-0 flex-1 bg-[var(--panel-raised)]">
-							<QodexThread />
-						</main>
-					</section>
-				</div>
-			</div>
+			<Workspace />
+			<PiRequests />
 		</QodexRuntimeProvider>
+	);
+}
+function Workspace() {
+	const aui = useAui();
+	const [route, setRoute] = useState("chat"),
+		[sidebarOpen, setSidebarOpen] = useState(true),
+		[health, setHealth] = useState<JsonObject>({}),
+		[checking, setChecking] = useState(false);
+	const pages = [
+		["chat", "工作台", HomeIcon],
+		["checker", "命题与审校", PenLine],
+		["bank", "正式题库", Database],
+		["assembly", "智能组卷", FileText],
+		["history", "组卷历史", History],
+	] as const;
+	useEffect(() => {
+		const update = () => setRoute(location.hash.slice(1) || "chat");
+		update();
+		window.addEventListener("hashchange", update);
+		return () => window.removeEventListener("hashchange", update);
+	}, []);
+	const checkHealth = useCallback(async () => {
+		setChecking(true);
+		const states = await Promise.all(
+			["checker", "assembly", "generation"].map(async (s) => {
+				try {
+					const result = await api(`${s}/health`);
+					return [s, result.status === "ok" ? "已连接" : "异常"];
+				} catch {
+					return [s, "未连接"];
+				}
+			}),
+		);
+		setHealth(Object.fromEntries(states));
+		setChecking(false);
+	}, []);
+	useEffect(() => {
+		void checkHealth();
+	}, [checkHealth]);
+	function prompt(value: string) {
+		location.hash = "chat";
+		aui.composer.setText(value);
+	}
+	function openHistory(id?: string) {
+		location.hash = id ? `exam/${id}` : "history";
+	}
+	const detailId = route.startsWith("exam/") ? route.slice(5) : "";
+	const title = detailId ? "试卷详情" : pages.find((p) => p[0] === route)?.[1] || "工作台";
+	return (
+		<div className="qx-app">
+			<aside className={`qx-sidebar ${sidebarOpen ? "is-open" : ""}`}>
+				<a className="qx-brand" href="#chat">
+					<Image src="/qodex-logo.svg" width="43" height="43" alt="Qodex" />
+					<div>
+						<strong>Qodex</strong>
+						<small>QUESTION · CODEX</small>
+					</div>
+				</a>
+				<nav className="qx-nav" aria-label="主导航">
+					{pages.map(([key, label, Icon]) => (
+						<a
+							key={key}
+							href={`#${key}`}
+							className={route === key || (key === "history" && !!detailId) ? "active" : ""}
+						>
+							<Icon size={18} />
+							{label}
+						</a>
+					))}
+				</nav>
+				<div className="qx-chatlist">
+					<QodexThreadList />
+				</div>
+				<div className="qx-sidefooter">
+					<BookOpen size={16} />
+					<div>
+						本地教师工作区<small>计算机考研 · 408</small>
+					</div>
+				</div>
+			</aside>
+			<section className="qx-main">
+				<header className="qx-topbar">
+					<button
+						type="button"
+						className="qx-iconbtn"
+						aria-label="切换侧边栏"
+						onClick={() => setSidebarOpen((v) => !v)}
+					>
+						<Menu size={18} />
+					</button>
+					<span className="qx-crumb">
+						教师工作台 <span>/</span> <b>{title}</b>
+					</span>
+					<div className="qx-health">
+						<details>
+							<summary>
+								业务服务{" "}
+								{Object.keys(health).length === 0
+									? "检查中"
+									: Object.values(health).every((v) => v === "已连接")
+										? "已连接"
+										: "需检查"}
+							</summary>
+							<div className="qx-healthmenu">
+								{[
+									["checker", "审校 / 题库"],
+									["assembly", "组卷 / 历史"],
+									["generation", "自主命题"],
+								].map(([k, v]) => (
+									<p key={k}>
+										{v}
+										<span>{text(health[k]) || "检查中"}</span>
+									</p>
+								))}
+								<button type="button" className="qx-link" disabled={checking} onClick={checkHealth}>
+									<RefreshCw size={13} />
+									重新检查
+								</button>
+							</div>
+						</details>
+						<RuntimeStatus />
+					</div>
+				</header>
+				<main className="qx-mainbody">
+					<div
+						className={
+							route === "chat" || (!["checker", "bank", "assembly", "history"].includes(route) && !detailId)
+								? "qx-chatpanel"
+								: "qx-hidden"
+						}
+					>
+						<QodexThread />
+					</div>
+					<div className={route === "assembly" ? "qx-scrollpanel" : "qx-hidden"}>
+						<AssemblyForm openHistory={openHistory} />
+					</div>
+					<div className={route === "checker" ? "qx-scrollpanel" : "qx-hidden"}>
+						<CheckerWorkspace prompt={prompt} />
+					</div>
+					<div className={route === "bank" ? "qx-scrollpanel" : "qx-hidden"}>
+						<QuestionBank />
+					</div>
+					{route === "history" && (
+						<div className="qx-scrollpanel">
+							<HistoryList active open={openHistory} />
+						</div>
+					)}
+					{detailId && (
+						<div className="qx-scrollpanel">
+							<HistoryDetail id={detailId} />
+						</div>
+					)}
+				</main>
+			</section>
+		</div>
 	);
 }

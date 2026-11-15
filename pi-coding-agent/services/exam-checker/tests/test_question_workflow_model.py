@@ -32,7 +32,7 @@ def stream_response(content: str) -> httpx.Response:
 
 def make_question() -> QuestionView:
     return QuestionView(
-        document_id="exam_1",
+        task_id="exam_1",
         question_id="question_1",
         question_number="1",
         question_type="single_choice",
@@ -95,7 +95,7 @@ async def test_revision_prompt_passes_complete_question_and_errors_directly() ->
     assert captured["chat_template_kwargs"] == {"enable_thinking": False}
     user_prompt = captured["messages"][1]["content"]
     assert "【原题 JSON】" in user_prompt
-    assert '"document_id": "exam_1"' in user_prompt
+    assert '"task_id": "exam_1"' in user_prompt
     assert "【审校修改意见】" in user_prompt
     assert '"error_type": "错别字"' in user_prompt
     assert "【用户补充修改意见】\n保持原题难度" in user_prompt

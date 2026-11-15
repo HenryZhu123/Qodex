@@ -1,23 +1,24 @@
 # Qodex
 
-Qodex 是面向计算机考研 408 的 AI 试题工作流，当前仓库已经合并自主命题、知识库辅助审校、单题审校、正式题库和组卷能力。Pi 是统一的 Agent 入口，各 Python 服务通过本机 HTTP 接口协作。开发入口见 [项目开发文档](docs/README.md)，自主命题的运行、验收和接手说明见 [模块文档](docs/question-generation.md)。
+Qodex 是面向计算机考研 408 的 AI 试题工作流，当前仓库已经合并自主命题、知识库辅助审校、单题审校、正式题库和组卷能力。Pi 是统一的 Agent 入口，各 Python 服务通过本机 HTTP 接口协作。
 
 ## 当前能力
 
+本地前端整合测试版（独立功能分支）新增组卷表单、题库检索、上传审校和组卷历史页面。Windows 安装、隐藏输入密钥、一键启动及队友验收步骤见 [本地完整工作台说明](docs/LOCAL_WEB_TEST.zh-CN.md)。
+
 | 模块 | 已实现能力 | Pi 工具 | 默认地址 |
 | --- | --- | --- | --- |
-| 工作流 | 政策（用户/动作/观察/停止）+ 护栏（预算、重复付费、失败可见、入库措辞、trace） | `qodex-workflow` 扩展 | — |
 | 自主命题 | 单选题、批量槽位命题、综合应用题、按反馈修订、确定性自检、待审版本入队 | `question_generation` | `http://127.0.0.1:8093` |
 | AI 审校 | PDF/DOC/DOCX 解析、整卷/单题审校、九类专项检查、知识库检索、题目版本修订 | `exam_checker` | `http://127.0.0.1:8091` |
 | 正式题库 | 查询审校通过题目，按学科、题型、难度、知识点和关键词检索 | `question_bank` | 复用 8091 |
-| 智能组卷 | 从正式题库选题、约束校验、缺题报告、相似题复核、HTML/PDF 导出 | `exam_assembly` | `http://127.0.0.1:8092` |
+| 智能组卷 | 从正式题库选题、约束校验、缺题报告、相似题复核、HTML/PDF 导出、PostgreSQL 历史快照与下载 | `exam_assembly` | `http://127.0.0.1:8092` |
 | Pi Agent | 注册上述内置工具并组织调用 | — | 终端交互 |
 
-当前边界：命题服务把自检通过的题目写入 PostgreSQL 待审队列；`question_generation/handoff.py` 把题包投影成审校侧 `QuestionView`，
-`POST /v1/exam-checker/documents/import` 把它登记成可审校的题目版本，之后 `review_question` 在 PASS 时自动 annotate 并写入正式题库，
-题库里的题目再由组卷接口成卷。这条链路已实测（见 [Agent 工作流](docs/agent-workflow.md)），由 Pi 的 `qodex-workflow` 扩展
-（政策 + 护栏）驱动。**仍未闭合的部分**：组卷只支持四选项单选、同题型单一分值，综合题、题组与带图题不支持；
-审校看不到答案与评分，因此 `PASS` 不证明答案正确。
+命题和审校现在使用统一的 `task_id + question_id + version`。Pi 发起一次命题时自动生成 `task_id`，同组题共享该 ID；审校任务接口按不可变版本从待审队列导入快照，PASS 后幂等写入正式题库。该链路由 Pi 显式调用，不是数据库后台自动消费。
+
+当前边界：命题与审校通过 `task_id + question_id + version` 对齐，Pi 显式调用两个工具完成接入；链路已实测（见 [Agent 工作流](docs/agent-workflow.md)），
+由 Pi 的 `qodex-workflow` 扩展（政策 + 护栏：调用预算、重复付费拦截、失败可见、入库措辞门禁、trace）驱动。
+**仍未闭合**：组卷只支持四选项单选、同题型单一分值，综合题/题组/带图题不支持；审校看不到答案与评分，因此 `PASS` 不证明答案正确。
 
 ## 一键演示
 
@@ -37,7 +38,7 @@ npm run demo:setup
 npm run demo
 ```
 
-该命令会依次启动 PostgreSQL、执行 Alembic 迁移、创建命题待审表、并行启动 8091/8092/8093 三个服务，再启动内嵌完整 Pi Agent 的 Assistant UI。浏览器访问 `http://127.0.0.1:3000` 即可演示。按 `Ctrl+C` 会关闭本次命令启动的网页和 Python 服务；PostgreSQL 容器和数据卷会保留，便于下次快速启动。
+该命令会依次启动 PostgreSQL、执行 Alembic 迁移（包括组卷历史表）、创建命题待审表、并行启动 8091/8092/8093 三个服务，再启动内嵌完整 Pi Agent 的 Assistant UI。浏览器访问 `http://127.0.0.1:3000` 即可演示。按 `Ctrl+C` 会关闭本次命令启动的网页和 Python 服务；PostgreSQL 容器和数据卷会保留，便于下次快速启动。
 
 辅助命令：
 
@@ -59,19 +60,14 @@ npm run demo:cli       # 使用终端版 Pi，而不是 Assistant UI
 │   │   ├── question-generation/           # Pi 命题工具
 │   │   ├── exam-checker/                  # Pi 审校和题库工具
 │   │   └── exam-assembly/                 # Pi 组卷工具
-│   ├── services/
-│   │   ├── exam-checker/                  # 审校、题库、PostgreSQL 迁移
-│   │   └── exam-assembly/                 # 组卷 HTTP 服务
-│   ├── start-exam-checker-db.sh           # 启动 PostgreSQL 并执行迁移
-│   ├── start-exam-checker.sh              # 启动 exam-checker API
-│   └── pi-test.sh                         # 从源码启动 Pi
+│   └── services/
+│       ├── exam-checker/                  # 审校、题库、PostgreSQL 迁移
+│       └── exam-assembly/                 # 组卷 HTTP 服务
 ├── scripts/                               # 根项目服务启动脚本
 ├── docs/                                  # 设计、接口、部署和验收文档
 ├── tests/                                 # 命题模块测试
 └── research-assets/                       # 历史研究资料
 ```
-
-`research-assets/` 保存原 `main` 分支的研究资料，不是运行时事实来源；可运行实现位于 `question_generation/`、`exam_assembly_agent/` 和 `pi-coding-agent/`。
 
 根目录 `pyproject.toml` 不是启动脚本；它定义 `qodex-exam-assembly-core` Python 包，组卷 HTTP 服务依赖该包，因此需要保留。
 
@@ -121,12 +117,15 @@ User: qodex
 Password: qodex-local
 ```
 
-为命题待审队列建表：
+为命题任务和待审队列建表：
 
 ```bash
 docker compose -f pi-coding-agent/services/exam-checker/compose.yaml \
   exec -T postgres psql -U qodex -d qodex \
   < question_generation/sql/001_pending_questions.sql
+docker compose -f pi-coding-agent/services/exam-checker/compose.yaml \
+  exec -T postgres psql -U qodex -d qodex \
+  < question_generation/sql/002_generation_tasks.sql
 ```
 
 数据库结构详见 [exam-checker 数据库说明](pi-coding-agent/services/exam-checker/DATABASE.zh-CN.md)。
@@ -168,7 +167,19 @@ source .venv/bin/activate
 ./scripts/start-exam-assembly.sh
 ```
 
-组卷服务默认通过 `http://127.0.0.1:8091` 查询正式题库，可用 `QUESTION_BANK_SERVICE_URL` 覆盖。
+组卷服务默认通过 `http://127.0.0.1:8091` 查询正式题库，可用 `QUESTION_BANK_SERVICE_URL` 覆盖。`npm run demo` 会把 `EXAM_ASSEMBLY_DATABASE_URL` 指向同一 PostgreSQL；手工启动时也可以设置该变量，未设置时回退到 `EXAM_CHECKER_DATABASE_URL`。两者均未设置时仍可组卷，但不会保存历史。
+
+组卷成功后，服务会把请求、报告、题目来源、学生题面、教师答案以及两份 HTML 保存为不可变快照。历史接口包括：
+
+```text
+GET /v1/exam-assembly/history
+GET /v1/exam-assembly/history/{exam_id}
+GET /v1/exam-assembly/history/{exam_id}/answers
+GET /v1/exam-assembly/history/{exam_id}/student.html
+GET /v1/exam-assembly/history/{exam_id}/answer.html
+```
+
+这些接口目前没有登录和角色鉴权，只用于监听 `127.0.0.1` 的本机教师演示。不要把 8092 公开到网络，也不要把答案接口直接提供给学生端。详细契约和限制见 [组卷历史说明](docs/ASSEMBLY_HISTORY.zh-CN.md)。
 
 ## 4. 启动 Pi
 
@@ -189,9 +200,9 @@ npm run hydrate:model-data:release
 合并后的 main 会自动注册：
 
 - `question_generation`：`single`、`batch`、`comprehensive`、`revise`
-- `exam_checker`：`review_file`、`review_document`、`review_question`、`revise_question`、`get_question_state`
+- `exam_checker`：`review_file`、`review_document`，以及使用 `task_id` 的 `review_question`、`revise_question`、`get_question_state`
 - `question_bank`：`get_question`、`search_questions`
-- `exam_assembly`：提交组卷请求并返回试卷或缺题结果
+- `exam_assembly`：提交组卷请求并返回试卷、缺题结果和历史记录 ID；历史查询目前通过 HTTP 接口完成
 
 ## 启动 Assistant UI 前端
 

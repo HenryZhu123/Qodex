@@ -8,6 +8,8 @@ extensions as the terminal client: `exam_checker`, `question_bank`,
 
 ## Run
 
+The integrated teacher workspace adds real bank search, file parsing/review, assembly, history and independent student/answer previews. See [Windows setup and acceptance](../../../docs/LOCAL_WEB_TEST.zh-CN.md). Browser requests use the local same-origin `/api/services` allowlist; there is no mock-bank fallback. Run `npm run typecheck` and `node --import tsx --test tests/workspace.test.ts` for the Web-specific checks.
+
 Install the root Pi dependencies once, then install and start the Web app:
 
 ```bash

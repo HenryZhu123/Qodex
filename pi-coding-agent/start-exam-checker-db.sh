@@ -11,5 +11,6 @@ if [[ -f "$ENV_FILE" ]]; then
 fi
 
 docker compose "${compose_args[@]}" up -d --wait
+docker compose "${compose_args[@]}" build migrate
 docker compose "${compose_args[@]}" run --rm migrate
 docker compose "${compose_args[@]}" ps

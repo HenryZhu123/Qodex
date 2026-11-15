@@ -15,8 +15,10 @@ interface RegisteredExamCheckerTool {
 			operation: "review_file" | "review_document" | "review_question" | "revise_question" | "get_question_state";
 			file_path?: string;
 			document_id?: string;
+			task_id?: string;
 			question_id?: string;
-			base_version_id?: string;
+			version?: number;
+			base_version?: number;
 			question_json?: Record<string, unknown>;
 			user_instruction?: string;
 		},
@@ -71,10 +73,10 @@ afterEach(() => {
 
 function fullReview(status: "PASS" | "NEEDS_REVISION" | "UNRESOLVED") {
 	return {
-		document_id: "exam_1",
+		task_id: "exam_1",
 		question_id: "question_2",
 		question_number: "2",
-		question_version_id: "00000000-0000-0000-0000-000000000002",
+		version: 2,
 		question: { reference: "ignored", detection_content: "ignored" },
 		ingestion: undefined as { status: "STORED" | "FAILED" | "SKIPPED"; record_id?: string } | undefined,
 		review: {
@@ -92,10 +94,10 @@ describe("compactReviewResult", () => {
 		const result = compactReviewResult(fullReview("PASS"));
 
 		expect(result).toEqual({
-			document_id: "exam_1",
+			task_id: "exam_1",
 			question_id: "question_2",
 			question_number: "2",
-			question_version_id: "00000000-0000-0000-0000-000000000002",
+			version: 2,
 			status: "PASS",
 			errors: [],
 			unresolved_checks: [],
@@ -170,19 +172,19 @@ describe("compactReviewResult", () => {
 			status: "NEEDS_REVISION",
 			questions: [
 				{
-					document_id: "exam_1",
+					task_id: "exam_1",
 					question_id: "question_2",
 					question_number: "2",
-					question_version_id: "00000000-0000-0000-0000-000000000002",
+					version: 2,
 					status: "PASS",
 					errors: [],
 					unresolved_checks: [],
 				},
 				{
-					document_id: "exam_1",
+					task_id: "exam_1",
 					question_id: "question_3",
 					question_number: "3",
-					question_version_id: "00000000-0000-0000-0000-000000000002",
+					version: 2,
 					status: "NEEDS_REVISION",
 					errors: [],
 					unresolved_checks: [],
@@ -231,24 +233,26 @@ describe("compactReviewResult", () => {
 
 		await registeredTool().execute(
 			"call_question",
-			{ operation: "review_question", document_id: "exam_1", question_id: "question_2" },
+			{ operation: "review_question", task_id: "exam_1", question_id: "question_2", version: 2 },
 			undefined,
 			undefined,
 			{ cwd: "/workspace" },
 		);
 
 		expect(fetchMock).toHaveBeenCalledWith(
-			"http://127.0.0.1:8091/v1/exam-checker/documents/exam_1/questions/question_2/review",
-			expect.objectContaining({ method: "POST" }),
+			"http://127.0.0.1:8091/v1/exam-checker/tasks/exam_1/questions/question_2/review",
+			expect.objectContaining({
+				method: "POST",
+				body: JSON.stringify({ version: 2, idempotency_key: "call_question" }),
+			}),
 		);
 	});
 
 	it("reads the latest question workflow state", async () => {
 		const state = {
-			document_id: "exam_1",
+			task_id: "exam_1",
 			question_id: "question_2",
-			question_version_id: "version_2",
-			version_number: 2,
+			version: 2,
 			revision_source: "AI_EDIT",
 			question: { question_text: "测试题" },
 			change_log: null,
@@ -264,14 +268,14 @@ describe("compactReviewResult", () => {
 
 		const result = await registeredTool().execute(
 			"call_state",
-			{ operation: "get_question_state", document_id: "exam_1", question_id: "question_2" },
+			{ operation: "get_question_state", task_id: "exam_1", question_id: "question_2" },
 			undefined,
 			undefined,
 			{ cwd: "/workspace" },
 		);
 
 		expect(fetchMock).toHaveBeenCalledWith(
-			"http://127.0.0.1:8091/v1/exam-checker/documents/exam_1/questions/question_2/state",
+			"http://127.0.0.1:8091/v1/exam-checker/tasks/exam_1/questions/question_2/state",
 			expect.objectContaining({ method: "GET" }),
 		);
 		expect(JSON.parse(result.content[0]?.text ?? "{}")).toEqual(state);
@@ -291,9 +295,9 @@ describe("compactReviewResult", () => {
 			"call_revise",
 			{
 				operation: "revise_question",
-				document_id: "exam_1",
+				task_id: "exam_1",
 				question_id: "question_2",
-				base_version_id: "00000000-0000-0000-0000-000000000002",
+				base_version: 2,
 				user_instruction: "保持原考点，修正选项 C",
 			},
 			undefined,
@@ -302,17 +306,18 @@ describe("compactReviewResult", () => {
 		);
 
 		expect(fetchMock).toHaveBeenCalledWith(
-			"http://127.0.0.1:8091/v1/exam-checker/documents/exam_1/questions/question_2/revise",
+			"http://127.0.0.1:8091/v1/exam-checker/tasks/exam_1/questions/question_2/revise",
 			expect.objectContaining({
 				method: "POST",
 				body: JSON.stringify({
-					base_version_id: "00000000-0000-0000-0000-000000000002",
+					base_version: 2,
+					idempotency_key: "call_revise",
 					user_instruction: "保持原考点，修正选项 C",
 				}),
 			}),
 		);
 		expect(JSON.parse(result.content[0]?.text ?? "{}")).toMatchObject({
-			document_id: "exam_1",
+			task_id: "exam_1",
 			question_id: "question_2",
 			status: "PASS",
 			ingestion: { status: "STORED", record_id: "record_1" },
@@ -416,8 +421,9 @@ describe("compactReviewResult", () => {
 	it("gets one complete stored question by record ID", async () => {
 		const entry = {
 			record_id: "record_1",
-			document_id: "exam_1",
+			task_id: "exam_1",
 			question_id: "question_2",
+			version: 2,
 			question_json: { question: { question_text: "TCP 题目" }, metadata: { difficulty: "medium" } },
 		};
 		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
@@ -445,8 +451,9 @@ describe("compactReviewResult", () => {
 	it("searches stored questions through bounded filters", async () => {
 		const entry = {
 			record_id: "record_1",
-			document_id: "exam_1",
+			task_id: "exam_1",
 			question_id: "question_2",
+			version: 2,
 			question_json: { question: { question_text: "TCP 题目" } },
 		};
 		const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(

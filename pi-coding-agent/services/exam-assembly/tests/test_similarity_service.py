@@ -16,16 +16,16 @@ class SyntheticBank:
         self.questions = copy.deepcopy(questions)
 
     async def search_candidates(self, request):
-        return [dict(record_id=q["question_id"], document_id="TEST_ONLY_doc", question_id=q["question_id"],
-                     source_version_id=str(q["version"]), question_json=dict(document_id="TEST_ONLY_doc",
-                     question_id=q["question_id"], review_status="PASS", question=dict(
+        return [dict(record_id=q["question_id"], task_id="TEST_ONLY_task", question_id=q["question_id"],
+                     version=q["version"], question_json=dict(task_id="TEST_ONLY_task",
+                     question_id=q["question_id"], version=q["version"], review_status="PASS", question=dict(
                          subject=q["subject"], question_type=q["question_type"], question_text=q["stem"],
                          options=list(q["options"].values()), answer_text=q["answer"], points=q["score"]),
                      metadata=dict(difficulty=q["difficulty"], knowledge_points=[q["topic"]]))) for q in self.questions], True
 
     async def state(self, entry):
-        return dict(document_id=entry["document_id"], question_id=entry["question_id"],
-                    question_version_id=entry["source_version_id"], question=entry["question_json"]["question"],
+        return dict(task_id=entry["task_id"], question_id=entry["question_id"],
+                    version=entry["version"], question=entry["question_json"]["question"],
                     review=dict(status="PASS", review_id="TEST_ONLY_review", errors=[], unresolved_checks=[]),
                     question_bank=dict(status="STORED", record_id=entry["record_id"]))
 
