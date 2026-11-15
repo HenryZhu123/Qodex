@@ -343,6 +343,42 @@ it("refuses to pay twice for the same call", async () => {
 	expect(getMessageText(results[1])).toContain("DUPLICATE_CALL");
 });
 
+it("passes a read-only bank answer through untouched", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	const records = {
+		questions: [
+			{
+				record_id: "r-1",
+				task_id: "t-1",
+				question_id: "q-1",
+				version: 1,
+				question_json: { question: { subject: "数据结构", stem: "循环队列", options: ["A", "B", "C", "D"] } },
+			},
+		],
+	};
+	const fetchStub = vi.fn<typeof fetch>().mockImplementation(async () => Response.json(records));
+	vi.stubGlobal("fetch", fetchStub);
+	// question_bank is registered by the exam-checker extension.
+	const withBank = builtInExtensions.filter(
+		(extension) => extension.name === "qodex-workflow" || extension.name === "exam-checker",
+	);
+	harness = await createHarness({ extensionFactories: withBank });
+	harness.setResponses([
+		fauxAssistantMessage(fauxToolCall("question_bank", { operation: "search_questions", request: { limit: 5 } }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("题库里有哪些题");
+
+	const result = harness.session.messages.find((message) => message.role === "toolResult");
+	const body = getMessageText(result);
+	// The records must survive: a hit count would send the model off to call the API itself.
+	expect(body).toContain("循环队列");
+	expect(body).not.toContain('"observation"');
+});
+
 it("reports a domain failure as an error observation instead of a success", async () => {
 	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
 	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(

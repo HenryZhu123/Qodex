@@ -558,6 +558,12 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 
 	pi.on("tool_result", async (event: ToolResultEvent) => {
 		if (!DOMAIN_TOOLS.has(event.toolName)) return undefined;
+		if (event.toolName === BANK_TOOL) {
+			// A read-only query costs nothing and its answer is the records themselves.
+			// Compressing it to a hit count would force the model to bypass the tool.
+			await trace("tool_result", { tool: event.toolName, readOnly: true });
+			return undefined;
+		}
 		const payload = parsePayload(firstText(event.content));
 		const observation = observe(event.toolName, payload);
 		const digest = callDigest(event.toolName, event.input);
