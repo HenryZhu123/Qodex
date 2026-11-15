@@ -7,7 +7,7 @@
 
 自主命题面向 408 专项练习和模拟卷补题。模块依据题型、考点和可追溯的资料生成题目、参考答案和解析，完成自检后交由独立审校。收到审校反馈时修订题目并重新自检。
 
-[材料驱动的模型创作](question-authoring.md)（旧五考点 v1.1，历史快照）通过 `constraints.authoring` 设计条件反推、错误诊断和方案选择题；[通用材料驱动创作](question-generalization.md)（当前主线）在此基础上支持 24 章节、单选与综合题、粗需求入口和一轮定向修订。旧请求保持确定性规则生成。三条路径并存，不要混用。
+[材料驱动的模型创作](question-authoring.md)（旧五考点 v1.1，历史快照）通过 `constraints.authoring` 设计条件反推、错误诊断和方案选择题；[通用材料驱动创作](question-generalization.md)（当前主线）在此基础上支持 24 章节、单选与综合题、粗需求入口和定向修订（最多两次，修订至 v3）。旧请求保持确定性规则生成。三条路径并存，不要混用。
 
 | 职责 | 边界 |
 | --- | --- |
@@ -385,7 +385,11 @@ v1 目标序列为 `4、5、3、2、1`，最小容量为 4。更换目标序列�
 
 ## 通用路径：模型输出、超时与失败诊断
 
-通用创作（`author`、`constraints.authoring`）由模型完成需求细化、创作、盲解和审计四个阶段。下列默认值是**当前代码**的取值（`question_generation/model_client.py`），按阶段覆盖时用 `QUESTION_GENERATION_<STAGE>_*`。
+通用创作（`author`、`constraints.authoring`）由模型完成需求细化、创作、盲解和审计四个阶段。
+
+修订走 `POST /v1/question-generation/revise`（`action=repair`）：成功返回 **`REVISED`**（不是 `GENERATED`），版本链为 v1→v2→v3；v3 之后返回 `REVISION_LIMIT`。Pi 护栏把 `GENERATED` 与 `REVISED` 都算作成功。
+
+下列默认值是**当前代码**的取值（`question_generation/model_client.py`），按阶段覆盖时用 `QUESTION_GENERATION_<STAGE>_*`。
 
 | 阶段 | 默认输出额度 | 默认时限 | 默认推理档 |
 | --- | --- | --- | --- |
