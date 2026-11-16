@@ -57,20 +57,13 @@ test("proxy exposes the six generation operations and the read-only queue listin
 	assert.equal(serviceTarget("generation", ["v1", "question-generation", "author", "extra"], "POST"), undefined);
 });
 
-test("proxy exposes review state and review for one generated version, and nothing else", () => {
+test("proxy keeps the generated-question task routes closed: the queue panel is read-only", () => {
 	const taskId = "cfe4a758-f990-4fdf-8ea7-7d484456deeb";
 	const questionId = "authored-964e468069b9e33438f3c8d0";
 	const route = ["v1", "exam-checker", "tasks", taskId, "questions", questionId];
-	const path = `/v1/exam-checker/tasks/${taskId}/questions/${questionId}`;
-	assert.equal(serviceTarget("checker", [...route, "state"], "GET")?.pathname, `${path}/state`);
-	assert.equal(serviceTarget("checker", route, "GET")?.pathname, path);
-	assert.equal(serviceTarget("checker", [...route, "review"], "POST")?.pathname, `${path}/review`);
-	// Reading with POST, or ingesting from this route, is not a supported shape.
-	assert.equal(serviceTarget("checker", route, "POST"), undefined);
+	assert.equal(serviceTarget("checker", [...route, "state"], "GET"), undefined);
+	assert.equal(serviceTarget("checker", [...route, "review"], "POST"), undefined);
 	assert.equal(serviceTarget("checker", [...route, "ingest"], "POST"), undefined);
-	assert.equal(serviceTarget("checker", [...route, "state"], "POST"), undefined);
-	// A task route must still name exactly one question.
-	assert.equal(serviceTarget("checker", ["v1", "exam-checker", "tasks", taskId], "GET"), undefined);
 });
 
 test("HTML downloads use isolated snapshots; no credentials or browser headers go upstream", async () => {

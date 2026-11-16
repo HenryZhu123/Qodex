@@ -17,11 +17,9 @@ export function serviceTarget(service: string, parts: string[], method: string):
 		},
 		checker: {
 			GET: new RegExp(
-				`^(health|v1/question-bank/(search|${id})|v1/exam-checker/(?:documents/${id}(?:/questions(?:/${id}(?:/(state|checker-payload))?)?)?|tasks/${id}/questions/${id}(?:/state)?))$`,
+				`^(health|v1/question-bank/(search|${id})|v1/exam-checker/documents/${id}(?:/questions(?:/${id}(?:/(state|checker-payload))?)?)?)$`,
 			),
-			POST: new RegExp(
-				`^v1/exam-checker/(?:documents/(?:parse|${id}/review|${id}/questions/${id}/(?:review|revise|ingest))|tasks/${id}/questions/${id}/review)$`,
-			),
+			POST: new RegExp(`^v1/exam-checker/documents/(parse|${id}/review|${id}/questions/${id}/(review|revise|ingest))$`),
 		},
 		generation: {
 			GET: /^health$|^v1\/question-generation\/pending$/,

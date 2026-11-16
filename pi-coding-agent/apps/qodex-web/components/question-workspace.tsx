@@ -2,7 +2,7 @@
 
 import { Search, ShieldCheck, Upload } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { api, array, badgeClass, type JsonObject, object, post, pretty, statusLabel, text } from "@/lib/workspace-api";
+import { api, array, type JsonObject, object, post, pretty, statusLabel, text } from "@/lib/workspace-api";
 import { Report } from "./assembly-workspace";
 
 export function QuestionBank() {
@@ -463,10 +463,14 @@ function GenerationPanel() {
 }
 
 /**
- * The review queue is where a generated question waits before it can reach the
- * bank. Listing it is read-only; only the per-row review button spends a model
- * call, and it asks first. The list omits answers on purpose: the teacher view
- * comes from the review state, one question at a time.
+ * Read-only view of the review queue: what the generator produced and what is
+ * still waiting for review.
+ *
+ * It offers no review action on purpose. The queue table carries no review
+ * status, and status lives in exam-checker; rendering it per row would either
+ * import each version (a write) or need a new endpoint, and a badge kept only in
+ * the page would go stale after a reload. Identity and text are safe to show,
+ * so the teacher copies an id and hands the question to Pi.
  */
 function PendingQuestions() {
 	const [rows, setRows] = useState<JsonObject[]>([]),
@@ -474,13 +478,12 @@ function PendingQuestions() {
 		[limit, setLimit] = useState(20),
 		[loaded, setLoaded] = useState(false),
 		[error, setError] = useState(""),
-		[busy, setBusy] = useState(""),
-		[state, setState] = useState<JsonObject>(),
-		[outcomes, setOutcomes] = useState<Record<string, JsonObject>>({});
+		[busy, setBusy] = useState(false),
+		[copied, setCopied] = useState("");
 
 	const load = useCallback(
 		async (next = limit) => {
-			setBusy("list");
+			setBusy(true);
 			setError("");
 			try {
 				const data = await api(`generation/v1/question-generation/pending?limit=${next}`);
@@ -490,7 +493,7 @@ function PendingQuestions() {
 			} catch (e) {
 				setError(e instanceof Error ? e.message : "待审题目读取失败");
 			} finally {
-				setBusy("");
+				setBusy(false);
 			}
 		},
 		[limit],
@@ -500,57 +503,29 @@ function PendingQuestions() {
 		void load();
 	}, [load]);
 
-	const questionPath = (row: JsonObject) =>
-		`checker/v1/exam-checker/tasks/${encodeURIComponent(text(row.task_id))}/questions/${encodeURIComponent(text(row.question_id))}`;
-
-	async function showState(row: JsonObject) {
-		if (busy) return;
-		setBusy(text(row.question_id));
-		setError("");
-		try {
-			setState(await api(`${questionPath(row)}/state`));
-		} catch (e) {
-			setError(e instanceof Error ? e.message : "状态读取失败");
-		} finally {
-			setBusy("");
-		}
-	}
-
-	async function review(row: JsonObject) {
-		if (busy) return;
-		const version = Number(row.version) || 1;
+	async function copyReviewRequest(row: JsonObject) {
 		const questionId = text(row.question_id);
-		const confirmed = window.confirm(
-			`审校会调用模型并产生费用。\n\n${questionId} v${version}\n\n同一版本重复审校复用同一幂等键，不会重复计费。确定现在审校？`,
-		);
-		if (!confirmed) return;
-		setBusy(questionId);
-		setError("");
+		const instruction =
+			`请审校这道题：task_id=${text(row.task_id)}，question_id=${questionId}，version=${text(row.version)}。` +
+			"审校通过后自动入库。";
 		try {
-			// One key per version: re-clicking returns the stored review instead of paying again,
-			// while a revised version produces a new key and therefore a real second review.
-			const reviewed = await post(`${questionPath(row)}/review`, {
-				version,
-				idempotency_key: `web:${text(row.task_id)}:${questionId}:v${version}`,
-			});
-			setOutcomes((previous) => ({ ...previous, [questionId]: object(reviewed.review) }));
-			setState(await api(`${questionPath(row)}/state`));
-		} catch (e) {
-			setError(e instanceof Error ? e.message : "审校失败");
-		} finally {
-			setBusy("");
+			await navigator.clipboard.writeText(instruction);
+			setCopied(questionId);
+			window.setTimeout(() => setCopied(""), 2000);
+		} catch {
+			setError("复制失败。请手动记下 task_id 和 question_id 再交给 Pi。");
 		}
 	}
 
 	return (
 		<section className="qx-formsection">
 			<div className="qx-between">
-				<h2>待审题目</h2>
+				<h2>待审队列</h2>
 				<div className="qx-actions">
 					<select
 						aria-label="待审题展示条数"
 						value={limit}
-						disabled={!!busy}
+						disabled={busy}
 						onChange={(e) => {
 							const next = Number(e.target.value);
 							setLimit(next);
@@ -561,17 +536,18 @@ function PendingQuestions() {
 						<option value={50}>最近 50 道</option>
 						<option value={100}>最近 100 道</option>
 					</select>
-					<button type="button" className="qx-btn" disabled={!!busy} onClick={() => void load()}>
-						{busy === "list" ? "读取中…" : "刷新"}
+					<button type="button" className="qx-btn" disabled={busy} onClick={() => void load()}>
+						{busy ? "读取中…" : "刷新"}
 					</button>
 				</div>
 			</div>
 			<p className="qx-note">
-				命题结果先进入这里；审校 PASS 后自动入库。列表只读、不调用模型；只有点「送审校」才会产生一次模型调用。
+				只读看板：这里是命题产出的当前版本，按入队时间倒序。审校通过后题目会进入正式题库，但队列行不会自动消失；
+				要看审校状态请到「正式题库」，或复制编号交给 Pi 查状态/送审校。本页不调用任何模型。
 			</p>
 			{loaded && (
 				<p className="qx-note">
-					待审 {total} 道，本次显示 {rows.length} 道（只列未作废的当前版本）。
+					队列 {total} 道，本次显示 {rows.length} 道（只列未作废的当前版本）。
 				</p>
 			)}
 			{error && (
@@ -579,18 +555,12 @@ function PendingQuestions() {
 					{error}
 				</p>
 			)}
-			{loaded && !rows.length && (
-				<p className="qx-empty">待审队列是空的。出题后（对话或上面的自测面板）会出现在这里。</p>
-			)}
+			{loaded && !rows.length && <p className="qx-empty">队列是空的。出题后（对话或上面的自测面板）会出现在这里。</p>}
 			{rows.map((row) => {
 				const questionId = text(row.question_id);
-				const status = text(object(outcomes[questionId]).status);
 				return (
 					<article className="qx-bankitem" key={`${text(row.task_id)}:${questionId}:${text(row.version)}`}>
-						<div className="qx-between">
-							<h2>{text(row.stem) || "（该版本没有学生题面）"}</h2>
-							<span className={`qx-badge ${badgeClass(status)}`}>{status ? statusLabel(status) : "待审校"}</span>
-						</div>
+						<h2>{text(row.stem) || "（该版本没有学生题面）"}</h2>
 						<p className="qx-note">
 							{text(row.subject) || "未标科目"} · {text(row.topic) || "未标考点"} · v{text(row.version)} ·{" "}
 							{text(row.queued_at).replace("T", " ").slice(0, 19)} · {text(row.question_type)}
@@ -602,42 +572,17 @@ function PendingQuestions() {
 								</p>
 							))}
 						</div>
+						<p className="qx-note">
+							<code title={text(row.task_id)}>task {text(row.task_id).slice(0, 8)}…</code> <code>{questionId}</code>
+						</p>
 						<div className="qx-actions">
-							<button type="button" className="qx-link" disabled={!!busy} onClick={() => void showState(row)}>
-								查看版本与审校
-							</button>
-							<button type="button" className="qx-btn primary" disabled={!!busy} onClick={() => void review(row)}>
-								<ShieldCheck size={14} />
-								{busy === questionId ? "审校中…" : "送审校"}
+							<button type="button" className="qx-btn" onClick={() => void copyReviewRequest(row)}>
+								{copied === questionId ? "已复制审校指令" : "复制审校指令"}
 							</button>
 						</div>
-						{status === "NEEDS_REVISION" && (
-							<p className="qx-note">
-								审校只给修改建议，不改题目。AI 出的题由 Pi
-								在对话里按版本决定是否修订；上传文档的题请改源文件后重新上传。
-							</p>
-						)}
 					</article>
 				);
 			})}
-			{state && (
-				<section className="qx-result">
-					<div className="qx-between">
-						<h2>
-							题目 {text(state.question_id)} · v{text(state.version)}
-						</h2>
-						<span className={`qx-badge ${badgeClass(object(state.review).status)}`}>
-							{statusLabel(object(state.review).status) || "未审校"}
-						</span>
-					</div>
-					<p className="qx-note">
-						审校：{statusLabel(object(state.review).status) || "未审校"} · 入库：
-						{statusLabel(object(state.question_bank).status) || "未知"}
-						{object(state.question_bank).record_id ? ` · record ${text(object(state.question_bank).record_id)}` : ""}
-					</p>
-					<Report value={state} />
-				</section>
-			)}
 		</section>
 	);
 }
