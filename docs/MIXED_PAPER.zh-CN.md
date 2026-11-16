@@ -18,8 +18,8 @@
 - 确定性综合题的评分点 `expected` 可能是数字、dict 或 bool；转换时统一序列化为文本，仅影响导出/展示，不改题库快照。
 - Pi 的 `exam_assembly` 工具会把 `data_structures` / `computer_organization` / `operating_systems` / `computer_networks`
   映射为题库中文标签，避免自然语言对话拿 syllabus ID 去查中文题库。
-- 已知残余：`question_bank.search?question_type=comprehensive` 仍是精确匹配，查不到 `comprehensive_application`；
-  直接组卷不受影响，先查题库的对话可能误判。重复题替换的端到端样本仍未取得。
+- `question_bank.search?question_type=comprehensive` 已同时覆盖 `comprehensive_application`（2026-11-16 晚）。
+- 已知残余：重复题替换的端到端样本仍未取得；47 题全卷语义复核、前端未覆盖。
 
 ## 调用
 
