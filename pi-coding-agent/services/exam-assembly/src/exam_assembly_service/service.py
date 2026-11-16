@@ -7,7 +7,7 @@ from uuid import uuid4
 from exam_assembly_agent.exam_export import export_exam
 from exam_assembly_agent.main import validate_request
 from exam_assembly_agent.similarity_assembly import assemble_with_similarity
-from .repository import QuestionBankRepository, verified_state
+from .repository import BankError, QuestionBankRepository, verified_state
 from .replenishment import propose_replenishment
 
 
@@ -78,12 +78,22 @@ async def assemble(request, repository: QuestionBankRepository, output_root: Pat
         return {"status": "INVALID_REQUEST", "errors": errors, "mode": "POSTGRES_QUESTION_BANK_API"}
     entries, complete = await repository.search_candidates(request)
     questions, rejected, sources = [], [], {}
-    states = await asyncio.gather(*(repository.state(e) for e in entries))
+    async def read_state(entry):
+        try:
+            return await repository.state(entry)
+        except (BankError, KeyError, ValueError, TypeError, AttributeError) as exc:
+            return exc
+    states = await asyncio.gather(*(read_state(e) for e in entries))
     for entry, state in zip(entries, states):
         try:
+            if isinstance(state, Exception):
+                raise state
             question = convert(entry, state, request)
-        except (KeyError, ValueError, TypeError, AttributeError) as exc:
-            rejected.append({"record_id": entry.get("record_id"), "reason": str(exc)})
+        except (BankError, KeyError, ValueError, TypeError, AttributeError) as exc:
+            rejected.append({"record_id": entry.get("record_id") if isinstance(entry, dict) else None,
+                             "reason": exc.code if isinstance(exc, BankError) else str(exc)})
+            if isinstance(exc, BankError) and exc.status not in (404, 410):
+                complete = False
         else:
             questions.append(question)
             sources[question["question_id"]] = entry
@@ -113,7 +123,7 @@ async def assemble(request, repository: QuestionBankRepository, output_root: Pat
             entry = sources[q["question_id"]]
             try:
                 verified_state(entry, await repository.state(entry))
-            except (KeyError, ValueError, TypeError, AttributeError):
+            except (BankError, KeyError, ValueError, TypeError, AttributeError):
                 result.update(status="UNRESOLVED", message="选题后源题发生变化，请重新组卷。")
                 result.pop("student_exam", None)
                 result.pop("answer_key", None)

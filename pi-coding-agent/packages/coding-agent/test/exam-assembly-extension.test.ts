@@ -6,7 +6,7 @@ import { builtInExtensions } from "../src/extensions/index.ts";
 interface Tool {
 	execute: (
 		id: string,
-		params: typeof request,
+		params: Record<string, unknown>,
 		signal?: AbortSignal,
 	) => Promise<{ content: { text?: string }[]; isError?: boolean }>;
 }
@@ -36,6 +36,38 @@ afterEach(() => {
 });
 
 describe("built-in exam assembly", () => {
+	it("forwards ordered mixed-subject v2 slots without inventing legacy quotas", async () => {
+		const mixed = {
+			schema_version: "2.0",
+			request_id: "offline-mixed",
+			subject: "408",
+			question_count: 2,
+			total_score: 12,
+			slots: [
+				{ subject: "数据结构", question_type: "single_choice", score: 2 },
+				{ subject: "操作系统", question_type: "comprehensive", score: 10, part_scores: [3, 7] },
+			],
+			export_pdf: false,
+			semantic_review: true,
+			semantic_max_calls: 2,
+			similarity_search_limit: 16,
+		};
+		const fetchMock = vi.fn().mockResolvedValue(
+			new Response(
+				JSON.stringify({
+					status: "STRUCTURAL_PASS",
+					mode: "POSTGRES_QUESTION_BANK_API",
+					validation: { passed: true },
+					artifacts: { student_exam_html: "student.html", answer_key_html: "answer.html", report: "report.json" },
+				}),
+			),
+		);
+		vi.stubGlobal("fetch", fetchMock);
+		const result = await tool().execute("mixed", mixed);
+		expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual(mixed);
+		expect(JSON.parse(result.content[0].text ?? "").status).toBe("STRUCTURAL_PASS");
+		expect(assemblyParameters.properties).toHaveProperty("slots");
+	});
 	it("matches the shared public example and excludes old development fields", () => {
 		const example = JSON.parse(
 			readFileSync(new URL("../../../services/exam-assembly/examples/request.json", import.meta.url), "utf8"),

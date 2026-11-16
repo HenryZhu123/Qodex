@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from copy import deepcopy
+
 from ..domain.models import (
     CheckerPayload,
     ExamDocument,
@@ -49,7 +51,9 @@ class QuestionService:
             question_id=node.id,
             question_number=node.question_number,
             question_type=node.question_type,
-            question_text=node.question_text,
+            question_text="\n".join([node.question_text, *(
+                f'{part["id"]}. ({part["score"]}分) {part["prompt"]}' for part in node.parts
+            )]),
             options=list(node.options),
             answer_text=node.answer_text,
             points=node.points,
@@ -59,6 +63,9 @@ class QuestionService:
             numbering_path=list(node.numbering_path),
             numbering_description=node.numbering_description,
             reference="\n\n".join(references),
+            student_stem=node.question_text if node.parts else "",
+            parts=deepcopy(node.parts),
+            grading=deepcopy(node.grading),
         )
 
     def to_checker_payload(

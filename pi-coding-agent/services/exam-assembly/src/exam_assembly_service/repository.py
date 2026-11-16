@@ -46,8 +46,9 @@ class HttpQuestionBankRepository:
                         knowledge_point=topic, difficulty=level, limit=100)
                    for topic, count in request["topic_counts"].items() if count
                    for level, count in request["difficulty_counts"].items() if count]
+        queries = [{key: value for key, value in query.items() if value != ""} for query in queries]
         pages = await asyncio.gather(*(self.get("/v1/question-bank/search", q) for q in queries))
-        records, complete = {}, True
+        records, invalid, conflicts, complete = {}, [], set(), True
         for page in pages:
             entries = page.get("questions")
             if not isinstance(entries, list) or len(entries) > 100:
@@ -55,11 +56,14 @@ class HttpQuestionBankRepository:
             complete = complete and len(entries) < 100
             for entry in entries:
                 if not isinstance(entry, dict) or not isinstance(entry.get("record_id"), str):
-                    raise BankError("INVALID_QUESTION_BANK_RESPONSE")
+                    invalid.append(entry)
+                    continue
                 if entry["record_id"] in records and records[entry["record_id"]] != entry:
-                    raise BankError("QUESTION_BANK_CHANGED", detail="Conflicting record snapshots")
+                    conflicts.add(entry["record_id"])
                 records[entry["record_id"]] = entry
-        return list(records.values()), complete
+        for identifier in conflicts:
+            records[identifier] = {"record_id": identifier, "rejection_reason": "Conflicting record snapshots"}
+        return [*records.values(), *invalid], complete
 
     async def state(self, entry):
         task = quote(entry["task_id"], safe="")

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+from copy import deepcopy
+from math import isfinite
 import re
 import uuid
 from collections.abc import Mapping, Sequence
@@ -202,6 +204,28 @@ class ExamDocumentNormalizer:
             "单项选择题(single_choice)",
         }:
             question_type = "single_choice"
+        if question_type in {"综合题", "综合应用题", "大题", "comprehensive_application"}:
+            question_type = "comprehensive"
+        parts = raw.get("parts", [])
+        grading = raw.get("grading", {})
+        if not isinstance(parts, list) or not isinstance(grading, dict):
+            raise NormalizationError("Structured parts and grading must be a list and object")
+        if parts or grading:
+            solutions = grading.get("parts")
+            if (question_type != "comprehensive" or not parts or not isinstance(solutions, list)
+                    or len(solutions) != len(parts)):
+                raise NormalizationError("Comprehensive subquestions and teacher solutions must match")
+            seen = set()
+            for part, solution in zip(parts, solutions, strict=True):
+                if (not isinstance(part, dict) or not _text(part.get("id")) or part["id"] in seen
+                        or not _text(part.get("prompt")) or type(part.get("score")) not in (int, float)
+                        or not isfinite(part["score"]) or part["score"] <= 0
+                        or not isinstance(solution, dict) or solution.get("part_id") != part["id"]
+                        or not _text(solution.get("solution"))):
+                    raise NormalizationError("Invalid comprehensive subquestion identity, score or solution")
+                seen.add(part["id"])
+            if sum(p["score"] for p in parts) != _points(raw.get("points") or raw.get("score")):
+                raise NormalizationError("Subquestion scores do not sum to the original question score")
         question = QuestionNode(
             id=node_id,
             parent_id=parent_id,
@@ -215,6 +239,8 @@ class ExamDocumentNormalizer:
             reference=_text(raw.get("reference") or raw.get("reading_passage")),
             numbering_path=current_path,
             numbering_description=_text(raw.get("numbering_description")),
+            parts=deepcopy(parts),
+            grading=deepcopy(grading),
         )
         state.nodes[node_id] = question
         return node_id

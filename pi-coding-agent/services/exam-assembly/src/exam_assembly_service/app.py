@@ -6,13 +6,18 @@ from uuid import UUID
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse, JSONResponse
 import httpx
-from .contracts import AssemblyRequest
+from .contracts import AssemblyRequest, PaperRequest
+from .paper import assemble_paper
 from .repository import BankError, HttpQuestionBankRepository
 from .service import assemble
 from .history import HistoryError, PostgresHistory
+from .semantic_selection import ModelReviewer
 
 
-def create_app(repository=None, output_root=None, history=None, database_url=None):
+def create_app(repository=None, output_root=None, history=None, database_url=None, semantic_reviewer=None):
+    reviewer = semantic_reviewer
+    if reviewer is None and os.getenv("EXAM_ASSEMBLY_SEMANTIC_ENABLED") == "1":
+        reviewer = ModelReviewer()
     dsn = database_url if database_url is not None else os.getenv("EXAM_ASSEMBLY_DATABASE_URL", os.getenv("EXAM_CHECKER_DATABASE_URL", ""))
     history_store = history if history is not None else (PostgresHistory(dsn) if dsn else None)
     @asynccontextmanager
@@ -36,6 +41,8 @@ def create_app(repository=None, output_root=None, history=None, database_url=Non
     @application.get("/health")
     async def health():
         return {"status": "ok", "bank_source": "QUESTION_BANK_API", "mock_fallback": False,
+                "semantic_model_enabled": reviewer is not None,
+                "semantic_model_call_limit": getattr(reviewer, "max_calls", 8) if reviewer is not None else 0,
                 "history_enabled": history_store is not None}
 
     async def persist(request, result):
@@ -71,6 +78,8 @@ def create_app(repository=None, output_root=None, history=None, database_url=Non
                 "errors": report.get("errors", []), "deficits": report.get("deficits", []),
                 "message": report.get("message"), "error_code": report.get("error_code"),
                 "similarity_review": report.get("similarity_review"),
+                "semantic_review": report.get("semantic_review"),
+                "rejected_records": report.get("rejected_records", []),
                 "student_exam": [item["student_json"] for item in row["items"]],
                 "selected_sources": [item["source_json"] for item in row["items"]]}
 
@@ -94,12 +103,14 @@ def create_app(repository=None, output_root=None, history=None, database_url=Non
         return HTMLResponse(row["answer_html"])
 
     @application.post("/v1/exam-assembly/assemble")
-    async def run(request: AssemblyRequest):
-        fields, errors = request.selection_request()
+    async def run(request: AssemblyRequest | PaperRequest):
+        fields, errors = (None, []) if isinstance(request, PaperRequest) else request.selection_request()
         if errors:
             return await persist(request, {"schema_version": "1.0", "request_id": request.request_id, "status": "INVALID_REQUEST",
                     "mode": "POSTGRES_QUESTION_BANK_API", "errors": errors})
         try:
+            if isinstance(request, PaperRequest):
+                return await assemble_paper(request.model_dump(), application.state.repository, root, history_store, reviewer)
             return await assemble(fields, application.state.repository, root, pdf=request.export_pdf,
                                   public_request=request.model_dump(),
                                   similarity_decisions=[d.model_dump() for d in request.similarity_decisions], history=history_store)

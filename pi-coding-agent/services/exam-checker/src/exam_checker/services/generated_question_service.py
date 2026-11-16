@@ -97,15 +97,16 @@ class GeneratedQuestionImportService:
         if isinstance(option_rows, list):
             for index, option in enumerate(option_rows):
                 if isinstance(option, dict) and isinstance(option.get("text"), str):
-                    # The review surface is an A-D question, and a bare list of texts is
-                    # reported as "missing option identifiers" on every item. Positional
-                    # labels keep that independent of the author's internal option ids.
-                    label = "ABCD"[index] if index < 4 else str(index + 1)
+                    # Preserve positional labels independently of authoring option IDs.
+                    if index >= 26:
+                        raise ValueError("At most 26 choice options are supported")
+                    label = chr(ord("A") + index)
                     options.append(f"{label}. {option['text']}")
         parts = student.get("parts", [])
+        student_stem = stem
         if isinstance(parts, list) and parts:
             part_text = [
-                f"{part.get('id', index + 1)}. {part.get('prompt', '')}"
+                f"{part.get('id', index + 1)}. ({part.get('score', '?')}分) {part.get('prompt', '')}"
                 for index, part in enumerate(parts)
                 if isinstance(part, dict)
             ]
@@ -117,6 +118,11 @@ class GeneratedQuestionImportService:
             if isinstance(option, dict) and option.get("id") == correct and isinstance(option.get("text"), str):
                 answer_text = option["text"]
                 break
+        if metadata.get("question_type") == "comprehensive":
+            answer_text = "\n".join(
+                f"{part.get('part_id', '')}. {part.get('solution', '')}"
+                for part in instructor.get("parts", []) if isinstance(part, dict)
+            )
         score = metadata.get("score")
         question_type = str(metadata.get("question_type") or "")
         if score is None and question_type == "single_choice":
@@ -142,4 +148,7 @@ class GeneratedQuestionImportService:
             # render; authoring evidence is provenance, not shared material, and a
             # non-empty value makes assembly reject the question outright.
             reference="",
+            student_stem=student_stem if parts else "",
+            parts=parts if isinstance(parts, list) else [],
+            grading=instructor if parts else {},
         )
