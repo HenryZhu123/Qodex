@@ -40,8 +40,13 @@ def create_app(repository=None, output_root=None, history=None, database_url=Non
 
     @application.get("/health")
     async def health():
+        semantic_configured = reviewer is not None and all(
+            os.getenv(name, "").strip()
+            for name in ("EXAM_ASSEMBLY_SEMANTIC_MODEL", "EXAM_ASSEMBLY_SEMANTIC_API_KEY", "EXAM_ASSEMBLY_SEMANTIC_BASE_URL")
+        )
         return {"status": "ok", "bank_source": "QUESTION_BANK_API", "mock_fallback": False,
                 "semantic_model_enabled": reviewer is not None,
+                "semantic_model_configured": semantic_configured,
                 "semantic_model_call_limit": getattr(reviewer, "max_calls", 8) if reviewer is not None else 0,
                 "history_enabled": history_store is not None}
 

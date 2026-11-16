@@ -12,6 +12,15 @@
 - 记录查询触及100条上限、状态查询网络失败、超过2000候选预算时，候选池标记不完整；如果仍无法组齐，只返回UNRESOLVED，不断言全库缺题。
 - 导出前重查入选题目的 `task_id + question_id + version` 和PASS状态；失败时不导出。
 
+## 兼容性补丁（2026-11-16 补测）
+
+- v2 槽位同时接受既有确定性综合题的存储类型 `comprehensive_application`（服务端归一为 `comprehensive`，搜索时两者都查）。
+- 确定性综合题的评分点 `expected` 可能是数字、dict 或 bool；转换时统一序列化为文本，仅影响导出/展示，不改题库快照。
+- Pi 的 `exam_assembly` 工具会把 `data_structures` / `computer_organization` / `operating_systems` / `computer_networks`
+  映射为题库中文标签，避免自然语言对话拿 syllabus ID 去查中文题库。
+- `question_bank.search?question_type=comprehensive` 已同时覆盖 `comprehensive_application`（2026-11-16 晚）。
+- 已知残余：重复题替换的端到端样本仍未取得；47 题全卷语义复核、前端未覆盖。
+
 ## 调用
 
 接口仍是 `POST /v1/exam-assembly/assemble`，Pi工具仍是 `exam_assembly`。

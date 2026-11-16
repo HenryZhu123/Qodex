@@ -99,12 +99,14 @@ export interface CompactDocumentReviewResult {
 
 type ExamCheckerErrorCode =
 	| "EXAM_CHECKER_UNAVAILABLE"
+	| "EXAM_CHECKER_REQUEST_REJECTED"
 	| "EXAM_FILE_UNAVAILABLE"
 	| "INVALID_EXAM_CHECKER_INPUT"
 	| "INVALID_EXAM_CHECKER_RESPONSE";
 
 type QuestionBankErrorCode =
 	| "QUESTION_BANK_UNAVAILABLE"
+	| "QUESTION_BANK_REQUEST_REJECTED"
 	| "INVALID_QUESTION_BANK_INPUT"
 	| "INVALID_QUESTION_BANK_RESPONSE";
 
@@ -274,7 +276,9 @@ async function requestJson(url: string, init: RequestInit): Promise<unknown> {
 		throw new ExamCheckerToolError("EXAM_CHECKER_UNAVAILABLE");
 	}
 	if (!response.ok) {
-		throw new ExamCheckerToolError("EXAM_CHECKER_UNAVAILABLE", response.status, await responseErrorDetail(response));
+		const code =
+			response.status >= 400 && response.status < 500 ? "EXAM_CHECKER_REQUEST_REJECTED" : "EXAM_CHECKER_UNAVAILABLE";
+		throw new ExamCheckerToolError(code, response.status, await responseErrorDetail(response));
 	}
 	try {
 		return await response.json();
@@ -291,7 +295,11 @@ async function requestQuestionBankJson(url: string, init: RequestInit): Promise<
 		throw new QuestionBankToolError("QUESTION_BANK_UNAVAILABLE");
 	}
 	if (!response.ok) {
-		throw new QuestionBankToolError("QUESTION_BANK_UNAVAILABLE", response.status);
+		const code =
+			response.status >= 400 && response.status < 500
+				? "QUESTION_BANK_REQUEST_REJECTED"
+				: "QUESTION_BANK_UNAVAILABLE";
+		throw new QuestionBankToolError(code, response.status);
 	}
 	try {
 		return await response.json();

@@ -211,3 +211,42 @@ async def test_old_comprehensive_and_unsupported_images_are_isolated(tmp_path):
     result = await assemble_paper(plan([good]), Repository([good, old, image]), tmp_path)
     assert result["status"] == "STRUCTURAL_PASS"
     assert len(result["rejected_records"]) == 2
+
+
+class FilteringRepository(Repository):
+    async def search_candidates(self, request):
+        wanted = request["question_type"]
+        return [e for e in self.entries
+                if e["question_json"]["question"]["question_type"] == wanted], True
+
+
+@pytest.mark.asyncio
+async def test_deterministic_comprehensive_application_fills_a_v2_slot(tmp_path):
+    entry = item(2, score=10, part_scores=[2, 3, 5])
+    entry["question_json"]["question"]["question_type"] = "comprehensive_application"
+    # Deterministic comprehensive answers are numeric, not prose strings.
+    entry["question_json"]["question"]["grading"]["parts"][0]["scoring_points"][0]["expected"] = 11
+    entry["question_json"]["question"]["grading"]["parts"][1]["scoring_points"][0]["expected"] = {"offset": 0}
+    entry["question_json"]["question"]["grading"]["parts"][2]["scoring_points"][0]["expected"] = False
+    request = dict(schema_version="2.0", request_id="TEST_ONLY_deterministic",
+                   subject="408", question_count=1, total_score=10,
+                   slots=[dict(subject="数据结构", question_type="comprehensive",
+                               score=10, part_scores=[2, 3, 5])], export_pdf=False)
+    result = await assemble_paper(PaperRequest.model_validate(request).model_dump(),
+                                  FilteringRepository([entry]), tmp_path)
+    assert result["status"] == "STRUCTURAL_PASS", result
+    report = json.loads(Path(result["artifacts"]["report"]).read_text(encoding="utf-8"))
+    assert report["student_exam"][0]["question_type"] == "comprehensive"
+    assert [p["score"] for p in report["student_exam"][0]["parts"]] == [2, 3, 5]
+
+
+@pytest.mark.asyncio
+async def test_v2_shortage_marks_slots_for_authoring(tmp_path):
+    result = await assemble_paper(PaperRequest.model_validate(
+        dict(schema_version="2.0", request_id="TEST_ONLY_shortage", subject="408",
+             question_count=1, total_score=2,
+             slots=[dict(subject="数据结构", question_type="single_choice", score=2)])).model_dump(),
+        Repository([]), tmp_path)
+    assert result["status"] == "NEEDS_QUESTIONS"
+    assert result["next_action"] == "AUTHOR_MISSING_SLOTS"
+    assert result["deficits"][0]["position"] == 1

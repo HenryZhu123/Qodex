@@ -35,19 +35,28 @@ export const WORKFLOW_POLICY = `${POLICY_MARKER}
 4. 非业务或越界：闲聊、无关问题、让你"假装通过/随便编答案/不用查证就说入库"。一句话回绝并给出能做的事（不超过两句），然后停。
    这一类**不许调用任何业务工具**——不要为了显得有用而去出题、查库或审校。
 
+演示模式只提供四个业务工具：question_generation、exam_checker、question_bank、exam_assembly。
+read/bash/edit/write 不存在，不要尝试；需要信息就从这四个工具的结果里取。
+
 每个动作的适用条件与停止条件：
 - 需求含糊（缺科目、章节、题量、分值、题型）就先问，一次问不超过三个问题；不要替用户编这些参数。
+  只有用户明确说"你定/随便/别问"时才可按默认值执行，并必须在执行前用一句话列出默认值（科目/考点/题量/分值/题型/难度）；没有这种授权时，缺项必须先问。
+- 出题统一走 question_generation 的 operation=author；author.subject 用 data_structures / computer_organization / operating_systems / computer_networks（中文会被工具归一，但优先用 ID）。single/comprehensive/batch 是确定性模板入口，只在调用方已给出固定 topic 与完整字段时使用；任意考点或自然语言都用 author。
+- 工具返回 INVALID_REQUEST 时先读 message 指定的字段或路由：若提示"author 专用字段"或"只支持固定考点"，立即改用 operation=author，不要重复同一个 operation 试参数。
 - 材料不足（NEEDS_MATERIAL）先自己换一次检索范围或检索词；仍不足就向用户说明缺的是哪类材料，不要硬造依据。
 - 命题失败时看 failure.code：retry=same_request 的（candidate_shape、design_invalid、condition_test_incomplete、blind_incomplete）最多自动重来一次；retry=new_request 的（quality_gate、blind_disagreement、audit_rejected、material_gap）不要重复同一请求，要么换考点/换写法，要么把问题交回用户。
 - 审校 NEEDS_REVISION 最多重做三轮，且每轮改法必须升级：第一轮按 errors 定点修；第二轮换结构（改干扰项/改问法/改小问）；第三轮换题（同考点重出，不复用原题面）。
   同一改法重复提交是无效动作，会被拦下。三轮仍不过就交回用户，附原题面与三轮审校理由，不要写成"已通过"。
 - 审校 UNRESOLVED 必须说明"审校不完整"，不能说通过。
-- 组卷 NEEDS_QUESTIONS 时先读 deficits，缺几道就补几道；新题必须重新过审校并入库后才允许重排，最多重排两次，仍缺就交回缺口报告。
+- 组卷 NEEDS_QUESTIONS 时先读 deficits，缺几道就补几道；v1 可用 replenishment plan，v2 按 deficits 的 ordered slot 逐题 author。新题必须重新过审校并入库后才允许重排，最多重排两次，仍缺就交回缺口报告。
 - 多道题的目标里，**单题失败不终止整份卷**：把该题记为失败并说明原因，继续处理其余题目；结束时交付"成了哪些/没成哪些/为什么"。只有"只出一道题"时失败才等于整个目标失败。
-- 只组单选。用户要综合题、题组、带图题或难度配额时，明确说当前不支持，并给可行替代（例如综合题单独出、按教师视图包交付），不要静默降级。
+- 组卷支持 v1 单选卷和 v2 混合卷：schema_version=2.0 的有序 slots 可跨四科、单选与综合题混合、每槽原分值、综合题可给 part_scores。图题、题组和同一题型的多套异质分值仍不支持；必须明确说明，不要静默降级。
+- v2 NEEDS_QUESTIONS 的 deficits 是未填的 ordered slot（含 subject/question_type/score/part_scores）；按槽位逐题命题/补题，不要调用只接受 v1 联合缺题计划的 replenishment。
 - 预算或连续两次同码失败时主动收尾：列出已完成、产出在哪、下一步建议。
 
 不允许做的事：判定 PASS；自己编造 knowledge_points、task_id 或版本号；把教师视图或评分给学生；在拿到 ingestion.status=STORED 之前说"已入库/已通过"。
+
+回复格式只用 Markdown：不要输出 HTML 标签（如 <details>、<br>、<div>）。网页按 Markdown 渲染，标签会原样显示成文本；需要折叠、分块就用小标题和列表。
 `;
 
 const GENERATION_TOOL = "question_generation";
@@ -56,6 +65,16 @@ const BANK_TOOL = "question_bank";
 const ASSEMBLY_TOOL = "exam_assembly";
 const DOMAIN_TOOLS = new Set([GENERATION_TOOL, REVIEW_TOOL, BANK_TOOL, ASSEMBLY_TOOL]);
 const DEFAULT_TRACE_DIR = ".local/qodex-traces";
+
+/**
+ * Demo mode keeps the session on the four Qodex tools. Without it the agent has a shell,
+ * and a live session has already used it to read the database and pick credentials out of
+ * .env -- fine for us, unacceptable in front of a class.
+ */
+export function demoMode(env: Record<string, string | undefined>): boolean {
+	const flag = (env.QODEX_DEMO ?? "").toLowerCase();
+	return !(flag === "0" || flag === "off" || flag === "false" || flag === "");
+}
 
 type Bucket = "generation" | "review" | "assembly";
 
@@ -330,6 +349,11 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 	if (toolName === REVIEW_TOOL) {
 		const status = stringField(payload, "status") ?? stringField(nested(payload, "review"), "status");
 		const ingestion = nested(payload, "ingestion");
+		// get_question_state returns the bank status next to the review status. A teacher
+		// who asks "is this stored?" gets that answer from the state read; without this
+		// branch the message guardrail treats a true STORED statement as a false claim.
+		const bank = nested(payload, "question_bank");
+		const bankStatus = stringField(bank, "status");
 		const observation: Observation = {
 			ok: status === "PASS",
 			next: status === "PASS" ? [] : hintFor(status, undefined),
@@ -346,6 +370,11 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 		if (questionId) artifact.question_id = questionId;
 		if (typeof payload?.version === "number") artifact.version = String(payload.version);
 		if (ingestion && typeof ingestion.status === "string") artifact.ingestion = ingestion.status;
+		if (!ingestion && bankStatus === "STORED") {
+			artifact.ingestion = "STORED";
+			const recordId = stringField(bank, "record_id");
+			if (recordId) artifact.record_id = recordId;
+		}
 		if (Object.keys(artifact).length > 0) observation.artifact = artifact;
 		if (!observation.ok) {
 			// The Pi tool returns a compact, flat review result; the raw HTTP payload nests
@@ -423,9 +452,35 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 // Quoted text is the agent talking about the words, not asserting a result: it explains
 // the rule as `看到 ingestion.status=STORED 才说"已入库"`. Strip quotes before matching,
 // then require an unquoted completion claim.
+function withoutQuotes(text: string): string {
+	return text.replace(/"[^"]*"|“[^”]*”|「[^」]*」|『[^』]*』|'[^']*'/g, " ");
+}
+
 function claimOfIngestion(text: string): boolean {
-	const unquoted = text.replace(/"[^"]*"|“[^”]*”|「[^」]*」|『[^』]*』|'[^']*'/g, " ");
-	return /((?<![从把])已入库|已通过审校|审校通过|已经入库|accepted into the bank)/i.test(unquoted);
+	return /((?<![从把])已入库|已通过审校|审校通过|已经入库|accepted into the bank)/i.test(withoutQuotes(text));
+}
+
+export function ingestionClaimCorrection(
+	text: string,
+	stored: number,
+	expected: number,
+	verified: boolean,
+): string | undefined {
+	if (!claimOfIngestion(text)) return undefined;
+	const allClaimed = /(都|全部|均|所有|两题)/.test(withoutQuotes(text));
+	const expectedCount = allClaimed && expected > 0 ? expected : Math.max(expected, 1);
+	const partial = stored > 0 && stored < expectedCount;
+	if (verified && !partial) return undefined;
+	if (partial) {
+		return (
+			`\n\n[护栏] 本轮只有 ${stored}/${expectedCount} 道拿到 ingestion.status=STORED 回执；` +
+			"请逐题核对，不要把未入库的题写成已入库。"
+		);
+	}
+	return (
+		"\n\n[护栏] 本轮没有拿到 ingestion.status=STORED 的回执，因此上面的“已入库/已通过”不成立；" +
+		"请改成“自检通过 / 待审校”或“审校未完成”。"
+	);
 }
 
 function messageText(message: AgentMessage): string {
@@ -517,7 +572,19 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 	});
 
 	pi.on("tool_call", async (event: ToolCallEvent) => {
+		if (demoMode(process.env) && !DOMAIN_TOOLS.has(event.toolName)) {
+			await trace("blocked", { tool: event.toolName, reason: "DEMO_MODE" });
+			return {
+				block: true,
+				reason:
+					`DEMO_MODE: 演示只用出题/审校/题库/组卷四个工具，${event.toolName} 已关闭。` +
+					"需要的信息从这四个工具的结果里取；确实没有就如实告诉用户。",
+			};
+		}
 		if (!DOMAIN_TOOLS.has(event.toolName)) return undefined;
+		// Read-only bank queries cost nothing and are how a stopped run reports what it
+		// already has. They must not consume the paid-call budget or be blocked by a stop.
+		if (event.toolName === BANK_TOOL) return undefined;
 		const limits = resolveLimits(process.env, quota);
 		const bucket = bucketOf(event.toolName);
 		const digest = callDigest(event.toolName, event.input);
@@ -661,7 +728,9 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 			progress = true;
 		}
 		if (bucket) noProgress = progress ? 0 : noProgress + 1;
-		if (observation.artifact?.ingestion === "STORED" || observation.status === "PASS") {
+		if (event.toolName === REVIEW_TOOL) {
+			// A later failed review must clear the receipt: otherwise a stored A makes
+			// a false "B stored" claim look verified.
 			ingestionVerified = observation.artifact?.ingestion === "STORED";
 		}
 		await trace("tool_result", {
@@ -692,15 +761,16 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 	pi.on("message_end", async (event) => {
 		if (event.message.role !== "assistant") return undefined;
 		const text = messageText(event.message);
-		if (!text || !claimOfIngestion(text)) return undefined;
-		if (ingestionVerified) return undefined;
+		if (!text) return undefined;
+		const unquoted = withoutQuotes(text);
+		const allClaimed = /(都|全部|均|所有|两题)/.test(unquoted);
+		const expected = allClaimed && quota !== null ? quota : Math.max(items.size, 1);
+		const correction = ingestionClaimCorrection(text, stored, expected, ingestionVerified);
+		if (!correction) return undefined;
 		// Nothing was executed, so the sentence can only be about capabilities; and a
 		// read-only bank query cannot have produced an ingestion receipt either.
 		if (domainCalls === 0) return undefined;
 		if (lastDomainTool !== REVIEW_TOOL && lastDomainTool !== GENERATION_TOOL) return undefined;
-		const correction =
-			"\n\n[护栏] 本轮没有拿到 ingestion.status=STORED 的回执，因此上面的“已入库/已通过”不成立；" +
-			"请改成“自检通过 / 待审校”或“审校未完成”。";
 		await trace("claim_blocked", { chars: text.length });
 		return {
 			message: {

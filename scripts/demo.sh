@@ -103,6 +103,9 @@ load_environment() {
 	export QUESTION_GENERATION_SERVICE_URL="${QUESTION_GENERATION_SERVICE_URL:-http://127.0.0.1:8093}"
 	export PI_PROVIDER="${PI_PROVIDER:-${QODEX_PI_PROVIDER:-deepseek}}"
 	export PI_MODEL_ID="${PI_MODEL_ID:-${QODEX_PI_MODEL:-deepseek-flash}}"
+	# Demo sessions only see the four Qodex tools; the agent must not read the
+	# repository, the database, or .env while a teacher is driving it.
+	export QODEX_DEMO="${QODEX_DEMO:-1}"
 	export PI_WORKSPACE_PATH="${PI_WORKSPACE_PATH:-$ROOT_DIR}"
 }
 
@@ -269,6 +272,7 @@ if [[ "$MODE" == "cli" ]]; then
 	(
 		cd "$PI_DIR"
 		exec ./pi-test.sh \
+			--no-builtin-tools \
 			--provider "$PI_PROVIDER" \
 			--model "$PI_MODEL_ID"
 	)

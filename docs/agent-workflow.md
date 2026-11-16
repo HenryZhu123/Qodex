@@ -21,7 +21,7 @@
 flowchart TD
     IN([用户一句话]) --> ID{能判断身份与参数?<br/>命题 / 组卷 / 练题<br/>科目·章节·题量·分值·题型}
     ID -- 缺 --> ASK[追问, 一次最多 3 个问题<br/>不替用户编参数] --> IN
-    ID -- 明确不支持 --> BOUND[说明边界 + 可替代方案<br/>综合题入卷/题组/图题/难度配额] --> END1([到此为止, 不硬做])
+    ID -- 明确不支持 --> BOUND[说明边界 + 可替代方案<br/>图题/题组/同题多档异质分值] --> END1([到此为止, 不硬做])
     ID -- 命题老师 --> GEN[question_generation]
     ID -- 组卷老师 --> ASM[question_bank 查池 → exam_assembly]
     ID -- 考生 --> STU[出题后只给 student_view + 讲解] --> END2([交付, 不给评分点/错因])
@@ -109,6 +109,41 @@ Pi Agent（qodex-workflow）
 `quality_gate`、`condition_test_incomplete`、`blind_disagreement`、`blind_incomplete`、`audit_rejected`，
 每项带 `retry`（`same_request`/`new_request`/`no`）与 `needs`（`material`/`human`/null）。
 
+## 4-A. 2026-11-16 契约修复（当前）
+
+CLI 全链路测试（111 用例）暴露的主路问题已修，改动在工具层/政策/启动参数、修订 hydration 与交付重标：
+
+| 变化 | 行为 |
+| --- | --- |
+| 自然语言路由 | `question_generation` 的描述明确「任意自然语言/粗需求 → `author`」；非 `author` 操作收到 `brief/requirements/syllabus_areas` 时在本地返回路由错误，不再花服务调用 |
+| `author` 校验 | 未知字段、subject 枚举、24 个 syllabus ID、requirements 1–8 字符串、total_score 仅综合题；中文 subject 与单条 requirements 自动归一 |
+| `revise` | feedback 六字段本地校验；补 `schema_version/request_id`；剥离审校 `errors`；task_id 取当前题；服务端按 `task_id+question_id+version` 从待审表补全题包（可按 question_id 回退） |
+| 解析重标 | 选项重排时按同一 inverse 映射改写 `explanation`/`option_explanations`/`misconceptions` 里的"选C/选项C/C项"等引用；提示禁止用 A–D 指代选项 |
+| 状态护栏 | `get_question_state` 的 `question_bank.status=STORED` 被识别为入库回执，不再把真话改成假话 |
+| demo 工具面 | CLI 演示默认 `--no-builtin-tools` + `QODEX_DEMO=1`，模型只看到四个业务工具 |
+| 错误分类 | 组卷/审校/题库的 4xx → `REQUEST_REJECTED` / `INVALID_REQUEST`；5xx/网络才是 UNAVAILABLE |
+
+实测：D-01r/D-02r/D-03r 单题与 G-01r2 两题+组卷均 `GENERATED → PASS → STORED → STRUCTURAL_PASS`；
+D-01s 完成 `NEEDS_REVISION → revise v2 → PASS/STORED`，v2 解析与答案一致；B-09r 改为先追问，C-10s 不再误纠正。
+证据与残余项见 `.local/test-2026-11-16/06-FIX-REPORT.md`。
+仍未闭环：no-progress 复测、跨进程重复计费、质量层（问题 1，不含答案/解析正确性）。
+
+## 4-B. 2026-11-16 组卷 v2 合并与补充测试
+
+`origin/main` 更新为 `a311bbc` 后与本地修复无冲突合并（`a4fd67d`），新增 v2 有序 slots、混合单选/综合、每槽原分值、
+`part_scores`、坏记录跳过、可选语义复核与换题；迁移 `20261116_01` 已执行，8092 历史已开启。
+
+补充测试（CLI）确认：v1 兼容、v2 跨学科单选、v2 单选+综合（综合题 2+3+5 分）、学生/答案隔离、坏题跳过、
+语义关闭/开启/预算停止、契约 422 均符合预期。合并后发现并修复 4 个接缝：
+
+1. 确定性综合题的 `comprehensive_application` 类型在 v2 中被归一为 `comprehensive`，并按双类型搜索；
+2. 综合题 `expected` 为数字/dict/bool 时统一转文本，避免校验拒绝或 HTML 导出崩溃；
+3. Pi 的 `exam_assembly` 在边界把 syllabus ID 映射为题库中文标签；
+4. `verification.solve("paging")` 对字符串页框先转整数再做位移。
+
+仍未闭环：重复题替换的真实重复题对、`question_bank.search` 对 `comprehensive_application` 的精确匹配、
+47 题全卷语义复核、前端。详见 `.local/test-2026-11-16/07-ASSEMBLY-SUPPLEMENT-REPORT.md`。
+
 ## 5-A. 运行与验证
 
 ```bash
@@ -160,15 +195,16 @@ cd pi-coding-agent/packages/coding-agent && node ../../node_modules/vitest/dist/
 
 - 组卷按题逐条调用 `/tasks/{task_id}/questions/{question_id}/state`，**一条历史脏记录（有题库行、无快照）会让整次组卷 502**，
   而不是跳过该记录。本地测试库中已删除该脏行；生产代码需要容错（建议按 `record_id` 跳过并记 `rejected_records`）。
-- 组卷契约仍只支持四选项单选、同题型单一分值；综合题/题组/带图题不支持（见 §6）。
+- v1 契约只支持四选项单选、同题型单一分值；v2 已支持混合单选+综合和每槽/小问分值，图题/题组仍不支持（见 §6）。
 
 ## 6. 已知边界（不要当成已实现）
 
-1. **组卷只支持四选项单选、同题型单一分值**；综合题不能入卷。真实 408 需要 40×2 单选 + 41–47 共 70 分综合题，
-   且综合题分值异质（6–16 分/题），当前契约表达不了。
-2. **题组**（2024 年 43/44 共用同一台机器 M）与**带图题**在全系统没有对应实体。
+1. **v1 只支持四选项单选、同题型单一分值；v2 支持混合单选+综合、每槽原分值与综合题 part_scores**。
+   v2 已可表达 40 道单选 + 若干综合题、综合题小问异质分值；图题/题组仍不支持。
+2. **题组**（2024 年 43/44 共用同一台机器 M）与**带图题**在全系统没有对应实体；v2 会拒绝含图材料/题面。
 3. **审校看不到答案**：`CheckerPayload` 只有 `reference` + `detection_content`，答案/解析/评分不进审校，
-   因此 `PASS` 不证明答案正确；答案正确性由命题侧盲解 + 审计与人工负责。
+   因此 `PASS` 不证明答案正确；答案/解析正确性是交付前必须保证的，由命题侧盲解 + 审计 + 交付重标负责，
+   **不属于问题 1（风格/难度/考纲贴合度）**。选项重排后解析里的选项引用由 `delivered_choice_views` 同步改写。
 4. 难度与知识点由 annotate 决定，属模型判断而非校准量表；组卷必须用 `question_bank search` 读真值。
 5. 金额没有代码强制上限，只有调用次数与墙钟；付费实验仍需事先授权 + 子 agent 审方案。
 6. 题目与真题的贴合度（计算量、题型配比、超纲判定）**未做**，见 `TASK_STATE.md` 问题 1。

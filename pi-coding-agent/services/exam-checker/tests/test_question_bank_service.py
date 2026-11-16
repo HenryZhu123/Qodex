@@ -227,3 +227,28 @@ async def test_read_and_search_return_complete_stored_json() -> None:
 
     assert entry.question_json == {"question": {"question_text": "测试题"}}
     assert result.questions == [entry]
+
+
+class _CompRepository:
+    def __init__(self) -> None:
+        self.calls: list[str | None] = []
+        self.entries = {
+            "comprehensive": StoredQuestionBankEntry(record_id="c1", task_id="t1", question_id="q1", version=1, question_json={}),
+            "comprehensive_application": StoredQuestionBankEntry(record_id="c2", task_id="t2", question_id="q2", version=1, question_json={}),
+        }
+
+    async def search(self, **filters: Any):
+        self.calls.append(filters["question_type"])
+        return [self.entries[filters["question_type"]]]
+
+
+@pytest.mark.asyncio
+async def test_comprehensive_search_also_covers_the_deterministic_subtype() -> None:
+    repository = _CompRepository()
+    service = QuestionBankService(
+        review_repository=FakeReviewRepository(make_review()),
+        question_bank_repository=repository,
+    )
+    result = await service.search(question_type="comprehensive", limit=10)
+    assert repository.calls == ["comprehensive", "comprehensive_application"]
+    assert [q.record_id for q in result.questions] == ["c1", "c2"]

@@ -376,6 +376,30 @@ describe("compactReviewResult", () => {
 		});
 	});
 
+	it("distinguishes a rejected request from an unavailable service", async () => {
+		vi.spyOn(globalThis, "fetch").mockResolvedValue(
+			new Response(JSON.stringify({ detail: "Question not found" }), {
+				status: 404,
+				headers: { "content-type": "application/json" },
+			}),
+		);
+
+		const result = await registeredTool().execute(
+			"call_404",
+			{ operation: "get_question_state", task_id: "task_1", question_id: "missing" },
+			undefined,
+			undefined,
+			{ cwd: "/workspace" },
+		);
+
+		expect(result.isError).toBe(true);
+		expect(JSON.parse(result.content[0]?.text ?? "{}")).toEqual({
+			error: "EXAM_CHECKER_REQUEST_REJECTED",
+			status: 404,
+			detail: "Question not found",
+		});
+	});
+
 	it("gets one complete stored question by record ID", async () => {
 		const entry = {
 			record_id: "record_1",

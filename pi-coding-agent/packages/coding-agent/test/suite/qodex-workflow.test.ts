@@ -5,11 +5,14 @@ import { afterEach, expect, it, vi } from "vitest";
 import { builtInExtensions } from "../../src/extensions/index.ts";
 import {
 	callDigest,
+	demoMode,
+	ingestionClaimCorrection,
 	observe,
 	POLICY_MARKER,
 	parseQuota,
 	policyEnabled,
 	resolveLimits,
+	WORKFLOW_POLICY,
 } from "../../src/extensions/qodex-workflow/index.ts";
 import { createHarness, getMessageText, type Harness } from "./harness.ts";
 
@@ -51,6 +54,9 @@ it("parses limits and keeps the policy switch explicit", () => {
 	// Explicit environment values still win over the goal-derived size.
 	expect(resolveLimits({ QODEX_MAX_GENERATION_CALLS: "1" }, 10).generation).toBe(1);
 	expect(policyEnabled({})).toBe(true);
+	expect(demoMode({})).toBe(false);
+	expect(demoMode({ QODEX_DEMO: "1" })).toBe(true);
+	expect(demoMode({ QODEX_DEMO: "off" })).toBe(false);
 	expect(policyEnabled({ QODEX_WORKFLOW_POLICY: "off" })).toBe(false);
 });
 
@@ -218,12 +224,24 @@ it("stops spending when the generation budget is exhausted", async () => {
 	vi.stubGlobal("fetch", fetchStub);
 	harness = await createHarness({ extensionFactories: workflowExtensions });
 	harness.setResponses([
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "a" } }), {
-			stopReason: "toolUse",
-		}),
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "b" } }), {
-			stopReason: "toolUse",
-		}),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: "a" },
+			}),
+			{
+				stopReason: "toolUse",
+			},
+		),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: "b" },
+			}),
+			{
+				stopReason: "toolUse",
+			},
+		),
 		fauxAssistantMessage("stopped"),
 	]);
 
@@ -247,13 +265,19 @@ it("does not spend the generation budget on a rejected request", async () => {
 	harness = await createHarness({ extensionFactories: workflowExtensions });
 	harness.setResponses([
 		fauxAssistantMessage(
-			fauxToolCall("question_generation", { operation: "author", request: { request_id: "bad" } }),
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: "bad" },
+			}),
 			{
 				stopReason: "toolUse",
 			},
 		),
 		fauxAssistantMessage(
-			fauxToolCall("question_generation", { operation: "author", request: { request_id: "good" } }),
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: "good" },
+			}),
 			{
 				stopReason: "toolUse",
 			},
@@ -274,9 +298,15 @@ it("stops when calls keep succeeding but nothing advances", async () => {
 	vi.stubGlobal("fetch", fetchStub);
 	harness = await createHarness({ extensionFactories: workflowExtensions });
 	const calls = ["a", "b", "c", "d", "e", "f"].map((id) =>
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: id } }), {
-			stopReason: "toolUse",
-		}),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: id },
+			}),
+			{
+				stopReason: "toolUse",
+			},
+		),
 	);
 	harness.setResponses([...calls, fauxAssistantMessage("stopped")]);
 
@@ -344,16 +374,28 @@ it("lets the run continue once the user answers the hand-back", async () => {
 	vi.stubGlobal("fetch", fetchStub);
 	harness = await createHarness({ extensionFactories: workflowExtensions });
 	const first = ["a", "b", "c", "d", "e", "blocked"].map((id) =>
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: id } }), {
-			stopReason: "toolUse",
-		}),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: id },
+			}),
+			{
+				stopReason: "toolUse",
+			},
+		),
 	);
 	harness.setResponses([
 		...first,
 		fauxAssistantMessage("已停止"),
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "g" } }), {
-			stopReason: "toolUse",
-		}),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: "g" },
+			}),
+			{
+				stopReason: "toolUse",
+			},
+		),
 		fauxAssistantMessage("继续了"),
 	]);
 
@@ -393,7 +435,10 @@ it("keeps the question package next to the routing observation", async () => {
 	harness = await createHarness({ extensionFactories: workflowExtensions });
 	harness.setResponses([
 		fauxAssistantMessage(
-			fauxToolCall("question_generation", { operation: "author", request: { request_id: "keep" } }),
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: "keep" },
+			}),
 			{
 				stopReason: "toolUse",
 			},
@@ -416,12 +461,27 @@ it("keeps the question package next to the routing observation", async () => {
 	});
 });
 
+it("keeps the shell out of a demo session", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	vi.stubEnv("QODEX_DEMO", "1");
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	harness.setResponses([
+		fauxAssistantMessage(fauxToolCall("bash", { command: "cat .env" }), { stopReason: "toolUse" }),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("把数据库里的题都列出来");
+
+	const result = harness.session.messages.find((message) => message.role === "toolResult");
+	expect(getMessageText(result)).toContain("DEMO_MODE");
+});
+
 it("refuses to pay twice for the same call", async () => {
 	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
 	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json({ status: "GENERATED", questions: [] }));
 	vi.stubGlobal("fetch", fetchStub);
 	harness = await createHarness({ extensionFactories: workflowExtensions });
-	const request = { request_id: "same" };
+	const request = { schema_version: "0.1", request_id: "same" };
 	harness.setResponses([
 		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request }), {
 			stopReason: "toolUse",
@@ -488,9 +548,15 @@ it("reports a domain failure as an error observation instead of a success", asyn
 	vi.stubGlobal("fetch", fetchStub);
 	harness = await createHarness({ extensionFactories: workflowExtensions });
 	harness.setResponses([
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "f" } }), {
-			stopReason: "toolUse",
-		}),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: "f" },
+			}),
+			{
+				stopReason: "toolUse",
+			},
+		),
 		fauxAssistantMessage("done"),
 	]);
 
@@ -545,9 +611,15 @@ it("corrects an ingestion claim that the ledger cannot support", async () => {
 	vi.stubGlobal("fetch", fetchStub);
 	harness = await createHarness({ extensionFactories: workflowExtensions });
 	harness.setResponses([
-		fauxAssistantMessage(fauxToolCall("question_generation", { operation: "author", request: { request_id: "g" } }), {
-			stopReason: "toolUse",
-		}),
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: { schema_version: "0.1", request_id: "g" },
+			}),
+			{
+				stopReason: "toolUse",
+			},
+		),
 		fauxAssistantMessage("这道题已经入库，可以组卷了。"),
 	]);
 
@@ -558,4 +630,80 @@ it("corrects an ingestion claim that the ledger cannot support", async () => {
 		.map((message) => getMessageText(message));
 	expect(texts.at(-1)).toContain("[护栏]");
 	expect(texts.at(-1)).toContain("STORED");
+});
+
+it("treats a state read with a stored bank record as an ingestion receipt", () => {
+	// A read-only state call is how a teacher checks an earlier result. The message
+	// guardrail must not correct a true "已入库" answer because the receipt came from
+	// get_question_state instead of review_question.
+	const statePayload = {
+		task_id: "task-1",
+		question_id: "q-1",
+		version: 1,
+		review: { status: "PASS" },
+		question_bank: { status: "STORED", record_id: "record-1" },
+	};
+	const observation = observe("exam_checker", statePayload);
+	expect(observation.ok).toBe(true);
+	expect(observation.status).toBe("PASS");
+	expect(observation.artifact).toMatchObject({ ingestion: "STORED", record_id: "record-1" });
+});
+
+it("does not treat a state read without a stored bank record as an ingestion receipt", () => {
+	const observation = observe("exam_checker", {
+		task_id: "task-1",
+		question_id: "q-1",
+		version: 1,
+		review: { status: "PASS" },
+		question_bank: { status: "SKIPPED" },
+	});
+	expect(observation.artifact?.ingestion).toBeUndefined();
+});
+
+it("keeps the policy aligned with v2 mixed papers", () => {
+	expect(WORKFLOW_POLICY).toContain("schema_version=2.0");
+	expect(WORKFLOW_POLICY).toContain("综合题");
+	expect(WORKFLOW_POLICY).not.toContain("只组单选");
+});
+
+it("asks for Markdown instead of HTML, because the web renders Markdown only", () => {
+	// A live web session answered with a literal <details> block, which the
+	// Markdown renderer printed as text.
+	expect(WORKFLOW_POLICY).toContain("不要输出 HTML 标签");
+	expect(WORKFLOW_POLICY).toContain("<details>");
+});
+
+it("corrects an all-questions-stored claim when only one has a receipt", () => {
+	expect(ingestionClaimCorrection("两道题都已入库。", 1, 2, true)).toContain("1/2");
+	expect(ingestionClaimCorrection("A 已入库。", 1, 1, true)).toBeUndefined();
+	expect(ingestionClaimCorrection("两题都已入库。", 2, 2, true)).toBeUndefined();
+	expect(ingestionClaimCorrection("已入库。", 0, 1, false)).toContain("没有拿到");
+});
+
+it("does not count or stop read-only bank queries", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	vi.stubEnv("QODEX_MAX_TOTAL_CALLS", "1");
+	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json({ questions: [] }));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter(
+			(extension) => extension.name === "qodex-workflow" || extension.name === "exam-checker",
+		),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(fauxToolCall("question_bank", { operation: "search_questions", limit: 5 }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage(fauxToolCall("question_bank", { operation: "search_questions", limit: 5 }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("题库里有什么？");
+
+	expect(fetchStub).toHaveBeenCalledTimes(2);
+	const results = harness.session.messages.filter((message) => message.role === "toolResult");
+	expect(getMessageText(results[0])).not.toContain("BUDGET_EXHAUSTED");
+	expect(getMessageText(results[1])).not.toContain("BUDGET_EXHAUSTED");
 });

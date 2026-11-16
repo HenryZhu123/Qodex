@@ -30,6 +30,10 @@ export function statusLabel(status: unknown): string {
 		TOOL_ERROR: "服务异常",
 		PASS: "审校通过",
 		NEEDS_REVISION: "需要修订",
+		NOT_REVIEWED: "未审校",
+		STORED: "已入库",
+		NOT_STORED: "未入库",
+		OUTDATED: "版本已过期",
 	};
 	return labels[text(status)] || text(status);
 }

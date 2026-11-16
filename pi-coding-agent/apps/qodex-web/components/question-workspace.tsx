@@ -1,7 +1,7 @@
 "use client";
 
 import { Search, ShieldCheck, Upload } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api, array, type JsonObject, object, post, pretty, statusLabel, text } from "@/lib/workspace-api";
 import { Report } from "./assembly-workspace";
 
@@ -186,7 +186,7 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 					className="qx-btn"
 					onClick={() =>
 						prompt(
-							"请介绍 question_generation 的 single、batch、comprehensive、revise 操作，并先确认我的命题需求。生成题目只进入待审队列，不等于审校通过。",
+							"帮我出一道题：先和我确认科目、考点、题量、分值和题型，再用 question_generation 的 author 出题，出完送 exam_checker 审校。生成题目只进入待审队列，不等于审校通过。",
 						)
 					}
 				>
@@ -255,6 +255,7 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 					</button>
 				</div>
 			</section>
+			<PendingQuestions />
 			{error && (
 				<p className="qx-error" role="alert">
 					{error} 操作可能已经执行，请保留文档编号检查状态后再决定是否重试。
@@ -329,12 +330,54 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 	);
 }
 
+const GENERATION_OPERATIONS = [
+	{
+		key: "single",
+		label: "单题命题 single（确定性模板）",
+		example: true,
+		hint: "固定考点（如 single_level_paging）+ 固定字段；项目自带示例，可直接提交，不调用模型。",
+	},
+	{
+		key: "batch",
+		label: "批量命题 batch（确定性模板）",
+		example: true,
+		hint: "显式 slots；项目自带示例，可直接提交，不调用模型。",
+	},
+	{
+		key: "comprehensive",
+		label: "综合应用题 comprehensive（确定性模板）",
+		example: true,
+		hint: "固定考点（分页 / 栈）；项目自带示例，可直接提交，不调用模型。",
+	},
+	{
+		key: "author",
+		label: "自然语言出题 author（需真实 brief）",
+		example: false,
+		hint: "字段：schema_version、request_id、brief、subject、syllabus_areas、question_type、total_score、requirements、evidence。会调用模型并计费。",
+	},
+	{
+		key: "replenishment",
+		label: "补题 replenishment（需组卷缺口单）",
+		example: false,
+		hint: "需要组卷服务返回的 replenishment_request（缺口单），没有静态示例；会调用模型并计费。",
+	},
+	{
+		key: "revise",
+		label: "修订 revise（需真实当前题目）",
+		example: false,
+		hint: "必须携带已生成题目的完整 current_question 和对应版本的反馈，不能用通用静态示例；会调用模型并计费。",
+	},
+] as const;
+
+const PAID_GENERATION_OPERATIONS = new Set(["author", "replenishment", "revise"]);
+
 function GenerationPanel() {
 	const [operation, setOperation] = useState("single"),
 		[payload, setPayload] = useState(""),
 		[result, setResult] = useState<JsonObject>(),
 		[error, setError] = useState(""),
 		[busy, setBusy] = useState(false);
+	const selected = GENERATION_OPERATIONS.find((item) => item.key === operation) ?? GENERATION_OPERATIONS[0];
 	async function example() {
 		try {
 			const r = await fetch(`/examples/generation-${operation}.json`);
@@ -356,6 +399,11 @@ function GenerationPanel() {
 			setError("请填入合法的请求 JSON 对象。");
 			return;
 		}
+		if (
+			PAID_GENERATION_OPERATIONS.has(operation) &&
+			!window.confirm(`operation=${operation} 会调用模型并产生费用，确定提交？`)
+		)
+			return;
 		setBusy(true);
 		setResult(undefined);
 		try {
@@ -368,8 +416,11 @@ function GenerationPanel() {
 	}
 	return (
 		<details className="qx-report qx-generation">
-			<summary>自主命题 · 直接调用服务（完整 JSON 请求）</summary>
-			<p className="qx-note">支持现有单题、批量、综合题和修订服务。成功结果写入命题待审队列，不会自动成为正式题库。</p>
+			<summary>命题接口自测（测试 / 展示用，非教师入口）</summary>
+			<p className="qx-note">
+				这里直接向 8093 发完整 JSON 请求，只用于验证接口本身；教师日常出题请用对话或上面的待审题目面板。
+				结果只写入命题待审队列，不会自动成为正式题库。
+			</p>
 			<div className="qx-filters">
 				<select
 					aria-label="命题操作"
@@ -380,20 +431,17 @@ function GenerationPanel() {
 						setPayload("");
 					}}
 				>
-					<option value="single">单题命题</option>
-					<option value="batch">批量命题</option>
-					<option value="comprehensive">综合应用题</option>
-					<option value="revise">修订综合题</option>
+					{GENERATION_OPERATIONS.map((item) => (
+						<option key={item.key} value={item.key}>
+							{item.label}
+						</option>
+					))}
 				</select>
-				<button type="button" className="qx-btn" disabled={busy || operation === "revise"} onClick={example}>
-					{operation === "revise" ? "修订需使用真实当前题目" : "加载项目请求示例"}
+				<button type="button" className="qx-btn" disabled={busy || !selected.example} onClick={example}>
+					{selected.example ? "加载项目请求示例" : "该操作没有静态示例"}
 				</button>
 			</div>
-			{operation === "revise" && (
-				<p className="qx-note">
-					修订请求必须携带已生成题目的完整 current_question 和对应版本反馈，不能使用通用静态示例。
-				</p>
-			)}
+			<p className="qx-note">{selected.hint}</p>
 			<textarea
 				aria-label="命题请求 JSON"
 				rows={12}
@@ -411,5 +459,130 @@ function GenerationPanel() {
 			)}
 			{result && <Report value={result} />}
 		</details>
+	);
+}
+
+/**
+ * Read-only view of the review queue: what the generator produced and what is
+ * still waiting for review.
+ *
+ * It offers no review action on purpose. The queue table carries no review
+ * status, and status lives in exam-checker; rendering it per row would either
+ * import each version (a write) or need a new endpoint, and a badge kept only in
+ * the page would go stale after a reload. Identity and text are safe to show,
+ * so the teacher copies an id and hands the question to Pi.
+ */
+function PendingQuestions() {
+	const [rows, setRows] = useState<JsonObject[]>([]),
+		[total, setTotal] = useState(0),
+		[limit, setLimit] = useState(20),
+		[loaded, setLoaded] = useState(false),
+		[error, setError] = useState(""),
+		[busy, setBusy] = useState(false),
+		[copied, setCopied] = useState("");
+
+	const load = useCallback(
+		async (next = limit) => {
+			setBusy(true);
+			setError("");
+			try {
+				const data = await api(`generation/v1/question-generation/pending?limit=${next}`);
+				setRows(array(data.questions).map(object));
+				setTotal(Number(data.total) || 0);
+				setLoaded(true);
+			} catch (e) {
+				setError(e instanceof Error ? e.message : "待审题目读取失败");
+			} finally {
+				setBusy(false);
+			}
+		},
+		[limit],
+	);
+
+	useEffect(() => {
+		void load();
+	}, [load]);
+
+	async function copyReviewRequest(row: JsonObject) {
+		const questionId = text(row.question_id);
+		const instruction =
+			`请审校这道题：task_id=${text(row.task_id)}，question_id=${questionId}，version=${text(row.version)}。` +
+			"审校通过后自动入库。";
+		try {
+			await navigator.clipboard.writeText(instruction);
+			setCopied(questionId);
+			window.setTimeout(() => setCopied(""), 2000);
+		} catch {
+			setError("复制失败。请手动记下 task_id 和 question_id 再交给 Pi。");
+		}
+	}
+
+	return (
+		<section className="qx-formsection">
+			<div className="qx-between">
+				<h2>待审队列</h2>
+				<div className="qx-actions">
+					<select
+						aria-label="待审题展示条数"
+						value={limit}
+						disabled={busy}
+						onChange={(e) => {
+							const next = Number(e.target.value);
+							setLimit(next);
+							void load(next);
+						}}
+					>
+						<option value={20}>最近 20 道</option>
+						<option value={50}>最近 50 道</option>
+						<option value={100}>最近 100 道</option>
+					</select>
+					<button type="button" className="qx-btn" disabled={busy} onClick={() => void load()}>
+						{busy ? "读取中…" : "刷新"}
+					</button>
+				</div>
+			</div>
+			<p className="qx-note">
+				只读看板：这里是命题产出的当前版本，按入队时间倒序。审校通过后题目会进入正式题库，但队列行不会自动消失；
+				要看审校状态请到「正式题库」，或复制编号交给 Pi 查状态/送审校。本页不调用任何模型。
+			</p>
+			{loaded && (
+				<p className="qx-note">
+					队列 {total} 道，本次显示 {rows.length} 道（只列未作废的当前版本）。
+				</p>
+			)}
+			{error && (
+				<p className="qx-error" role="alert">
+					{error}
+				</p>
+			)}
+			{loaded && !rows.length && <p className="qx-empty">队列是空的。出题后（对话或上面的自测面板）会出现在这里。</p>}
+			{rows.map((row) => {
+				const questionId = text(row.question_id);
+				return (
+					<article className="qx-bankitem" key={`${text(row.task_id)}:${questionId}:${text(row.version)}`}>
+						<h2>{text(row.stem) || "（该版本没有学生题面）"}</h2>
+						<p className="qx-note">
+							{text(row.subject) || "未标科目"} · {text(row.topic) || "未标考点"} · v{text(row.version)} ·{" "}
+							{text(row.queued_at).replace("T", " ").slice(0, 19)} · {text(row.question_type)}
+						</p>
+						<div className="qx-options">
+							{array(row.options).map((option) => (
+								<p key={text(object(option).id)}>
+									{text(object(option).id)}. {text(object(option).text)}
+								</p>
+							))}
+						</div>
+						<p className="qx-note">
+							<code title={text(row.task_id)}>task {text(row.task_id).slice(0, 8)}…</code> <code>{questionId}</code>
+						</p>
+						<div className="qx-actions">
+							<button type="button" className="qx-btn" onClick={() => void copyReviewRequest(row)}>
+								{copied === questionId ? "已复制审校指令" : "复制审校指令"}
+							</button>
+						</div>
+					</article>
+				);
+			})}
+		</section>
 	);
 }

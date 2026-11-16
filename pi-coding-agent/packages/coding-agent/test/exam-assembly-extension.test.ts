@@ -165,6 +165,31 @@ describe("built-in exam assembly", () => {
 			"EXAM_ASSEMBLY_UNAVAILABLE",
 		);
 	});
+	it("reports a contract violation as a request error, not a service outage", async () => {
+		vi.stubGlobal(
+			"fetch",
+			vi.fn().mockResolvedValue(
+				new Response(
+					JSON.stringify({
+						detail: [
+							{
+								type: "extra_forbidden",
+								loc: ["body", "unexpected_field"],
+								msg: "Extra inputs are not permitted",
+							},
+						],
+					}),
+					{ status: 422, headers: { "content-type": "application/json" } },
+				),
+			),
+		);
+		const result = await tool().execute("test", request);
+		const output = JSON.parse(result.content[0].text ?? "");
+		expect(output.status).toBe("INVALID_REQUEST");
+		expect(output.error_code).toBe("INVALID_EXAM_ASSEMBLY_REQUEST");
+		expect(output.http_status).toBe(422);
+		expect(result.isError).toBe(false);
+	});
 	it("bounds service wait", async () => {
 		vi.stubEnv("EXAM_ASSEMBLY_TIMEOUT_SECONDS", "0.01");
 		vi.stubGlobal(
@@ -183,3 +208,24 @@ describe("built-in exam assembly", () => {
 });
 
 import { readFileSync } from "node:fs";
+
+it("maps syllabus subject IDs to bank labels for v2 slots", async () => {
+	const fetchMock = vi
+		.fn<typeof fetch>()
+		.mockResolvedValue(Response.json({ status: "NEEDS_QUESTIONS", deficits: [], artifacts: {} }));
+	vi.stubGlobal("fetch", fetchMock);
+	await tool().execute("mixed", {
+		schema_version: "2.0",
+		request_id: "mixed-subjects",
+		subject: "408计算机学科专业基础",
+		question_count: 2,
+		total_score: 4,
+		slots: [
+			{ subject: "data_structures", question_type: "single_choice", score: 2 },
+			{ subject: "computer_organization", question_type: "single_choice", score: 2 },
+		],
+	});
+	const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body));
+	expect(body.slots[0].subject).toBe("数据结构");
+	expect(body.slots[1].subject).toBe("计算机组成原理");
+});

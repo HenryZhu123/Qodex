@@ -33,7 +33,8 @@ class HttpQuestionBankRepository:
         except ValueError as exc:
             raise BankError("INVALID_QUESTION_BANK_RESPONSE", status=response.status_code) from exc
         if not response.is_success:
-            raise BankError("QUESTION_BANK_UNAVAILABLE", status=response.status_code,
+            code = "RECORD_NOT_FOUND" if response.status_code in (404, 410) else "QUESTION_BANK_UNAVAILABLE"
+            raise BankError(code, status=response.status_code,
                             detail=body.get("detail", body) if isinstance(body, dict) else body)
         if not isinstance(body, dict):
             raise BankError("INVALID_QUESTION_BANK_RESPONSE")

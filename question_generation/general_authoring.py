@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from copy import deepcopy
 from dataclasses import replace
 from random import Random
@@ -146,6 +147,7 @@ instructor_view={"correct_option_id":"A","explanation":"完整推导",
 "option_explanations":{"A":"成立依据","B":"不成立的依据","C":"不成立的依据","D":"不成立的依据"},
 "misconceptions":{"B":"错误机制与纠正","C":"错误机制与纠正","D":"错误机制与纠正"}}。
 四项互异且唯一正确，错项源自真实误解，避免长度或措辞泄题。逐项解释写判别依据，错因写误解及纠正，均不复述完整推导。
+explanation、option_explanations、misconceptions 中不得用 A/B/C/D 指代选项；请用选项内容或“正确项/错误项”表述。系统会在交付时重排选项。
 三条硬约束：（1）纯结果同构选项：options[].text 只能写同构的计算数值、状态序列、表项映射或具体操作，
 严禁在选项文本中附带「因为……」「由于……」「只要……就……」等解释性理由或因果论证；
 所有错因分析只准写在 instructor_view.option_explanations 和 misconceptions 中。
@@ -399,6 +401,44 @@ def apply_replacements(previous, replacements):
     return candidate
 
 
+OPTION_REFERENCE = re.compile(
+    r"(?P<prefix>正确答案|正确选项|对应选项|选项|答案|应选|选)"
+    r"(?P<sep>\s*(?:为|是)?\s*[:：]?\s*)"
+    r"(?P<letter>[A-D])(?P<suffix>项)?"
+    r"|(?P<ordinal>第)?(?P<item>[A-D])(?P<item_suffix>\s*项)"
+    r"|(?P<sequence>(?:[A-D]\s*[、,，]\s*){1,3}[A-D])(?P<sequence_suffix>\s*(?:项|均|都|中))"
+    r"|(?P<item_answer>[A-D])(?P<item_answer_sep>\s*(?:是|为)\s*)(?P<item_answer_word>正确答案|正确项|答案|应选)"
+)
+SEQUENCE_LETTER = re.compile(r"[A-D]")
+
+
+def relabel_option_text(value, inverse):
+    """Rewrite option-letter references in a teacher-only string.
+
+    Options are shuffled before delivery, so a free-text "故选C" becomes false
+    when the author's C is delivered as D. Only phrases that explicitly denote an
+    option are rewritten; a node label such as "根为A" is left alone.
+    """
+    if not isinstance(value, str) or not value:
+        return value
+
+    def replace(match):
+        if match.group("letter"):
+            letter = inverse.get(match.group("letter"), match.group("letter"))
+            return f"{match.group('prefix')}{match.group('sep')}{letter}{match.group('suffix') or ''}"
+        if match.group("item"):
+            item = inverse.get(match.group("item"), match.group("item"))
+            return f"{match.group('ordinal') or ''}{item}{match.group('item_suffix')}"
+        if match.group("item_answer"):
+            item = inverse.get(match.group("item_answer"), match.group("item_answer"))
+            return f"{item}{match.group('item_answer_sep')}{match.group('item_answer_word')}"
+        sequence = SEQUENCE_LETTER.sub(lambda found: inverse.get(found.group(0), found.group(0)),
+                                       match.group("sequence"))
+        return f"{sequence}{match.group('sequence_suffix')}"
+
+    return OPTION_REFERENCE.sub(replace, value)
+
+
 def delivered_choice_views(candidate, seed):
     """Shuffle and relabel single-choice options for delivery.
 
@@ -418,8 +458,12 @@ def delivered_choice_views(candidate, seed):
     inverse = {author_id: label for label, author_id in mapping.items()}
     teacher = deepcopy(candidate["instructor_view"])
     teacher["correct_option_id"] = inverse[teacher["correct_option_id"]]
+    teacher["explanation"] = relabel_option_text(teacher.get("explanation"), inverse)
     for field in ("option_explanations", "misconceptions"):
-        teacher[field] = {inverse[key]: value for key, value in teacher[field].items()}
+        teacher[field] = {
+            inverse[key]: relabel_option_text(value, inverse)
+            for key, value in teacher[field].items()
+        }
     return student, teacher, mapping
 
 
@@ -614,7 +658,6 @@ def run(payload, client, request, settings, *, brief_plan=None, version=None, re
     if not choice:
         metadata["score"] = request.constraints["total_score"]
     metadata["syllabus_areas"] = list(settings.get("syllabus_areas", []))
-    metadata["knowledge_points"] = list(candidate["design"]["concepts"][:8])
     version = version or (BRIEF_VERSION if brief_plan is not None else engine_version(settings))
     question = {
         "version": 1, "metadata": metadata, "student_view": student,

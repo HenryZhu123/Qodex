@@ -1,6 +1,7 @@
 import type { PiClient, PiHostUiResponse, PiSendMessageInput, PiThinkingLevel } from "@assistant-ui/react-pi";
 import type { NextRequest } from "next/server";
 import { getPiClient, workspacePath } from "@/lib/pi-server";
+import { nameUntitledThread } from "@/lib/pi-threads";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -112,6 +113,7 @@ export function POST(request: NextRequest, context: RouteContext): Promise<Respo
 			case "messages": {
 				const { input } = (await request.json()) as { input: PiSendMessageInput };
 				await piClient.sendMessage(threadId, input);
+				await nameUntitledThread(piClient, threadId, input.content);
 				return noContent();
 			}
 			case "cancel":

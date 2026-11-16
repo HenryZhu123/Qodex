@@ -21,7 +21,10 @@ export function serviceTarget(service: string, parts: string[], method: string):
 			),
 			POST: new RegExp(`^v1/exam-checker/documents/(parse|${id}/review|${id}/questions/${id}/(review|revise|ingest))$`),
 		},
-		generation: { GET: /^health$/, POST: /^v1\/question-generation\/(single|batch|comprehensive|revise)$/ },
+		generation: {
+			GET: /^health$|^v1\/question-generation\/pending$/,
+			POST: /^v1\/question-generation\/(single|batch|replenishment|comprehensive|revise|author)$/,
+		},
 	};
 	if (!rules[service]?.[method]?.test(route)) return undefined;
 	const [name, fallback] = services[service as keyof typeof services];
