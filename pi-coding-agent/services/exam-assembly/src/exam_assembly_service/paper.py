@@ -39,8 +39,13 @@ def convert_paper(entry, state):
     # Do not silently discard images or turn remote resources into executable HTML.
     if re.search(r"!\[|<\s*(?:img|svg|iframe)\b", reference + q["question_text"], re.I):
         raise ValueError("包含图像材料，须先接入受控资源渲染")
+    raw_question_type = q.get("question_type")
+    # Deterministic comprehensive questions are stored as comprehensive_application;
+    # the v2 paper contract exposes one comprehensive slot type. Normalise at the
+    # boundary instead of making callers know the authoring sub-type.
+    question_type = "comprehensive" if raw_question_type == "comprehensive_application" else raw_question_type
     result = dict(question_id=entry["record_id"], subject=q["subject"],
-                  question_type=q.get("question_type"), score=q["points"],
+                  question_type=question_type, score=q["points"],
                   stem=q.get("student_stem") or q["question_text"], reference=reference,
                   knowledge_points=knowledge, difficulty=meta["difficulty"], options={}, parts=[])
     if not nonempty(result["stem"]):
@@ -68,9 +73,19 @@ def convert_paper(entry, state):
             answer = matched[0]
         result.update(answer=answer, explanation=q.get("explanation") or payload.get("explanation") or "")
     elif result["question_type"] == "comprehensive":
-        parts, grading = q.get("parts"), q.get("grading")
+        parts, grading = q.get("parts"), deepcopy(q.get("grading"))
         if not isinstance(parts, list) or not 1 <= len(parts) <= 20 or not isinstance(grading, dict):
             raise ValueError("综合题缺少结构化小问和评分；旧快照须重新导入并审校，不能猜测")
+        # Deterministic comprehensive answers are numeric; the export layer renders
+        # text, so normalise the expected value without changing the stored snapshot.
+        for solution in grading.get("parts", []):
+            if isinstance(solution, dict):
+                for point in solution.get("scoring_points", []):
+                    expected = point.get("expected") if isinstance(point, dict) else None
+                    if expected is not None and not isinstance(expected, str):
+                        # Deterministic answers may be numbers, dicts (for structured
+                        # witnesses) or booleans; the HTML renderer needs text.
+                        point["expected"] = json.dumps(expected, ensure_ascii=False, sort_keys=True)
         solutions = grading.get("parts")
         if not isinstance(solutions, list) or len(parts) != len(solutions):
             raise ValueError("小问答案数量不一致")
@@ -85,7 +100,8 @@ def convert_paper(entry, state):
             if (not isinstance(points, list) or not points
                     or any(not isinstance(p, dict) or not positive(p.get("points"))
                            or not nonempty(p.get("id")) or not nonempty(p.get("criterion"))
-                           or not nonempty(p.get("expected")) for p in points)
+                           or not (nonempty(p.get("expected")) or type(p.get("expected")) in (int, float))
+                           for p in points)
                     or len({p["id"] for p in points}) != len(points)
                     or sum(p["points"] for p in points) != part["score"]):
                 raise ValueError("评分点分值与小问不一致")
@@ -189,23 +205,28 @@ async def assemble_paper(request, repository, output_root, history=None, semanti
                   note="仅核验结构、原分值、PASS版本与字面重复；不认证完整语义质量。HTML可在浏览器打印为PDF。")
     entries, conflicts, searched = {}, set(), set()
     for slot in slots:
-        search = dict(subject=slot["subject"], question_type=slot["question_type"],
-                      topic_counts={slot.get("knowledge_point") or "": 1},
-                      difficulty_counts={slot["difficulty"]: 1} if slot.get("difficulty") else {"": 1})
-        search_key = json.dumps(search, sort_keys=True)
-        if search_key in searched:
-            continue
-        searched.add(search_key)
-        page, complete = await repository.search_candidates(search)
-        result["pool_complete"] &= complete
-        for entry in page:
-            identifier = entry.get("record_id") if isinstance(entry, dict) else None
-            if not nonempty(identifier):
-                result["rejected_records"].append(dict(record_id=None, reason="无效记录身份"))
+        query_types = [slot["question_type"]]
+        if slot["question_type"] == "comprehensive":
+            # Older deterministic comprehensive questions carry this sub-type.
+            query_types.append("comprehensive_application")
+        for query_type in query_types:
+            search = dict(subject=slot["subject"], question_type=query_type,
+                          topic_counts={slot.get("knowledge_point") or "": 1},
+                          difficulty_counts={slot["difficulty"]: 1} if slot.get("difficulty") else {"": 1})
+            search_key = json.dumps(search, sort_keys=True)
+            if search_key in searched:
                 continue
-            if identifier in entries and entries[identifier] != entry:
-                conflicts.add(identifier)
-            entries[identifier] = entry
+            searched.add(search_key)
+            page, complete = await repository.search_candidates(search)
+            result["pool_complete"] &= complete
+            for entry in page:
+                identifier = entry.get("record_id") if isinstance(entry, dict) else None
+                if not nonempty(identifier):
+                    result["rejected_records"].append(dict(record_id=None, reason="无效记录身份"))
+                    continue
+                if identifier in entries and entries[identifier] != entry:
+                    conflicts.add(identifier)
+                entries[identifier] = entry
     if len(entries) > 2000:
         result["pool_complete"] = False
         result["candidate_budget"] = 2000

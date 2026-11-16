@@ -208,3 +208,24 @@ describe("built-in exam assembly", () => {
 });
 
 import { readFileSync } from "node:fs";
+
+it("maps syllabus subject IDs to bank labels for v2 slots", async () => {
+	const fetchMock = vi
+		.fn<typeof fetch>()
+		.mockResolvedValue(Response.json({ status: "NEEDS_QUESTIONS", deficits: [], artifacts: {} }));
+	vi.stubGlobal("fetch", fetchMock);
+	await tool().execute("mixed", {
+		schema_version: "2.0",
+		request_id: "mixed-subjects",
+		subject: "408计算机学科专业基础",
+		question_count: 2,
+		total_score: 4,
+		slots: [
+			{ subject: "data_structures", question_type: "single_choice", score: 2 },
+			{ subject: "computer_organization", question_type: "single_choice", score: 2 },
+		],
+	});
+	const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body));
+	expect(body.slots[0].subject).toBe("数据结构");
+	expect(body.slots[1].subject).toBe("计算机组成原理");
+});

@@ -88,6 +88,36 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+// The authoring tools use 408 syllabus IDs; the question bank and assembly use
+// Chinese subject labels. Normalising here keeps one vocabulary at the boundary
+// instead of making the model guess which spelling a slot needs.
+const SUBJECT_ALIASES: Record<string, string> = {
+	data_structures: "数据结构",
+	data_structure: "数据结构",
+	数据结构: "数据结构",
+	computer_organization: "计算机组成原理",
+	计算机组成原理: "计算机组成原理",
+	operating_systems: "操作系统",
+	operating_system: "操作系统",
+	操作系统: "操作系统",
+	computer_networks: "计算机网络",
+	computer_network: "计算机网络",
+	计算机网络: "计算机网络",
+};
+
+function bankSubject(value: unknown): unknown {
+	return typeof value === "string" ? (SUBJECT_ALIASES[value.trim()] ?? value) : value;
+}
+
+function withBankSubjects(params: Record<string, unknown>): Record<string, unknown> {
+	const copy = { ...params };
+	copy.subject = bankSubject(copy.subject);
+	if (Array.isArray(copy.slots)) {
+		copy.slots = copy.slots.map((slot) => (isRecord(slot) ? { ...slot, subject: bankSubject(slot.subject) } : slot));
+	}
+	return copy;
+}
+
 export default function examAssemblyExtension(pi: ExtensionAPI): void {
 	pi.registerTool<typeof assemblyParameters, { result: Record<string, unknown> }>({
 		name: "exam_assembly",
@@ -116,12 +146,13 @@ export default function examAssemblyExtension(pi: ExtensionAPI): void {
 					throw new Error("Invalid EXAM_ASSEMBLY_TIMEOUT_SECONDS");
 				}
 				const timeout = AbortSignal.timeout(Math.ceil(seconds * 1000));
+				const payload = withBankSubjects(params as Record<string, unknown>);
 				const response = await fetch(
 					`${(process.env.EXAM_ASSEMBLY_SERVICE_URL || "http://127.0.0.1:8092").replace(/\/$/, "")}/v1/exam-assembly/assemble`,
 					{
 						method: "POST",
 						headers: { "content-type": "application/json" },
-						body: JSON.stringify(params),
+						body: JSON.stringify(payload),
 						signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
 					},
 				);

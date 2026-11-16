@@ -63,7 +63,7 @@ def solve(kind, inputs):
         page, offset = address >> bits, address & (size - 1)
         if str(page) not in table:
             raise ValueError("所访问的虚页没有有效映射。")
-        frame = table[str(page)]
+        frame = integer(table[str(page)], 0, 2**24 - 1)
         return {"page": page, "offset": offset, "frame": frame, "physical_address": (frame << bits) | offset}
     if kind == "cache" and inputs.keys() == {"cache_size", "block_size", "address"}:
         size, block = power(inputs["cache_size"], 16, 4096), power(inputs["block_size"], 4, 256)

@@ -128,6 +128,22 @@ D-01s 完成 `NEEDS_REVISION → revise v2 → PASS/STORED`，v2 解析与答案
 证据与残余项见 `.local/test-2026-11-16/06-FIX-REPORT.md`。
 仍未闭环：no-progress 复测、跨进程重复计费、质量层（问题 1，不含答案/解析正确性）。
 
+## 4-B. 2026-11-16 组卷 v2 合并与补充测试
+
+`origin/main` 更新为 `a311bbc` 后与本地修复无冲突合并（`a4fd67d`），新增 v2 有序 slots、混合单选/综合、每槽原分值、
+`part_scores`、坏记录跳过、可选语义复核与换题；迁移 `20261116_01` 已执行，8092 历史已开启。
+
+补充测试（CLI）确认：v1 兼容、v2 跨学科单选、v2 单选+综合（综合题 2+3+5 分）、学生/答案隔离、坏题跳过、
+语义关闭/开启/预算停止、契约 422 均符合预期。合并后发现并修复 4 个接缝：
+
+1. 确定性综合题的 `comprehensive_application` 类型在 v2 中被归一为 `comprehensive`，并按双类型搜索；
+2. 综合题 `expected` 为数字/dict/bool 时统一转文本，避免校验拒绝或 HTML 导出崩溃；
+3. Pi 的 `exam_assembly` 在边界把 syllabus ID 映射为题库中文标签；
+4. `verification.solve("paging")` 对字符串页框先转整数再做位移。
+
+仍未闭环：重复题替换的真实重复题对、`question_bank.search` 对 `comprehensive_application` 的精确匹配、
+47 题全卷语义复核、前端。详见 `.local/test-2026-11-16/07-ASSEMBLY-SUPPLEMENT-REPORT.md`。
+
 ## 5-A. 运行与验证
 
 ```bash
