@@ -291,13 +291,6 @@ async def _hydrate_revision(payload: dict, task_id: UUID, pool) -> UUID | None:
     version = current.get("version")
     if not isinstance(question_id, str) or not question_id or type(version) is not int:
         return None
-    lookup_task_id = task_id
-    raw_task_id = current.get("task_id")
-    if isinstance(raw_task_id, str):
-        try:
-            lookup_task_id = UUID(raw_task_id)
-        except (TypeError, ValueError):
-            lookup_task_id = task_id
     row = None
     try:
         row = await pool.fetchrow(
@@ -306,26 +299,10 @@ async def _hydrate_revision(payload: dict, task_id: UUID, pool) -> UUID | None:
             FROM question_generation.pending_questions
             WHERE task_id = $1 AND question_id = $2 AND version = $3
             """,
-            lookup_task_id, question_id, version,
+            task_id, question_id, version,
         )
     except Exception:  # noqa: BLE001 - hydration must not turn a revise into a queue error
         row = None
-    if row is None and not isinstance(current.get("task_id"), str):
-        # The agent may only know question_id/version. The generated id is unique
-        # enough to find the pending row, and its task_id is the one v2 must join.
-        try:
-            row = await pool.fetchrow(
-                """
-                SELECT task_id, question_json
-                FROM question_generation.pending_questions
-                WHERE question_id = $1 AND version = $2
-                ORDER BY queued_at DESC
-                LIMIT 1
-                """,
-                question_id, version,
-            )
-        except Exception:  # noqa: BLE001
-            row = None
     if row is None:
         return None
     package = row["question_json"]
@@ -370,16 +347,26 @@ async def submit(
         elapsed_ms=0.0, questions=0, queue_status="not_queued",
     )
     status, questions, queue_status = "ERROR", 0, "not_queued"
-    # A revision must stay in the task it revises, so the caller may pin task_id;
-    # otherwise the service mints one. Every question of this call shares it.
+    # A revision must stay in the task it revises. New generation calls mint an id,
+    # while revisions must carry the original id returned by this service.
     raw_task_id = payload.pop("task_id", None) if isinstance(payload, dict) else None
-    # A revision belongs to the task it revises. The tool normally injects that id,
-    # but a direct caller may only send current_question.task_id; use it so v2 is
-    # queued under the same task instead of a freshly minted one.
-    if operation == "revise" and raw_task_id is None and isinstance(payload, dict):
+    current_task_id = None
+    if operation == "revise" and isinstance(payload, dict):
         current = payload.get("current_question")
-        if isinstance(current, dict) and isinstance(current.get("task_id"), str):
-            raw_task_id = current["task_id"]
+        if isinstance(current, dict):
+            current_task_id = current.get("task_id")
+        if raw_task_id is None:
+            raw_task_id = current_task_id
+        if raw_task_id is None:
+            status = "INVALID_REQUEST"
+            return JSONResponse(
+                failure_result(
+                    "INVALID_REQUEST",
+                    "revise 必须携带原题的 task_id，以 task_id + question_id + version 定位版本。",
+                    identifier,
+                ),
+                status_code=422,
+            )
     try:
         task_id = UUID(raw_task_id) if raw_task_id is not None else uuid4()
     except (TypeError, ValueError, AttributeError):
@@ -388,6 +375,23 @@ async def submit(
             failure_result("INVALID_REQUEST", "task_id 必须是 UUID 字符串。", identifier),
             status_code=422,
         )
+    if operation == "revise" and current_task_id is not None:
+        try:
+            embedded_task_id = UUID(current_task_id)
+        except (TypeError, ValueError, AttributeError):
+            status = "INVALID_REQUEST"
+            return JSONResponse(
+                failure_result("INVALID_REQUEST", "current_question.task_id 必须是 UUID 字符串。", identifier),
+                status_code=422,
+            )
+        if embedded_task_id != task_id:
+            status = "INVALID_REQUEST"
+            return JSONResponse(
+                failure_result(
+                    "INVALID_REQUEST", "request.task_id 必须与 current_question.task_id 一致。", identifier,
+                ),
+                status_code=422,
+            )
     generation_request = dict(payload)
     admission = None
     acquired = False

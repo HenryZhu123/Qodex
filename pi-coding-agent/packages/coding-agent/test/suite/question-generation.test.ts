@@ -276,6 +276,7 @@ it("lists the exact revise feedback fields instead of letting the model guess", 
 				request: {
 					schema_version: "0.1",
 					request_id: "revise-demo",
+					task_id: "00000000-0000-4000-8000-000000000001",
 					current_question: {
 						question_id: "authored-demo",
 						version: 1,
@@ -314,6 +315,7 @@ it("passes a complete revise feedback package to the service", async () => {
 				request: {
 					schema_version: "0.1",
 					request_id: "revise-ok",
+					task_id: "00000000-0000-4000-8000-000000000001",
 					current_question: { question_id: "authored-demo", version: 1 },
 					feedback: {
 						feedback_id: "review-1",
@@ -378,6 +380,7 @@ it("defaults revise bookkeeping fields and drops the review-only errors array", 
 			fauxToolCall("question_generation", {
 				operation: "revise",
 				request: {
+					task_id: "00000000-0000-4000-8000-000000000001",
 					current_question: { question_id: "authored-demo", version: 1 },
 					feedback: {
 						feedback_id: "review-1",
@@ -403,4 +406,40 @@ it("defaults revise bookkeeping fields and drops the review-only errors array", 
 	expect(submitted.request_id).toMatch(/^[0-9a-f-]{36}$/);
 	expect(submitted.feedback.errors).toBeUndefined();
 	expect(submitted.feedback.comment).toBe("修正指代");
+});
+
+it("rejects revise without the original task identity", async () => {
+	const fetchStub = vi.fn<typeof fetch>();
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "revise",
+				request: {
+					current_question: { question_id: "authored-demo", version: 1 },
+					feedback: {
+						feedback_id: "review-1",
+						question_id: "authored-demo",
+						target_version: 1,
+						part_id: "p1",
+						action: "repair",
+						comment: "修正指代",
+					},
+				},
+			}),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("修订一下");
+
+	expect(fetchStub).not.toHaveBeenCalled();
+	const result = harness.session.messages.find((message) => message.role === "toolResult");
+	const payload = JSON.parse(getMessageText(result));
+	expect(payload.status).toBe("INVALID_REQUEST");
+	expect(payload.message).toContain("task_id");
 });

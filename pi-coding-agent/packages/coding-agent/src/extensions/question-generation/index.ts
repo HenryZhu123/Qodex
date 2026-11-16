@@ -327,6 +327,9 @@ function reviseRequestError(request: Record<string, unknown>): string | undefine
 	if (typeof current.version !== "number" || !Number.isInteger(current.version) || current.version < 1) {
 		return "revise.current_question.version 必须是正整数。";
 	}
+	if (!isText(request.task_id) && !isText(current.task_id)) {
+		return "revise 需要原命题结果的 task_id，以 task_id + question_id + version 定位题目。";
+	}
 	const feedback = request.feedback;
 	if (!isRecord(feedback)) {
 		return `revise.feedback 必须是对象，包含 ${REVISE_FEEDBACK_FIELDS.join("、")}。`;
@@ -404,7 +407,7 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 			'author fields: schema_version="0.1" and request_id are required. Optional: brief (≤2000 chars), seed, subject (data_structures | computer_organization | operating_systems | computer_networks), syllabus_areas, question_type (single_choice | comprehensive), total_score (comprehensive only, 2–30), requirements (1–8 strings), evidence (≤16 items). Unknown fields are rejected before any model call.',
 			"Chinese subject names such as 数据结构/计组/操作系统/计网 are normalised to the four IDs; prefer the English IDs. syllabus_areas must be IDs: ds.foundations, ds.linear, ds.stack_queue_array, ds.trees, ds.graphs, ds.search, ds.sort, co.system, co.representation, co.memory, co.instructions, co.cpu, co.io, os.foundations, os.process, os.memory, os.files, os.io, cn.architecture, cn.physical, cn.link, cn.network, cn.transport, cn.application.",
 			"single requires topic one of single_level_paging, stack_pop_sequence, direct_mapped_cache, ipv4_subnet_network_address, tcp_message_boundaries, plus seed and evidence rules. Any other topic must use author.",
-			"revise requires the exact current_question package and feedback {feedback_id, question_id, target_version, part_id, action, comment}; general authoring uses action=repair, paging comprehensive uses action=replace plus replacement. Do not review or revise a version you did not receive from the service.",
+			"revise requires the original task_id, the exact current_question package, and feedback {feedback_id, question_id, target_version, part_id, action, comment}; general authoring uses action=repair, paging comprehensive uses action=replace plus replacement. Keep the top-level task_id returned by generation and do not review or revise a version you did not receive from the service.",
 			"When exam_checker returns NEEDS_REVISION, inspect its structured errors and autonomously decide whether a revision is warranted. Set feedback.feedback_id to exam_checker's review_id. Do not ask exam_checker to edit a question.",
 			"Do not create an unbounded loop. Review at most v1, v2, and v3 for one question; if v3 is rejected, report that the autonomous attempt failed.",
 			"Treat queued versions as pending independent review. The student_view is the student-facing content; keep instructor_view, pedagogy, self_check, generator, and authoring_report separate.",

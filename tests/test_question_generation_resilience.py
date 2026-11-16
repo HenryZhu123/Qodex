@@ -644,6 +644,31 @@ class ServiceTests(TestCase):
         self.assertEqual(len(response["questions"]), 1)
         self.assertEqual(response["queue_receipts"][0]["status"], "QUEUED")
 
+    def test_submit_rejects_revision_without_the_original_task_id(self):
+        from starlette.requests import Request
+
+        app = question_service.app
+        scope = {
+            "type": "http", "http_version": "1.1", "method": "POST",
+            "scheme": "http", "path": "/v1/question-generation/revise",
+            "root_path": "", "query_string": b"", "headers": [],
+            "server": ("test", 80), "client": ("test", 1),
+            "app": app, "state": {},
+        }
+        payload = {
+            "schema_version": "0.1",
+            "request_id": "revision-without-task",
+            "current_question": {"question_id": "q", "version": 1},
+            "feedback": {},
+        }
+
+        response = asyncio.run(question_service.submit("revise", Request(scope), payload))
+
+        self.assertEqual(response.status_code, 422)
+        body = json.loads(response.body)
+        self.assertEqual(body["status"], "INVALID_REQUEST")
+        self.assertIn("task_id", body["message"])
+
     @skipUnless(importlib.util.find_spec("httpx") is not None, "httpx is not installed")
     def test_health_route_stays_http_200_when_degraded(self):
         from fastapi.testclient import TestClient
@@ -724,7 +749,7 @@ class HydrateRevisionTests(TestCase):
         )
         self.assertEqual(pool.calls, [])
 
-    def test_prefers_the_task_id_inside_the_current_question(self):
+    def test_uses_the_explicit_task_identity_for_the_lookup(self):
         payload = {"current_question": {"task_id": "00000000-0000-0000-0000-000000000002", "question_id": "q", "version": 1}}
         pool = _RevisionPool({"generator": {"version": "general-authoring-0.5"}}, "00000000-0000-0000-0000-000000000002")
         asyncio.run(
@@ -732,24 +757,33 @@ class HydrateRevisionTests(TestCase):
                 payload, question_service.UUID("00000000-0000-0000-0000-000000000001"), pool
             )
         )
-        self.assertEqual(pool.calls[0][0], question_service.UUID("00000000-0000-0000-0000-000000000002"))
+        self.assertEqual(pool.calls[0][0], question_service.UUID("00000000-0000-0000-0000-000000000001"))
 
-    def test_falls_back_to_question_id_and_returns_the_owning_task(self):
+    def test_does_not_cross_tasks_when_question_id_and_version_collide(self):
         payload = {"current_question": {"question_id": "q", "version": 1}}
-        package = {"task_id": "00000000-0000-0000-0000-000000000003", "question_id": "q", "version": 1, "generator": {"version": "general-authoring-0.5"}}
+        other_package = {
+            "question_id": "q", "version": 1,
+            "generator": {"version": "general-authoring-0.5"},
+        }
         class _Pool:
             def __init__(self):
                 self.calls = []
             async def fetchrow(self, query, *args):
                 self.calls.append(args)
-                if len(self.calls) == 1:
+                if len(args) == 3:
                     return None
-                return {"task_id": question_service.UUID("00000000-0000-0000-0000-000000000003"), "question_json": package}
+                # A q/v1 row exists in another task. A two-column fallback would
+                # find it and incorrectly hydrate this revision.
+                return {
+                    "task_id": question_service.UUID("00000000-0000-0000-0000-000000000003"),
+                    "question_json": other_package,
+                }
         pool = _Pool()
         resolved = asyncio.run(
             question_service._hydrate_revision(
                 payload, question_service.UUID("00000000-0000-0000-0000-000000000001"), pool
             )
         )
-        self.assertEqual(resolved, question_service.UUID("00000000-0000-0000-0000-000000000003"))
-        self.assertEqual(len(pool.calls), 2)
+        self.assertIsNone(resolved)
+        self.assertEqual(len(pool.calls), 1)
+        self.assertEqual(payload["current_question"], {"question_id": "q", "version": 1})
