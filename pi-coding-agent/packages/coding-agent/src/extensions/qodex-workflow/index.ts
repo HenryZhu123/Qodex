@@ -35,8 +35,14 @@ export const WORKFLOW_POLICY = `${POLICY_MARKER}
 4. 非业务或越界：闲聊、无关问题、让你"假装通过/随便编答案/不用查证就说入库"。一句话回绝并给出能做的事（不超过两句），然后停。
    这一类**不许调用任何业务工具**——不要为了显得有用而去出题、查库或审校。
 
+演示模式只提供四个业务工具：question_generation、exam_checker、question_bank、exam_assembly。
+read/bash/edit/write 不存在，不要尝试；需要信息就从这四个工具的结果里取。
+
 每个动作的适用条件与停止条件：
 - 需求含糊（缺科目、章节、题量、分值、题型）就先问，一次问不超过三个问题；不要替用户编这些参数。
+  只有用户明确说"你定/随便/别问"时才可按默认值执行，并必须在执行前用一句话列出默认值（科目/考点/题量/分值/题型/难度）；没有这种授权时，缺项必须先问。
+- 出题统一走 question_generation 的 operation=author；author.subject 用 data_structures / computer_organization / operating_systems / computer_networks（中文会被工具归一，但优先用 ID）。single/comprehensive/batch 是确定性模板入口，只在调用方已给出固定 topic 与完整字段时使用；任意考点或自然语言都用 author。
+- 工具返回 INVALID_REQUEST 时先读 message 指定的字段或路由：若提示"author 专用字段"或"只支持固定考点"，立即改用 operation=author，不要重复同一个 operation 试参数。
 - 材料不足（NEEDS_MATERIAL）先自己换一次检索范围或检索词；仍不足就向用户说明缺的是哪类材料，不要硬造依据。
 - 命题失败时看 failure.code：retry=same_request 的（candidate_shape、design_invalid、condition_test_incomplete、blind_incomplete）最多自动重来一次；retry=new_request 的（quality_gate、blind_disagreement、audit_rejected、material_gap）不要重复同一请求，要么换考点/换写法，要么把问题交回用户。
 - 审校 NEEDS_REVISION 最多重做三轮，且每轮改法必须升级：第一轮按 errors 定点修；第二轮换结构（改干扰项/改问法/改小问）；第三轮换题（同考点重出，不复用原题面）。
@@ -340,6 +346,11 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 	if (toolName === REVIEW_TOOL) {
 		const status = stringField(payload, "status") ?? stringField(nested(payload, "review"), "status");
 		const ingestion = nested(payload, "ingestion");
+		// get_question_state returns the bank status next to the review status. A teacher
+		// who asks "is this stored?" gets that answer from the state read; without this
+		// branch the message guardrail treats a true STORED statement as a false claim.
+		const bank = nested(payload, "question_bank");
+		const bankStatus = stringField(bank, "status");
 		const observation: Observation = {
 			ok: status === "PASS",
 			next: status === "PASS" ? [] : hintFor(status, undefined),
@@ -356,6 +367,11 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 		if (questionId) artifact.question_id = questionId;
 		if (typeof payload?.version === "number") artifact.version = String(payload.version);
 		if (ingestion && typeof ingestion.status === "string") artifact.ingestion = ingestion.status;
+		if (!ingestion && bankStatus === "STORED") {
+			artifact.ingestion = "STORED";
+			const recordId = stringField(bank, "record_id");
+			if (recordId) artifact.record_id = recordId;
+		}
 		if (Object.keys(artifact).length > 0) observation.artifact = artifact;
 		if (!observation.ok) {
 			// The Pi tool returns a compact, flat review result; the raw HTTP payload nests

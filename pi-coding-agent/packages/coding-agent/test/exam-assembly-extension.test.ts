@@ -133,6 +133,31 @@ describe("built-in exam assembly", () => {
 			"EXAM_ASSEMBLY_UNAVAILABLE",
 		);
 	});
+	it("reports a contract violation as a request error, not a service outage", async () => {
+		vi.stubGlobal(
+			"fetch",
+			vi.fn().mockResolvedValue(
+				new Response(
+					JSON.stringify({
+						detail: [
+							{
+								type: "extra_forbidden",
+								loc: ["body", "unexpected_field"],
+								msg: "Extra inputs are not permitted",
+							},
+						],
+					}),
+					{ status: 422, headers: { "content-type": "application/json" } },
+				),
+			),
+		);
+		const result = await tool().execute("test", request);
+		const output = JSON.parse(result.content[0].text ?? "");
+		expect(output.status).toBe("INVALID_REQUEST");
+		expect(output.error_code).toBe("INVALID_EXAM_ASSEMBLY_REQUEST");
+		expect(output.http_status).toBe(422);
+		expect(result.isError).toBe(false);
+	});
 	it("bounds service wait", async () => {
 		vi.stubEnv("EXAM_ASSEMBLY_TIMEOUT_SECONDS", "0.01");
 		vi.stubGlobal(

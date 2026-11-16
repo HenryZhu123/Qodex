@@ -163,6 +163,72 @@ async def health(request: Request) -> dict:
         }
 
 
+async def _hydrate_revision(payload: dict, task_id: UUID, pool) -> UUID | None:
+    """Fill a partial revise package from the immutable pending version.
+
+    The agent can read the review state, but that projection intentionally omits
+    ``generator`` and the full self-check. Revision needs the original package, so
+    when the caller supplies only the identity/views we restore the pending copy and
+    the task id that owns it. The task id is stored on the row, not inside the JSONB
+    package, so the lookup returns both.
+    """
+    current = payload.get("current_question")
+    if not isinstance(current, dict) or isinstance(current.get("generator"), dict):
+        return None
+    question_id = current.get("question_id")
+    version = current.get("version")
+    if not isinstance(question_id, str) or not question_id or type(version) is not int:
+        return None
+    lookup_task_id = task_id
+    raw_task_id = current.get("task_id")
+    if isinstance(raw_task_id, str):
+        try:
+            lookup_task_id = UUID(raw_task_id)
+        except (TypeError, ValueError):
+            lookup_task_id = task_id
+    row = None
+    try:
+        row = await pool.fetchrow(
+            """
+            SELECT task_id, question_json
+            FROM question_generation.pending_questions
+            WHERE task_id = $1 AND question_id = $2 AND version = $3
+            """,
+            lookup_task_id, question_id, version,
+        )
+    except Exception:  # noqa: BLE001 - hydration must not turn a revise into a queue error
+        row = None
+    if row is None and not isinstance(current.get("task_id"), str):
+        # The agent may only know question_id/version. The generated id is unique
+        # enough to find the pending row, and its task_id is the one v2 must join.
+        try:
+            row = await pool.fetchrow(
+                """
+                SELECT task_id, question_json
+                FROM question_generation.pending_questions
+                WHERE question_id = $1 AND version = $2
+                ORDER BY queued_at DESC
+                LIMIT 1
+                """,
+                question_id, version,
+            )
+        except Exception:  # noqa: BLE001
+            row = None
+    if row is None:
+        return None
+    package = row["question_json"]
+    if isinstance(package, str):
+        try:
+            package = json.loads(package)
+        except (TypeError, ValueError):
+            return None
+    if not isinstance(package, dict):
+        return None
+    payload["current_question"] = package
+    owner = row["task_id"]
+    return owner if isinstance(owner, UUID) else None
+
+
 def _generate(operation: str, payload: dict, knowledge: KnowledgeEvidence | None) -> dict:
     if operation == "author":
         return generate_from_brief(payload, knowledge=knowledge)
@@ -195,6 +261,13 @@ async def submit(
     # A revision must stay in the task it revises, so the caller may pin task_id;
     # otherwise the service mints one. Every question of this call shares it.
     raw_task_id = payload.pop("task_id", None) if isinstance(payload, dict) else None
+    # A revision belongs to the task it revises. The tool normally injects that id,
+    # but a direct caller may only send current_question.task_id; use it so v2 is
+    # queued under the same task instead of a freshly minted one.
+    if operation == "revise" and raw_task_id is None and isinstance(payload, dict):
+        current = payload.get("current_question")
+        if isinstance(current, dict) and isinstance(current.get("task_id"), str):
+            raw_task_id = current["task_id"]
     try:
         task_id = UUID(raw_task_id) if raw_task_id is not None else uuid4()
     except (TypeError, ValueError, AttributeError):
@@ -218,6 +291,12 @@ async def submit(
                 status_code=503,
             )
 
+        if operation == "revise":
+            hydrated_task_id = await _hydrate_revision(
+                generation_request, task_id, request.app.state.queue_pool
+            )
+            if hydrated_task_id is not None:
+                task_id = hydrated_task_id
         result = await asyncio.to_thread(
             _generate, operation, generation_request, getattr(request.app.state, "knowledge", None),
         )

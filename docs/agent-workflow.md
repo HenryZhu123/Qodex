@@ -109,6 +109,25 @@ Pi Agent（qodex-workflow）
 `quality_gate`、`condition_test_incomplete`、`blind_disagreement`、`blind_incomplete`、`audit_rejected`，
 每项带 `retry`（`same_request`/`new_request`/`no`）与 `needs`（`material`/`human`/null）。
 
+## 4-A. 2026-11-16 契约修复（当前）
+
+CLI 全链路测试（111 用例）暴露的主路问题已修，改动在工具层/政策/启动参数、修订 hydration 与交付重标：
+
+| 变化 | 行为 |
+| --- | --- |
+| 自然语言路由 | `question_generation` 的描述明确「任意自然语言/粗需求 → `author`」；非 `author` 操作收到 `brief/requirements/syllabus_areas` 时在本地返回路由错误，不再花服务调用 |
+| `author` 校验 | 未知字段、subject 枚举、24 个 syllabus ID、requirements 1–8 字符串、total_score 仅综合题；中文 subject 与单条 requirements 自动归一 |
+| `revise` | feedback 六字段本地校验；补 `schema_version/request_id`；剥离审校 `errors`；task_id 取当前题；服务端按 `task_id+question_id+version` 从待审表补全题包（可按 question_id 回退） |
+| 解析重标 | 选项重排时按同一 inverse 映射改写 `explanation`/`option_explanations`/`misconceptions` 里的"选C/选项C/C项"等引用；提示禁止用 A–D 指代选项 |
+| 状态护栏 | `get_question_state` 的 `question_bank.status=STORED` 被识别为入库回执，不再把真话改成假话 |
+| demo 工具面 | CLI 演示默认 `--no-builtin-tools` + `QODEX_DEMO=1`，模型只看到四个业务工具 |
+| 错误分类 | 组卷/审校/题库的 4xx → `REQUEST_REJECTED` / `INVALID_REQUEST`；5xx/网络才是 UNAVAILABLE |
+
+实测：D-01r/D-02r/D-03r 单题与 G-01r2 两题+组卷均 `GENERATED → PASS → STORED → STRUCTURAL_PASS`；
+D-01s 完成 `NEEDS_REVISION → revise v2 → PASS/STORED`，v2 解析与答案一致；B-09r 改为先追问，C-10s 不再误纠正。
+证据与残余项见 `.local/test-2026-11-16/06-FIX-REPORT.md`。
+仍未闭环：no-progress 复测、跨进程重复计费、质量层（问题 1，不含答案/解析正确性）。
+
 ## 5-A. 运行与验证
 
 ```bash
@@ -168,7 +187,8 @@ cd pi-coding-agent/packages/coding-agent && node ../../node_modules/vitest/dist/
    且综合题分值异质（6–16 分/题），当前契约表达不了。
 2. **题组**（2024 年 43/44 共用同一台机器 M）与**带图题**在全系统没有对应实体。
 3. **审校看不到答案**：`CheckerPayload` 只有 `reference` + `detection_content`，答案/解析/评分不进审校，
-   因此 `PASS` 不证明答案正确；答案正确性由命题侧盲解 + 审计与人工负责。
+   因此 `PASS` 不证明答案正确；答案/解析正确性是交付前必须保证的，由命题侧盲解 + 审计 + 交付重标负责，
+   **不属于问题 1（风格/难度/考纲贴合度）**。选项重排后解析里的选项引用由 `delivered_choice_views` 同步改写。
 4. 难度与知识点由 annotate 决定，属模型判断而非校准量表；组卷必须用 `question_bank search` 读真值。
 5. 金额没有代码强制上限，只有调用次数与墙钟；付费实验仍需事先授权 + 子 agent 审方案。
 6. 题目与真题的贴合度（计算量、题型配比、超纲判定）**未做**，见 `TASK_STATE.md` 问题 1。

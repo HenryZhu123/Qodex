@@ -114,16 +114,25 @@ export default function examAssemblyExtension(pi: ExtensionAPI): void {
 							typeof body.artifacts.student_exam_html === "string" &&
 							typeof body.artifacts.answer_key_html === "string" &&
 							typeof body.artifacts.report === "string"));
+				const rejectedRequest = !response.ok && httpStatus !== undefined && httpStatus >= 400 && httpStatus < 500;
 				const output =
 					response.ok && valid && validSuccess && isRecord(body)
 						? { ...body, http_status: httpStatus }
-						: {
-								status: "TOOL_ERROR",
-								error_code: response.ok ? "INVALID_EXAM_ASSEMBLY_RESPONSE" : "EXAM_ASSEMBLY_UNAVAILABLE",
-								http_status: httpStatus,
-								detail: isRecord(body) && "detail" in body ? body.detail : body,
-								service_response: body,
-							};
+						: rejectedRequest
+							? {
+									status: "INVALID_REQUEST",
+									error_code: "INVALID_EXAM_ASSEMBLY_REQUEST",
+									http_status: httpStatus,
+									detail: isRecord(body) && "detail" in body ? body.detail : body,
+									service_response: body,
+								}
+							: {
+									status: "TOOL_ERROR",
+									error_code: response.ok ? "INVALID_EXAM_ASSEMBLY_RESPONSE" : "EXAM_ASSEMBLY_UNAVAILABLE",
+									http_status: httpStatus,
+									detail: isRecord(body) && "detail" in body ? body.detail : body,
+									service_response: body,
+								};
 				return {
 					content: [{ type: "text", text: JSON.stringify(output) }],
 					details: { result: output },

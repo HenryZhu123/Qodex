@@ -14,6 +14,7 @@ from question_generation.general_authoring import (
     AUTHOR_VIEWS,
     READER_PROMPT,
     delivered_choice_views,
+    relabel_option_text,
     run,
 )
 from question_generation.general_contract import (
@@ -382,3 +383,62 @@ class ReplenishmentPreflightTests(TestCase):
         self.assertEqual({q['slot_id'] for q in result['questions']}, {'assembly-1', 'assembly-2'})
         self.assertTrue(all(q['assembly_slot']['difficulty_status'] == 'REVIEW_REQUIRED'
                             for q in result['questions']))
+
+
+class OptionReferenceTests(DeliveryTests):
+    def test_relabels_the_answer_letter_in_teacher_text(self):
+        candidate = deepcopy(CASES[0]['candidate'])
+        correct = candidate['instructor_view']['correct_option_id']
+        candidate['instructor_view']['explanation'] = f"推导略。故选{correct}。{correct}项同时满足条件。"
+        seed = next(
+            value for value in range(64)
+            if delivered_choice_views(candidate, value)[1]['correct_option_id'] != correct
+        )
+        _, teacher, _ = delivered_choice_views(candidate, seed)
+        delivered = teacher['correct_option_id']
+        self.assertNotEqual(delivered, correct)
+        self.assertIn(f"故选{delivered}", teacher['explanation'])
+        self.assertNotIn(f"故选{correct}", teacher['explanation'])
+        self.assertIn(f"{delivered}项", teacher['explanation'])
+
+    def test_option_relabel_leaves_node_labels_alone(self):
+        candidate = deepcopy(CASES[0]['candidate'])
+        correct = candidate['instructor_view']['correct_option_id']
+        candidate['instructor_view']['explanation'] = f"由先序首项A知根为A；故选{correct}。"
+        seed = next(
+            value for value in range(64)
+            if delivered_choice_views(candidate, value)[1]['correct_option_id'] != correct
+        )
+        _, teacher, _ = delivered_choice_views(candidate, seed)
+        # "首项A" and "根为A" are tree-node labels, not option references.
+        self.assertIn("首项A", teacher['explanation'])
+        self.assertIn("根为A", teacher['explanation'])
+
+
+
+class OptionReferenceRegressionTests(TestCase):
+    def test_the_d01c_explanation_letter_is_rewritten(self):
+        text = ("空判定：front=7、rear=3，二者不等，故不是队空。满判定：采用少用一个元素空间时，"
+                "判满条件为 (rear+1)%MAXQSIZE==front；计算 (3+1)%10=4，而 front=7，不满足，故不是队满。"
+                "长度计算：QueueLength=(rear-front+MAXQSIZE)%MAXQSIZE=(3-7+10)%10=6。"
+                "因此当前状态为非空非满，元素个数为6，选C。")
+        inverse = {"A": "A", "B": "B", "C": "D", "D": "C"}
+        rewritten = relabel_option_text(text, inverse)
+        self.assertIn("选D", rewritten)
+        self.assertNotIn("选C", rewritten)
+
+    def test_option_references_in_explanation_values_are_rewritten(self):
+        inverse = {"A": "D", "B": "C", "C": "B", "D": "A"}
+        value = "该项与C项混淆；A、B、D项均不满足条件。"
+        rewritten = relabel_option_text(value, inverse)
+        self.assertIn("B项", rewritten)
+        self.assertIn("D、C、A项", rewritten)
+
+
+    def test_answer_statements_without_a_select_prefix_are_rewritten(self):
+        inverse = {"A": "D", "B": "C", "C": "B", "D": "A"}
+        text = "C 是正确答案；正确答案是C；故选C。"
+        rewritten = relabel_option_text(text, inverse)
+        self.assertIn("B 是正确答案", rewritten)
+        self.assertIn("正确答案是B", rewritten)
+        self.assertIn("故选B", rewritten)

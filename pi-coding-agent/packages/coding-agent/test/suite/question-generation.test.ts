@@ -164,3 +164,243 @@ it("passes a rough request to the author operation for the service to plan", asy
 	const result = harness.session.messages.find((message) => message.role === "toolResult");
 	expect(JSON.parse(getMessageText(result))).toEqual(response);
 });
+
+it("normalises a Chinese subject and a single requirement for the author operation", async () => {
+	const response = {
+		status: "GENERATED",
+		questions: [{ question_id: "authored-demo", version: 1, review_status: "PENDING" }],
+		queue_receipts: [{ question_id: "authored-demo", version: 1, status: "QUEUED" }],
+	};
+	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json(response));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: {
+					schema_version: "0.1",
+					request_id: "author-cn-subject",
+					subject: "数据结构",
+					requirements: "只出一道循环队列单选题",
+				},
+			}),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("出一道数据结构单选题");
+
+	expect(fetchStub).toHaveBeenCalledOnce();
+	const submitted = JSON.parse(String(fetchStub.mock.calls[0]?.[1]?.body));
+	expect(submitted.subject).toBe("data_structures");
+	expect(submitted.requirements).toEqual(["只出一道循环队列单选题"]);
+});
+
+it("redirects authoring fields sent to the deterministic single operation without calling the service", async () => {
+	const fetchStub = vi.fn<typeof fetch>();
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "single",
+				request: {
+					schema_version: "0.1",
+					request_id: "authoring-on-single",
+					subject: "数据结构",
+					syllabus_areas: ["循环队列"],
+					requirements: "出一道循环队列单选题，2 分",
+				},
+			}),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("出一道循环队列单选题，2 分");
+
+	expect(fetchStub).not.toHaveBeenCalled();
+	const result = harness.session.messages.find((message) => message.role === "toolResult");
+	const payload = JSON.parse(getMessageText(result));
+	expect(payload.status).toBe("INVALID_REQUEST");
+	expect(payload.message).toContain("operation=author");
+});
+
+it("rejects unknown author fields before spending a model call", async () => {
+	const fetchStub = vi.fn<typeof fetch>();
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: {
+					schema_version: "0.1",
+					request_id: "unknown-field",
+					brief: "出一道题",
+					difficulty: "medium",
+				},
+			}),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("出一道题");
+
+	expect(fetchStub).not.toHaveBeenCalled();
+	const result = harness.session.messages.find((message) => message.role === "toolResult");
+	const payload = JSON.parse(getMessageText(result));
+	expect(payload.status).toBe("INVALID_REQUEST");
+	expect(payload.message).toContain("不接受字段 difficulty");
+});
+
+it("lists the exact revise feedback fields instead of letting the model guess", async () => {
+	const fetchStub = vi.fn<typeof fetch>();
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "revise",
+				request: {
+					schema_version: "0.1",
+					request_id: "revise-demo",
+					current_question: {
+						question_id: "authored-demo",
+						version: 1,
+						metadata: { question_type: "single_choice" },
+					},
+					feedback: { feedback_id: "review-1", question_id: "authored-demo" },
+				},
+			}),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("把刚才那道题改一下");
+
+	expect(fetchStub).not.toHaveBeenCalled();
+	const result = harness.session.messages.find((message) => message.role === "toolResult");
+	const payload = JSON.parse(getMessageText(result));
+	expect(payload.status).toBe("INVALID_REQUEST");
+	expect(payload.message).toContain("target_version");
+	expect(payload.message).toContain("part_id");
+	expect(payload.message).toContain("action");
+});
+
+it("passes a complete revise feedback package to the service", async () => {
+	const response = { status: "REVISED", questions: [{ question_id: "authored-demo", version: 2 }] };
+	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json(response));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "revise",
+				request: {
+					schema_version: "0.1",
+					request_id: "revise-ok",
+					current_question: { question_id: "authored-demo", version: 1 },
+					feedback: {
+						feedback_id: "review-1",
+						question_id: "authored-demo",
+						target_version: 1,
+						part_id: "stem",
+						action: "repair",
+						comment: "难度改为 hard",
+					},
+				},
+			}),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("把难度改成 hard");
+
+	expect(fetchStub).toHaveBeenCalledOnce();
+	expect(String(fetchStub.mock.calls[0]?.[0])).toMatch(/\/v1\/question-generation\/revise$/);
+});
+
+it("rejects a Chinese chapter name in syllabus_areas and lists the valid IDs", async () => {
+	const fetchStub = vi.fn<typeof fetch>();
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "author",
+				request: {
+					schema_version: "0.1",
+					request_id: "bad-area",
+					syllabus_areas: ["循环队列"],
+				},
+			}),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("出一道循环队列题");
+
+	expect(fetchStub).not.toHaveBeenCalled();
+	const result = harness.session.messages.find((message) => message.role === "toolResult");
+	const payload = JSON.parse(getMessageText(result));
+	expect(payload.status).toBe("INVALID_REQUEST");
+	expect(payload.message).toContain("ds.stack_queue_array");
+});
+
+it("defaults revise bookkeeping fields and drops the review-only errors array", async () => {
+	const response = { status: "REVISED", questions: [{ question_id: "authored-demo", version: 2 }] };
+	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json(response));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter((extension) => extension.name === "question-generation"),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(
+			fauxToolCall("question_generation", {
+				operation: "revise",
+				request: {
+					current_question: { question_id: "authored-demo", version: 1 },
+					feedback: {
+						feedback_id: "review-1",
+						question_id: "authored-demo",
+						target_version: 1,
+						part_id: "p1",
+						action: "repair",
+						comment: "修正指代",
+						errors: [{ error_type: "语义不清" }],
+					},
+				},
+			}),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("修订一下");
+
+	expect(fetchStub).toHaveBeenCalledOnce();
+	const submitted = JSON.parse(String(fetchStub.mock.calls[0]?.[1]?.body));
+	expect(submitted.schema_version).toBe("0.1");
+	expect(submitted.request_id).toMatch(/^[0-9a-f-]{36}$/);
+	expect(submitted.feedback.errors).toBeUndefined();
+	expect(submitted.feedback.comment).toBe("修正指代");
+});

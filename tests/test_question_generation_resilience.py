@@ -431,9 +431,14 @@ class _FakeTransaction:
 class _FakeConnection:
     def __init__(self, status: str = "QUEUED"):
         self.status = status
+        self.executed: list[tuple[str, tuple]] = []
 
     def transaction(self):
         return _FakeTransaction()
+
+    async def execute(self, query: str, *args):
+        self.executed.append((query, args))
+        return "INSERT 0 1"
 
     async def fetchval(self, query: str, *args):
         return self.status
@@ -661,3 +666,90 @@ class ServiceTests(TestCase):
             response = TestClient(app).get("/health")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "degraded")
+
+
+class _RevisionPool:
+    def __init__(self, package, owner="00000000-0000-0000-0000-000000000001"):
+        self.package = package
+        self.owner = owner
+        self.calls = []
+
+    async def fetchrow(self, query, *args):
+        self.calls.append(args)
+        if self.package is None:
+            return None
+        return {"task_id": question_service.UUID(self.owner), "question_json": self.package}
+
+
+
+@skipUnless(question_service is not None, "service dependencies are not installed")
+class HydrateRevisionTests(TestCase):
+    def test_fills_a_partial_package_from_the_pending_version(self):
+        payload = {"current_question": {"task_id": "t", "question_id": "q", "version": 1, "metadata": {}}}
+        package = {
+            "question_id": "q",
+            "version": 1,
+            "generator": {"version": "general-authoring-0.5", "seed": 7, "parameters": {}},
+            "self_check": {"status": "PASSED"},
+            "review_status": "PENDING",
+        }
+        pool = _RevisionPool(package)
+        asyncio.run(
+            question_service._hydrate_revision(
+                payload, question_service.UUID("00000000-0000-0000-0000-000000000001"), pool
+            )
+        )
+        self.assertEqual(payload["current_question"], package)
+        self.assertEqual(len(pool.calls), 1)
+
+    def test_keeps_a_complete_package_and_skips_the_query(self):
+        complete = {"question_id": "q", "version": 1, "generator": {"version": "general-authoring-0.5"}}
+        payload = {"current_question": complete}
+        pool = _RevisionPool({})
+        asyncio.run(
+            question_service._hydrate_revision(
+                payload, question_service.UUID("00000000-0000-0000-0000-000000000001"), pool
+            )
+        )
+        self.assertIs(payload["current_question"], complete)
+        self.assertEqual(pool.calls, [])
+
+    def test_ignores_a_package_without_identity(self):
+        payload = {"current_question": {"metadata": {}}}
+        pool = _RevisionPool({})
+        asyncio.run(
+            question_service._hydrate_revision(
+                payload, question_service.UUID("00000000-0000-0000-0000-000000000001"), pool
+            )
+        )
+        self.assertEqual(pool.calls, [])
+
+    def test_prefers_the_task_id_inside_the_current_question(self):
+        payload = {"current_question": {"task_id": "00000000-0000-0000-0000-000000000002", "question_id": "q", "version": 1}}
+        pool = _RevisionPool({"generator": {"version": "general-authoring-0.5"}}, "00000000-0000-0000-0000-000000000002")
+        asyncio.run(
+            question_service._hydrate_revision(
+                payload, question_service.UUID("00000000-0000-0000-0000-000000000001"), pool
+            )
+        )
+        self.assertEqual(pool.calls[0][0], question_service.UUID("00000000-0000-0000-0000-000000000002"))
+
+    def test_falls_back_to_question_id_and_returns_the_owning_task(self):
+        payload = {"current_question": {"question_id": "q", "version": 1}}
+        package = {"task_id": "00000000-0000-0000-0000-000000000003", "question_id": "q", "version": 1, "generator": {"version": "general-authoring-0.5"}}
+        class _Pool:
+            def __init__(self):
+                self.calls = []
+            async def fetchrow(self, query, *args):
+                self.calls.append(args)
+                if len(self.calls) == 1:
+                    return None
+                return {"task_id": question_service.UUID("00000000-0000-0000-0000-000000000003"), "question_json": package}
+        pool = _Pool()
+        resolved = asyncio.run(
+            question_service._hydrate_revision(
+                payload, question_service.UUID("00000000-0000-0000-0000-000000000001"), pool
+            )
+        )
+        self.assertEqual(resolved, question_service.UUID("00000000-0000-0000-0000-000000000003"))
+        self.assertEqual(len(pool.calls), 2)
