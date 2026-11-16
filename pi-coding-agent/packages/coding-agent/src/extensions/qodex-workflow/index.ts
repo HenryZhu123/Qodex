@@ -55,6 +55,8 @@ read/bash/edit/write 不存在，不要尝试；需要信息就从这四个工�
 - 预算或连续两次同码失败时主动收尾：列出已完成、产出在哪、下一步建议。
 
 不允许做的事：判定 PASS；自己编造 knowledge_points、task_id 或版本号；把教师视图或评分给学生；在拿到 ingestion.status=STORED 之前说"已入库/已通过"。
+
+回复格式只用 Markdown：不要输出 HTML 标签（如 <details>、<br>、<div>）。网页按 Markdown 渲染，标签会原样显示成文本；需要折叠、分块就用小标题和列表。
 `;
 
 const GENERATION_TOOL = "question_generation";

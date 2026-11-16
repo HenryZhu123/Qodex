@@ -666,6 +666,13 @@ it("keeps the policy aligned with v2 mixed papers", () => {
 	expect(WORKFLOW_POLICY).not.toContain("只组单选");
 });
 
+it("asks for Markdown instead of HTML, because the web renders Markdown only", () => {
+	// A live web session answered with a literal <details> block, which the
+	// Markdown renderer printed as text.
+	expect(WORKFLOW_POLICY).toContain("不要输出 HTML 标签");
+	expect(WORKFLOW_POLICY).toContain("<details>");
+});
+
 it("corrects an all-questions-stored claim when only one has a receipt", () => {
 	expect(ingestionClaimCorrection("两道题都已入库。", 1, 2, true)).toContain("1/2");
 	expect(ingestionClaimCorrection("A 已入库。", 1, 1, true)).toBeUndefined();
