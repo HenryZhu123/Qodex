@@ -15,6 +15,7 @@ import {
 	text,
 	validateQuotas,
 } from "@/lib/workspace-api";
+import { MixedPaperForm } from "./mixed-paper-form";
 
 export function Report({ value }: { value: unknown }) {
 	return (
@@ -26,6 +27,23 @@ export function Report({ value }: { value: unknown }) {
 }
 
 export function AssemblyForm({ openHistory }: { openHistory: (id?: string) => void }) {
+	const [mixed, setMixed] = useState(true);
+	return (
+		<>
+			<div className="qx-actions" style={{ padding: "16px 32px" }}>
+				<button type="button" className={`qx-btn ${mixed ? "selected" : ""}`} onClick={() => setMixed(true)}>
+					多学科整卷
+				</button>
+				<button type="button" className={`qx-btn ${!mixed ? "selected" : ""}`} onClick={() => setMixed(false)}>
+					单学科配额练习
+				</button>
+			</div>
+			{mixed ? <MixedPaperForm openHistory={openHistory} /> : <SingleSubjectForm openHistory={openHistory} />}
+		</>
+	);
+}
+
+function SingleSubjectForm({ openHistory }: { openHistory: (id?: string) => void }) {
 	const [subject, setSubject] = useState("数据结构");
 	const [name, setName] = useState("章节练习");
 	const [count, setCount] = useState(3);

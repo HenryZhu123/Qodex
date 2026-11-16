@@ -50,6 +50,8 @@ class QuestionNode(StrictModel):
     reference: str = ""
     numbering_path: list[str] = Field(default_factory=list)
     numbering_description: str = ""
+    parts: list[dict[str, Any]] = Field(default_factory=list, exclude_if=lambda value: not value)
+    grading: dict[str, Any] = Field(default_factory=dict, exclude_if=lambda value: not value)
 
 
 ExamNode = Annotated[SectionNode | QuestionNode, Field(discriminator="type")]
@@ -140,6 +142,10 @@ class QuestionView(StrictModel):
     numbering_path: list[str]
     numbering_description: str
     reference: str
+    # Persist the authoring views in the immutable version, not a mutable side lookup.
+    student_stem: str = Field(default="", exclude_if=lambda value: not value)
+    parts: list[dict[str, Any]] = Field(default_factory=list, exclude_if=lambda value: not value)
+    grading: dict[str, Any] = Field(default_factory=dict, exclude_if=lambda value: not value)
 
 
 class ReviewError(StrictModel):

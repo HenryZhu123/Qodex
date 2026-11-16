@@ -62,8 +62,11 @@ def prepare_database(env):
         except OSError:
             time.sleep(1)
     subprocess.run([sys.executable, "-m", "alembic", "upgrade", "head"], cwd=PI / "services/exam-checker", env=env, check=True)
-    with (ROOT / "question_generation/sql/001_pending_questions.sql").open("rb") as stream:
-        subprocess.run([*compose, "exec", "-T", "postgres", "psql", "-v", "ON_ERROR_STOP=1", "-U", env.get("EXAM_CHECKER_POSTGRES_USER", "qodex"), "-d", env.get("EXAM_CHECKER_POSTGRES_DB", "qodex")], stdin=stream, env=env, check=True)
+    # Use the same ordered bootstrap as the team's main demo script. The second
+    # script installs task-scoped ownership and restores the current pending view.
+    for filename in ("001_pending_questions.sql", "002_generation_tasks.sql"):
+        with (ROOT / "question_generation/sql" / filename).open("rb") as stream:
+            subprocess.run([*compose, "exec", "-T", "postgres", "psql", "-v", "ON_ERROR_STOP=1", "-U", env.get("EXAM_CHECKER_POSTGRES_USER", "qodex"), "-d", env.get("EXAM_CHECKER_POSTGRES_DB", "qodex")], stdin=stream, env=env, check=True)
 
 
 def main():

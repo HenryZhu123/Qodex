@@ -3,31 +3,61 @@ import type { ExtensionAPI } from "../../core/extensions/types.ts";
 
 export const assemblyParameters = Type.Object(
 	{
-		schema_version: Type.Optional(Type.Literal("1.0")),
+		schema_version: Type.Optional(Type.Union([Type.Literal("1.0"), Type.Literal("2.0")])),
 		request_id: Type.String({ minLength: 1, maxLength: 200 }),
 		subject: Type.String({ minLength: 1 }),
 		question_count: Type.Integer({ minimum: 1, maximum: 100 }),
 		total_score: Type.Integer({ minimum: 1 }),
-		question_type_counts: Type.Record(Type.String(), Type.Integer({ minimum: 0 }), {
-			description: "Question count per type; sum equals question_count. Currently only single_choice is supported.",
-		}),
-		question_type_scores: Type.Record(Type.String(), Type.Integer({ minimum: 1 }), {
-			description:
-				"Per-question score for each type. Same keys as question_type_counts; sum(count * score) equals total_score.",
-		}),
-		knowledge_point_counts: Type.Record(Type.String(), Type.Integer({ minimum: 0 }), {
-			description:
-				"Exact bank knowledge-point labels. Each question fills one topic quota even with multiple labels.",
-		}),
-		difficulty_counts: Type.Object(
-			{
-				easy: Type.Integer({ minimum: 0 }),
-				medium: Type.Integer({ minimum: 0 }),
-				hard: Type.Integer({ minimum: 0 }),
-			},
-			{ additionalProperties: false },
+		question_type_counts: Type.Optional(
+			Type.Record(Type.String(), Type.Integer({ minimum: 0 }), {
+				description:
+					"Question count per type; sum equals question_count. Currently only single_choice is supported.",
+			}),
+		),
+		question_type_scores: Type.Optional(
+			Type.Record(Type.String(), Type.Integer({ minimum: 1 }), {
+				description:
+					"Per-question score for each type. Same keys as question_type_counts; sum(count * score) equals total_score.",
+			}),
+		),
+		knowledge_point_counts: Type.Optional(
+			Type.Record(Type.String(), Type.Integer({ minimum: 0 }), {
+				description:
+					"Exact bank knowledge-point labels. Each question fills one topic quota even with multiple labels.",
+			}),
+		),
+		difficulty_counts: Type.Optional(
+			Type.Object(
+				{
+					easy: Type.Integer({ minimum: 0 }),
+					medium: Type.Integer({ minimum: 0 }),
+					hard: Type.Integer({ minimum: 0 }),
+				},
+				{ additionalProperties: false },
+			),
+		),
+		slots: Type.Optional(
+			Type.Array(
+				Type.Object(
+					{
+						subject: Type.String({ minLength: 1 }),
+						question_type: Type.Union([Type.Literal("single_choice"), Type.Literal("comprehensive")]),
+						score: Type.Integer({ minimum: 1, maximum: 150 }),
+						knowledge_point: Type.Optional(Type.String({ minLength: 1 })),
+						difficulty: Type.Optional(
+							Type.Union([Type.Literal("easy"), Type.Literal("medium"), Type.Literal("hard")]),
+						),
+						part_scores: Type.Optional(Type.Array(Type.Integer({ minimum: 1 }), { maxItems: 20 })),
+					},
+					{ additionalProperties: false },
+				),
+				{ minItems: 1, maxItems: 100 },
+			),
 		),
 		max_repair_rounds: Type.Optional(Type.Integer({ minimum: 0, maximum: 10 })),
+		semantic_review: Type.Optional(Type.Boolean()),
+		semantic_max_calls: Type.Optional(Type.Integer({ minimum: 0, maximum: 100 })),
+		similarity_search_limit: Type.Optional(Type.Integer({ minimum: 1, maximum: 128 })),
 		export_pdf: Type.Optional(Type.Boolean()),
 		similarity_decisions: Type.Optional(
 			Type.Array(
@@ -63,17 +93,18 @@ export default function examAssemblyExtension(pi: ExtensionAPI): void {
 		name: "exam_assembly",
 		label: "exam assembly",
 		description:
-			"Assemble single-choice exams from the accepted PostgreSQL Question Bank API. Verifies current PASS and source versions. Returns separate student exam, teacher answers and report paths. No mock fallback or arbitrary SQL.",
+			"Assemble single-choice or mixed-subject comprehensive papers from the accepted PostgreSQL Question Bank API. Verifies current PASS and source versions. Returns separate student exam, teacher answers and report paths. No mock fallback or arbitrary SQL.",
 		promptSnippet: "Assemble exams from accepted bank questions or report missing requirements",
 		promptGuidelines: [
-			"Preserve all user quotas. Ask for missing topic/difficulty quotas or propose explicit defaults before calling. Do not invent questions, answers, bank labels or successful results.",
-			"Use question_type_counts, question_type_scores and knowledge_point_counts. Each quota dimension sums to question_count; sum(type count * type score) equals total_score. Each question fills one knowledge-point quota.",
+			"V2 semantic_review=true requests all selected pairs (including materials and subquestions) be reviewed. Model review is disabled server-side by default and may incur API costs when enabled; obtain explicit user approval and a semantic_max_calls budget before requesting model review. Confirmed duplicates trigger bounded replacement without changing scores or quotas. Budget exhaustion, uncertain verdicts and search limits never mean semantic pass. Model findings are not human review; never fabricate source=human decisions. V1 does not accept semantic_review or semantic budget fields.",
+			"Preserve all user quotas. Do not invent questions, answers, bank labels or successful results. For v2, omitted topic/difficulty/part_scores means unrestricted; do not invent exact quotas the user did not request.",
+			"For v1 use question_type_counts, question_type_scores and knowledge_point_counts. Each quota dimension sums to question_count; sum(type count * type score) equals total_score. Each question fills one knowledge-point quota.",
 			"Only STRUCTURAL_PASS means assembly completed. NEEDS_QUESTIONS reports shortages, INVALID_REQUEST requires correcting quotas, UNRESOLVED is inconclusive, TOOL_ERROR means failure. Never report those statuses as success.",
 			"The production tool uses real accepted bank entries only. Do not load development JSON, fabricate PASS reviews or use -e to load the old development extension.",
-			"This version supports four-option single_choice with integer per-question scores. Explain unsupported question types rather than silently converting them.",
+			"For mixed subjects, comprehensive questions or different scores use schema_version=2.0 and ordered slots, each with subject, question_type, score and optional knowledge_point/difficulty/part_scores. Slots count and score sum must match question_count/total_score. Do not send legacy quota maps or max_repair_rounds with v2. Put 40 choice slots before comprehensive slots for a 408-style paper. Scores must match originals; never rescale. v2 exports HTML (export_pdf=false), printable as PDF. Bad records are skipped and reported. Old comprehensive snapshots lacking structured parts/grading require a new authored version and independent review; never overwrite an immutable version.",
 			"Return the separate student/answer artifact paths. Structural checks do not certify semantic uniqueness or absence of cross-question clues.",
 			"UNRESOLVED with similarity_review.status=NEEDS_REVIEW requires human review. Return the teacher-only review packet and decisions template paths. Never invent a human reviewer, reason or verdict. Only forward explicit human decisions with their original question IDs and content hashes; changed content invalidates old decisions.",
-			"On NEEDS_QUESTIONS, return deficits and the replenishment_request artifact. Joint deficits are a proposed completion, not unique mandatory cells. Do not add them to marginal deficits or claim a minimum unless minimum_count_proven is true. Newly supplied questions must independently pass review and enter the bank before reassembly.",
+			"On NEEDS_QUESTIONS, return deficits and the replenishment_request artifact when present. V2 deficits identify unfilled ordered slots in one partial assignment. Joint deficits are a proposed completion, not unique mandatory cells. Do not add them to marginal deficits or claim a minimum unless minimum_count_proven is true. Newly supplied questions must independently pass review and enter the bank before reassembly.",
 		],
 		parameters: assemblyParameters,
 		executionMode: "sequential",
