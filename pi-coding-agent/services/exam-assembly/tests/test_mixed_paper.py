@@ -238,3 +238,15 @@ async def test_deterministic_comprehensive_application_fills_a_v2_slot(tmp_path)
     report = json.loads(Path(result["artifacts"]["report"]).read_text(encoding="utf-8"))
     assert report["student_exam"][0]["question_type"] == "comprehensive"
     assert [p["score"] for p in report["student_exam"][0]["parts"]] == [2, 3, 5]
+
+
+@pytest.mark.asyncio
+async def test_v2_shortage_marks_slots_for_authoring(tmp_path):
+    result = await assemble_paper(PaperRequest.model_validate(
+        dict(schema_version="2.0", request_id="TEST_ONLY_shortage", subject="408",
+             question_count=1, total_score=2,
+             slots=[dict(subject="数据结构", question_type="single_choice", score=2)])).model_dump(),
+        Repository([]), tmp_path)
+    assert result["status"] == "NEEDS_QUESTIONS"
+    assert result["next_action"] == "AUTHOR_MISSING_SLOTS"
+    assert result["deficits"][0]["position"] == 1

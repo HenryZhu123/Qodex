@@ -37,7 +37,7 @@ def integer(value, low, high):
 
 
 def power(value, low, high):
-    integer(value, low, high)
+    value = integer(value, low, high)
     if value & (value - 1):
         raise ValueError("大小须为 2 的幂。")
     return value

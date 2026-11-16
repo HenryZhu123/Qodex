@@ -6,11 +6,13 @@ import { builtInExtensions } from "../../src/extensions/index.ts";
 import {
 	callDigest,
 	demoMode,
+	ingestionClaimCorrection,
 	observe,
 	POLICY_MARKER,
 	parseQuota,
 	policyEnabled,
 	resolveLimits,
+	WORKFLOW_POLICY,
 } from "../../src/extensions/qodex-workflow/index.ts";
 import { createHarness, getMessageText, type Harness } from "./harness.ts";
 
@@ -656,4 +658,45 @@ it("does not treat a state read without a stored bank record as an ingestion rec
 		question_bank: { status: "SKIPPED" },
 	});
 	expect(observation.artifact?.ingestion).toBeUndefined();
+});
+
+it("keeps the policy aligned with v2 mixed papers", () => {
+	expect(WORKFLOW_POLICY).toContain("schema_version=2.0");
+	expect(WORKFLOW_POLICY).toContain("综合题");
+	expect(WORKFLOW_POLICY).not.toContain("只组单选");
+});
+
+it("corrects an all-questions-stored claim when only one has a receipt", () => {
+	expect(ingestionClaimCorrection("两道题都已入库。", 1, 2, true)).toContain("1/2");
+	expect(ingestionClaimCorrection("A 已入库。", 1, 1, true)).toBeUndefined();
+	expect(ingestionClaimCorrection("两题都已入库。", 2, 2, true)).toBeUndefined();
+	expect(ingestionClaimCorrection("已入库。", 0, 1, false)).toContain("没有拿到");
+});
+
+it("does not count or stop read-only bank queries", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	vi.stubEnv("QODEX_MAX_TOTAL_CALLS", "1");
+	const fetchStub = vi.fn<typeof fetch>().mockResolvedValue(Response.json({ questions: [] }));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({
+		extensionFactories: builtInExtensions.filter(
+			(extension) => extension.name === "qodex-workflow" || extension.name === "exam-checker",
+		),
+	});
+	harness.setResponses([
+		fauxAssistantMessage(fauxToolCall("question_bank", { operation: "search_questions", limit: 5 }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage(fauxToolCall("question_bank", { operation: "search_questions", limit: 5 }), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage("done"),
+	]);
+
+	await harness.session.prompt("题库里有什么？");
+
+	expect(fetchStub).toHaveBeenCalledTimes(2);
+	const results = harness.session.messages.filter((message) => message.role === "toolResult");
+	expect(getMessageText(results[0])).not.toContain("BUDGET_EXHAUSTED");
+	expect(getMessageText(results[1])).not.toContain("BUDGET_EXHAUSTED");
 });

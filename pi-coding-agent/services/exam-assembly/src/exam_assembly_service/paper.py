@@ -254,6 +254,7 @@ async def assemble_paper(request, repository, output_root, history=None, semanti
     if len(allocated) != len(slots):
         result["status"] = "NEEDS_QUESTIONS" if result["pool_complete"] else "UNRESOLVED"
         result["deficits"] = [dict(position=i+1, **slot) for i, slot in enumerate(slots) if i not in allocated]
+        result["next_action"] = "AUTHOR_MISSING_SLOTS"
         result["message"] = "缺口为当前候选池的一种联合补题方案，未生成残缺试卷。"
     else:
         selected = [allocated[i] for i in range(len(slots))]

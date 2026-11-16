@@ -88,6 +88,8 @@ async def test_inconclusive_never_exports(tmp_path, mode):
     assert not list(tmp_path.rglob('*.html'))
     if mode in ('disabled', 'budget', 'unresolved'):
         assert len(json.loads(Path(result['artifacts']['similarity_decisions_template']).read_text(encoding='utf-8'))) == 1
+    if mode == 'disabled':
+        assert 'SEMANTIC_MODEL_DISABLED' in result['semantic_review']['errors']
 
 
 @pytest.mark.asyncio

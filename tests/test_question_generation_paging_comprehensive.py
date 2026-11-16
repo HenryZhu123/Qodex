@@ -193,3 +193,15 @@ class PagingWitnessTypeTests(TestCase):
         })
         self.assertEqual(result["frame"], 17)
         self.assertEqual(result["physical_address"], 17 * 4096 + 0x1B4)
+
+
+class WitnessPowerTypeTests(TestCase):
+    def test_hex_page_size_is_converted_before_the_shift(self):
+        from question_generation.verification import solve
+        result = solve("paging", {
+            "page_size": "0x1000",
+            "address": "0x1B4",
+            "page_table": {"0": "0x11", "1": "0x3F"},
+        })
+        self.assertEqual(result["page"], 0)
+        self.assertEqual(result["physical_address"], 0x111B4)

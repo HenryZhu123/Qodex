@@ -48,9 +48,10 @@ read/bash/edit/write 不存在，不要尝试；需要信息就从这四个工�
 - 审校 NEEDS_REVISION 最多重做三轮，且每轮改法必须升级：第一轮按 errors 定点修；第二轮换结构（改干扰项/改问法/改小问）；第三轮换题（同考点重出，不复用原题面）。
   同一改法重复提交是无效动作，会被拦下。三轮仍不过就交回用户，附原题面与三轮审校理由，不要写成"已通过"。
 - 审校 UNRESOLVED 必须说明"审校不完整"，不能说通过。
-- 组卷 NEEDS_QUESTIONS 时先读 deficits，缺几道就补几道；新题必须重新过审校并入库后才允许重排，最多重排两次，仍缺就交回缺口报告。
+- 组卷 NEEDS_QUESTIONS 时先读 deficits，缺几道就补几道；v1 可用 replenishment plan，v2 按 deficits 的 ordered slot 逐题 author。新题必须重新过审校并入库后才允许重排，最多重排两次，仍缺就交回缺口报告。
 - 多道题的目标里，**单题失败不终止整份卷**：把该题记为失败并说明原因，继续处理其余题目；结束时交付"成了哪些/没成哪些/为什么"。只有"只出一道题"时失败才等于整个目标失败。
-- 只组单选。用户要综合题、题组、带图题或难度配额时，明确说当前不支持，并给可行替代（例如综合题单独出、按教师视图包交付），不要静默降级。
+- 组卷支持 v1 单选卷和 v2 混合卷：schema_version=2.0 的有序 slots 可跨四科、单选与综合题混合、每槽原分值、综合题可给 part_scores。图题、题组和同一题型的多套异质分值仍不支持；必须明确说明，不要静默降级。
+- v2 NEEDS_QUESTIONS 的 deficits 是未填的 ordered slot（含 subject/question_type/score/part_scores）；按槽位逐题命题/补题，不要调用只接受 v1 联合缺题计划的 replenishment。
 - 预算或连续两次同码失败时主动收尾：列出已完成、产出在哪、下一步建议。
 
 不允许做的事：判定 PASS；自己编造 knowledge_points、task_id 或版本号；把教师视图或评分给学生；在拿到 ingestion.status=STORED 之前说"已入库/已通过"。
@@ -449,9 +450,35 @@ export function observe(toolName: string, payload: Record<string, unknown> | und
 // Quoted text is the agent talking about the words, not asserting a result: it explains
 // the rule as `看到 ingestion.status=STORED 才说"已入库"`. Strip quotes before matching,
 // then require an unquoted completion claim.
+function withoutQuotes(text: string): string {
+	return text.replace(/"[^"]*"|“[^”]*”|「[^」]*」|『[^』]*』|'[^']*'/g, " ");
+}
+
 function claimOfIngestion(text: string): boolean {
-	const unquoted = text.replace(/"[^"]*"|“[^”]*”|「[^」]*」|『[^』]*』|'[^']*'/g, " ");
-	return /((?<![从把])已入库|已通过审校|审校通过|已经入库|accepted into the bank)/i.test(unquoted);
+	return /((?<![从把])已入库|已通过审校|审校通过|已经入库|accepted into the bank)/i.test(withoutQuotes(text));
+}
+
+export function ingestionClaimCorrection(
+	text: string,
+	stored: number,
+	expected: number,
+	verified: boolean,
+): string | undefined {
+	if (!claimOfIngestion(text)) return undefined;
+	const allClaimed = /(都|全部|均|所有|两题)/.test(withoutQuotes(text));
+	const expectedCount = allClaimed && expected > 0 ? expected : Math.max(expected, 1);
+	const partial = stored > 0 && stored < expectedCount;
+	if (verified && !partial) return undefined;
+	if (partial) {
+		return (
+			`\n\n[护栏] 本轮只有 ${stored}/${expectedCount} 道拿到 ingestion.status=STORED 回执；` +
+			"请逐题核对，不要把未入库的题写成已入库。"
+		);
+	}
+	return (
+		"\n\n[护栏] 本轮没有拿到 ingestion.status=STORED 的回执，因此上面的“已入库/已通过”不成立；" +
+		"请改成“自检通过 / 待审校”或“审校未完成”。"
+	);
 }
 
 function messageText(message: AgentMessage): string {
@@ -553,6 +580,9 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 			};
 		}
 		if (!DOMAIN_TOOLS.has(event.toolName)) return undefined;
+		// Read-only bank queries cost nothing and are how a stopped run reports what it
+		// already has. They must not consume the paid-call budget or be blocked by a stop.
+		if (event.toolName === BANK_TOOL) return undefined;
 		const limits = resolveLimits(process.env, quota);
 		const bucket = bucketOf(event.toolName);
 		const digest = callDigest(event.toolName, event.input);
@@ -696,7 +726,9 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 			progress = true;
 		}
 		if (bucket) noProgress = progress ? 0 : noProgress + 1;
-		if (observation.artifact?.ingestion === "STORED" || observation.status === "PASS") {
+		if (event.toolName === REVIEW_TOOL) {
+			// A later failed review must clear the receipt: otherwise a stored A makes
+			// a false "B stored" claim look verified.
 			ingestionVerified = observation.artifact?.ingestion === "STORED";
 		}
 		await trace("tool_result", {
@@ -727,15 +759,16 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 	pi.on("message_end", async (event) => {
 		if (event.message.role !== "assistant") return undefined;
 		const text = messageText(event.message);
-		if (!text || !claimOfIngestion(text)) return undefined;
-		if (ingestionVerified) return undefined;
+		if (!text) return undefined;
+		const unquoted = withoutQuotes(text);
+		const allClaimed = /(都|全部|均|所有|两题)/.test(unquoted);
+		const expected = allClaimed && quota !== null ? quota : Math.max(items.size, 1);
+		const correction = ingestionClaimCorrection(text, stored, expected, ingestionVerified);
+		if (!correction) return undefined;
 		// Nothing was executed, so the sentence can only be about capabilities; and a
 		// read-only bank query cannot have produced an ingestion receipt either.
 		if (domainCalls === 0) return undefined;
 		if (lastDomainTool !== REVIEW_TOOL && lastDomainTool !== GENERATION_TOOL) return undefined;
-		const correction =
-			"\n\n[护栏] 本轮没有拿到 ingestion.status=STORED 的回执，因此上面的“已入库/已通过”不成立；" +
-			"请改成“自检通过 / 待审校”或“审校未完成”。";
 		await trace("claim_blocked", { chars: text.length });
 		return {
 			message: {

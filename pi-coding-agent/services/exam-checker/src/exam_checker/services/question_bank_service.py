@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from copy import deepcopy
 from typing import Any
 from uuid import UUID, uuid4
@@ -43,7 +44,37 @@ class QuestionBankService:
         keyword: str | None = None,
         limit: int = 20,
     ) -> QuestionBankSearchResult:
-        questions = await self.question_bank_repository.search(
+        if question_type == "comprehensive":
+            # Deterministic comprehensive questions are stored under the authoring
+            # sub-type; the public contract exposes one comprehensive label.
+            pages = await asyncio.gather(
+                self._search(
+                    subject=subject,
+                    question_type="comprehensive",
+                    difficulty=difficulty,
+                    knowledge_point=knowledge_point,
+                    keyword=keyword,
+                    limit=limit,
+                ),
+                self._search(
+                    subject=subject,
+                    question_type="comprehensive_application",
+                    difficulty=difficulty,
+                    knowledge_point=knowledge_point,
+                    keyword=keyword,
+                    limit=limit,
+                ),
+            )
+            merged: list[StoredQuestionBankEntry] = []
+            seen: set[str] = set()
+            for page in pages:
+                for entry in page:
+                    if entry.record_id in seen:
+                        continue
+                    seen.add(entry.record_id)
+                    merged.append(entry)
+            return QuestionBankSearchResult(questions=merged[:limit])
+        questions = await self._search(
             subject=subject,
             question_type=question_type,
             difficulty=difficulty,
@@ -52,6 +83,25 @@ class QuestionBankService:
             limit=limit,
         )
         return QuestionBankSearchResult(questions=questions)
+
+    async def _search(
+        self,
+        *,
+        subject: str | None,
+        question_type: str | None,
+        difficulty: str | None,
+        knowledge_point: str | None,
+        keyword: str | None,
+        limit: int,
+    ) -> list[StoredQuestionBankEntry]:
+        return await self.question_bank_repository.search(
+            subject=subject,
+            question_type=question_type,
+            difficulty=difficulty,
+            knowledge_point=knowledge_point,
+            keyword=keyword,
+            limit=limit,
+        )
 
     async def ingest(
         self,

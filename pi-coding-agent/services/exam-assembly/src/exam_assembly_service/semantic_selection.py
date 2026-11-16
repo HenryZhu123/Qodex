@@ -123,6 +123,8 @@ async def select_reviewed(request, questions, sources, allocate, reviewer=None):
                                             "reason": "题干完全相同"}
         known_conflict = any(cache.get(p["pair_id"], {}).get("verdict") == "DUPLICATE" for p in pairs)
         missing = [p for p in pairs if p["pair_id"] not in cache]
+        if missing and reviewer is None:
+            errors.append("SEMANTIC_MODEL_DISABLED")
         while missing and not known_conflict and reviewer is not None and calls < max_calls:
             batch = missing[:4]
             payload = [{**p, "left": by_id[p["question_ids"][0]], "right": by_id[p["question_ids"][1]]} for p in batch]
