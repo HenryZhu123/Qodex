@@ -151,6 +151,118 @@ async def _health_report(app: FastAPI) -> dict:
     }
 
 
+PENDING_LIMIT_MAX = 100
+
+
+def _pending_question_view(row) -> dict:
+    """Project one queued package into the fields a queue list needs.
+
+    The package also holds the author's design, witness and self-check. The queue
+    page only needs identity, position and the student-facing text, so the answer
+    stays in the per-question review state instead of riding along on every row.
+    """
+    package = row["question_json"]
+    if isinstance(package, str):
+        try:
+            package = json.loads(package)
+        except (TypeError, ValueError):
+            package = {}
+    if not isinstance(package, dict):
+        package = {}
+    metadata = package.get("metadata") if isinstance(package.get("metadata"), dict) else {}
+    student = package.get("student_view") if isinstance(package.get("student_view"), dict) else {}
+    options = student.get("options") if isinstance(student.get("options"), list) else []
+    areas = metadata.get("syllabus_areas")
+    queued_at = row["queued_at"]
+    return {
+        "task_id": str(row["task_id"]),
+        "question_id": row["question_id"],
+        "version": row["version"],
+        "request_id": row["request_id"],
+        "queued_at": queued_at.isoformat() if hasattr(queued_at, "isoformat") else queued_at,
+        "review_status": package.get("review_status"),
+        "subject": metadata.get("subject"),
+        "topic": metadata.get("topic"),
+        "question_type": metadata.get("question_type"),
+        "syllabus_areas": [area for area in areas if isinstance(area, str)] if isinstance(areas, list) else [],
+        "stem": student.get("stem") if isinstance(student.get("stem"), str) else "",
+        "options": [
+            {"id": str(option.get("id", "")), "text": str(option.get("text", ""))}
+            for option in options
+            if isinstance(option, dict)
+        ],
+    }
+
+
+@app.get("/v1/question-generation/pending")
+async def pending(
+    request: Request, limit: int = 20, task_id: str | None = None, subject: str | None = None,
+) -> JSONResponse:
+    """Read-only listing of the review queue.
+
+    The queue is the only place a generated question exists before review, and no
+    other endpoint lists it: Pi reviews one version at a time through exam-checker,
+    using the identity it was just handed. This route never imports a version,
+    never reviews and never writes, so the browser can show what is waiting without
+    spending a model call or changing a question's state.
+    """
+    if not 1 <= limit <= PENDING_LIMIT_MAX:
+        return JSONResponse(
+            {"status": "INVALID_REQUEST", "message": f"limit 必须是 1–{PENDING_LIMIT_MAX} 的整数。"},
+            status_code=422,
+        )
+    task_uuid: UUID | None = None
+    if task_id:
+        try:
+            task_uuid = UUID(task_id)
+        except (TypeError, ValueError, AttributeError):
+            return JSONResponse(
+                {"status": "INVALID_REQUEST", "message": "task_id 必须是 UUID 字符串。"},
+                status_code=422,
+            )
+    pool = getattr(request.app.state, "queue_pool", None)
+    if pool is None:
+        return JSONResponse(
+            {"status": "QUEUE_UNAVAILABLE", "message": "待审表未配置，无法读取。"}, status_code=503,
+        )
+    clauses = ["p.superseded_at IS NULL"]
+    args: list = []
+    if task_uuid is not None:
+        args.append(task_uuid)
+        clauses.append(f"p.task_id = ${len(args)}::uuid")
+    if subject:
+        args.append(subject)
+        clauses.append(f"p.question_json->'metadata'->>'subject' = ${len(args)}")
+    where = " AND ".join(clauses)
+    try:
+        rows = await pool.fetch(
+            f"""
+            SELECT p.task_id, p.question_id, p.version, p.request_id, p.queued_at, p.question_json
+            FROM question_generation.pending_questions p
+            WHERE {where}
+            ORDER BY p.queued_at DESC, p.question_id
+            LIMIT ${len(args) + 1}
+            """,
+            *args, limit,
+        )
+        total = await pool.fetchval(
+            f"SELECT count(*) FROM question_generation.pending_questions p WHERE {where}", *args,
+        )
+    except Exception as error:  # noqa: BLE001 - a read failure must not look like an empty queue
+        observability.event("pending.list", status="QUEUE_UNAVAILABLE", error=type(error).__name__)
+        return JSONResponse(
+            {"status": "QUEUE_UNAVAILABLE", "message": "待审表读取失败，请稍后重试。"}, status_code=503,
+        )
+    questions = [_pending_question_view(row) for row in rows]
+    return JSONResponse({
+        "status": "OK",
+        "total": int(total or 0),
+        "count": len(questions),
+        "limit": limit,
+        "questions": questions,
+    })
+
+
 @app.get("/health")
 async def health(request: Request) -> dict:
     try:

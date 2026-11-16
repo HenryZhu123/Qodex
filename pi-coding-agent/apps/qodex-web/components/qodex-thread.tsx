@@ -69,7 +69,7 @@ export function QodexThread() {
 						<div className="flex flex-col gap-8 pb-8">
 							<ThreadPrimitive.Messages>{() => <ThreadMessage />}</ThreadPrimitive.Messages>
 						</div>
-						<ThreadPrimitive.ViewportFooter className="sticky bottom-0 mt-auto bg-gradient-to-t from-white via-white to-transparent pb-5 pt-10">
+						<ThreadPrimitive.ViewportFooter className="sticky bottom-0 mt-auto bg-white pb-5 pt-3">
 							<ThreadPrimitive.ScrollToBottom className="absolute -top-1 left-1/2 flex size-8 -translate-x-1/2 items-center justify-center rounded-full border border-[var(--border)] bg-white text-[var(--muted)] shadow-sm transition hover:text-[var(--text)] disabled:invisible">
 								<ArrowDownIcon className="size-4" />
 								<span className="sr-only">Scroll to bottom</span>

@@ -40,6 +40,39 @@ test("proxy restricts service paths; traversal and external targets are unavaila
 	delete process.env.EXAM_ASSEMBLY_SERVICE_URL;
 });
 
+test("proxy exposes the six generation operations and the read-only queue listing", () => {
+	for (const operation of ["single", "batch", "replenishment", "comprehensive", "revise", "author"]) {
+		assert.equal(
+			serviceTarget("generation", ["v1", "question-generation", operation], "POST")?.pathname,
+			`/v1/question-generation/${operation}`,
+		);
+	}
+	assert.equal(
+		serviceTarget("generation", ["v1", "question-generation", "pending"], "GET")?.pathname,
+		"/v1/question-generation/pending",
+	);
+	// The queue listing is read-only, and an unknown operation stays unavailable.
+	assert.equal(serviceTarget("generation", ["v1", "question-generation", "pending"], "POST"), undefined);
+	assert.equal(serviceTarget("generation", ["v1", "question-generation", "unknown"], "POST"), undefined);
+	assert.equal(serviceTarget("generation", ["v1", "question-generation", "author", "extra"], "POST"), undefined);
+});
+
+test("proxy exposes review state and review for one generated version, and nothing else", () => {
+	const taskId = "cfe4a758-f990-4fdf-8ea7-7d484456deeb";
+	const questionId = "authored-964e468069b9e33438f3c8d0";
+	const route = ["v1", "exam-checker", "tasks", taskId, "questions", questionId];
+	const path = `/v1/exam-checker/tasks/${taskId}/questions/${questionId}`;
+	assert.equal(serviceTarget("checker", [...route, "state"], "GET")?.pathname, `${path}/state`);
+	assert.equal(serviceTarget("checker", route, "GET")?.pathname, path);
+	assert.equal(serviceTarget("checker", [...route, "review"], "POST")?.pathname, `${path}/review`);
+	// Reading with POST, or ingesting from this route, is not a supported shape.
+	assert.equal(serviceTarget("checker", route, "POST"), undefined);
+	assert.equal(serviceTarget("checker", [...route, "ingest"], "POST"), undefined);
+	assert.equal(serviceTarget("checker", [...route, "state"], "POST"), undefined);
+	// A task route must still name exactly one question.
+	assert.equal(serviceTarget("checker", ["v1", "exam-checker", "tasks", taskId], "GET"), undefined);
+});
+
 test("HTML downloads use isolated snapshots; no credentials or browser headers go upstream", async () => {
 	const original = globalThis.fetch;
 	globalThis.fetch = async (input, init) => {

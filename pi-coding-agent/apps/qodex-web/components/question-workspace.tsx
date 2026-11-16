@@ -1,8 +1,8 @@
 "use client";
 
 import { Search, ShieldCheck, Upload } from "lucide-react";
-import { useEffect, useState } from "react";
-import { api, array, type JsonObject, object, post, pretty, statusLabel, text } from "@/lib/workspace-api";
+import { useCallback, useEffect, useState } from "react";
+import { api, array, badgeClass, type JsonObject, object, post, pretty, statusLabel, text } from "@/lib/workspace-api";
 import { Report } from "./assembly-workspace";
 
 export function QuestionBank() {
@@ -186,7 +186,7 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 					className="qx-btn"
 					onClick={() =>
 						prompt(
-							"请介绍 question_generation 的 single、batch、comprehensive、revise 操作，并先确认我的命题需求。生成题目只进入待审队列，不等于审校通过。",
+							"帮我出一道题：先和我确认科目、考点、题量、分值和题型，再用 question_generation 的 author 出题，出完送 exam_checker 审校。生成题目只进入待审队列，不等于审校通过。",
 						)
 					}
 				>
@@ -255,6 +255,7 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 					</button>
 				</div>
 			</section>
+			<PendingQuestions />
 			{error && (
 				<p className="qx-error" role="alert">
 					{error} 操作可能已经执行，请保留文档编号检查状态后再决定是否重试。
@@ -329,12 +330,54 @@ export function CheckerWorkspace({ prompt }: { prompt: (text: string) => void })
 	);
 }
 
+const GENERATION_OPERATIONS = [
+	{
+		key: "single",
+		label: "单题命题 single（确定性模板）",
+		example: true,
+		hint: "固定考点（如 single_level_paging）+ 固定字段；项目自带示例，可直接提交，不调用模型。",
+	},
+	{
+		key: "batch",
+		label: "批量命题 batch（确定性模板）",
+		example: true,
+		hint: "显式 slots；项目自带示例，可直接提交，不调用模型。",
+	},
+	{
+		key: "comprehensive",
+		label: "综合应用题 comprehensive（确定性模板）",
+		example: true,
+		hint: "固定考点（分页 / 栈）；项目自带示例，可直接提交，不调用模型。",
+	},
+	{
+		key: "author",
+		label: "自然语言出题 author（需真实 brief）",
+		example: false,
+		hint: "字段：schema_version、request_id、brief、subject、syllabus_areas、question_type、total_score、requirements、evidence。会调用模型并计费。",
+	},
+	{
+		key: "replenishment",
+		label: "补题 replenishment（需组卷缺口单）",
+		example: false,
+		hint: "需要组卷服务返回的 replenishment_request（缺口单），没有静态示例；会调用模型并计费。",
+	},
+	{
+		key: "revise",
+		label: "修订 revise（需真实当前题目）",
+		example: false,
+		hint: "必须携带已生成题目的完整 current_question 和对应版本的反馈，不能用通用静态示例；会调用模型并计费。",
+	},
+] as const;
+
+const PAID_GENERATION_OPERATIONS = new Set(["author", "replenishment", "revise"]);
+
 function GenerationPanel() {
 	const [operation, setOperation] = useState("single"),
 		[payload, setPayload] = useState(""),
 		[result, setResult] = useState<JsonObject>(),
 		[error, setError] = useState(""),
 		[busy, setBusy] = useState(false);
+	const selected = GENERATION_OPERATIONS.find((item) => item.key === operation) ?? GENERATION_OPERATIONS[0];
 	async function example() {
 		try {
 			const r = await fetch(`/examples/generation-${operation}.json`);
@@ -356,6 +399,11 @@ function GenerationPanel() {
 			setError("请填入合法的请求 JSON 对象。");
 			return;
 		}
+		if (
+			PAID_GENERATION_OPERATIONS.has(operation) &&
+			!window.confirm(`operation=${operation} 会调用模型并产生费用，确定提交？`)
+		)
+			return;
 		setBusy(true);
 		setResult(undefined);
 		try {
@@ -368,8 +416,11 @@ function GenerationPanel() {
 	}
 	return (
 		<details className="qx-report qx-generation">
-			<summary>自主命题 · 直接调用服务（完整 JSON 请求）</summary>
-			<p className="qx-note">支持现有单题、批量、综合题和修订服务。成功结果写入命题待审队列，不会自动成为正式题库。</p>
+			<summary>命题接口自测（测试 / 展示用，非教师入口）</summary>
+			<p className="qx-note">
+				这里直接向 8093 发完整 JSON 请求，只用于验证接口本身；教师日常出题请用对话或上面的待审题目面板。
+				结果只写入命题待审队列，不会自动成为正式题库。
+			</p>
 			<div className="qx-filters">
 				<select
 					aria-label="命题操作"
@@ -380,20 +431,17 @@ function GenerationPanel() {
 						setPayload("");
 					}}
 				>
-					<option value="single">单题命题</option>
-					<option value="batch">批量命题</option>
-					<option value="comprehensive">综合应用题</option>
-					<option value="revise">修订综合题</option>
+					{GENERATION_OPERATIONS.map((item) => (
+						<option key={item.key} value={item.key}>
+							{item.label}
+						</option>
+					))}
 				</select>
-				<button type="button" className="qx-btn" disabled={busy || operation === "revise"} onClick={example}>
-					{operation === "revise" ? "修订需使用真实当前题目" : "加载项目请求示例"}
+				<button type="button" className="qx-btn" disabled={busy || !selected.example} onClick={example}>
+					{selected.example ? "加载项目请求示例" : "该操作没有静态示例"}
 				</button>
 			</div>
-			{operation === "revise" && (
-				<p className="qx-note">
-					修订请求必须携带已生成题目的完整 current_question 和对应版本反馈，不能使用通用静态示例。
-				</p>
-			)}
+			<p className="qx-note">{selected.hint}</p>
 			<textarea
 				aria-label="命题请求 JSON"
 				rows={12}
@@ -411,5 +459,185 @@ function GenerationPanel() {
 			)}
 			{result && <Report value={result} />}
 		</details>
+	);
+}
+
+/**
+ * The review queue is where a generated question waits before it can reach the
+ * bank. Listing it is read-only; only the per-row review button spends a model
+ * call, and it asks first. The list omits answers on purpose: the teacher view
+ * comes from the review state, one question at a time.
+ */
+function PendingQuestions() {
+	const [rows, setRows] = useState<JsonObject[]>([]),
+		[total, setTotal] = useState(0),
+		[limit, setLimit] = useState(20),
+		[loaded, setLoaded] = useState(false),
+		[error, setError] = useState(""),
+		[busy, setBusy] = useState(""),
+		[state, setState] = useState<JsonObject>(),
+		[outcomes, setOutcomes] = useState<Record<string, JsonObject>>({});
+
+	const load = useCallback(
+		async (next = limit) => {
+			setBusy("list");
+			setError("");
+			try {
+				const data = await api(`generation/v1/question-generation/pending?limit=${next}`);
+				setRows(array(data.questions).map(object));
+				setTotal(Number(data.total) || 0);
+				setLoaded(true);
+			} catch (e) {
+				setError(e instanceof Error ? e.message : "待审题目读取失败");
+			} finally {
+				setBusy("");
+			}
+		},
+		[limit],
+	);
+
+	useEffect(() => {
+		void load();
+	}, [load]);
+
+	const questionPath = (row: JsonObject) =>
+		`checker/v1/exam-checker/tasks/${encodeURIComponent(text(row.task_id))}/questions/${encodeURIComponent(text(row.question_id))}`;
+
+	async function showState(row: JsonObject) {
+		if (busy) return;
+		setBusy(text(row.question_id));
+		setError("");
+		try {
+			setState(await api(`${questionPath(row)}/state`));
+		} catch (e) {
+			setError(e instanceof Error ? e.message : "状态读取失败");
+		} finally {
+			setBusy("");
+		}
+	}
+
+	async function review(row: JsonObject) {
+		if (busy) return;
+		const version = Number(row.version) || 1;
+		const questionId = text(row.question_id);
+		const confirmed = window.confirm(
+			`审校会调用模型并产生费用。\n\n${questionId} v${version}\n\n同一版本重复审校复用同一幂等键，不会重复计费。确定现在审校？`,
+		);
+		if (!confirmed) return;
+		setBusy(questionId);
+		setError("");
+		try {
+			// One key per version: re-clicking returns the stored review instead of paying again,
+			// while a revised version produces a new key and therefore a real second review.
+			const reviewed = await post(`${questionPath(row)}/review`, {
+				version,
+				idempotency_key: `web:${text(row.task_id)}:${questionId}:v${version}`,
+			});
+			setOutcomes((previous) => ({ ...previous, [questionId]: object(reviewed.review) }));
+			setState(await api(`${questionPath(row)}/state`));
+		} catch (e) {
+			setError(e instanceof Error ? e.message : "审校失败");
+		} finally {
+			setBusy("");
+		}
+	}
+
+	return (
+		<section className="qx-formsection">
+			<div className="qx-between">
+				<h2>待审题目</h2>
+				<div className="qx-actions">
+					<select
+						aria-label="待审题展示条数"
+						value={limit}
+						disabled={!!busy}
+						onChange={(e) => {
+							const next = Number(e.target.value);
+							setLimit(next);
+							void load(next);
+						}}
+					>
+						<option value={20}>最近 20 道</option>
+						<option value={50}>最近 50 道</option>
+						<option value={100}>最近 100 道</option>
+					</select>
+					<button type="button" className="qx-btn" disabled={!!busy} onClick={() => void load()}>
+						{busy === "list" ? "读取中…" : "刷新"}
+					</button>
+				</div>
+			</div>
+			<p className="qx-note">
+				命题结果先进入这里；审校 PASS 后自动入库。列表只读、不调用模型；只有点「送审校」才会产生一次模型调用。
+			</p>
+			{loaded && (
+				<p className="qx-note">
+					待审 {total} 道，本次显示 {rows.length} 道（只列未作废的当前版本）。
+				</p>
+			)}
+			{error && (
+				<p className="qx-error" role="alert">
+					{error}
+				</p>
+			)}
+			{loaded && !rows.length && (
+				<p className="qx-empty">待审队列是空的。出题后（对话或上面的自测面板）会出现在这里。</p>
+			)}
+			{rows.map((row) => {
+				const questionId = text(row.question_id);
+				const status = text(object(outcomes[questionId]).status);
+				return (
+					<article className="qx-bankitem" key={`${text(row.task_id)}:${questionId}:${text(row.version)}`}>
+						<div className="qx-between">
+							<h2>{text(row.stem) || "（该版本没有学生题面）"}</h2>
+							<span className={`qx-badge ${badgeClass(status)}`}>{status ? statusLabel(status) : "待审校"}</span>
+						</div>
+						<p className="qx-note">
+							{text(row.subject) || "未标科目"} · {text(row.topic) || "未标考点"} · v{text(row.version)} ·{" "}
+							{text(row.queued_at).replace("T", " ").slice(0, 19)} · {text(row.question_type)}
+						</p>
+						<div className="qx-options">
+							{array(row.options).map((option) => (
+								<p key={text(object(option).id)}>
+									{text(object(option).id)}. {text(object(option).text)}
+								</p>
+							))}
+						</div>
+						<div className="qx-actions">
+							<button type="button" className="qx-link" disabled={!!busy} onClick={() => void showState(row)}>
+								查看版本与审校
+							</button>
+							<button type="button" className="qx-btn primary" disabled={!!busy} onClick={() => void review(row)}>
+								<ShieldCheck size={14} />
+								{busy === questionId ? "审校中…" : "送审校"}
+							</button>
+						</div>
+						{status === "NEEDS_REVISION" && (
+							<p className="qx-note">
+								审校只给修改建议，不改题目。AI 出的题由 Pi
+								在对话里按版本决定是否修订；上传文档的题请改源文件后重新上传。
+							</p>
+						)}
+					</article>
+				);
+			})}
+			{state && (
+				<section className="qx-result">
+					<div className="qx-between">
+						<h2>
+							题目 {text(state.question_id)} · v{text(state.version)}
+						</h2>
+						<span className={`qx-badge ${badgeClass(object(state.review).status)}`}>
+							{statusLabel(object(state.review).status) || "未审校"}
+						</span>
+					</div>
+					<p className="qx-note">
+						审校：{statusLabel(object(state.review).status) || "未审校"} · 入库：
+						{statusLabel(object(state.question_bank).status) || "未知"}
+						{object(state.question_bank).record_id ? ` · record ${text(object(state.question_bank).record_id)}` : ""}
+					</p>
+					<Report value={state} />
+				</section>
+			)}
+		</section>
 	);
 }
