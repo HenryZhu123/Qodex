@@ -11,7 +11,9 @@ Typical use:
 from __future__ import annotations
 
 import argparse
+from hashlib import sha256
 import json
+import os
 import random
 import sys
 from pathlib import Path
@@ -386,7 +388,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
     run = sub.add_parser("run", help="run the pipeline")
     run.add_argument("--input", required=True, help="input file or directory")
-    common(run)
+    run.add_argument("--out", help="output run directory (default: Qodex kb_library/_library/<entry-id>)")
     run.add_argument("--sample-ratio", type=float, default=0.10)
     run.add_argument("--seed", type=int, default=42)
     run.add_argument("--sample-windows", type=int, default=1, help="number of contiguous sample windows")
@@ -497,9 +499,43 @@ def _load_chunks(out_dir: Path) -> dict[str, list[dict[str, Any]]]:
     return by_doc
 
 
+def _default_library_run(input_path: str) -> Path:
+    source = Path(input_path).resolve()
+    if not source.exists():
+        raise ValueError(f"input does not exist: {source}")
+
+    configured_root = os.environ.get("QODEX_KB_ROOT")
+    if configured_root:
+        library_root = Path(configured_root).expanduser().resolve()
+    else:
+        starts = (Path.cwd(), Path(__file__).resolve().parent)
+        project = next(
+            (
+                parent
+                for start in starts
+                for parent in (start, *start.parents)
+                if (parent / "question_generation").is_dir() and (parent / "exam_assembly_agent").is_dir()
+            ),
+            None,
+        )
+        if project is None:
+            raise ValueError("Run from the Qodex project or provide --out.")
+        library_root = project / "kb_library"
+
+    source_id = sha256(os.fsencode(source)).hexdigest()[:16]
+    return library_root / "_library" / f"kb_{source_id}"
+
+
 def main() -> int:
-    args = _build_parser().parse_args()
+    parser = _build_parser()
+    args = parser.parse_args()
     out_dir = Path(args.out) if getattr(args, "out", None) else None
+    if args.command == "run" and out_dir is None:
+        try:
+            out_dir = _default_library_run(args.input)
+        except ValueError as error:
+            parser.error(str(error))
+        _print(f"[output] {out_dir}")
     if out_dir is not None:
         out_dir.mkdir(parents=True, exist_ok=True)
 

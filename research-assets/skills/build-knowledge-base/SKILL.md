@@ -9,6 +9,18 @@ Turn a folder of user documents into a reproducible, anchor-preserving knowledge
 
 All commands below assume the current directory is **this skill directory** — the folder containing this `SKILL.md`, wherever the skill was installed (`research-assets/skills/build-knowledge-base` in the reference checkout). Scripts resolve their own imports, so `--input` and `--out` may be absolute paths. Replace `<file-or-dir>` and `<run-dir>` with real paths; do not paste the angle brackets into PowerShell.
 
+## Qodex library output
+
+Run this command from the skill directory to prepare a new library entry:
+
+~~~bash
+python scripts/kb_pipeline.py run --input "<file-or-dir>"
+~~~
+
+Omitting `--out` puts the run in `<Qodex>/kb_library/_library/kb_<source-id>/` and prints the output path. The ID is stable for the same input path. Review the integrity report and chunk plan, then repeat the command with `--stop-after ingest`. Use the printed path as `<run-dir>` for individual phases. An explicit `--out` still selects the run directory. If `QODEX_KB_ROOT` is set, the CLI and GUI use that library root instead.
+
+After ingestion, refresh the GUI’s **知识库** page to see the indexed entry. Open its subject and link the existing entry. Use one input file per run for one entry per book.
+
 ## Required references
 
 Read these before starting a run:

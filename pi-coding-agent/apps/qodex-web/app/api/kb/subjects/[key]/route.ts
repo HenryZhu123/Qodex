@@ -1,4 +1,4 @@
-import { subjectDetail } from "@/lib/kb-store";
+import { deleteSubject, KbConflictError, subjectDetail } from "@/lib/kb-store";
 import { rejectUnsafeRequest } from "@/lib/local-access";
 
 export const runtime = "nodejs";
@@ -13,5 +13,19 @@ export async function GET(request: Request, context: Context): Promise<Response>
 		return Response.json(await subjectDetail(key));
 	} catch (error) {
 		return Response.json({ error: error instanceof Error ? error.message : "读取专业失败" }, { status: 404 });
+	}
+}
+
+export async function DELETE(request: Request, context: Context): Promise<Response> {
+	const rejected = rejectUnsafeRequest(request);
+	if (rejected) return rejected;
+	const { key } = await context.params;
+	try {
+		return Response.json(await deleteSubject(key));
+	} catch (error) {
+		return Response.json(
+			{ error: error instanceof Error ? error.message : "删除专业失败" },
+			{ status: error instanceof KbConflictError ? 409 : 400 },
+		);
 	}
 }

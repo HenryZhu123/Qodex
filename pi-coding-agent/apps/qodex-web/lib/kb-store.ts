@@ -1,6 +1,7 @@
 import { spawn } from "node:child_process";
+import { randomUUID } from "node:crypto";
 import { closeSync, existsSync, linkSync, openSync } from "node:fs";
-import { copyFile, mkdir, readdir, readFile, rm, stat, symlink, writeFile } from "node:fs/promises";
+import { copyFile, lstat, mkdir, readdir, readFile, rename, rm, stat, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
@@ -22,6 +23,21 @@ import { DatabaseSync } from "node:sqlite";
 
 const SUBJECT_KEY = /^[a-z0-9][a-z0-9_-]{1,40}$/;
 const LIBRARY_DIR = "_library";
+const BOOK_ID = /^[\w-]{1,64}$/;
+type SubjectLink = { kbId: string; addedAt: string };
+
+export class KbConflictError extends Error {}
+
+const mutationState = globalThis as typeof globalThis & { qodexKbMutation?: Promise<void> };
+
+function mutateKb<T>(operation: () => Promise<T>): Promise<T> {
+	const result = (mutationState.qodexKbMutation ?? Promise.resolve()).then(operation);
+	mutationState.qodexKbMutation = result.then(
+		() => undefined,
+		() => undefined,
+	);
+	return result;
+}
 
 export type KbEntry = {
 	id: string;
@@ -52,7 +68,7 @@ export function repoRoot(): string {
 }
 
 export function kbRoot(): string {
-	return path.resolve(process.env.QODEX_KB_ROOT || path.join(repoRoot(), "knowledge-base"));
+	return path.resolve(process.env.QODEX_KB_ROOT || path.join(repoRoot(), "kb_library"));
 }
 
 function libraryDir(): string {
@@ -156,13 +172,15 @@ export async function listSubjects(): Promise<{ root: string; subjects: SubjectS
 }
 
 export async function createSubject(key: string, name: string): Promise<{ key: string }> {
-	if (!validKey(key)) throw new Error("专业标识只能包含小写字母、数字、下划线和短横线（2–41 位）。");
-	if (!name.trim()) throw new Error("专业名称不能为空。");
-	const dir = path.join(kbRoot(), key);
-	if (existsSync(dir)) throw new Error(`专业 ${key} 已存在。`);
-	await writeJson(path.join(dir, "subject.json"), { key, name: name.trim(), createdAt: new Date().toISOString() });
-	await writeJson(path.join(dir, "links.json"), []);
-	return { key };
+	return mutateKb(async () => {
+		if (!validKey(key)) throw new Error("专业标识只能包含小写字母、数字、下划线和短横线（2–41 位）。");
+		if (!name.trim()) throw new Error("专业名称不能为空。");
+		const dir = path.join(kbRoot(), key);
+		if (existsSync(dir)) throw new Error(`专业 ${key} 已存在。`);
+		await writeJson(path.join(dir, "subject.json"), { key, name: name.trim(), createdAt: new Date().toISOString() });
+		await writeJson(path.join(dir, "links.json"), []);
+		return { key };
+	});
 }
 
 export async function subjectDetail(key: string): Promise<{ subject: SubjectSummary; kbs: KbEntry[] }> {
@@ -189,33 +207,112 @@ async function materialise(subjectKey: string, kbId: string): Promise<void> {
 	}
 }
 
-export async function linkKb(subjectKey: string, kbId: string): Promise<{ linked: string }> {
-	if (!validKey(subjectKey)) throw new Error("专业标识不合法。");
-	if (!/^[\w-]{1,64}$/.test(kbId)) throw new Error("知识库标识不合法。");
-	if (!existsSync(path.join(libraryDir(), kbId, "kb.sqlite"))) throw new Error("书库里没有这个知识库。");
-	const dir = path.join(kbRoot(), subjectKey);
-	if (!existsSync(dir)) throw new Error(`专业 ${subjectKey} 不存在。`);
-	const linksFile = path.join(dir, "links.json");
-	const links = (await readJson<{ kbId: string; addedAt: string }[]>(linksFile)) ?? [];
-	if (!links.some((l) => l.kbId === kbId)) {
-		links.push({ kbId, addedAt: new Date().toISOString() });
-		await writeJson(linksFile, links);
+async function subjectLinks(dir: string): Promise<SubjectLink[]> {
+	try {
+		const links: SubjectLink[] = JSON.parse(await readFile(path.join(dir, "links.json"), "utf8"));
+		if (!Array.isArray(links) || !links.every((link) => link && typeof link.kbId === "string")) {
+			throw new Error("专业关联记录格式无效。");
+		}
+		return links;
+	} catch (error) {
+		if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+		throw error;
 	}
-	await materialise(subjectKey, kbId);
-	return { linked: kbId };
 }
 
-export async function unlinkKb(subjectKey: string, kbId: string): Promise<{ unlinked: string }> {
-	if (!validKey(subjectKey)) throw new Error("专业标识不合法。");
-	const dir = path.join(kbRoot(), subjectKey);
-	const linksFile = path.join(dir, "links.json");
-	const links = (await readJson<{ kbId: string }[]>(linksFile)) ?? [];
-	await writeJson(
-		linksFile,
-		links.filter((l) => l.kbId !== kbId),
-	);
+async function subjectDirectory(key: string): Promise<string> {
+	if (!validKey(key)) throw new Error("专业标识不合法。");
+	const dir = path.join(kbRoot(), key);
+	if (!(await lstat(dir).catch(() => undefined))?.isDirectory()) throw new Error("专业不存在。");
+	return dir;
+}
+
+async function removeLink(dir: string, kbId: string, links: SubjectLink[]) {
 	await rm(path.join(dir, `kb_${kbId}.sqlite`), { force: true });
-	return { unlinked: kbId };
+	if (links.some((link) => link.kbId === kbId)) {
+		await writeJson(
+			path.join(dir, "links.json"),
+			links.filter((link) => link.kbId !== kbId),
+		);
+	}
+}
+
+export function linkKb(subjectKey: string, kbId: string): Promise<{ linked: string }> {
+	return mutateKb(async () => {
+		const dir = await subjectDirectory(subjectKey);
+		if (!BOOK_ID.test(kbId)) throw new Error("知识库标识不合法。");
+		if (!existsSync(path.join(libraryDir(), kbId, "kb.sqlite"))) throw new Error("书库里没有这个知识库。");
+		const links = await subjectLinks(dir);
+		await materialise(subjectKey, kbId);
+		if (!links.some((link) => link.kbId === kbId)) {
+			links.push({ kbId, addedAt: new Date().toISOString() });
+			await writeJson(path.join(dir, "links.json"), links);
+		}
+		return { linked: kbId };
+	});
+}
+
+export function unlinkKb(subjectKey: string, kbId: string): Promise<{ unlinked: string }> {
+	return mutateKb(async () => {
+		const dir = await subjectDirectory(subjectKey);
+		if (!BOOK_ID.test(kbId)) throw new Error("知识库标识不合法。");
+		await removeLink(dir, kbId, await subjectLinks(dir));
+		return { unlinked: kbId };
+	});
+}
+
+async function deleteDirectory(dir: string) {
+	const trash = path.join(kbRoot(), "_trash");
+	await mkdir(trash, { recursive: true });
+	if (!(await lstat(trash)).isDirectory()) throw new Error("知识库清理目录无效。");
+	const pending = path.join(trash, randomUUID());
+	await rename(dir, pending);
+	await rm(pending, { recursive: true, force: true }).catch(() => {
+		throw new Error("条目已移出知识库，但本地文件仍被占用，未完全清理。");
+	});
+}
+
+export function deleteSubject(key: string): Promise<{ deleted: string }> {
+	return mutateKb(async () => {
+		const dir = await subjectDirectory(key);
+		const entries = await readdir(dir);
+		if ((await subjectLinks(dir)).length || entries.some((entry) => /^kb.*\.sqlite$/i.test(entry))) {
+			throw new KbConflictError("该专业仍有关联书籍，请先取消全部链接。");
+		}
+		if (entries.some((entry) => entry !== "subject.json" && entry !== "links.json")) {
+			throw new KbConflictError("该专业目录还有其他本地文件，无法删除。");
+		}
+		await deleteDirectory(dir);
+		return { deleted: key };
+	});
+}
+
+export function deleteBook(kbId: string, expectedSubjects: string[]): Promise<{ deleted: string }> {
+	return mutateKb(async () => {
+		if (!BOOK_ID.test(kbId)) throw new Error("知识库标识不合法。");
+		const library = libraryDir();
+		if (!(await lstat(library).catch(() => undefined))?.isDirectory()) throw new Error("书库目录无效。");
+		const book = path.join(library, kbId);
+		if (!(await lstat(book).catch(() => undefined))?.isDirectory() || !existsSync(path.join(book, "kb.sqlite"))) {
+			throw new Error("书库里没有这个知识库。");
+		}
+		const linked: { key: string; dir: string; links: SubjectLink[] }[] = [];
+		for (const entry of await readdir(kbRoot(), { withFileTypes: true })) {
+			if (!entry.isDirectory() || !validKey(entry.name)) continue;
+			const dir = path.join(kbRoot(), entry.name);
+			const links = await subjectLinks(dir);
+			if (links.some((link) => link.kbId === kbId) || existsSync(path.join(dir, `kb_${kbId}.sqlite`))) {
+				linked.push({ key: entry.name, dir, links });
+			}
+		}
+		const expected = new Set(expectedSubjects);
+		if (linked.length !== expected.size || linked.some(({ key }) => !expected.has(key))) {
+			throw new KbConflictError("这本书的关联专业已变更，请刷新后重新确认删除。");
+		}
+		for (const { dir, links } of linked) await removeLink(dir, kbId, links);
+		await deleteDirectory(book);
+		return { deleted: kbId };
+	});
 }
 
 export async function registerExisting(subjectKey: string, sourceDb: string): Promise<{ kbId: string }> {

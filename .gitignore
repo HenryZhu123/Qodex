@@ -17,6 +17,7 @@ venv/
 node_modules
 
 # Local run outputs (knowledge-base builds, OCR review sheets, scratch dirs)
+/kb_library/
 kb_refq_out/
 kb_ocr_review/
 kb_test/

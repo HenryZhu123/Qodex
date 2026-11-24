@@ -260,7 +260,18 @@
 	cursor: pointer;
 	font-size: 12px;
 }
-.qx-link:hover {
+.qx-kb-book-actions.qx-actions {
+	column-gap: 50px;
+}
+.qx-link.qx-kb-delete {
+	color: var(--danger);
+}
+.qx-link:disabled {
+	cursor: default;
+	opacity: 0.45;
+	text-decoration: none;
+}
+.qx-link:not(:disabled):hover {
 	text-decoration: underline;
 }
 .qx-actions {

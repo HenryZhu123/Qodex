@@ -1,6 +1,6 @@
 "use client";
 
-import { BookPlus, Database, Link2, Plus, RefreshCw, Search, Unlink, X } from "lucide-react";
+import { BookPlus, Database, Link2, Plus, RefreshCw, Search, Trash2, Unlink, X } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 type Kb = {
@@ -348,9 +348,27 @@ export function KnowledgeBase() {
 
 			{selectedSubject && (
 				<section className="qx-kb-card">
-					<button type="button" className="qx-link" onClick={backToList}>
-						← 返回知识库
-					</button>
+					<div className="qx-between">
+						<button type="button" className="qx-link" onClick={backToList}>
+							← 返回知识库
+						</button>
+						<button
+							type="button"
+							className="qx-link qx-kb-delete"
+							disabled={busy || selectedSubject.kbs.length > 0}
+							onClick={() => {
+								if (!window.confirm(`确认删除专业「${selectedSubject.name}」？`)) return;
+								void run(async () => {
+									await kb(`/api/kb/subjects/${selectedSubject.key}`, { method: "DELETE" });
+									backToList();
+									return `已删除专业「${selectedSubject.name}」`;
+								});
+							}}
+						>
+							<Trash2 size={13} /> 删除专业
+						</button>
+					</div>
+					{selectedSubject.kbs.length > 0 && <p className="qx-note">取消全部书籍链接后可以删除该专业。</p>}
 					<h2>
 						<Database size={16} /> {selectedSubject.name}
 					</h2>
@@ -380,20 +398,49 @@ export function KnowledgeBase() {
 										<td>{item.chunks}</td>
 										<td>{item.indexed}</td>
 										<td>
-											<button
-												type="button"
-												className="qx-link"
-												onClick={() =>
-													void run(async () => {
-														await kb(`/api/kb/subjects/${selectedSubject.key}/links?kbId=${item.id}`, {
-															method: "DELETE",
+											<div className="qx-actions qx-kb-book-actions">
+												<button
+													type="button"
+													className="qx-link"
+													disabled={busy}
+													onClick={() =>
+														void run(async () => {
+															await kb(`/api/kb/subjects/${selectedSubject.key}/links?kbId=${item.id}`, {
+																method: "DELETE",
+															});
+															return `已从 ${selectedSubject.name} 移除《${item.title}》`;
+														})
+													}
+												>
+													<Unlink size={13} /> 取消链接
+												</button>
+												<button
+													type="button"
+													className="qx-link qx-kb-delete"
+													disabled={busy}
+													onClick={() => {
+														const otherSubjects = item.subjects
+															.filter((key) => key !== selectedSubject.key)
+															.map((key) => payload.subjects.find((subject) => subject.key === key)?.name ?? key);
+														const summary = otherSubjects.length ? otherSubjects.join("、") : "无";
+														if (
+															!window.confirm(
+																`确认删除《${item.title}》？\n其他关联专业：${summary}\n删除会移除书库文件和所有专业的链接。`,
+															)
+														)
+															return;
+														void run(async () => {
+															await kb("/api/kb/books", {
+																...post({ kbId: item.id, subjectKeys: item.subjects }),
+																method: "DELETE",
+															});
+															return `已从书库删除《${item.title}》`;
 														});
-														return `已从 ${selectedSubject.name} 移除《${item.title}》`;
-													})
-												}
-											>
-												<Unlink size={13} /> 取消链接
-											</button>
+													}}
+												>
+													<Trash2 size={13} /> 删除
+												</button>
+											</div>
 										</td>
 									</tr>
 								))}
