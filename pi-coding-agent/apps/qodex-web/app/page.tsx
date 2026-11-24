@@ -36,6 +36,7 @@ function Workspace() {
 	const aui = useAui();
 	const [route, setRoute] = useState("chat"),
 		[sidebarOpen, setSidebarOpen] = useState(true),
+		[bankRefresh, setBankRefresh] = useState(0),
 		[health, setHealth] = useState<JsonObject>({}),
 		[checking, setChecking] = useState(false);
 	const pages = [
@@ -96,6 +97,18 @@ function Workspace() {
 							key={key}
 							href={`#${key}`}
 							className={route === key || (key === "history" && !!detailId) ? "active" : ""}
+							onClick={(event) => {
+								if (
+									key === "bank" &&
+									route === "bank" &&
+									!event.ctrlKey &&
+									!event.metaKey &&
+									!event.shiftKey &&
+									!event.altKey
+								) {
+									setBankRefresh((current) => current + 1);
+								}
+							}}
 						>
 							<Icon size={18} />
 							{label}
@@ -173,7 +186,7 @@ function Workspace() {
 						<CheckerWorkspace prompt={prompt} />
 					</div>
 					<div className={route === "bank" ? "qx-scrollpanel" : "qx-hidden"}>
-						<QuestionBank />
+						<QuestionBank activation={route === "bank" ? bankRefresh : null} />
 					</div>
 					<div className={route === "kb" || kbDetail ? "qx-scrollpanel" : "qx-hidden"}>
 						<KnowledgeBase />

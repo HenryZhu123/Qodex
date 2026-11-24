@@ -5,31 +5,34 @@ import { useCallback, useEffect, useState } from "react";
 import { api, array, type JsonObject, object, post, pretty, statusLabel, text } from "@/lib/workspace-api";
 import { Report } from "./assembly-workspace";
 
-export function QuestionBank() {
+export function QuestionBank({ activation }: { activation: number | null }) {
 	const [subject, setSubject] = useState(""),
 		[keyword, setKeyword] = useState(""),
 		[difficulty, setDifficulty] = useState("");
+	const [query, setQuery] = useState(() => new URLSearchParams({ limit: "100" }));
 	const [rows, setRows] = useState<JsonObject[]>([]),
 		[error, setError] = useState(""),
 		[busy, setBusy] = useState(false),
 		[loaded, setLoaded] = useState(false);
-	async function search() {
+	useEffect(() => {
+		if (activation === null) return;
+		const request = new AbortController();
 		setBusy(true);
 		setError("");
-		try {
-			const query = new URLSearchParams({ limit: "100" });
-			if (subject) query.set("subject", subject);
-			if (keyword) query.set("keyword", keyword);
-			if (difficulty) query.set("difficulty", difficulty);
-			const data = await api(`checker/v1/question-bank/search?${query}`);
-			setRows(array(data.questions).map(object));
-			setLoaded(true);
-		} catch (e) {
-			setError(e instanceof Error ? e.message : "题库读取失败");
-		} finally {
-			setBusy(false);
-		}
-	}
+		api(`checker/v1/question-bank/search?${query}`, { signal: request.signal })
+			.then((data) => {
+				if (request.signal.aborted) return;
+				setRows(array(data.questions).map(object));
+				setLoaded(true);
+			})
+			.catch((e: unknown) => {
+				if (!request.signal.aborted) setError(e instanceof Error ? e.message : "题库读取失败");
+			})
+			.finally(() => {
+				if (!request.signal.aborted) setBusy(false);
+			});
+		return () => request.abort();
+	}, [activation, query]);
 	return (
 		<div className="qx-page">
 			<div className="qx-pagehead">
@@ -46,7 +49,11 @@ export function QuestionBank() {
 				className="qx-filters"
 				onSubmit={(e) => {
 					e.preventDefault();
-					void search();
+					const filters = new URLSearchParams({ limit: "100" });
+					if (subject) filters.set("subject", subject);
+					if (keyword) filters.set("keyword", keyword);
+					if (difficulty) filters.set("difficulty", difficulty);
+					setQuery(filters);
 				}}
 			>
 				<input
@@ -82,7 +89,7 @@ export function QuestionBank() {
 					本次返回 {rows.length} 条（最多 100 条，非题库总数）。教师工作区包含答案，请勿直接分发本页给学生。
 				</p>
 			)}
-			{!loaded && <div className="qx-empty">选择检索条件，查询你的本地 PostgreSQL 题库。</div>}
+			{!loaded && busy && <output className="qx-empty block">正在读取正式题库…</output>}
 			{loaded && !rows.length && <p className="qx-empty">没有符合条件的已入库题目。启动服务并不会自动生成题库数据。</p>}
 			{rows.map((r, i) => {
 				const payload = object(r.question_json),
