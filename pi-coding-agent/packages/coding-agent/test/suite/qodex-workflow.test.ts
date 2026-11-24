@@ -1,3 +1,4 @@
+import { readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fauxAssistantMessage, fauxToolCall } from "@earendil-works/pi-ai";
@@ -28,6 +29,183 @@ afterEach(() => {
 const workflowExtensions = builtInExtensions.filter(
 	(extension) => extension.name === "qodex-workflow" || extension.name === "question-generation",
 );
+
+const withReviewExtensions = builtInExtensions.filter((extension) =>
+	["qodex-workflow", "question-generation", "exam-checker"].includes(extension.name),
+);
+
+function authorCall(id: string) {
+	return fauxToolCall("question_generation", { operation: "author", request: { request_id: id, brief: id } });
+}
+
+function reviewCall() {
+	return fauxToolCall("exam_checker", {
+		operation: "review_question",
+		task_id: "t-1",
+		question_id: "q-a",
+		version: 1,
+	});
+}
+
+function reviewResponse() {
+	return Response.json({
+		task_id: "t-1",
+		question_id: "q-a",
+		question_number: "1",
+		version: 1,
+		review_id: "22222222-2222-4222-8222-222222222222",
+		review: { status: "PASS", summary: { errors: [] }, checks: [] },
+		ingestion: { status: "STORED" },
+	});
+}
+
+it.each([false, true])(
+	"dispatches a five-author batch sequentially and permits review (model failure=%s)",
+	async (failOne) => {
+		vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+		let active = 0;
+		let peak = 0;
+		const generated: string[] = [];
+		const fetchStub = vi.fn<typeof fetch>().mockImplementation(async (url, init) => {
+			if (!String(url).endsWith("/author")) return reviewResponse();
+			const request = JSON.parse(String(init?.body));
+			active += 1;
+			peak = Math.max(peak, active);
+			// Emulate a server with only one admission slot. An unbounded batch fails here.
+			const busy = active > 1;
+			await new Promise((resolve) => setTimeout(resolve, 10));
+			active -= 1;
+			if (busy) return Response.json({ status: "SERVER_BUSY", questions: [] }, { status: 503 });
+			if (failOne && request.request_id === "b") {
+				return Response.json({ status: "MODEL_UNAVAILABLE", questions: [], message: "transport_error (audit)" });
+			}
+			generated.push(request.request_id);
+			return Response.json({
+				status: "GENERATED",
+				task_id: "t-1",
+				questions: [{ question_id: `q-${request.request_id}`, version: 1 }],
+			});
+		});
+		vi.stubGlobal("fetch", fetchStub);
+		harness = await createHarness({ extensionFactories: withReviewExtensions });
+		harness.setResponses([
+			fauxAssistantMessage(["a", "b", "c", "d", "e"].map(authorCall), { stopReason: "toolUse" }),
+			fauxAssistantMessage(reviewCall(), { stopReason: "toolUse" }),
+			fauxAssistantMessage("done"),
+		]);
+		await harness.session.prompt("生成五道题并审校");
+		expect(peak).toBe(1);
+		expect(fetchStub).toHaveBeenCalledTimes(6);
+		expect(generated).toEqual(failOne ? ["a", "c", "d", "e"] : ["a", "b", "c", "d", "e"]);
+		const results = harness.session.messages.filter((message) => message.role === "toolResult");
+		expect(results).toHaveLength(6);
+		expect(getMessageText(results.at(-1))).toContain('"STORED"');
+		expect(results.map(getMessageText).join("\n")).not.toMatch(/SERVER_BUSY|NO_PROGRESS|RUN_STOPPED/);
+	},
+);
+
+it.each(["SERVER_BUSY", "AUTHORING_IN_PROGRESS"])(
+	"does not turn repeated %s into a failure circuit or no-progress stop",
+	async (status) => {
+		vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+		const fetchStub = vi
+			.fn<typeof fetch>()
+			.mockImplementation(async (url) =>
+				String(url).endsWith("/author")
+					? Response.json({ status, questions: [] }, { status: 503 })
+					: reviewResponse(),
+			);
+		vi.stubGlobal("fetch", fetchStub);
+		harness = await createHarness({ extensionFactories: withReviewExtensions });
+		harness.setResponses([
+			...Array.from({ length: 6 }, (_, i) =>
+				fauxAssistantMessage(authorCall(`busy-${i}`), { stopReason: "toolUse" }),
+			),
+			fauxAssistantMessage(reviewCall(), { stopReason: "toolUse" }),
+			fauxAssistantMessage("done"),
+		]);
+		await harness.session.prompt("继续处理已有题目");
+		expect(fetchStub).toHaveBeenCalledTimes(7);
+		expect(
+			getMessageText(harness.session.messages.filter((message) => message.role === "toolResult").at(-1)),
+		).toContain('"STORED"');
+		expect(observe("question_generation", { status, questions: [] }).next.join(" ")).toContain("不要立即循环重试");
+	},
+);
+
+it("bounds busy attempts by the total call budget", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	vi.stubEnv("QODEX_MAX_TOTAL_CALLS", "2");
+	const fetchStub = vi
+		.fn<typeof fetch>()
+		.mockImplementation(async () => Response.json({ status: "SERVER_BUSY", questions: [] }, { status: 503 }));
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	harness.setResponses([
+		fauxAssistantMessage(["a", "b", "c"].map(authorCall), { stopReason: "toolUse" }),
+		fauxAssistantMessage("done"),
+	]);
+	await harness.session.prompt("出题");
+	expect(fetchStub).toHaveBeenCalledTimes(2);
+	expect(getMessageText(harness.session.messages.filter((message) => message.role === "toolResult").at(-1))).toContain(
+		"BUDGET_EXHAUSTED",
+	);
+});
+
+it("isolates genuine generation failures, preserves the circuit across review, and resumes on a new instruction", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	const fetchStub = vi
+		.fn<typeof fetch>()
+		.mockImplementation(async (url) =>
+			String(url).endsWith("/author")
+				? Response.json({ status: "MODEL_UNAVAILABLE", questions: [] })
+				: reviewResponse(),
+		);
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({ extensionFactories: withReviewExtensions });
+	harness.setResponses([
+		fauxAssistantMessage(["a", "b", "c", "blocked", "blocked-again", "blocked-third"].map(authorCall), {
+			stopReason: "toolUse",
+		}),
+		fauxAssistantMessage(reviewCall(), { stopReason: "toolUse" }),
+		fauxAssistantMessage(authorCall("still-blocked"), { stopReason: "toolUse" }),
+		fauxAssistantMessage("done"),
+		fauxAssistantMessage(authorCall("resume"), { stopReason: "toolUse" }),
+		fauxAssistantMessage("done"),
+	]);
+	await harness.session.prompt("继续五题任务");
+	expect(fetchStub).toHaveBeenCalledTimes(4);
+	const results = harness.session.messages.filter((message) => message.role === "toolResult");
+	expect(getMessageText(results[3])).toContain("REPEATED_FAILURES");
+	expect(getMessageText(results[5])).toContain("REPEATED_FAILURES");
+	expect(getMessageText(results[6])).toContain('"STORED"');
+	expect(getMessageText(results[7])).toContain("REPEATED_FAILURES");
+	await harness.session.prompt("模型连接已恢复，继续");
+	expect(fetchStub).toHaveBeenCalledTimes(5);
+});
+
+it("does not count the same immutable draft returned under new request ids as repeated progress", async () => {
+	vi.stubEnv("QODEX_TRACE_DIR", traceDir());
+	const fetchStub = vi
+		.fn<typeof fetch>()
+		.mockImplementation(async () =>
+			Response.json({ status: "GENERATED", task_id: "t-1", questions: [{ question_id: "q-1", version: 1 }] }),
+		);
+	vi.stubGlobal("fetch", fetchStub);
+	harness = await createHarness({ extensionFactories: workflowExtensions });
+	harness.setResponses([
+		fauxAssistantMessage(
+			Array.from({ length: 7 }, (_, i) => authorCall(`same-${i}`)),
+			{ stopReason: "toolUse" },
+		),
+		fauxAssistantMessage("done"),
+	]);
+	await harness.session.prompt("出七道题");
+	expect(fetchStub).toHaveBeenCalledTimes(6);
+	expect(getMessageText(harness.session.messages.filter((message) => message.role === "toolResult").at(-1))).toContain(
+		"RUN_STOPPED",
+	);
+});
 
 function traceDir(): string {
 	return join(tmpdir(), `qodex-trace-${Math.trunc(performance.now())}-${process.pid}`);
@@ -197,7 +375,6 @@ it("appends the policy without replacing the assembled system prompt", async () 
 	expect(harness.session.systemPrompt).toContain(POLICY_MARKER);
 	// The operator trace must show what the user typed, not only which tools ran.
 	const traceDirPath = process.env.QODEX_TRACE_DIR as string;
-	const { readdirSync, readFileSync } = await import("node:fs");
 	const log = readdirSync(traceDirPath)
 		.map((name) => readFileSync(`${traceDirPath}/${name}`, "utf8"))
 		.join("");
@@ -312,11 +489,10 @@ it("stops when calls keep succeeding but nothing advances", async () => {
 
 	await harness.session.prompt("出五道题");
 
-	// Five drafts nobody reviewed is no progress; the sixth call never reaches the service.
+	// A nominal success without an identifiable new version is not progress.
 	expect(fetchStub).toHaveBeenCalledTimes(5);
 	const results = harness.session.messages.filter((message) => message.role === "toolResult");
 	expect(getMessageText(results[5])).toContain("NO_PROGRESS");
-	const { readdirSync, readFileSync } = await import("node:fs");
 	const dir = process.env.QODEX_TRACE_DIR as string;
 	const log = readdirSync(dir)
 		.map((name) => readFileSync(`${dir}/${name}`, "utf8"))
@@ -357,7 +533,6 @@ it("counts a stored question as progress and records it in the ledger", async ()
 
 	await harness.session.prompt("审校一下这道题");
 
-	const { readdirSync, readFileSync } = await import("node:fs");
 	const dir = process.env.QODEX_TRACE_DIR as string;
 	const log = readdirSync(dir)
 		.map((name) => readFileSync(`${dir}/${name}`, "utf8"))
@@ -407,7 +582,6 @@ it("lets the run continue once the user answers the hand-back", async () => {
 	const results = harness.session.messages.filter((message) => message.role === "toolResult");
 	expect(getMessageText(results[5])).toContain("RUN_STOPPED");
 	expect(getMessageText(results[6])).not.toContain("RUN_STOPPED");
-	const { readdirSync, readFileSync } = await import("node:fs");
 	const dir = process.env.QODEX_TRACE_DIR as string;
 	const log = readdirSync(dir)
 		.map((name) => readFileSync(`${dir}/${name}`, "utf8"))

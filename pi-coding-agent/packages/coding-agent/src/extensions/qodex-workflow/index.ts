@@ -52,7 +52,8 @@ read/bash/edit/write 不存在，不要尝试；需要信息就从这四个工�
 - 多道题的目标里，**单题失败不终止整份卷**：把该题记为失败并说明原因，继续处理其余题目；结束时交付"成了哪些/没成哪些/为什么"。只有"只出一道题"时失败才等于整个目标失败。
 - 组卷支持 v1 单选卷和 v2 混合卷：schema_version=2.0 的有序 slots 可跨四科、单选与综合题混合、每槽原分值、综合题可给 part_scores。图题、题组和同一题型的多套异质分值仍不支持；必须明确说明，不要静默降级。
 - v2 NEEDS_QUESTIONS 的 deficits 是未填的 ordered slot（含 subject/question_type/score/part_scores）；按槽位逐题命题/补题，不要调用只接受 v1 联合缺题计划的 replenishment。
-- 预算或连续两次同码失败时主动收尾：列出已完成、产出在哪、下一步建议。
+- 多题命题由运行时顺序执行；不要因一题 MODEL_UNAVAILABLE 把其他题记成并发失败。SERVER_BUSY / AUTHORING_IN_PROGRESS 是暂时忙碌，不是题目质量或模型失败；先处理已生成题目的审校，不要立即循环重试，稍后至多重试一次忙碌项。
+- 同一业务工具连续真正失败达到护栏上限时停止该工具，其他工具仍可处理已有成果；收到 REPEATED_FAILURES 后不要继续调用被限制的工具。总次数、墙钟或无进展预算耗尽则整轮收尾：列出已完成、产出在哪、下一步建议。
 
 不允许做的事：判定 PASS；自己编造 knowledge_points、task_id 或版本号；把教师视图或评分给学生；在拿到 ingestion.status=STORED 之前说"已入库/已通过"。
 
@@ -83,7 +84,7 @@ export interface WorkflowLimits {
 	review: number;
 	assembly: number;
 	wallClockMs: number;
-	/** Consecutive rejected calls allowed before the run must stop and hand back. */
+	/** Consecutive failures per business tool before that tool must hand back. */
 	failures: number;
 	/**
 	 * Calls that spend money but advance nothing. Five of them in a row is not bad luck,
@@ -239,7 +240,14 @@ const FAILURE_STATUSES = new Set([
 	"TOOL_ERROR",
 ]);
 
+// No new work was admitted. These must not trip a quality/transport circuit;
+// the global call budget still bounds repeated attempts.
+const BUSY_STATUSES = new Set(["SERVER_BUSY", "AUTHORING_IN_PROGRESS"]);
+
 function hintFor(status: string | undefined, code: string | undefined): string[] {
+	if (status && BUSY_STATUSES.has(status)) {
+		return ["服务暂时忙碌；先审校已生成的版本", "不要立即循环重试；稍后至多重试一次忙碌项，保留原请求"];
+	}
 	if (code === "material_gap" || status === "NEEDS_MATERIAL") {
 		return ["换一次检索范围或检索词", "仍不足则向用户说明缺失的材料类型，不要编造依据"];
 	}
@@ -501,6 +509,8 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 	/** One entry per question the run has actually reviewed: the closing report reads this. */
 	const items = new Map<string, ItemRecord>();
 	const storedItems = new Set<string>();
+	const generatedVersions = new Set<string>();
+	const dispatched = new Set<string>();
 	const traceDir = process.env.QODEX_TRACE_DIR ?? DEFAULT_TRACE_DIR;
 	const traceFile = join(traceDir, `workflow-${startedAt.toString(36)}.jsonl`);
 	let ingestionVerified = false;
@@ -511,7 +521,7 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 	let quota: number | null = null;
 	let stored = 0;
 	let assembled = 0;
-	let consecutiveFailures = 0;
+	const failures: Record<Bucket, number> = { generation: 0, review: 0, assembly: 0 };
 	let noProgress = 0;
 	/** Set once a stop condition fires; a new user message is the only way out. */
 	let stopped: string | null = null;
@@ -530,6 +540,7 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		stop: reason,
 		elapsedMs: Date.now() - startedAt,
 		counts: { ...counts },
+		failures: { ...failures },
 		quota,
 		stored,
 		assembled,
@@ -555,13 +566,18 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 		await trace("user_prompt", { prompt: event.prompt.slice(0, 2000), length: event.prompt.length });
 		const asked = parseQuota(event.prompt);
 		if (asked !== null) quota = Math.max(quota ?? 0, asked);
+		// A new user instruction can resume a tool-local circuit as well as a run.
+		if (!stopped && Object.values(failures).some((count) => count >= resolveLimits(process.env, quota).failures)) {
+			noProgress = 0;
+			await trace("resume", { previous: "TOOL_FAILURES", failures: { ...failures }, quota });
+		}
+		failures.generation = failures.review = failures.assembly = 0;
 		if (stopped) {
 			// Answering the hand-back is how a run continues: the blockage the user just
 			// addressed is gone, so the streaks that caused it restart at zero.
 			const previous = stopped;
 			stopped = null;
 			resumes += 1;
-			consecutiveFailures = 0;
 			noProgress = 0;
 			await trace("resume", { previous, resumes, quota });
 		}
@@ -634,15 +650,13 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 					"不要重复付费；需要不同结果请改参数或换考点。",
 			};
 		}
-		domainCalls += 1;
-		lastDomainTool = event.toolName;
-		if (consecutiveFailures >= limits.failures) {
-			await stopRun(`REPEATED_FAILURES:${consecutiveFailures}`);
+		if (bucket && failures[bucket] >= limits.failures) {
+			await trace("blocked", { tool: event.toolName, reason: "REPEATED_FAILURES", failures: failures[bucket] });
 			return {
 				block: true,
 				reason:
-					`REPEATED_FAILURES: 已连续失败 ${consecutiveFailures} 次。停止新调用，把失败原文与请求体交回用户，` +
-					"不要继续试参数。",
+					`REPEATED_FAILURES: ${event.toolName} 已连续失败 ${failures[bucket]} 次，停止该工具的新调用。` +
+					"其他工具仍可审校、入库或查询已有成果；报告失败原文，用户回复后可恢复。",
 			};
 		}
 		if (noProgress >= limits.noProgress) {
@@ -654,6 +668,9 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 					"这不是偶发失败：停下来说明卡在哪一步、已经排除了什么、需要用户补充什么。",
 			};
 		}
+		domainCalls += 1;
+		lastDomainTool = event.toolName;
+		dispatched.add(event.toolCallId);
 		await trace("tool_call", {
 			tool: event.toolName,
 			digest,
@@ -674,26 +691,49 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 			await trace("tool_result", { tool: event.toolName, readOnly: true });
 			return undefined;
 		}
+		// A hook rejection is not another service failure. In particular, repeated
+		// calls to a tool-local open circuit must not escalate into a global stop.
+		if (!dispatched.delete(event.toolCallId)) return undefined;
 		const payload = parsePayload(firstText(event.content));
 		const observation = observe(event.toolName, payload);
 		const digest = callDigest(event.toolName, event.input);
 		const bucket = bucketOf(event.toolName);
 		const limits = resolveLimits(process.env, quota);
+		const busy = observation.status !== undefined && BUSY_STATUSES.has(observation.status);
 		if (observation.ok) {
 			completed.set(digest, observation);
 			rollback.delete(digest);
-			consecutiveFailures = 0;
+			if (bucket) failures[bucket] = 0;
 			// Only successful work consumes the per-tool budget, so one malformed request
 			// cannot end the session; repeated failures are bounded separately.
 			if (bucket) counts[bucket] += 1;
 		} else {
 			rollback.set(digest, observation);
-			consecutiveFailures += 1;
+			if (bucket && !busy) failures[bucket] += 1;
 		}
 
-		// Progress means the run moved forward, not that a call succeeded: a draft nobody
-		// can review is not progress, and neither is a revise that changes nothing.
+		// A new immutable draft is progress toward review, not proof of PASS/STORED.
+		// Replaying the same version with a different request id is not progress.
 		let progress = false;
+		if (event.toolName === GENERATION_TOOL && observation.ok && Array.isArray(payload?.questions)) {
+			for (const question of payload.questions) {
+				if (!question || typeof question !== "object") continue;
+				const record = question as Record<string, unknown>;
+				if (
+					typeof record.question_id !== "string" ||
+					!record.question_id ||
+					typeof record.version !== "number" ||
+					!Number.isInteger(record.version) ||
+					record.version < 1
+				)
+					continue;
+				const key = JSON.stringify([payload.task_id ?? record.task_id, record.question_id, record.version]);
+				if (!generatedVersions.has(key)) {
+					generatedVersions.add(key);
+					progress = true;
+				}
+			}
+		}
 		if (event.toolName === REVIEW_TOOL) {
 			const questionId = observation.artifact?.question_id ?? digest;
 			const version = observation.artifact?.version;
@@ -727,7 +767,7 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 			assembled += 1;
 			progress = true;
 		}
-		if (bucket) noProgress = progress ? 0 : noProgress + 1;
+		if (bucket && !busy) noProgress = progress ? 0 : noProgress + 1;
 		if (event.toolName === REVIEW_TOOL) {
 			// A later failed review must clear the receipt: otherwise a stored A makes
 			// a false "B stored" claim look verified.
@@ -743,6 +783,7 @@ export default function qodexWorkflowExtension(pi: ExtensionAPI): void {
 			progress,
 			stored,
 			noProgress,
+			failures: { ...failures },
 		});
 		if (noProgress >= limits.noProgress && !stopped) {
 			await stopRun(`NO_PROGRESS:${noProgress}`);

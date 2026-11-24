@@ -53,7 +53,7 @@ flowchart TD
     A -- INVALID_REQUEST --> FIX[按 errors 修参数, 不支持的能力要说明]
 
     subgraph GUARD[护栏: 不依赖模型自觉]
-        B1[tool_call: 预算按目标题量(2N+2/3N+2) · 墙钟 90min · 同参数重复付费拦截<br/>连续失败 3 次停 · 连续 5 次无进展停 · 停后需用户回复才解封]
+        B1[tool_call: 预算按目标题量(2N+2/3N+2) · 墙钟 90min · 同参数重复付费拦截<br/>同工具连续失败 3 次停该工具 · 连续 5 次无进展整轮停 · 新用户消息解封]
         B2[tool_result: 失败置 isError + 压成 observation<br/>ok/status/code/retry/needs/next/errors/artifact]
         B3[message_end: 没有 STORED 就不许说"已入库"<br/>引号内文字不算断言 · 只在出题/审校后生效]
         B4[goal_report: 停止时写清原因 + 已入库题 + 逐题账本<br/>trace: 输入→调用→观察→拦截→续做 全部落盘]
@@ -98,7 +98,9 @@ Pi Agent（qodex-workflow）
 | 护栏 | 行为 | 配置 |
 | --- | --- | --- |
 | 调用预算 | 超限 `tool_call` 直接 block，并给出"停止新调用 + 报告已完成部分"。默认按**目标题量**放大：读到 "N 道/N 题" 时命题 `2N+2`、审校 `3N+2`、总 `5N+8`；无题量时底值 12/12/4 | `QODEX_MAX_GENERATION_CALLS`(12) / `QODEX_MAX_REVIEW_CALLS`(12) / `QODEX_MAX_ASSEMBLY_CALLS`(4) / `QODEX_MAX_TOTAL_CALLS`(40) / `QODEX_MAX_WALL_CLOCK_MS`(90 min) |
-| 连续失败 / 无进展 | 同一 Item 连续 3 次失败，或连续 5 次"花钱但没推进"（无新题、无新版本审校、无 STORED、无组卷成功）即停；新用户消息可解封 | `QODEX_MAX_FAILED_CALLS`(3) / `QODEX_MAX_NO_PROGRESS_CALLS`(5) |
+| 命题调度 | `question_generation.executionMode=sequential`，同一 Pi 工具批次含命题时依次执行整批调用，每次执行前重新检查护栏；不同会话仍受服务并发上限保护 | 服务 `QUESTION_GENERATION_MAX_CONCURRENT`(2) |
+| 连续失败 / 无进展 | 按命题/审校/组卷分别计连续失败，3 次后仅阻止该工具，其他工具成功不会清除此工具失败；新用户消息解封。全局连续 5 次无新版本草稿、无新版本审校、无 STORED、无组卷成功则整轮停止；新草稿按 `(task_id, question_id, version)` 去重，不代表已审校 | `QODEX_MAX_FAILED_CALLS`(3) / `QODEX_MAX_NO_PROGRESS_CALLS`(5) |
+| 暂时忙碌 | `SERVER_BUSY` / `AUTHORING_IN_PROGRESS` 不增加连续失败或无进展，不重置已有失败；仍占总调用次数。护栏拦截本身不作为一次新的服务失败 | 不自动循环或追加付费重试 |
 | 重复付费 | 同 `(tool, 参数)` 摘要已成功执行 → block（失败不占用，允许重试） | — |
 | 失败可见 | 服务返回 `status=SELF_CHECK_FAILED/UNRESOLVED/…` 或 `{error}` 时置 `isError=true`，把结果压成 `{observation:{ok,status,code,retry,needs,next,detail,errors,artifact}}` | — |
 | 入库措辞 | 拿不到 `ingestion.status=STORED` 时，助手若写"已入库/已通过"，`message_end` 追加纠正 | — |
@@ -108,6 +110,11 @@ Pi Agent（qodex-workflow）
 命题侧新增 `failure.code`（追加字段，不改 `status/message`）：`candidate_shape`、`material_gap`、`design_invalid`、
 `quality_gate`、`condition_test_incomplete`、`blind_disagreement`、`blind_incomplete`、`audit_rejected`，
 每项带 `retry`（`same_request`/`new_request`/`no`）与 `needs`（`material`/`human`/null）。
+
+2026-11-24 调度修复：采用现有运行时顺序执行能力，避免单会话五个 author 同时冲击服务。
+这会降低单批吞吐，但不依赖服务并发配置恰好为 2。多会话同时使用仍可能返回忙碌；优先审校已生成的题，
+稍后至多重试一次忙碌项。`MODEL_UNAVAILABLE/transport_error` 仍是真实失败，不能据此断定由并发导致；
+本次不改变模型连接策略，不把失败结果标为成功。离线 faux provider 已覆盖批量调度与护栏，真实模型端到端未重跑。
 
 ## 4-A. 2026-11-16 契约修复（当前）
 

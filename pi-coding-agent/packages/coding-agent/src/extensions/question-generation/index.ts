@@ -396,6 +396,9 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 	pi.registerTool({
 		name: "question_generation",
 		label: "Question generation",
+		// A model may emit many author calls in one turn. Let the runtime dispatch
+		// them one at a time instead of racing the service's shared admission limit.
+		executionMode: "sequential",
 		description:
 			"Generate or revise 408 questions. Use operation=author for ANY natural-language, rough-topic, " +
 			"material-driven, or arbitrary-syllabus request; it plans the topic and returns a versioned package. " +
@@ -403,6 +406,7 @@ export default function questionGenerationExtension(pi: ExtensionAPI): void {
 			"fields, not a general-purpose entry. This is the only tool allowed to create a new question version.",
 		promptSnippet: "Generate or revise 408 questions and submit them for review",
 		promptGuidelines: [
+			"Multiple generation calls in one turn run sequentially. Each author call creates one question; retain every result and review all successful versions even when another item fails. SERVER_BUSY means no generation was admitted, not a model failure.",
 			"Routing: if the user names a topic in prose, asks for any 408 question, or supplies material, use author. Use single only with a fixed topic and exact fields from its contract; use comprehensive only for the fixed paging/stack templates; use batch only with explicit slots; use replenishment only with an assembly v1.0 plan.",
 			'author fields: schema_version="0.1" and request_id are required. Optional: brief (≤2000 chars), seed, subject (data_structures | computer_organization | operating_systems | computer_networks), syllabus_areas, question_type (single_choice | comprehensive), total_score (comprehensive only, 2–30), requirements (1–8 strings), evidence (≤16 items). Unknown fields are rejected before any model call.',
 			"Chinese subject names such as 数据结构/计组/操作系统/计网 are normalised to the four IDs; prefer the English IDs. syllabus_areas must be IDs: ds.foundations, ds.linear, ds.stack_queue_array, ds.trees, ds.graphs, ds.search, ds.sort, co.system, co.representation, co.memory, co.instructions, co.cpu, co.io, os.foundations, os.process, os.memory, os.files, os.io, cn.architecture, cn.physical, cn.link, cn.network, cn.transport, cn.application.",
