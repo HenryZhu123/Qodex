@@ -1,7 +1,19 @@
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { closeSync, existsSync, linkSync, openSync } from "node:fs";
-import { copyFile, lstat, mkdir, readdir, readFile, rename, rm, stat, symlink, writeFile } from "node:fs/promises";
+import { existsSync, linkSync } from "node:fs";
+import {
+	copyFile,
+	lstat,
+	mkdir,
+	open,
+	readdir,
+	readFile,
+	rename,
+	rm,
+	stat,
+	symlink,
+	writeFile,
+} from "node:fs/promises";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 
@@ -57,7 +69,8 @@ export type SubjectSummary = { key: string; name: string; createdAt: string; kbs
 export type BuildJob = {
 	id: string;
 	book: string;
-	status: string;
+	skill: "build-knowledge-base";
+	status: "running" | "done" | "failed";
 	message: string;
 	startedAt: string;
 	finishedAt?: string;
@@ -337,25 +350,10 @@ export async function registerExisting(subjectKey: string, sourceDb: string): Pr
 
 /** Add a PDF (or DOCX/TXT) and build its knowledge base with the skill pipeline. */
 export async function addBook(subjectKey: string, sourcePath: string): Promise<{ kbId: string; job: BuildJob }> {
-	if (!validKey(subjectKey)) throw new Error("专业标识不合法。");
 	const source = path.resolve(sourcePath.trim());
 	const info = await stat(source).catch(() => undefined);
 	if (!info?.isFile()) throw new Error("找不到该文件，请填写本机绝对路径。");
-	if (!/\.(pdf|docx|doc|txt|md)$/i.test(source)) throw new Error("只接受 PDF、DOC、DOCX、TXT、MD。");
-	const kbId = `kb_${Date.now().toString(36)}`;
-	const kbDir = path.join(libraryDir(), kbId);
-	await mkdir(path.join(kbDir, "sources"), { recursive: true });
-	const book = path.join(kbDir, "sources", path.basename(source));
-	await copyFile(source, book);
-	await writeJson(path.join(kbDir, "book.json"), {
-		id: kbId,
-		title: path.basename(source, path.extname(source)),
-		sourcePath: source,
-		createdAt: new Date().toISOString(),
-	});
-	const job = startBuild(kbDir, book);
-	await linkKb(subjectKey, kbId);
-	return { kbId, job };
+	return prepareBuild(subjectKey, path.basename(source), source, (book) => copyFile(source, book));
 }
 
 /** Add a book uploaded from the browser: the bytes are written straight into the library. */
@@ -364,64 +362,100 @@ export async function addBookFromFile(
 	fileName: string,
 	data: Buffer,
 ): Promise<{ kbId: string; job: BuildJob; file: string }> {
-	if (!validKey(subjectKey)) throw new Error("专业标识不合法。");
-	const name = path.basename(fileName || "book");
+	const name = path.win32.basename(fileName);
+	const result = await prepareBuild(subjectKey, name, name, (book) => writeFile(book, data));
+	return { ...result, file: name };
+}
+
+async function prepareBuild(
+	subjectKey: string,
+	name: string,
+	sourcePath: string,
+	save: (book: string) => Promise<void>,
+): Promise<{ kbId: string; job: BuildJob }> {
 	if (!/\.(pdf|docx|doc|txt|md)$/i.test(name)) throw new Error("只接受 PDF、DOC、DOCX、TXT、MD。");
-	const kbId = `kb_${Date.now().toString(36)}`;
+	if (subjectKey) await subjectDirectory(subjectKey);
+	const script = path.join(
+		repoRoot(),
+		"research-assets",
+		"skills",
+		"build-knowledge-base",
+		"scripts",
+		"kb_pipeline.py",
+	);
+	if (!existsSync(script)) throw new Error("未安装 build-knowledge-base skill。");
+	const kbId = `kb_${randomUUID()}`;
 	const kbDir = path.join(libraryDir(), kbId);
 	await mkdir(path.join(kbDir, "sources"), { recursive: true });
 	const book = path.join(kbDir, "sources", name);
-	await writeFile(book, data);
+	await save(book);
 	await writeJson(path.join(kbDir, "book.json"), {
 		id: kbId,
 		title: path.basename(name, path.extname(name)),
-		sourcePath: name,
+		sourcePath,
 		createdAt: new Date().toISOString(),
 	});
-	const job = startBuild(kbDir, book);
-	await linkKb(subjectKey, kbId);
-	return { kbId, job, file: name };
+	const job = await startBuild(kbId, book, script, subjectKey);
+	return { kbId, job };
 }
 
-function startBuild(kbDir: string, book: string): BuildJob {
-	const id = Date.now().toString(36);
+export async function getBuildJob(kbId: string, jobId: string): Promise<BuildJob | undefined> {
+	if (!/^kb_[a-f0-9-]{36}$/.test(kbId) || !/^[a-f0-9-]{36}$/.test(jobId)) return undefined;
+	return readJson<BuildJob>(path.join(libraryDir(), kbId, "jobs", `${jobId}.json`));
+}
+
+async function startBuild(kbId: string, book: string, script: string, subjectKey: string): Promise<BuildJob> {
+	const kbDir = path.join(libraryDir(), kbId);
+	const id = randomUUID();
 	const job: BuildJob = {
 		id,
 		book: path.basename(book),
+		skill: "build-knowledge-base",
 		status: "running",
 		message: "解析入库中",
 		startedAt: new Date().toISOString(),
 	};
 	const jobsDir = path.join(kbDir, "jobs");
-	void mkdir(jobsDir, { recursive: true }).then(() => writeJson(path.join(jobsDir, `${id}.json`), job));
-
-	// File descriptor, not a stream: a stream has no fd yet at spawn time, and a
-	// pipe would dead-lock once its buffer fills.
-	const fd = openSync(path.join(jobsDir, `${id}.log`), "a");
-	const args = [
-		path.join(repoRoot(), "research-assets", "skills", "build-knowledge-base", "scripts", "kb_pipeline.py"),
-		"run",
-		"--input",
-		book,
-		"--out",
-		kbDir,
-		"--stop-after",
-		"ingest",
-		"--ocr",
-		"off",
-	];
+	const jobFile = path.join(jobsDir, `${id}.json`);
+	await writeJson(jobFile, job);
+	const log = await open(path.join(jobsDir, `${id}.log`), "a");
+	const args = [script, "run", "--input", book, "--out", kbDir, "--stop-after", "ingest", "--ocr", "off"];
 	const child = spawn(process.env.QODEX_PYTHON || "python", args, {
 		cwd: repoRoot(),
-		stdio: ["ignore", fd, fd],
+		stdio: ["ignore", log.fd, log.fd],
 		windowsHide: true,
 	});
-	const settle = (status: string, message: string) => {
-		closeSync(fd);
-		void writeJson(path.join(jobsDir, `${id}.json`), { ...job, status, message, finishedAt: new Date().toISOString() });
-	};
-	child.on("error", (error) => settle("failed", `无法启动构建进程：${error.message}`));
-	child.on("exit", (code) =>
-		settle(code === 0 ? "done" : "failed", code === 0 ? "解析入库完成" : `构建失败，退出码 ${code}`),
-	);
+	let launchError: Error | undefined;
+	child.once("error", (error) => {
+		launchError = error;
+	});
+	child.once("close", (code) => {
+		void (async () => {
+			let status: BuildJob["status"] = "failed";
+			let message: string;
+			if (launchError) {
+				message = `无法启动构建进程：${launchError.message}`;
+			} else if (code !== 0) {
+				const state = await readJson<{ phase?: string }>(path.join(kbDir, "run_state.json"));
+				message =
+					state?.phase === "blocked_integrity"
+						? "原文抽样未通过完整性检查，请查看 integrity_report.md。"
+						: `构建失败，请查看任务日志（退出码 ${code}）。`;
+			} else {
+				status = "done";
+				message = "解析入库完成";
+				if (subjectKey) {
+					try {
+						await linkKb(subjectKey, kbId);
+					} catch {
+						message = "已入库，未能自动链接到所选专业。";
+					}
+				}
+			}
+			await writeJson(`${jobFile}.tmp`, { ...job, status, message, finishedAt: new Date().toISOString() });
+			await rename(`${jobFile}.tmp`, jobFile);
+		})().catch((error: unknown) => console.error("Could not save knowledge-base build status", error));
+	});
+	await log.close();
 	return job;
 }

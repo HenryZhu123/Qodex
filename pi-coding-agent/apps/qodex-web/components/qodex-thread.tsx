@@ -30,7 +30,8 @@ import {
 	WrenchIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import type { BuildJob } from "@/lib/kb-store";
 import { parseModelSelection } from "@/lib/workspace-api";
 
 const SUGGESTIONS = [
@@ -39,6 +40,7 @@ const SUGGESTIONS = [
 	"介绍单题、批量和综合题的命题功能",
 	"告诉我怎样审校试卷和修订题目",
 ];
+const KB_SKILL_COMMAND = "/skill:build-knowledge-base";
 
 export function QodexThread() {
 	const readiness = usePiThreadState((state) => state.readiness);
@@ -269,29 +271,196 @@ function ComposerQueue() {
 }
 
 function Composer() {
+	const aui = useAui();
 	const { status } = usePiRuntimeExtras();
 	const isEmpty = useAuiState((state) => state.composer.isEmpty);
+	const text = useAuiState((state) => state.composer.text);
 	const showCancel = status === "running" && isEmpty;
+	const picker = useRef<HTMLInputElement>(null);
+	const [file, setFile] = useState<File | null>(null);
+	const [skillSelected, setSkillSelected] = useState(false);
+	const [uploading, setUploading] = useState(false);
+	const [build, setBuild] = useState<{ kbId: string; job: BuildJob } | null>(null);
+	const [buildError, setBuildError] = useState("");
+	const command = text.trim().toLowerCase();
+	const showSkill =
+		!skillSelected &&
+		command.startsWith("/") &&
+		(KB_SKILL_COMMAND.startsWith(command) || "/build-knowledge-base".startsWith(command));
+	const usesLibrary = !!file || skillSelected;
+	const runningBuild = uploading || build?.job.status === "running";
+
+	function selectSkill() {
+		setSkillSelected(true);
+		setBuildError("");
+		aui.composer.setText("");
+	}
+
+	async function buildKnowledgeBase() {
+		if (!file || !skillSelected || runningBuild) return;
+		setUploading(true);
+		setBuild(null);
+		setBuildError("");
+		try {
+			const body = new FormData();
+			body.set("file", file);
+			const response = await fetch("/api/kb/books/upload", { method: "POST", body });
+			const data = await response.json();
+			if (!response.ok) throw new Error(data.error || "上传失败");
+			setBuild(data as { kbId: string; job: BuildJob });
+			setFile(null);
+			aui.composer.setText("");
+		} catch (error) {
+			setBuildError(error instanceof Error ? error.message : "上传失败");
+		} finally {
+			setUploading(false);
+		}
+	}
+
+	const activeBuildId = build?.job.status === "running" ? build.job.id : undefined;
+	const kbId = build?.kbId;
+	useEffect(() => {
+		if (!activeBuildId || !kbId) return;
+		const abort = new AbortController();
+		const params = new URLSearchParams({ kbId, jobId: activeBuildId });
+		const timer = window.setInterval(async () => {
+			try {
+				const response = await fetch(`/api/kb/books/upload?${params}`, {
+					cache: "no-store",
+					signal: abort.signal,
+				});
+				if (response.ok && !abort.signal.aborted) {
+					setBuild({ kbId, job: (await response.json()) as BuildJob });
+					setBuildError("");
+				}
+			} catch {
+				if (!abort.signal.aborted) setBuildError("暂时无法读取构建进度，正在重试。");
+			}
+		}, 1500);
+		return () => {
+			window.clearInterval(timer);
+			abort.abort();
+		};
+	}, [activeBuildId, kbId]);
 
 	return (
 		<ComposerPrimitive.Root className="rounded-[20px] border border-[var(--border-strong)] bg-white p-2 shadow-[0_10px_35px_rgba(20,20,15,0.07)] transition focus-within:border-[#b8b8b2] focus-within:shadow-[0_12px_40px_rgba(20,20,15,0.09)]">
+			{(file || skillSelected) && (
+				<div className="flex flex-wrap gap-2 px-3 py-1.5 text-sm">
+					{skillSelected && (
+						<span className="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] px-2 py-1">
+							<SparklesIcon className="size-3.5" />
+							知识库制作 · {KB_SKILL_COMMAND}
+							<button
+								type="button"
+								aria-label="取消引用知识库制作 skill"
+								disabled={runningBuild}
+								onClick={() => setSkillSelected(false)}
+							>
+								×
+							</button>
+						</span>
+					)}
+					{file && (
+						<span className="inline-flex min-w-0 items-center gap-2 rounded-lg border border-[var(--border)] px-2 py-1">
+							<span className="truncate" title={file.name}>
+								{file.name}
+							</span>
+							<button type="button" aria-label="移除附件" disabled={runningBuild} onClick={() => setFile(null)}>
+								×
+							</button>
+						</span>
+					)}
+				</div>
+			)}
 			<ComposerPrimitive.Input
-				placeholder="描述你的需求，或让 Qodex 帮你调用命题、审校与组卷工具…"
+				placeholder={skillSelected ? "附加书籍文件后，点击制作知识库" : "描述你的需求，或输入 / 选择技能…"}
+				readOnly={skillSelected}
+				submitMode={usesLibrary || showSkill ? "none" : "enter"}
+				onKeyDown={(event) => {
+					if (showSkill && event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+						event.preventDefault();
+						selectSkill();
+					}
+				}}
 				rows={1}
 				className="max-h-40 min-h-[58px] w-full resize-none border-0 bg-transparent px-3 py-2 text-[15px] leading-6 text-[var(--text)] outline-none placeholder:text-[#9b9b96]"
 			/>
+			{showSkill && (
+				<div className="mx-2 mb-2 rounded-xl border border-[var(--border)] p-1">
+					<button
+						type="button"
+						className="w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-[var(--panel-subtle)]"
+						onClick={selectSkill}
+					>
+						<span className="block font-medium">知识库制作</span>
+						<span className="text-[var(--muted)]">{KB_SKILL_COMMAND}</span>
+					</button>
+				</div>
+			)}
+			{file && !skillSelected && <p className="px-3 pb-2 text-sm text-[var(--muted)]">输入 / 选择知识库制作技能。</p>}
+			{build && (
+				<output className="block px-3 pb-2 text-sm text-[var(--text)]">
+					{build.job.skill} · {build.job.book} · {build.job.message}
+					{build.job.status === "done" && (
+						<a href="#kb" className="ml-2 underline">
+							查看知识库
+						</a>
+					)}
+				</output>
+			)}
+			{buildError && (
+				<p role="alert" className="px-3 pb-2 text-sm text-red-700">
+					{buildError}
+				</p>
+			)}
 			<div className="flex items-center gap-1.5 px-1 pb-1">
-				<ComposerPrimitive.AddAttachment className="composer-icon-button">
+				<input
+					ref={picker}
+					type="file"
+					accept=".pdf,.docx,.doc,.txt,.md"
+					hidden
+					onChange={(event) => {
+						const selected = event.target.files?.[0];
+						event.target.value = "";
+						if (!selected) return;
+						if (
+							!/\.(pdf|docx|doc|txt|md)$/i.test(selected.name) ||
+							selected.size === 0 ||
+							selected.size > 300 * 1024 * 1024
+						) {
+							setBuildError("请选择不超过 300 MB 的 PDF、DOC、DOCX、TXT 或 MD 文件。");
+							return;
+						}
+						setFile(selected);
+						setBuildError("");
+					}}
+				/>
+				<button
+					type="button"
+					className="composer-icon-button"
+					disabled={runningBuild}
+					onClick={() => picker.current?.click()}
+				>
 					<PlusIcon className="size-4" />
-					<span className="sr-only">Add attachment</span>
-				</ComposerPrimitive.AddAttachment>
+					<span className="sr-only">添加附件</span>
+				</button>
 				<ModelPicker />
 				<div className="ml-auto flex items-center gap-1.5">
 					<ComposerPrimitive.Dictate className="composer-icon-button">
 						<MicIcon className="size-4" />
 						<span className="sr-only">Dictate message</span>
 					</ComposerPrimitive.Dictate>
-					{showCancel ? (
+					{usesLibrary ? (
+						<button
+							type="button"
+							className="qx-btn primary"
+							disabled={!file || !skillSelected || runningBuild}
+							onClick={() => void buildKnowledgeBase()}
+						>
+							{uploading ? "正在上传…" : "制作知识库"}
+						</button>
+					) : showCancel ? (
 						<ComposerPrimitive.Cancel className="flex size-8 items-center justify-center rounded-xl border-0 bg-[var(--text)] text-white transition hover:bg-black">
 							<SquareIcon className="size-3 fill-current" />
 							<span className="sr-only">Stop generating</span>

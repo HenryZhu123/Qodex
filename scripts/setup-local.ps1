@@ -6,7 +6,7 @@ if (-not (Test-Path '.venv/Scripts/python.exe')) {
     & $PythonPath -m venv .venv
     if ($LASTEXITCODE -ne 0) { throw 'Creating Python environment failed; provide Python 3.11+ with -PythonPath.' }
 }
-& ./.venv/Scripts/python.exe -m pip install -e . -e 'pi-coding-agent/services/exam-checker[dev]' -e 'pi-coding-agent/services/exam-assembly[pdf]' -r question_generation/service-requirements.txt
+& ./.venv/Scripts/python.exe -m pip install -e . -e 'pi-coding-agent/services/exam-checker[dev]' -e 'pi-coding-agent/services/exam-assembly[pdf]' -r question_generation/service-requirements.txt -r research-assets/skills/build-knowledge-base/requirements.txt
 if ($LASTEXITCODE -ne 0) { throw 'Python dependencies failed to install.' }
 Push-Location pi-coding-agent
 try {

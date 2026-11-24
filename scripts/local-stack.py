@@ -47,6 +47,7 @@ def environment():
         env.setdefault(key, value)
     env["PYTHONPATH"] = os.pathsep.join(map(str, [ROOT, PI / "services/exam-checker/src", PI / "services/exam-assembly/src"]))
     env["PI_WORKSPACE_PATH"] = str(ROOT)
+    env.setdefault("QODEX_PYTHON", sys.executable)
     env["PYTHONUTF8"] = "1"
     env["NEXT_TELEMETRY_DISABLED"] = "1"
     return env

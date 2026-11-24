@@ -203,6 +203,9 @@ export function KnowledgeBase() {
 
 	const selectedSubject = payload.subjects.find((s) => s.key === selected);
 	const linked = selectedSubject ? booksOf(selectedSubject) : [];
+	const unlinkedBooks = payload.library.filter(
+		(item) => item.subjects.length === 0 && item.title.toLowerCase().includes(applied.trim().toLowerCase()),
+	);
 	const available = payload.library.filter((item) => !selectedSubject?.kbs.includes(item.id));
 	const libNeedle = libApplied.trim().toLowerCase();
 	const libFiltered = libNeedle
@@ -343,6 +346,32 @@ export function KnowledgeBase() {
 							</>
 						)}
 					</section>
+					{unlinkedBooks.length > 0 && (
+						<section className="qx-kb-card">
+							<h2>书库中待链接的书籍（{unlinkedBooks.length}）</h2>
+							<p className="qx-note">打开专业详情，可从书库链接这些书籍。</p>
+							<table className="qx-table">
+								<thead>
+									<tr>
+										<th>书名</th>
+										<th>页数</th>
+										<th>块数</th>
+										<th>已索引</th>
+									</tr>
+								</thead>
+								<tbody>
+									{unlinkedBooks.map((item) => (
+										<tr key={item.id}>
+											<td>{item.title}</td>
+											<td>{item.pages ?? "—"}</td>
+											<td>{item.chunks}</td>
+											<td>{item.indexed}</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</section>
+					)}
 				</>
 			)}
 
